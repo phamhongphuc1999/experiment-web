@@ -12,8 +12,10 @@ export default function LayoutWrapper({ children }: Props) {
   return (
     <>
       <EffectBox />
-      <AppHeader />
-      <div className="min-h-screen">{children}</div>
+      <div className="min-h-screen">
+        <AppHeader />
+        <div className="pt-[55px]">{children}</div>
+      </div>
       <div className="border-b-border bg-secondary flex w-full flex-col items-center py-[16px] shadow-xl">
         <p className="text-center">COPYRIGHT © {new Date().getFullYear()}&nbsp;</p>
         <div className="flex items-center gap-2">

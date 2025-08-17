@@ -121,3 +121,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.react-json-view {
+  .icon-container {
+    svg {
+      @apply !text-foreground;
+    }
+  }
+  span {
+    @apply !text-foreground;
+  }
+  .object-size {
+    @apply !text-muted-foreground;
+  }
+}

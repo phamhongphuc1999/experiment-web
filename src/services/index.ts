@@ -26,3 +26,14 @@ export function switchTheme() {
   if (newTheme == 'dark') document.documentElement.classList.toggle('dark');
   else document.documentElement.classList.remove('dark');
 }
+
+export function hexToUint8Array(hex: string): Uint8Array {
+  if (hex.length % 2 !== 0) {
+    throw new Error('Invalid hex string');
+  }
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+  }
+  return bytes;
+}

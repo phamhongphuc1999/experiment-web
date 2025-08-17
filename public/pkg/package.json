@@ -1,0 +1,15 @@
+{
+  "name": "aes",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "aes_bg.wasm",
+    "aes.js",
+    "aes.d.ts"
+  ],
+  "main": "aes.js",
+  "types": "aes.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
