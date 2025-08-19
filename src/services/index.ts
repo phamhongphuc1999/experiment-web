@@ -37,3 +37,7 @@ export function hexToUint8Array(hex: string): Uint8Array {
   }
   return bytes;
 }
+
+export function getCurrentTimestamp() {
+  return Math.floor(Date.now() / 1000);
+}
