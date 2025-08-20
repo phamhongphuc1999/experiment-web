@@ -5,6 +5,7 @@ import DynamicReactJson from 'src/components/DynamicReactJson';
 import { Button } from 'src/components/shadcn-ui/button';
 import { ENCRYPT_KEY, exampleJson, IV_HEX } from 'src/configs/constance';
 import { getCurrentTimestamp, hexToUint8Array } from 'src/services';
+import { baseQuery } from 'src/services/api-query';
 import { decryptText, encryptText } from 'src/services/encrypt';
 import { initWasm } from 'src/services/wasm';
 import * as uuid from 'uuid';
@@ -15,6 +16,8 @@ export default function EncryptView() {
   const [wasmData, setWasmData] = useState<object>({});
   const [error, setError] = useState('');
   const [randomData, setRandomData] = useState<object>({});
+  const [axiosError, setAxiosError] = useState('');
+  const [axiosRandomData, setAxiosRandomData] = useState<object>({});
 
   function onReset() {
     setHello({ data: '' });
@@ -22,6 +25,8 @@ export default function EncryptView() {
     setWasmData({});
     setError('');
     setRandomData({});
+    setAxiosError('');
+    setAxiosRandomData({});
   }
 
   async function onHello() {
@@ -75,6 +80,21 @@ export default function EncryptView() {
     }
   }
 
+  async function getAxiosRandomData() {
+    try {
+      const wasm = await initWasm();
+      const iv = hexToUint8Array(IV_HEX);
+      const id = uuid.v4();
+      const currentTimestamp = getCurrentTimestamp();
+      const expiredTimestamp = currentTimestamp + 15 * 60;
+      const _key = wasm.create_key(ENCRYPT_KEY, iv, expiredTimestamp.toString(), id);
+      const res = await baseQuery.get('/random-user', { headers: { 'x-client-id': _key } });
+      setAxiosRandomData(res);
+    } catch (error) {
+      setAxiosError(String(error));
+    }
+  }
+
   return (
     <>
       <Button onClick={onReset}>Reset</Button>
@@ -94,6 +114,11 @@ export default function EncryptView() {
         <Button onClick={getRandomData}>Random data</Button>
         <DynamicReactJson src={randomData} rootProps={{ className: 'mt-2' }} />
         {error && <p className="text-destructive">{error}</p>}
+      </div>
+      <div className="border-sidebar-border mt-4 rounded-xl border p-4">
+        <Button onClick={getAxiosRandomData}>Axios random data</Button>
+        <DynamicReactJson src={axiosRandomData} rootProps={{ className: 'mt-2' }} />
+        {axiosError && <p className="text-destructive">{error}</p>}
       </div>
     </>
   );

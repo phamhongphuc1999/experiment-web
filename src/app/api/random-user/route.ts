@@ -15,7 +15,9 @@ export async function GET(req: Request) {
       const _res = await fetch('https://randomuser.me/api/');
       const randomData = await _res.json();
       const data = encryptText(clientId, IV_HEX, JSON.stringify(randomData));
-      return NextResponse.json({ data, status: true });
+      const rawResponse = NextResponse.json({ data, status: true });
+      rawResponse.headers.set('x-client-id', clientId);
+      return rawResponse;
     } catch (error) {
       return NextResponse.json({ message: String(error), status: false }, { status: 400 });
     }

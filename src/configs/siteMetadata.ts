@@ -4,7 +4,7 @@ import ThumbImg from 'public/thumbnail.webp';
 export const siteMetadata = {
   title: 'Experiment App',
   description: '',
-  url: 'https://my-next-app-one-topaz.vercel.app/',
+  url: 'https://experiment.peter-present.xyz/',
   siteName: 'Experiment App',
   twitterHandle: 'PhamHon08928762',
   icon: IconImg.src,
