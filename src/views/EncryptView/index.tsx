@@ -82,13 +82,7 @@ export default function EncryptView() {
 
   async function getAxiosRandomData() {
     try {
-      const wasm = await initWasm();
-      const iv = hexToUint8Array(IV_HEX);
-      const id = uuid.v4();
-      const currentTimestamp = getCurrentTimestamp();
-      const expiredTimestamp = currentTimestamp + 15 * 60;
-      const _key = wasm.create_key(ENCRYPT_KEY, iv, expiredTimestamp.toString(), id);
-      const res = await baseQuery.get('/random-user', { headers: { 'x-client-id': _key } });
+      const res = await baseQuery.get('/random-user');
       setAxiosRandomData(res);
     } catch (error) {
       setAxiosError(String(error));

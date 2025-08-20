@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ENCRYPT_KEY, IV_HEX } from 'src/configs/constance';
 import { getCurrentTimestamp } from 'src/services';
-import { decryptText, encryptText } from 'src/services/encrypt';
+import { decryptText, encryptText, randomIvHex } from 'src/services/encrypt';
 
 export async function GET(req: Request) {
   const clientId = req.headers.get('x-client-id');
@@ -14,8 +14,9 @@ export async function GET(req: Request) {
         NextResponse.json({ message: 'clientId is expired', status: false }, { status: 400 });
       const _res = await fetch('https://randomuser.me/api/');
       const randomData = await _res.json();
-      const data = encryptText(clientId, IV_HEX, JSON.stringify(randomData));
-      const rawResponse = NextResponse.json({ data, status: true });
+      const iv = randomIvHex();
+      const data = encryptText(clientId, iv, JSON.stringify(randomData));
+      const rawResponse = NextResponse.json({ data, iv, status: true });
       rawResponse.headers.set('x-client-id', clientId);
       return rawResponse;
     } catch (error) {
