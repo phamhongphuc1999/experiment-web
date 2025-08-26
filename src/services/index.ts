@@ -41,3 +41,12 @@ export function hexToUint8Array(hex: string): Uint8Array {
 export function getCurrentTimestamp() {
   return Math.floor(Date.now() / 1000);
 }
+
+export function getFlagEmoji(countryCode: string) {
+  const codePoints: Array<number> = [];
+  const upperCode = countryCode.toUpperCase();
+  for (let i = 0; i < upperCode.length; i++) {
+    codePoints.push(127397 + upperCode.charCodeAt(i));
+  }
+  return String.fromCodePoint(...codePoints);
+}

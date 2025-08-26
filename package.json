@@ -9,9 +9,10 @@
     "format": "prettier --write .",
     "start": "next start",
     "prepare": "husky",
-    "eslint": "bunx eslint --config ./eslint.config.js --cache --fix"
+    "eslint": "eslint --config ./eslint.config.js --cache --fix"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
