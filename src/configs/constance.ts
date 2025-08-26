@@ -4,6 +4,10 @@ export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aab
 export const LS = { THEME: 'theme' };
 export const APP_NAME = 'Experiment App';
 
+export const QUERY_KEY = {
+  location: 'location',
+};
+
 export const exampleJson = {
   name: 'example name',
   title: 'example title',

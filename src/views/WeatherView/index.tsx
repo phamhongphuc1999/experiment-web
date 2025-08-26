@@ -1,8 +1,14 @@
+'use client';
+
 import CommonContainer from 'src/components/box/CommonContainer';
 import BaseInput from 'src/components/input/BaseInput';
-import SearchLocationDialog from './SearchLocaltionDialog';
+import SearchLocationDialog from './SearchLocationDialog';
+import { useState } from 'react';
 
 export default function WeatherView() {
+  const [latitude, setLatitude] = useState<number | undefined>();
+  const [longitude, setLongitude] = useState<number | undefined>();
+
   return (
     <CommonContainer>
       <form>
@@ -11,15 +17,19 @@ export default function WeatherView() {
             <BaseInput
               placeholder="Latitude"
               type="number"
-              rootProps={{ className: 'md:w-1/4 w-1/3' }}
+              rootprops={{ className: 'md:w-1/4 w-1/3' }}
+              value={latitude}
+              onChange={(event) => setLatitude(parseFloat(event.target.value))}
             />
             <BaseInput
               placeholder="Longitude"
               type="number"
-              rootProps={{ className: 'md:w-1/4 w-1/3' }}
+              rootprops={{ className: 'md:w-1/4 w-1/3' }}
+              value={longitude}
+              onChange={(event) => setLongitude(parseFloat(event.target.value))}
             />
           </div>
-          <SearchLocationDialog />
+          <SearchLocationDialog setLatitude={setLatitude} setLongitude={setLongitude} />
         </div>
       </form>
     </CommonContainer>

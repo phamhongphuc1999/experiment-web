@@ -115,6 +115,5 @@ baseQuery.interceptors.response.use(async (response: AxiosResponse) => {
 });
 
 const weatherApi = new ApiQuery('https://api.open-meteo.com/v1/forecast');
-const geographyApi = new ApiQuery('https://geocoding-api.open-meteo.com/v1/search');
 
-export { baseQuery, weatherApi, geographyApi };
+export { baseQuery, weatherApi };
