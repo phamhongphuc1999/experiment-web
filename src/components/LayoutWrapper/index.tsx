@@ -10,8 +10,7 @@ interface Props {
 
 export default function LayoutWrapper({ children }: Props) {
   return (
-    <>
-      <EffectBox />
+    <EffectBox>
       <div className="min-h-screen">
         <AppHeader />
         <div className="pt-[55px]">{children}</div>
@@ -24,6 +23,6 @@ export default function LayoutWrapper({ children }: Props) {
           </Link>
         </div>
       </div>
-    </>
+    </EffectBox>
   );
 }
