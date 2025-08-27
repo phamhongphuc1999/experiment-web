@@ -1,9 +1,10 @@
 'use client';
 
+import { Location } from 'iconsax-reactjs';
 import debounce from 'lodash/debounce';
 import { Search } from 'lucide-react';
 import Image from 'next/image';
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -16,14 +17,11 @@ import { LoaderFive } from 'src/components/ui/loader';
 import { LocationType } from 'src/global';
 import { useLocation } from 'src/hooks/queries/location.query';
 import { cn } from 'src/lib/utils';
+import { useWeatherParamsStore } from 'src/states/weather-params.state';
 import { useWeatherStore } from 'src/states/weather.state';
 
-interface Props {
-  setLatitude: Dispatch<SetStateAction<number | undefined>>;
-  setLongitude: Dispatch<SetStateAction<number | undefined>>;
-}
-
-export default function SearchLocationDialog({ setLatitude, setLongitude }: Props) {
+export default function SearchLocationDialog() {
+  const { setState } = useWeatherParamsStore();
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filterText, setFilterText] = useState('');
@@ -51,11 +49,23 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
 
   function onLocation(location: LocationType) {
     enqueueLocation(location);
-    setLatitude(location.latitude);
-    setLongitude(location.longitude);
+    setState({ latitude: location.latitude, longitude: location.longitude });
     setOpen(false);
     setSearchText('');
     setFilterText('');
+  }
+
+  function gps() {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setState({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+    setOpen(false);
   }
 
   return (
@@ -70,8 +80,10 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
         <DialogHeader>
           <DialogTitle>Search location</DialogTitle>
           <div>
-            <Input value={searchText} onChange={(event) => onTextChange(event.target.value)} />
-
+            <div className="flex items-center gap-3">
+              <Input value={searchText} onChange={(event) => onTextChange(event.target.value)} />
+              <Location className="size-8 cursor-pointer" onClick={gps} />
+            </div>
             {isLoading ? (
               <div className="mt-4 flex flex-col items-center">
                 <LoaderFive text="Loading..." />

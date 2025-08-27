@@ -46,6 +46,9 @@ export type LocationApiType = {
 // end location type
 
 // weather type
+export type TemperatureUnitType = 'celsius' | 'fahrenheit';
+export type WindSpeedUnitType = 'kmh' | 'ms' | 'mph' | 'kn';
+
 export type WeatherHourlyVariableType =
   | 'temperature_2m'
   | 'relative_humidity_2m'
@@ -157,9 +160,9 @@ export type WeatherParamsType = {
   elevation?: number | number[];
   hourly?: Array<WeatherHourlyVariableType>;
   daily?: Array<WeatherDailyVariableType>;
-  current?: string | string[];
-  temperature_unit?: 'celsius' | 'fahrenheit';
-  wind_speed_unit?: 'kmh' | 'ms' | 'mph' | 'kn';
+  current?: string[];
+  temperature_unit?: TemperatureUnitType;
+  wind_speed_unit?: WindSpeedUnitType;
   precipitation_unit?: 'mm' | 'inch';
   timeformat?: 'iso8601' | 'unixtime';
   timezone?: string;

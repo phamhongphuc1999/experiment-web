@@ -1,29 +1,29 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import CommonContainer from 'src/components/box/CommonContainer';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useWeather } from 'src/hooks/queries/weather.query';
 import { WeatherParamsSchema } from 'src/schemas/weather.schema';
+import { useWeatherParamsStore } from 'src/states/weather-params.state';
+import CommonParams from './CommonParams';
+import ResultSpot from './ResultSpot';
 import SearchLocationDialog from './SearchLocationDialog';
 
 export default function WeatherView() {
-  const [latitude, setLatitude] = useState<number | undefined>();
-  const [longitude, setLongitude] = useState<number | undefined>();
-
-  const { refetch } = useWeather({ latitude, longitude }, { enabled: false });
+  const { state, setState } = useWeatherParamsStore();
+  const { data, refetch } = useWeather(state, { enabled: false });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (WeatherParamsSchema.isValidSync({ latitude, longitude })) {
+    if (WeatherParamsSchema.isValidSync(state)) {
       await refetch();
     }
   }
 
   function onReset() {
-    setLatitude(undefined);
-    setLongitude(undefined);
+    setState({});
   }
 
   return (
@@ -41,20 +41,22 @@ export default function WeatherView() {
               placeholder="Latitude"
               type="number"
               rootprops={{ className: 'md:w-1/4 w-1/3' }}
-              value={latitude}
-              onChange={(event) => setLatitude(parseFloat(event.target.value))}
+              value={state.latitude || ''}
+              onChange={(event) => setState({ latitude: parseFloat(event.target.value) })}
             />
             <BaseInput
               placeholder="Longitude"
               type="number"
               rootprops={{ className: 'md:w-1/4 w-1/3' }}
-              value={longitude}
-              onChange={(event) => setLongitude(parseFloat(event.target.value))}
+              value={state.longitude || ''}
+              onChange={(event) => setState({ longitude: parseFloat(event.target.value) })}
             />
           </div>
-          <SearchLocationDialog setLatitude={setLatitude} setLongitude={setLongitude} />
+          <SearchLocationDialog />
         </div>
+        <CommonParams className="mt-3" />
       </form>
+      {data && <ResultSpot data={data} />}
     </CommonContainer>
   );
 }

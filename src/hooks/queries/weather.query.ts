@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEY } from 'src/configs/constance';
-import { OptionalQueryType, WeatherParamsType } from 'src/global';
+import { OptionalQueryType, WeatherApiType, WeatherParamsType } from 'src/global';
 import { WeatherParamsSchema } from 'src/schemas/weather.schema';
 import WeatherApi from 'src/services/api-query/weather.api';
 
-export function useWeather(params: Partial<WeatherParamsType>, query?: OptionalQueryType) {
+export function useWeather(
+  params: Partial<WeatherParamsType>,
+  query?: OptionalQueryType<WeatherApiType>
+) {
   return useQuery({
     enabled: WeatherParamsSchema.isValidSync(params),
     ...query,
