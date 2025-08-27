@@ -114,6 +114,4 @@ baseQuery.interceptors.response.use(async (response: AxiosResponse) => {
   return JSON.parse(decryptedData);
 });
 
-const weatherApi = new ApiQuery('https://api.open-meteo.com/v1/forecast');
-
-export { baseQuery, weatherApi };
+export { baseQuery };

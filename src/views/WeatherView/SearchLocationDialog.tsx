@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -17,6 +16,7 @@ import { LoaderFive } from 'src/components/ui/loader';
 import { LocationType } from 'src/global';
 import { useLocation } from 'src/hooks/queries/location.query';
 import { cn } from 'src/lib/utils';
+import { useWeatherStore } from 'src/states/weather.state';
 
 interface Props {
   setLatitude: Dispatch<SetStateAction<number | undefined>>;
@@ -27,8 +27,14 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filterText, setFilterText] = useState('');
+  const { locations, enqueueLocation } = useWeatherStore();
 
   const { data, isLoading } = useLocation(filterText);
+
+  const { realData, isRecent } = useMemo(() => {
+    if (filterText.length > 0) return { realData: data?.results || [], isRecent: false };
+    return { realData: locations, isRecent: true };
+  }, [data?.results, filterText.length, locations]);
 
   const _setFilterText = useMemo(
     () =>
@@ -44,6 +50,7 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
   }
 
   function onLocation(location: LocationType) {
+    enqueueLocation(location);
     setLatitude(location.latitude);
     setLongitude(location.longitude);
     setOpen(false);
@@ -62,7 +69,7 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Search location</DialogTitle>
-          <DialogDescription>
+          <div>
             <Input value={searchText} onChange={(event) => onTextChange(event.target.value)} />
 
             {isLoading ? (
@@ -70,39 +77,44 @@ export default function SearchLocationDialog({ setLatitude, setLongitude }: Prop
                 <LoaderFive text="Loading..." />
               </div>
             ) : (
-              <div className="mt-4 cursor-pointer rounded-md border">
-                {data?.results.map((item, index) => {
-                  const code = item.country_code;
+              <div className="mt-4">
+                {isRecent && <p className="text-right">Recent</p>}
+                <div
+                  className={cn('mt-2 cursor-pointer rounded-md', realData.length > 0 && 'border')}
+                >
+                  {realData.map((item, index) => {
+                    const code = item.country_code;
 
-                  return (
-                    <div
-                      key={item.id}
-                      className={cn('px-4 py-1', index > 0 && 'border-t')}
-                      onClick={() => onLocation(item)}
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <Image
-                            src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
-                            alt={`${code} flag`}
-                            width={20}
-                            height={20}
-                          />
-                          <p>
-                            <span className="text-secondary-foreground text-lg">{item.name}</span> (
-                            {item.country})
+                    return (
+                      <div
+                        key={item.id}
+                        className={cn('px-4 py-1', index > 0 && 'border-t')}
+                        onClick={() => onLocation(item)}
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <Image
+                              src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
+                              alt={`${code} flag`}
+                              width={20}
+                              height={20}
+                            />
+                            <p>
+                              <span className="text-secondary-foreground text-lg">{item.name}</span>{' '}
+                              ({item.country})
+                            </p>
+                          </div>
+                          <p className="text-muted-foreground text-xs">
+                            {item.admin1} ({item.latitude}, {item.longitude})
                           </p>
                         </div>
-                        <p>
-                          {item.admin1} ({item.latitude}, {item.longitude})
-                        </p>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             )}
-          </DialogDescription>
+          </div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
