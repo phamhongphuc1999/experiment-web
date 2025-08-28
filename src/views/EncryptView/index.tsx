@@ -9,6 +9,7 @@ import { baseQuery } from 'src/services/api-query';
 import { decryptText, encryptText } from 'src/services/encrypt';
 import { initWasm } from 'src/services/wasm';
 import * as uuid from 'uuid';
+import DomainInfo, { DomainInfoType } from './DomainInfo';
 
 export default function EncryptView() {
   const [hello, setHello] = useState<{ data: string }>({ data: '' });
@@ -18,6 +19,7 @@ export default function EncryptView() {
   const [randomData, setRandomData] = useState<object>({});
   const [axiosError, setAxiosError] = useState('');
   const [axiosRandomData, setAxiosRandomData] = useState<object>({});
+  const [data, setData] = useState<DomainInfoType | undefined>(undefined);
 
   function onReset() {
     setHello({ data: '' });
@@ -27,6 +29,7 @@ export default function EncryptView() {
     setRandomData({});
     setAxiosError('');
     setAxiosRandomData({});
+    setData(undefined);
   }
 
   async function onHello() {
@@ -114,6 +117,7 @@ export default function EncryptView() {
         <DynamicReactJson src={axiosRandomData} rootProps={{ className: 'mt-2' }} />
         {axiosError && <p className="text-destructive">{error}</p>}
       </div>
+      <DomainInfo data={data} setData={setData} />
     </>
   );
 }

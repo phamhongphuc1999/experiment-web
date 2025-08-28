@@ -1,14 +1,14 @@
 {
-  "name": "aes",
+  "name": "crypt",
   "type": "module",
   "version": "0.1.0",
   "files": [
-    "aes_bg.wasm",
-    "aes.js",
-    "aes.d.ts"
+    "crypt_bg.wasm",
+    "crypt.js",
+    "crypt.d.ts"
   ],
-  "main": "aes.js",
-  "types": "aes.d.ts",
+  "main": "crypt.js",
+  "types": "crypt.d.ts",
   "sideEffects": [
     "./snippets/*"
   ]
