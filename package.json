@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "start": "next start",
     "prepare": "husky",
-    "eslint": "eslint --config ./eslint.config.js --cache --fix"
+    "eslint": "eslint --config ./eslint.config.js --cache"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
