@@ -136,75 +136,53 @@ function passArray8ToWasm0(arg, malloc) {
   return ptr;
 }
 /**
- * @param {string} key
+ * @param {string} timestamp
+ * @param {string} uuid
  * @param {Uint8Array} iv
  * @param {string} plain
  * @returns {string}
  */
-export function encrypt(key, iv, plain) {
-  let deferred4_0;
-  let deferred4_1;
+export function encrypt(timestamp, uuid, iv, plain) {
+  let deferred5_0;
+  let deferred5_1;
   try {
-    const ptr0 = passStringToWasm0(key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr0 = passStringToWasm0(timestamp, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passArray8ToWasm0(iv, wasm.__wbindgen_malloc);
+    const ptr1 = passStringToWasm0(uuid, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    const ptr2 = passStringToWasm0(plain, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr2 = passArray8ToWasm0(iv, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    const ret = wasm.encrypt(ptr0, len0, ptr1, len1, ptr2, len2);
-    deferred4_0 = ret[0];
-    deferred4_1 = ret[1];
+    const ptr3 = passStringToWasm0(plain, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len3 = WASM_VECTOR_LEN;
+    const ret = wasm.encrypt(ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
+    deferred5_0 = ret[0];
+    deferred5_1 = ret[1];
     return getStringFromWasm0(ret[0], ret[1]);
   } finally {
-    wasm.__wbindgen_free(deferred4_0, deferred4_1, 1);
+    wasm.__wbindgen_free(deferred5_0, deferred5_1, 1);
   }
 }
 
 /**
- * @param {string} key
+ * @param {string} timestamp
+ * @param {string} uuid
  * @param {Uint8Array} iv
  * @param {string} cipher_b64
  * @returns {string}
  */
-export function decrypt(key, iv, cipher_b64) {
-  let deferred4_0;
-  let deferred4_1;
-  try {
-    const ptr0 = passStringToWasm0(key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passArray8ToWasm0(iv, wasm.__wbindgen_malloc);
-    const len1 = WASM_VECTOR_LEN;
-    const ptr2 = passStringToWasm0(cipher_b64, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len2 = WASM_VECTOR_LEN;
-    const ret = wasm.decrypt(ptr0, len0, ptr1, len1, ptr2, len2);
-    deferred4_0 = ret[0];
-    deferred4_1 = ret[1];
-    return getStringFromWasm0(ret[0], ret[1]);
-  } finally {
-    wasm.__wbindgen_free(deferred4_0, deferred4_1, 1);
-  }
-}
-
-/**
- * @param {string} key
- * @param {Uint8Array} iv
- * @param {string} timestamp
- * @param {string} uuid
- * @returns {string}
- */
-export function create_key(key, iv, timestamp, uuid) {
+export function decrypt(timestamp, uuid, iv, cipher_b64) {
   let deferred5_0;
   let deferred5_1;
   try {
-    const ptr0 = passStringToWasm0(key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr0 = passStringToWasm0(timestamp, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passArray8ToWasm0(iv, wasm.__wbindgen_malloc);
+    const ptr1 = passStringToWasm0(uuid, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    const ptr2 = passStringToWasm0(timestamp, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr2 = passArray8ToWasm0(iv, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    const ptr3 = passStringToWasm0(uuid, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr3 = passStringToWasm0(cipher_b64, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len3 = WASM_VECTOR_LEN;
-    const ret = wasm.create_key(ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
+    const ret = wasm.decrypt(ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
     deferred5_0 = ret[0];
     deferred5_1 = ret[1];
     return getStringFromWasm0(ret[0], ret[1]);

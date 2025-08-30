@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import queryString from 'query-string';
-import { ENCRYPT_KEY, IV_HEX } from 'src/configs/constance';
 import * as uuid from 'uuid';
 import { hexToUint8Array } from '..';
 import { initWasm } from '../wasm';
@@ -93,12 +92,10 @@ const baseQuery: AxiosInstance = axios.create({
 });
 
 baseQuery.interceptors.request.use(async (config) => {
-  const wasm = await initWasm();
   const id = uuid.v4();
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const expiredTimestamp = currentTimestamp;
-  const iv = hexToUint8Array(IV_HEX);
-  const _key = wasm.create_key(ENCRYPT_KEY, iv, expiredTimestamp.toString(), id);
+  const _key = `${expiredTimestamp}_${id}`;
   config.headers['x-client-id'] = _key;
   return config;
 });
@@ -110,7 +107,8 @@ baseQuery.interceptors.response.use(async (response: AxiosResponse) => {
   if (!clientId) return rawData;
   const wasm = await initWasm();
   const iv = hexToUint8Array(rawData.iv);
-  const decryptedData = wasm.decrypt(clientId.toString(), iv, rawData.data);
+  const [timestamp, id] = clientId.toString().split('_');
+  const decryptedData = wasm.decrypt(timestamp, id, iv, rawData.data);
   return JSON.parse(decryptedData);
 });
 

@@ -7,17 +7,11 @@ export const encrypt: (
   c: number,
   d: number,
   e: number,
-  f: number
+  f: number,
+  g: number,
+  h: number
 ) => [number, number];
 export const decrypt: (
-  a: number,
-  b: number,
-  c: number,
-  d: number,
-  e: number,
-  f: number
-) => [number, number];
-export const create_key: (
   a: number,
   b: number,
   c: number,

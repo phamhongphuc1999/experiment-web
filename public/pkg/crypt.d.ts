@@ -1,8 +1,12 @@
 /* tslint:disable */
 export function main_js(): void;
-export function encrypt(key: string, iv: Uint8Array, plain: string): string;
-export function decrypt(key: string, iv: Uint8Array, cipher_b64: string): string;
-export function create_key(key: string, iv: Uint8Array, timestamp: string, uuid: string): string;
+export function encrypt(timestamp: string, uuid: string, iv: Uint8Array, plain: string): string;
+export function decrypt(
+  timestamp: string,
+  uuid: string,
+  iv: Uint8Array,
+  cipher_b64: string
+): string;
 export function get_hostname(): string;
 export function get_host(): string;
 export function get_origin(): string;
@@ -19,17 +23,11 @@ export interface InitOutput {
     c: number,
     d: number,
     e: number,
-    f: number
+    f: number,
+    g: number,
+    h: number
   ) => [number, number];
   readonly decrypt: (
-    a: number,
-    b: number,
-    c: number,
-    d: number,
-    e: number,
-    f: number
-  ) => [number, number];
-  readonly create_key: (
     a: number,
     b: number,
     c: number,

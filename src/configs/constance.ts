@@ -8,27 +8,3 @@ export const QUERY_KEY = {
   location: 'location',
   weather: 'weather',
 };
-
-export const exampleJson = {
-  name: 'example name',
-  title: 'example title',
-  description: 'example description',
-  token: {
-    decimal: 18,
-    symbol: 'ETH',
-    name: 'Ethereum',
-    img: 'http://example.img.eth',
-  },
-  metadata: {
-    '2025': {
-      '1': 'example1',
-      '2': 'example2',
-    },
-    '2024': {
-      '1': {
-        '1': 1,
-        '2': 2,
-      },
-    },
-  },
-};
