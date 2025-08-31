@@ -1,3 +1,5 @@
+import { WeatherHourlyVariableType } from 'src/global';
+
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
 
@@ -7,4 +9,62 @@ export const APP_NAME = 'Experiment App';
 export const QUERY_KEY = {
   location: 'location',
   weather: 'weather',
+};
+
+export const WeatherHourlyConfig: {
+  [id in WeatherHourlyVariableType]: { id: WeatherHourlyVariableType; title: string };
+} = {
+  temperature_2m: { id: 'temperature_2m', title: 'Temperature 2m' },
+  relative_humidity_2m: { id: 'relative_humidity_2m', title: 'Relative Humidity 2m' },
+  dew_point_2m: { id: 'dew_point_2m', title: 'Dew Point 2m' },
+  apparent_temperature: { id: 'apparent_temperature', title: 'Apparent Temperature' },
+  pressure_msl: { id: 'pressure_msl', title: 'Pressure (MSL)' },
+  surface_pressure: { id: 'surface_pressure', title: 'Surface Pressure' },
+  cloud_cover: { id: 'cloud_cover', title: 'Cloud Cover' },
+  cloud_cover_low: { id: 'cloud_cover_low', title: 'Cloud Cover (Low)' },
+  cloud_cover_mid: { id: 'cloud_cover_mid', title: 'Cloud Cover (Mid)' },
+  cloud_cover_high: { id: 'cloud_cover_high', title: 'Cloud Cover (High)' },
+  wind_speed_10m: { id: 'wind_speed_10m', title: 'Wind Speed 10m' },
+  wind_speed_80m: { id: 'wind_speed_80m', title: 'Wind Speed 80m' },
+  wind_speed_120m: { id: 'wind_speed_120m', title: 'Wind Speed 120m' },
+  wind_speed_180m: { id: 'wind_speed_180m', title: 'Wind Speed 180m' },
+  wind_direction_10m: { id: 'wind_direction_10m', title: 'Wind Direction 10m' },
+  wind_direction_80m: { id: 'wind_direction_80m', title: 'Wind Direction 80m' },
+  wind_direction_120m: { id: 'wind_direction_120m', title: 'Wind Direction 120m' },
+  wind_direction_180m: { id: 'wind_direction_180m', title: 'Wind Direction 180m' },
+  wind_gusts_10m: { id: 'wind_gusts_10m', title: 'Wind Gusts 10m' },
+  shortwave_radiation: { id: 'shortwave_radiation', title: 'Shortwave Radiation' },
+  direct_radiation: { id: 'direct_radiation', title: 'Direct Radiation' },
+  direct_normal_irradiance: { id: 'direct_normal_irradiance', title: 'Direct Normal Irradiance' },
+  diffuse_radiation: { id: 'diffuse_radiation', title: 'Diffuse Radiation' },
+  global_tilted_irradiance: { id: 'global_tilted_irradiance', title: 'Global Tilted Irradiance' },
+  vapour_pressure_deficit: { id: 'vapour_pressure_deficit', title: 'Vapour Pressure Deficit' },
+  cape: { id: 'cape', title: 'CAPE' },
+  evapotranspiration: { id: 'evapotranspiration', title: 'Evapotranspiration' },
+  et0_fao_evapotranspiration: {
+    id: 'et0_fao_evapotranspiration',
+    title: 'ET0 FAO Evapotranspiration',
+  },
+  precipitation: { id: 'precipitation', title: 'Precipitation' },
+  snowfall: { id: 'snowfall', title: 'Snowfall' },
+  precipitation_probability: {
+    id: 'precipitation_probability',
+    title: 'Precipitation Probability',
+  },
+  rain: { id: 'rain', title: 'Rain' },
+  showers: { id: 'showers', title: 'Showers' },
+  snow_depth: { id: 'snow_depth', title: 'Snow Depth' },
+  weather_code: { id: 'weather_code', title: 'Weather Code' },
+  freezing_level_height: { id: 'freezing_level_height', title: 'Freezing Level Height' },
+  visibility: { id: 'visibility', title: 'Visibility' },
+  soil_temperature_0cm: { id: 'soil_temperature_0cm', title: 'Soil Temperature 0cm' },
+  soil_temperature_6cm: { id: 'soil_temperature_6cm', title: 'Soil Temperature 6cm' },
+  soil_temperature_18cm: { id: 'soil_temperature_18cm', title: 'Soil Temperature 18cm' },
+  soil_temperature_54cm: { id: 'soil_temperature_54cm', title: 'Soil Temperature 54cm' },
+  soil_moisture_0_to_1cm: { id: 'soil_moisture_0_to_1cm', title: 'Soil Moisture 0-1cm' },
+  soil_moisture_1_to_3cm: { id: 'soil_moisture_1_to_3cm', title: 'Soil Moisture 1-3cm' },
+  soil_moisture_3_to_9cm: { id: 'soil_moisture_3_to_9cm', title: 'Soil Moisture 3-9cm' },
+  soil_moisture_9_to_27cm: { id: 'soil_moisture_9_to_27cm', title: 'Soil Moisture 9-27cm' },
+  soil_moisture_27_to_81cm: { id: 'soil_moisture_27_to_81cm', title: 'Soil Moisture 27-81cm' },
+  is_day: { id: 'is_day', title: 'Is Day' },
 };

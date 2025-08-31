@@ -5,6 +5,7 @@ import { immer } from 'zustand/middleware/immer';
 type WeatherParamsStateType = {
   state: Partial<WeatherParamsType>;
   setState: (state: Partial<WeatherParamsType>) => void;
+  reset: () => void;
 };
 
 export const useWeatherParamsStore = create<WeatherParamsStateType, [['zustand/immer', unknown]]>(
@@ -14,6 +15,11 @@ export const useWeatherParamsStore = create<WeatherParamsStateType, [['zustand/i
       setState: (partialState) => {
         set((state) => {
           state.state = { ...state.state, ...partialState };
+        });
+      },
+      reset: () => {
+        set((state) => {
+          state.state = {};
         });
       },
     };

@@ -191,5 +191,7 @@ export type WeatherApiType = {
   timezone: string;
   timezone_abbreviation: string;
   utc_offset_seconds: number;
+  hourly_units?: { time: string } & { [id in WeatherHourlyVariableType]: string };
+  hourly?: { time: Array<string> } & { [id in WeatherDailyVariableType]: Array<number> };
 };
 // end weather type

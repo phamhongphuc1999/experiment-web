@@ -8,11 +8,12 @@ import { useWeather } from 'src/hooks/queries/weather.query';
 import { WeatherParamsSchema } from 'src/schemas/weather.schema';
 import { useWeatherParamsStore } from 'src/states/weather-params.state';
 import CommonParams from './CommonParams';
+import HourlyParams from './HourlyParams';
 import ResultSpot from './ResultSpot';
 import SearchLocationDialog from './SearchLocationDialog';
 
 export default function WeatherView() {
-  const { state, setState } = useWeatherParamsStore();
+  const { state, setState, reset } = useWeatherParamsStore();
   const { data, refetch } = useWeather(state, { enabled: false });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -22,16 +23,12 @@ export default function WeatherView() {
     }
   }
 
-  function onReset() {
-    setState({});
-  }
-
   return (
     <CommonContainer>
       <form onSubmit={onSubmit}>
         <div className="flex items-center gap-2">
           <Button type="submit">Submit</Button>
-          <Button type="button" onClick={onReset}>
+          <Button type="button" onClick={reset}>
             Reset
           </Button>
         </div>
@@ -55,6 +52,7 @@ export default function WeatherView() {
           <SearchLocationDialog />
         </div>
         <CommonParams className="mt-3" />
+        <HourlyParams className="mt-3" />
       </form>
       {data && <ResultSpot data={data} />}
     </CommonContainer>

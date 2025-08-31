@@ -11,7 +11,7 @@ interface Props extends ComponentProps<'div'> {
 export default function TitleBox({ title, value, titleProps, valueProps, ...props }: Props) {
   return (
     <div {...props} className={cn('flex items-center gap-2', props.className)}>
-      <div {...titleProps} className={cn('text-lg font-bold', titleProps?.className)}>
+      <div {...titleProps} className={cn('text-sm font-bold', titleProps?.className)}>
         {title}
       </div>
       <div {...valueProps}>{value}</div>
