@@ -8,6 +8,7 @@ import { useWeather } from 'src/hooks/queries/weather.query';
 import { WeatherParamsSchema } from 'src/schemas/weather.schema';
 import { useWeatherParamsStore } from 'src/states/weather-params.state';
 import CommonParams from './CommonParams';
+import DailyParams from './DailyParams';
 import HourlyParams from './HourlyParams';
 import ResultSpot from './ResultSpot';
 import SearchLocationDialog from './SearchLocationDialog';
@@ -53,6 +54,7 @@ export default function WeatherView() {
         </div>
         <CommonParams className="mt-3" />
         <HourlyParams className="mt-3" />
+        <DailyParams className="mt-3" />
       </form>
       {data && <ResultSpot data={data} />}
     </CommonContainer>

@@ -1,10 +1,11 @@
 'use client';
 
 import { Location } from 'iconsax-reactjs';
-import debounce from 'lodash/debounce';
 import { Search } from 'lucide-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import EmptyBox from 'src/components/box/EmptyBox';
+import SearchInput from 'src/components/input/SearchInput';
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
-import { Input } from 'src/components/shadcn-ui/input';
 import { LoaderFive } from 'src/components/ui/loader';
 import { LocationType } from 'src/global';
 import { useLocation } from 'src/hooks/queries/location.query';
@@ -33,19 +33,6 @@ export default function SearchLocationDialog() {
     if (filterText.length > 0) return { realData: data?.results || [], isRecent: false };
     return { realData: locations, isRecent: true };
   }, [data?.results, filterText.length, locations]);
-
-  const _setFilterText = useMemo(
-    () =>
-      debounce((value: string) => {
-        setFilterText(value);
-      }, 500),
-    []
-  );
-
-  function onTextChange(text: string) {
-    setSearchText(text);
-    _setFilterText(text);
-  }
 
   function onLocation(location: LocationType) {
     enqueueLocation(location);
@@ -81,7 +68,11 @@ export default function SearchLocationDialog() {
           <DialogTitle>Search location</DialogTitle>
           <div>
             <div className="flex items-center gap-3">
-              <Input value={searchText} onChange={(event) => onTextChange(event.target.value)} />
+              <SearchInput
+                value={searchText}
+                placeholder="Search location"
+                events={{ setSearchText, setFilterText }}
+              />
               <Location className="size-8 cursor-pointer" onClick={gps} />
             </div>
             {isLoading ? (
@@ -124,6 +115,7 @@ export default function SearchLocationDialog() {
                     );
                   })}
                 </div>
+                {realData.length == 0 && <EmptyBox title="No locations found" />}
               </div>
             )}
           </div>

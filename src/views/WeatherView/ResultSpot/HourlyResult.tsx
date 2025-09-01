@@ -93,8 +93,7 @@ export default function HourlyResult({ hourlyUnits, hourly }: Props) {
             const id = item.seriesId as WeatherHourlyVariableType;
             const unit = hourlyUnits[id];
 
-            return `<div class="flex items-center mt-0.5 gap-2">
-                <div class="bg-primary-400 dark:bg-special w-1 h-4 rounded-sm"></div>
+            return `<div class="flex items-center gap-2">
                 <p class="dark:text-content-2 text-gray-600">${name}</p>
                 <p class="dark:text-content-1">${value} (${unit})</p>
               </div>`;

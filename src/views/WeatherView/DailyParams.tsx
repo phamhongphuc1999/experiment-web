@@ -12,26 +12,26 @@ import {
   CollapsibleTrigger,
 } from 'src/components/shadcn-ui/collapsible';
 import { Label } from 'src/components/shadcn-ui/label';
-import { WeatherHourlyConfig } from 'src/configs/constance';
-import { WeatherHourlyVariableType } from 'src/global';
+import { WeatherDailyConfig } from 'src/configs/constance';
+import { WeatherDailyVariableType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { useWeatherParamsStore } from 'src/states/weather-params.state';
 
-export default function HourlyParams(props: ComponentProps<'div'>) {
+export default function DailyParams(props: ComponentProps<'div'>) {
   const [isOpen, setIsOpen] = useState(false);
   const { state, setState } = useWeatherParamsStore();
   const [searchText, setSearchText] = useState('');
   const [filterText, setFilterText] = useState('');
 
   const config = useMemo(() => {
-    const rawConfig = Object.values(WeatherHourlyConfig);
+    const rawConfig = Object.values(WeatherDailyConfig);
     return rawConfig.filter((item) => item.title.toLowerCase().includes(filterText.toLowerCase()));
   }, [filterText]);
 
-  function onCheckChange(checked: CheckedState, id: WeatherHourlyVariableType) {
-    const prevState = state.hourly || [];
-    if (checked) setState({ hourly: [...prevState, id] });
-    else setState({ hourly: prevState.filter((v) => v !== id) });
+  function onCheckChange(checked: CheckedState, id: WeatherDailyVariableType) {
+    const prevState = state.daily || [];
+    if (checked) setState({ daily: [...prevState, id] });
+    else setState({ daily: prevState.filter((v) => v !== id) });
   }
 
   function onCollapseClose(open: boolean) {
@@ -43,12 +43,12 @@ export default function HourlyParams(props: ComponentProps<'div'>) {
       <Collapsible onOpenChange={onCollapseClose}>
         <CollapsibleTrigger className="flex w-full items-center justify-between">
           <div className="flex cursor-pointer items-center gap-2">
-            <p className="text-lg font-semibold">Hourly Weather Variables</p>
+            <p className="text-lg font-semibold">Daily Weather Variables</p>
             <ArrowDown2 className={cn('size-4 transition duration-100', isOpen && 'rotate-180')} />
           </div>
           <SearchInput
             rootprops={{ onClick: (event) => event.stopPropagation(), className: 'max-w-1/4' }}
-            placeholder="Search hourly params"
+            placeholder="Search daily params"
             value={searchText}
             events={{ setSearchText, setFilterText }}
           />
@@ -60,7 +60,7 @@ export default function HourlyParams(props: ComponentProps<'div'>) {
                 <div key={item.id} className="flex cursor-pointer items-center gap-2">
                   <Checkbox
                     id={item.id}
-                    checked={Boolean(state.hourly?.includes(item.id))}
+                    checked={Boolean(state.daily?.includes(item.id))}
                     onCheckedChange={(checked) => onCheckChange(checked, item.id)}
                   />
                   <Label htmlFor={item.id}>{item.title}</Label>

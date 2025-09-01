@@ -1,4 +1,4 @@
-import { WeatherHourlyVariableType } from 'src/global';
+import { WeatherDailyVariableType, WeatherHourlyVariableType } from 'src/global';
 
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
@@ -67,4 +67,59 @@ export const WeatherHourlyConfig: {
   soil_moisture_9_to_27cm: { id: 'soil_moisture_9_to_27cm', title: 'Soil Moisture 9-27cm' },
   soil_moisture_27_to_81cm: { id: 'soil_moisture_27_to_81cm', title: 'Soil Moisture 27-81cm' },
   is_day: { id: 'is_day', title: 'Is Day' },
+};
+
+export const WeatherDailyConfig: {
+  [id in WeatherDailyVariableType]: { id: WeatherDailyVariableType; title: string };
+} = {
+  temperature_2m_max: { id: 'temperature_2m_max', title: 'Max Temperature (°C)' },
+  temperature_2m_mean: { id: 'temperature_2m_mean', title: 'Mean Temperature (°C)' },
+  temperature_2m_min: { id: 'temperature_2m_min', title: 'Min Temperature (°C)' },
+  apparent_temperature_max: {
+    id: 'apparent_temperature_max',
+    title: 'Max Feels-like Temperature (°C)',
+  },
+  apparent_temperature_mean: {
+    id: 'apparent_temperature_mean',
+    title: 'Mean Feels-like Temperature (°C)',
+  },
+  apparent_temperature_min: {
+    id: 'apparent_temperature_min',
+    title: 'Min Feels-like Temperature (°C)',
+  },
+  precipitation_sum: { id: 'precipitation_sum', title: 'Total Precipitation (mm)' },
+  rain_sum: { id: 'rain_sum', title: 'Total Rainfall (mm)' },
+  showers_sum: { id: 'showers_sum', title: 'Total Showers (mm)' },
+  snowfall_sum: { id: 'snowfall_sum', title: 'Total Snowfall (cm)' },
+  precipitation_hours: { id: 'precipitation_hours', title: 'Hours with Precipitation' },
+  precipitation_probability_max: {
+    id: 'precipitation_probability_max',
+    title: 'Max Precipitation Probability (%)',
+  },
+  precipitation_probability_mean: {
+    id: 'precipitation_probability_mean',
+    title: 'Mean Precipitation Probability (%)',
+  },
+  precipitation_probability_min: {
+    id: 'precipitation_probability_min',
+    title: 'Min Precipitation Probability (%)',
+  },
+  weather_code: { id: 'weather_code', title: 'Weather Code' },
+  sunrise: { id: 'sunrise', title: 'Sunrise Time' },
+  sunset: { id: 'sunset', title: 'Sunset Time' },
+  sunshine_duration: { id: 'sunshine_duration', title: 'Sunshine Duration (s)' },
+  daylight_duration: { id: 'daylight_duration', title: 'Daylight Duration (s)' },
+  wind_speed_10m_max: { id: 'wind_speed_10m_max', title: 'Max Wind Speed (10m) (km/h)' },
+  wind_gusts_10m_max: { id: 'wind_gusts_10m_max', title: 'Max Wind Gusts (10m) (km/h)' },
+  wind_direction_10m_dominant: {
+    id: 'wind_direction_10m_dominant',
+    title: 'Dominant Wind Direction (°)',
+  },
+  shortwave_radiation_sum: { id: 'shortwave_radiation_sum', title: 'Shortwave Radiation (MJ/m²)' },
+  et0_fao_evapotranspiration: {
+    id: 'et0_fao_evapotranspiration',
+    title: 'Evapotranspiration (mm)',
+  },
+  uv_index_max: { id: 'uv_index_max', title: 'Max UV Index' },
+  uv_index_clear_sky_max: { id: 'uv_index_clear_sky_max', title: 'Max UV Index (Clear Sky)' },
 };
