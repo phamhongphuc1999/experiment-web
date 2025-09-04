@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { GithubIcon } from '../icons';
 import AppHeader from './AppHeader';
 import EffectBox from './EffectBox';
+import { Toaster } from '../shadcn-ui/sonner';
 
 interface Props {
   children: ReactNode;
@@ -13,6 +14,7 @@ export default function LayoutWrapper({ children }: Props) {
     <EffectBox>
       <div className="min-h-screen">
         <AppHeader />
+        <Toaster />
         <div className="pt-[55px]">{children}</div>
       </div>
       <div className="border-b-border bg-secondary flex w-full flex-col items-center py-[16px] shadow-xl">
