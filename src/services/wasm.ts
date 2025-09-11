@@ -1,4 +1,4 @@
-let wasm: typeof import('../../public/pkg');
+let wasm: typeof import('../../public/pkg/crypt');
 
 export async function initWasm() {
   if (!wasm) {
