@@ -131,7 +131,15 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
             />
             <TitleBox
               title="Note"
-              value={<WordSelect selectedValue={note} onValueChange={setNote} />}
+              value={
+                <WordSelect
+                  selectedValue={note}
+                  onValueChange={(value) => {
+                    if ((value as string) == 'null') setNote(undefined);
+                    else setNote(value);
+                  }}
+                />
+              }
             />
           </div>
         </form>

@@ -2,6 +2,8 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { UseQueryOptions } from '@tanstack/react-query';
 import { ComponentProps } from 'react';
 
+export type ThemeType = 'light' | 'dark';
+
 export interface AnimationComponentProps {
   size?: number | string;
   color?: string;
@@ -209,7 +211,7 @@ export type WeatherApiType = {
 // end weather type
 
 // start word
-export type WordModeType = 'noun' | 'adj' | 'adv';
+export type WordModeType = 'noun' | 'adj' | 'adv' | 'verb';
 
 export type CategoryTableType = {
   id: string;
@@ -217,6 +219,12 @@ export type CategoryTableType = {
   user_id: string;
   create_at: string;
   update_at: string;
+};
+
+export type ResultType = {
+  status: string;
+  correct: number;
+  errors: { [id: string]: boolean };
 };
 
 export type PairTableType = {

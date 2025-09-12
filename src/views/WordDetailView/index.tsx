@@ -1,11 +1,14 @@
 'use client';
 
+import { Setting } from 'iconsax-reactjs';
 import AppBreadcrumb from 'src/components/AppBreadcrumb';
 import TitleBox from 'src/components/box/TitleBox';
 import { ClockLoaderBox } from 'src/components/ClockLoader';
+import { DIALOG_KEY } from 'src/configs/constance';
 import { CategoryTableType } from 'src/global';
 import { useCategoryById, usePairByCategoryId } from 'src/hooks/queries/word.query';
 import { postgrestMoment } from 'src/services';
+import { useDialogStore } from 'src/states/dialog.state';
 import AddDialog from './dialog/AddDialog';
 import PairView from './PairView';
 
@@ -14,20 +17,25 @@ interface LayoutProps {
 }
 
 function WordDetailViewLayout({ category }: LayoutProps) {
+  const { setDialog } = useDialogStore();
   const { data: pairs, isPending } = usePairByCategoryId(category.id);
 
   return (
     <>
       <AppBreadcrumb items={[{ title: 'Word', href: '/word' }, { title: category.title }]} />
-      <div className="mt-3 flex flex-wrap gap-6 rounded-sm border p-3">
+      <div className="mt-3 flex flex-wrap items-center gap-6 rounded-sm border p-3">
         <TitleBox title="Title" value={category.title} />
         <TitleBox title="Create at" value={postgrestMoment(category.create_at)} />
         <TitleBox title="Update at" value={postgrestMoment(category.update_at)} />
         <AddDialog categoryId={category.id} categoryTitle={category.title} />
+        <Setting
+          className="cursor-pointer"
+          onClick={() => setDialog(DIALOG_KEY.wordConfigDialog, true)}
+        />
       </div>
       <div className="mt-3">
         {isPending || pairs?.data == undefined || pairs?.data?.length == 0 ? (
-          <ClockLoaderBox />
+          <ClockLoaderBox iconProps={{ size: 30 }} />
         ) : (
           <PairView pairs={pairs.data} />
         )}

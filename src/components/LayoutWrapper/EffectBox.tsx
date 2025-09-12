@@ -2,8 +2,8 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode, useEffect } from 'react';
-import { LS } from 'src/configs/constance';
-import { LocalStorage } from 'src/services';
+import { useConfigStore } from 'src/states/config.state';
+import WordConfigDialog from '../AppDialog/WordConfigDialog';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,13 +16,18 @@ interface Props {
 }
 
 export default function EffectBox({ children }: Props) {
+  const { theme } = useConfigStore();
+
   useEffect(() => {
-    const theme = LocalStorage.get(LS.THEME) || 'dark';
-    LocalStorage.set(LS.THEME, theme);
     document.body.dataset.theme = theme;
     if (theme == 'dark') document.documentElement.classList.toggle('dark');
     else document.documentElement.classList.remove('dark');
-  }, []);
+  }, [theme]);
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <WordConfigDialog />
+    </QueryClientProvider>
+  );
 }

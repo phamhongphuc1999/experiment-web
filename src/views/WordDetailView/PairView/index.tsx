@@ -2,34 +2,37 @@ import { ChangeEvent, ComponentProps, useCallback, useEffect, useRef, useState }
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { Input } from 'src/components/shadcn-ui/input';
-import { PairTableType } from 'src/global';
+import { PairTableType, ResultType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { randomSubGroup } from 'src/services';
-
-type ResultType = {
-  status: string;
-  correct: number;
-  errors: { [id: string]: boolean };
-};
+import { useConfigStore } from 'src/states/config.state';
+import ResultSpot from './ResultSpot';
+import RevealSpot from './RevealSpot';
 
 interface Props extends ComponentProps<'div'> {
   pairs: Array<PairTableType>;
 }
 
 export default function PairView({ pairs }: Props) {
+  const { revealPerWord } = useConfigStore();
+  const [isShowReveal, setIsShowReveal] = useState(false);
   const [isReveal, setIsReveal] = useState(false);
   const [arr, setArr] = useState<Array<number>>([]);
   const [outputs, setOutputs] = useState<{ [id: string]: string }>({});
-  const [result, setResult] = useState<ResultType | undefined>(undefined);
   const [countdown, setCountdown] = useState(0);
   const _id = useRef<NodeJS.Timeout | null>(null);
+
+  const [time, setTime] = useState(0);
+  const [result, setResult] = useState<{ [id: number]: ResultType }>({});
 
   const onReset = useCallback(() => {
     setArr(randomSubGroup(pairs.length));
     setOutputs({});
-    setResult(undefined);
+    setResult({});
     setIsReveal(false);
     setCountdown(0);
+    setIsShowReveal(false);
+    setOutputs({});
   }, [pairs.length]);
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export default function PairView({ pairs }: Props) {
     });
   }
 
-  function onCheck() {
+  function _calculatorResult() {
     let status = '';
     let correct = 0;
     const errors: { [id: string]: boolean } = {};
@@ -71,7 +74,13 @@ export default function PairView({ pairs }: Props) {
       if (pair.en != outputs[pair.id]) errors[pair.id] = true;
       else correct++;
     }
-    setResult({ status, correct, errors });
+    return { status, correct, errors };
+  }
+
+  function onCheck() {
+    setResult({ [time + 1]: _calculatorResult() });
+    setTime((preValue) => preValue + 1);
+    setIsShowReveal(true);
   }
 
   function onReveal() {
@@ -82,12 +91,15 @@ export default function PairView({ pairs }: Props) {
         break;
       }
     }
-    setOutputs({});
     if (isAllowReveal) {
+      let correct = 0;
+      for (const pair of pairs) {
+        if (pair.en == outputs[pair.id]) correct++;
+      }
+
       setIsReveal(true);
-      setCountdown(5);
+      setCountdown(revealPerWord * (pairs.length - correct));
       setArr(randomSubGroup(pairs.length));
-      setResult(undefined);
     }
   }
 
@@ -95,25 +107,31 @@ export default function PairView({ pairs }: Props) {
     <div className="rounded-sm border p-2">
       <div className="flex items-center gap-3">
         <Button onClick={onCheck}>Check</Button>
-        <Button onClick={onReveal}>{isReveal ? countdown : 'Reveal'}</Button>
-        {result?.correct == pairs.length && <Button onClick={onReset}>Reset</Button>}
+        {result[time]?.correct == pairs.length ? (
+          <Button
+            onClick={() => {
+              onReset();
+              setTime(0);
+            }}
+          >
+            Reset
+          </Button>
+        ) : (
+          <>
+            {isShowReveal && <Button onClick={onReveal}>{isReveal ? countdown : 'Reveal'}</Button>}
+          </>
+        )}
+        <TitleBox title="Time" value={time + 1} />
       </div>
-      {result && (
-        <div className="mt-2">
-          {result.status.length > 0 ? (
-            <p className="text-destructive">{result.status}</p>
-          ) : (
-            <>
-              <TitleBox title="Number of corrects" value={`${result.correct}/${pairs.length}`} />
-            </>
-          )}
-        </div>
+      {result[time] && <ResultSpot len={pairs.length} result={result[time]} />}
+      {result[time] && isReveal && (
+        <RevealSpot arr={arr} pairs={pairs} result={result[time]} outputs={outputs} />
       )}
       {arr.length == pairs.length && (
         <>
           {arr.map((num) => {
             const pair = pairs[num - 1];
-            const isError = result?.errors?.[pair.id];
+            const isError = result[time]?.errors?.[pair.id];
 
             return (
               <div
@@ -121,7 +139,7 @@ export default function PairView({ pairs }: Props) {
                 className={cn('mt-2 gap-3 rounded-sm border p-2', isError && 'border-destructive')}
               >
                 <p>
-                  {pair.vi} {isReveal && <span className="text-chart-4">{` -> ${pair.en}`}</span>}
+                  {pair.vi} {pair.note && <span>({pair.note})</span>}
                 </p>
                 <Input
                   className="mt-2"

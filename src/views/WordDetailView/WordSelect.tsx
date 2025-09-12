@@ -21,7 +21,9 @@ export default function WordSelect({ selectedValue, onValueChange }: Props) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
+          <SelectItem value="null">--</SelectItem>
           <SelectItem value="noun">noun</SelectItem>
+          <SelectItem value="verb">verb</SelectItem>
           <SelectItem value="adj">adj</SelectItem>
           <SelectItem value="adv">adv</SelectItem>
         </SelectGroup>
