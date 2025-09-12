@@ -12,6 +12,7 @@ export const APP_NAME = 'Experiment App';
 export const QUERY_KEY = {
   location: 'location',
   weather: 'weather',
+  wordCategory: 'wordCategory',
 };
 
 export const WeatherHourlyConfig: {

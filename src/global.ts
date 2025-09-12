@@ -1,4 +1,16 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 import { UseQueryOptions } from '@tanstack/react-query';
+import { ComponentProps } from 'react';
+
+export interface AnimationComponentProps {
+  size?: number | string;
+  color?: string;
+}
+
+export interface AnimationComponentDivProps<T = AnimationComponentProps>
+  extends ComponentProps<'div'> {
+  iconProps?: T;
+}
 
 export type OptionalQueryType<T = unknown> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
 
@@ -195,3 +207,38 @@ export type WeatherApiType = {
   hourly?: { time: Array<string> } & { [id in WeatherDailyVariableType]: Array<number> };
 };
 // end weather type
+
+// start database
+
+export type CategoryTableType = {
+  id: string;
+  title: string;
+  user_id: string;
+  create_at: string;
+};
+
+export type DatabaseType = {
+  public: {
+    Tables: {
+      category: {
+        Row: CategoryTableType;
+        Insert: Omit<CategoryTableType, 'id' | 'create_at'>;
+        Update: Pick<CategoryTableType, 'title'>;
+      };
+    };
+  };
+};
+
+export type TypedSupabaseClient = SupabaseClient<DatabaseType>;
+
+export type BaseSupbaseResponseType = {
+  count: null;
+  error: null;
+  status: number;
+  statusText: string;
+};
+
+export type SupbaseResponseType<T> = BaseSupbaseResponseType & { data: Array<T> };
+
+export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T };
+// end database

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import DynamicReactJson from 'src/components/DynamicReactJson';
 import { Button } from 'src/components/shadcn-ui/button';
 import { ENCRYPT_KEY, IV_HEX } from 'src/configs/constance';
-import { baseQuery } from 'src/services/api-query';
+import { useRandomNumber } from 'src/hooks/actions/crypt.action';
 import { decryptText } from 'src/services/encrypt';
 import DomainInfo, { DomainInfoType } from './DomainInfo';
 
@@ -15,6 +15,15 @@ export default function EncryptView() {
   const [axiosError, setAxiosError] = useState('');
   const [axiosRandomData, setAxiosRandomData] = useState<object>({});
   const [data, setData] = useState<DomainInfoType | undefined>(undefined);
+
+  const { mutate, isPending } = useRandomNumber({
+    onSuccess: (data) => {
+      setAxiosRandomData(data);
+    },
+    onError: (error) => {
+      setAxiosRandomData(error);
+    },
+  });
 
   function onReset() {
     setHello({ data: '' });
@@ -38,12 +47,7 @@ export default function EncryptView() {
   }
 
   async function getAxiosRandomData() {
-    try {
-      const res = await baseQuery.get('/random-user');
-      setAxiosRandomData(res);
-    } catch (error) {
-      setAxiosError(String(error));
-    }
+    mutate();
   }
 
   return (
@@ -58,7 +62,9 @@ export default function EncryptView() {
         <DynamicReactJson src={encryptData} rootProps={{ className: 'mt-2' }} />
       </div>
       <div className="border-sidebar-border mt-4 rounded-xl border p-4">
-        <Button onClick={getAxiosRandomData}>Axios random data</Button>
+        <Button onClick={getAxiosRandomData} disabled={isPending} isLoading={isPending}>
+          Axios random data
+        </Button>
         <DynamicReactJson src={axiosRandomData} rootProps={{ className: 'mt-2' }} />
         {axiosError && <p className="text-destructive">{error}</p>}
       </div>

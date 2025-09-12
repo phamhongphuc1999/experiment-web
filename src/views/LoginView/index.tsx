@@ -4,12 +4,12 @@ import { toast } from 'sonner';
 import CommonContainer from 'src/components/box/CommonContainer';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
-import wordApi from 'src/services/api-query/word.api';
+import wordClient from 'src/services/api-query/wordClient';
 
 export default function LoginView() {
   async function onOAuthClick() {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const { error } = await wordApi.auth.signInWithOAuth({
+    const { error } = await wordClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${baseUrl}/word`,

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { LS } from 'src/configs/constance';
 
 type SBase = {
@@ -40,4 +41,8 @@ export function hexToUint8Array(hex: string): Uint8Array {
 
 export function getCurrentTimestamp() {
   return Math.floor(Date.now() / 1000);
+}
+
+export function postgrestMoment(time: string) {
+  return moment(time, 'HH:mm:ss.SSSSSS');
 }

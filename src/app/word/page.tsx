@@ -1,3 +1,4 @@
+import AuthWrapper from 'src/components/AuthWrapper';
 import CommonContainer from 'src/components/box/CommonContainer';
 import WordView from 'src/views/WordView';
 
@@ -7,8 +8,10 @@ export async function generateMetadata() {
 
 export default function Word() {
   return (
-    <CommonContainer>
-      <WordView />
-    </CommonContainer>
+    <AuthWrapper>
+      <CommonContainer>
+        <WordView />
+      </CommonContainer>
+    </AuthWrapper>
   );
 }

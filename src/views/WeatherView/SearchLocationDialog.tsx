@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import EmptyBox from 'src/components/box/EmptyBox';
+import ClockLoader from 'src/components/ClockLoader';
 import SearchInput from 'src/components/input/SearchInput';
 import {
   Dialog,
@@ -13,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
-import { LoaderFive } from 'src/components/ui/loader';
 import { LocationType } from 'src/global';
 import { useLocation } from 'src/hooks/queries/location.query';
 import { cn } from 'src/lib/utils';
@@ -77,7 +77,7 @@ export default function SearchLocationDialog() {
             </div>
             {isLoading ? (
               <div className="mt-4 flex flex-col items-center">
-                <LoaderFive text="Loading..." />
+                <ClockLoader />
               </div>
             ) : (
               <div className="mt-4">
