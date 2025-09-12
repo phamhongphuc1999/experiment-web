@@ -208,13 +208,23 @@ export type WeatherApiType = {
 };
 // end weather type
 
-// start database
+// start word
+export type WordModeType = 'noun' | 'adj' | 'adv';
 
 export type CategoryTableType = {
   id: string;
   title: string;
   user_id: string;
   create_at: string;
+  update_at: string;
+};
+
+export type PairTableType = {
+  id: string;
+  en: string;
+  vi: string;
+  category_id: string;
+  note?: string;
 };
 
 export type DatabaseType = {
@@ -224,6 +234,11 @@ export type DatabaseType = {
         Row: CategoryTableType;
         Insert: Omit<CategoryTableType, 'id' | 'create_at'>;
         Update: Pick<CategoryTableType, 'title'>;
+      };
+      pair: {
+        Row: PairTableType;
+        Insert: Omit<PairTableType, 'id'>;
+        Update: Partial<Omit<PairTableType, 'id'>>;
       };
     };
   };
@@ -241,4 +256,4 @@ export type BaseSupbaseResponseType = {
 export type SupbaseResponseType<T> = BaseSupbaseResponseType & { data: Array<T> };
 
 export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T };
-// end database
+// end word

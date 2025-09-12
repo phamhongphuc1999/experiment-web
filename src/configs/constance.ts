@@ -13,6 +13,8 @@ export const QUERY_KEY = {
   location: 'location',
   weather: 'weather',
   wordCategory: 'wordCategory',
+  wordCategoryById: 'wordCategoryById',
+  wordPairByCategoryById: 'wordPairByCategoryById',
 };
 
 export const WeatherHourlyConfig: {

@@ -27,11 +27,7 @@ export default function LoginView() {
           Login
         </Button>
         <p className="my-3 text-center text-lg font-semibold">Or</p>
-        <Button
-          type="button"
-          onClick={onOAuthClick}
-          className="bg-destructive hover:bg-destructive/50 w-full"
-        >
+        <Button onClick={onOAuthClick} className="bg-destructive hover:bg-destructive/50 w-full">
           Login with Google
         </Button>
       </form>

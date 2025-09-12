@@ -9,8 +9,7 @@ export default function AuthWrapper({ children }: PropsWithChildren) {
 
   useEffect(() => {
     wordClient.auth.getSession().then(({ data: { session } }) => {
-      if (session) router.replace('/word');
-      else router.push('/login');
+      if (!session) router.push('/login');
     });
   }, [router]);
 

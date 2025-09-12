@@ -48,6 +48,7 @@ function Button({ className, variant, size, asChild = false, isLoading = false, 
     <Comp
       data-slot="button"
       className={cn('cursor-pointer', buttonVariants({ variant, size, className }))}
+      type="button"
       {...props}
     >
       <div className="flex items-center gap-2">
