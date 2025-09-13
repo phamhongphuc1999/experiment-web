@@ -7,7 +7,7 @@ interface ClockLoaderProps extends AnimationComponentProps {
 }
 
 export default function ClockLoader({
-  color = 'var(--secondary)',
+  color = 'var(--primary)',
   size = 16,
   isReverse = false,
 }: ClockLoaderProps) {

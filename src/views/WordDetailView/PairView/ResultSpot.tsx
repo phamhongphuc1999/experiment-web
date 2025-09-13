@@ -13,7 +13,14 @@ export default function ResultSpot({ len, result }: Props) {
         <p className="text-destructive">{result.status}</p>
       ) : (
         <>
-          <TitleBox title="Number of corrects" value={`${result.correct}/${len}`} />
+          <TitleBox
+            title="Number of corrects"
+            value={
+              <p>
+                <span className="text-emerald-500">{result.correct}</span>/{len}
+              </p>
+            }
+          />
         </>
       )}
     </div>

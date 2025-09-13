@@ -1,5 +1,7 @@
 import { WeatherDailyVariableType, WeatherHourlyVariableType } from 'src/global';
 
+export const ITEM_PER_PAGE = 10;
+
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
 export const SUPBASE_API_KEY = process.env.NEXT_PUBLIC_SUPBASE_API_KEY || '';

@@ -2,6 +2,7 @@ import { ChangeEvent, ComponentProps, useCallback, useEffect, useRef, useState }
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { Input } from 'src/components/shadcn-ui/input';
+import { beVietnamPro } from 'src/configs/font-family';
 import { PairTableType, ResultType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { randomSubGroup } from 'src/services';
@@ -139,9 +140,11 @@ export default function PairView({ pairs }: Props) {
                 className={cn('mt-2 gap-3 rounded-sm border p-2', isError && 'border-destructive')}
               >
                 <p>
-                  {pair.vi} {pair.note && <span>({pair.note})</span>}
+                  <span className={beVietnamPro.className}>{pair.vi}</span>{' '}
+                  {pair.note && <span>({pair.note})</span>}
                 </p>
                 <Input
+                  spellCheck={false}
                   className="mt-2"
                   value={outputs[pair.id] || ''}
                   onChange={(event) => onOutputsChange(event, pair.id)}

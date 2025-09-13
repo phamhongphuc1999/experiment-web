@@ -2,6 +2,7 @@
 
 import { Setting } from 'iconsax-reactjs';
 import AppBreadcrumb from 'src/components/AppBreadcrumb';
+import EmptyBox from 'src/components/box/EmptyBox';
 import TitleBox from 'src/components/box/TitleBox';
 import { ClockLoaderBox } from 'src/components/ClockLoader';
 import { DIALOG_KEY } from 'src/configs/constance';
@@ -34,10 +35,16 @@ function WordDetailViewLayout({ category }: LayoutProps) {
         />
       </div>
       <div className="mt-3">
-        {isPending || pairs?.data == undefined || pairs?.data?.length == 0 ? (
-          <ClockLoaderBox iconProps={{ size: 30 }} />
+        {isPending ? (
+          <ClockLoaderBox iconProps={{ size: 48 }} />
         ) : (
-          <PairView pairs={pairs.data} />
+          <>
+            {pairs?.data == undefined || pairs?.data?.length == 0 ? (
+              <EmptyBox />
+            ) : (
+              <PairView pairs={pairs.data} />
+            )}
+          </>
         )}
       </div>
     </>
@@ -52,7 +59,7 @@ export default function WordDetailView({ id }: Props) {
   const { data: category, isPending } = useCategoryById(id);
 
   return isPending || category?.data == undefined ? (
-    <ClockLoaderBox />
+    <ClockLoaderBox iconProps={{ size: 48 }} />
   ) : (
     <WordDetailViewLayout category={category.data} />
   );

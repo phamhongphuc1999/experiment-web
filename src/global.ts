@@ -212,6 +212,29 @@ export type WeatherApiType = {
 
 // start word
 export type WordModeType = 'noun' | 'adj' | 'adv' | 'verb';
+export type SortOrderType = 'ascending' | 'descending';
+
+export type BaseFilterType<T, SortByType = string> = Partial<
+  T & {
+    sortBy: SortByType;
+    sortOrder: SortOrderType;
+  }
+>;
+
+export type PaginationType = {
+  page?: number;
+  pageSize?: number;
+};
+
+export type BaseSupbaseQueryParamsType<T, SortByType = string> = {
+  filter?: BaseFilterType<T, SortByType>;
+  pagination?: PaginationType;
+};
+
+export type CategoryParamsType = BaseSupbaseQueryParamsType<
+  { title: string },
+  'create_at' | 'update_at'
+>;
 
 export type CategoryTableType = {
   id: string;
