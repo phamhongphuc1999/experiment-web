@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import EmptyBox from 'src/components/box/EmptyBox';
+import ClockLoader from 'src/components/ClockLoader';
 import SearchInput from 'src/components/input/SearchInput';
 import {
   Dialog,
@@ -13,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
-import { LoaderFive } from 'src/components/ui/loader';
 import { LocationType } from 'src/global';
 import { useLocation } from 'src/hooks/queries/location.query';
 import { cn } from 'src/lib/utils';
@@ -66,60 +66,60 @@ export default function SearchLocationDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Search location</DialogTitle>
-          <div>
-            <div className="flex items-center gap-3">
-              <SearchInput
-                value={searchText}
-                placeholder="Search location"
-                events={{ setSearchText, setFilterText }}
-              />
-              <Location className="size-8 cursor-pointer" onClick={gps} />
+        </DialogHeader>
+        <div>
+          <div className="flex items-center gap-3">
+            <SearchInput
+              value={searchText}
+              placeholder="Search location"
+              events={{ setSearchText, setFilterText }}
+            />
+            <Location className="size-8 cursor-pointer" onClick={gps} />
+          </div>
+          {isLoading ? (
+            <div className="mt-4 flex flex-col items-center">
+              <ClockLoader />
             </div>
-            {isLoading ? (
-              <div className="mt-4 flex flex-col items-center">
-                <LoaderFive text="Loading..." />
-              </div>
-            ) : (
-              <div className="mt-4">
-                {isRecent && <p className="text-right">Recent</p>}
-                <div
-                  className={cn('mt-2 cursor-pointer rounded-md', realData.length > 0 && 'border')}
-                >
-                  {realData.map((item, index) => {
-                    const code = item.country_code;
+          ) : (
+            <div className="mt-4">
+              {isRecent && <p className="text-right">Recent</p>}
+              <div
+                className={cn('mt-2 cursor-pointer rounded-md', realData.length > 0 && 'border')}
+              >
+                {realData.map((item, index) => {
+                  const code = item.country_code;
 
-                    return (
-                      <div
-                        key={item.id}
-                        className={cn('px-4 py-1', index > 0 && 'border-t')}
-                        onClick={() => onLocation(item)}
-                      >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <Image
-                              src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
-                              alt={`${code} flag`}
-                              width={20}
-                              height={20}
-                            />
-                            <p>
-                              <span className="text-secondary-foreground text-lg">{item.name}</span>{' '}
-                              ({item.country})
-                            </p>
-                          </div>
-                          <p className="text-muted-foreground text-xs">
-                            {item.admin1} ({item.latitude}, {item.longitude})
+                  return (
+                    <div
+                      key={item.id}
+                      className={cn('px-4 py-1', index > 0 && 'border-t')}
+                      onClick={() => onLocation(item)}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={`https://flagcdn.com/${code.toLowerCase()}.svg`}
+                            alt={`${code} flag`}
+                            width={20}
+                            height={20}
+                          />
+                          <p>
+                            <span className="text-secondary-foreground text-lg">{item.name}</span> (
+                            {item.country})
                           </p>
                         </div>
+                        <p className="text-muted-foreground text-xs">
+                          {item.admin1} ({item.latitude}, {item.longitude})
+                        </p>
                       </div>
-                    );
-                  })}
-                </div>
-                {realData.length == 0 && <EmptyBox title="No locations found" />}
+                    </div>
+                  );
+                })}
               </div>
-            )}
-          </div>
-        </DialogHeader>
+              {realData.length == 0 && <EmptyBox title="No locations found" />}
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

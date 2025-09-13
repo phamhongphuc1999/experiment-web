@@ -171,3 +171,27 @@ input[type='number'] {
   font-size: 12px;
   opacity: 100;
 }
+
+/* ClockLoader */
+@keyframes ClockLoader_keyframes {
+  0% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+.ClockLoader_root {
+  border-color: var(--color);
+}
+.ClockLoader {
+  position: absolute;
+  box-sizing: border-box;
+  width: 0.5px;
+  transform-origin: bottom;
+}
+.ClockLoader_item {
+  animation: ClockLoader_keyframes var(--animation-time) linear infinite;
+  background-color: var(--color);
+}
+/* ClockLoader */

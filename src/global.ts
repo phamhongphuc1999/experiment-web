@@ -1,4 +1,18 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 import { UseQueryOptions } from '@tanstack/react-query';
+import { ComponentProps } from 'react';
+
+export type ThemeType = 'light' | 'dark';
+
+export interface AnimationComponentProps {
+  size?: number | string;
+  color?: string;
+}
+
+export interface AnimationComponentDivProps<T = AnimationComponentProps>
+  extends ComponentProps<'div'> {
+  iconProps?: T;
+}
 
 export type OptionalQueryType<T = unknown> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
 
@@ -195,3 +209,82 @@ export type WeatherApiType = {
   hourly?: { time: Array<string> } & { [id in WeatherDailyVariableType]: Array<number> };
 };
 // end weather type
+
+// start word
+export type WordModeType = 'noun' | 'adj' | 'adv' | 'verb';
+export type SortOrderType = 'ascending' | 'descending';
+
+export type BaseFilterType<T, SortByType = string> = Partial<
+  T & {
+    sortBy: SortByType;
+    sortOrder: SortOrderType;
+  }
+>;
+
+export type PaginationType = {
+  page?: number;
+  pageSize?: number;
+};
+
+export type BaseSupbaseQueryParamsType<T, SortByType = string> = {
+  filter?: BaseFilterType<T, SortByType>;
+  pagination?: PaginationType;
+};
+
+export type CategoryParamsType = BaseSupbaseQueryParamsType<
+  { title: string },
+  'create_at' | 'update_at'
+>;
+
+export type CategoryTableType = {
+  id: string;
+  title: string;
+  user_id: string;
+  create_at: string;
+  update_at: string;
+};
+
+export type ResultType = {
+  status: string;
+  correct: number;
+  errors: { [id: string]: boolean };
+};
+
+export type PairTableType = {
+  id: string;
+  en: string;
+  vi: string;
+  category_id: string;
+  note?: string;
+};
+
+export type DatabaseType = {
+  public: {
+    Tables: {
+      category: {
+        Row: CategoryTableType;
+        Insert: Omit<CategoryTableType, 'id' | 'create_at'>;
+        Update: Pick<CategoryTableType, 'title'>;
+      };
+      pair: {
+        Row: PairTableType;
+        Insert: Omit<PairTableType, 'id'>;
+        Update: Partial<Omit<PairTableType, 'id'>>;
+      };
+    };
+  };
+};
+
+export type TypedSupabaseClient = SupabaseClient<DatabaseType>;
+
+export type BaseSupbaseResponseType = {
+  count: null;
+  error: null;
+  status: number;
+  statusText: string;
+};
+
+export type SupbaseResponseType<T> = BaseSupbaseResponseType & { data: Array<T> };
+
+export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T };
+// end word

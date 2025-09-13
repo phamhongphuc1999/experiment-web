@@ -1,31 +1,6 @@
-import { LS } from 'src/configs/constance';
-
-type SBase = {
-  toString: () => string;
-};
-
-export class LocalStorage {
-  static set<T extends SBase>(key: string, value: T, formatter?: (value: T) => string) {
-    if (formatter) localStorage.setItem(key, formatter(value));
-    else localStorage.setItem(key, value.toString());
-  }
-
-  static get(key: string): string | null {
-    return localStorage.getItem(key);
-  }
-
-  static remove(key: string) {
-    localStorage.removeItem(key);
-  }
-}
-
-export function switchTheme() {
-  const newTheme = LocalStorage.get(LS.THEME) == 'dark' ? 'light' : 'dark';
-  LocalStorage.set(LS.THEME, newTheme);
-  document.body.dataset.theme = newTheme;
-  if (newTheme == 'dark') document.documentElement.classList.toggle('dark');
-  else document.documentElement.classList.remove('dark');
-}
+import moment from 'moment';
+import { ITEM_PER_PAGE } from 'src/configs/constance';
+import { PaginationType } from 'src/global';
 
 export function hexToUint8Array(hex: string): Uint8Array {
   if (hex.length % 2 !== 0) {
@@ -40,4 +15,33 @@ export function hexToUint8Array(hex: string): Uint8Array {
 
 export function getCurrentTimestamp() {
   return Math.floor(Date.now() / 1000);
+}
+
+export function postgrestMoment(time: string) {
+  return moment.utc(time).local().format('MMM DD, YYYY HH:mm');
+}
+
+export function randomSubGroup(range: number) {
+  const _array = Array.from(Array(range).keys(), (key) => key + 1);
+  for (let i = range - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [_array[i], _array[j]] = [_array[j], _array[i]];
+  }
+  return _array;
+}
+
+export function getRandomArbitrary(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
+
+export function getPaginationRange(pagination?: PaginationType) {
+  const page = pagination?.page == undefined ? 0 : pagination.page;
+  const pageSize = pagination?.pageSize == undefined ? ITEM_PER_PAGE : pagination.pageSize;
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  return { from, to };
+}
+
+export function formatText(s: string, frac = 3) {
+  return s.length > frac * 2 + 5 ? `${s.substring(0, frac)}...${s.slice(-frac)}` : s;
 }
