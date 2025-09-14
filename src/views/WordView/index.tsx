@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowDown2, ArrowUp2, Setting } from 'iconsax-reactjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import AppBreadcrumb from 'src/components/AppBreadcrumb';
@@ -16,18 +17,23 @@ import {
   TableHeader,
   TableRow,
 } from 'src/components/shadcn-ui/table';
-import { ITEM_PER_PAGE } from 'src/configs/constance';
+import { DIALOG_KEY, ITEM_PER_PAGE } from 'src/configs/constance';
+import { CategorySortByType, SortOrderType } from 'src/global';
 import { useCategories } from 'src/hooks/queries/word.query';
 import { formatText, postgrestMoment } from 'src/services';
+import { useDialogStore } from 'src/states/dialog.state';
 
 export default function WordView() {
+  const { setDialog } = useDialogStore();
   const router = useRouter();
   const [filterText, setFilterText] = useState('');
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<CategorySortByType>('update_at');
+  const [orderBy, setOrderBy] = useState<SortOrderType>('descending');
 
   const { data, isPending } = useCategories({
-    filter: { title: filterText },
+    filter: { title: filterText, sortBy, sortOrder: orderBy },
     pagination: { page: currentPage },
   });
 
@@ -35,10 +41,26 @@ export default function WordView() {
     router.push(`/word/${categoryId}`);
   }
 
+  function onSort(_sortBy: CategorySortByType) {
+    if (_sortBy == sortBy)
+      setOrderBy((preValue) => (preValue == 'ascending' ? 'descending' : 'ascending'));
+    else {
+      setSortBy(_sortBy);
+      setOrderBy('descending');
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
-        <AppBreadcrumb items={[{ title: 'Word' }]} />
+        <div className="flex items-center gap-2">
+          <AppBreadcrumb items={[{ title: 'Word' }]} />
+          <Setting
+            size={14}
+            className="cursor-pointer"
+            onClick={() => setDialog(DIALOG_KEY.wordConfigDialog, true)}
+          />
+        </div>
         <SearchInput
           placeholder="Search category"
           rootprops={{ className: 'w-fit' }}
@@ -51,8 +73,26 @@ export default function WordView() {
           <TableRow>
             <TableHead>id</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead>Create at</TableHead>
-            <TableHead>Update at</TableHead>
+            <TableHead onClick={() => onSort('create_at')}>
+              <div className="flex cursor-pointer items-center gap-2">
+                <p>Create at</p>
+                {sortBy == 'create_at' && (
+                  <div>
+                    {orderBy == 'ascending' ? <ArrowDown2 size={16} /> : <ArrowUp2 size={16} />}
+                  </div>
+                )}
+              </div>
+            </TableHead>
+            <TableHead onClick={() => onSort('update_at')}>
+              <div className="flex cursor-pointer items-center gap-2">
+                <p>Update at</p>
+                {sortBy == 'update_at' && (
+                  <div>
+                    {orderBy == 'ascending' ? <ArrowDown2 size={16} /> : <ArrowUp2 size={16} />}
+                  </div>
+                )}
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

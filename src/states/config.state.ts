@@ -5,16 +5,19 @@ import { immer } from 'zustand/middleware/immer';
 
 type WordConfigStateType = {
   revealPerWord: number;
+  isFillFromScratch: boolean;
 };
 
 interface ConfigStateType extends WordConfigStateType {
   theme: ThemeType;
   setTheme: () => void;
   setRevealPerWord: (revealPerWord: number) => void;
+  setIsFillFromScratch: (isFillFromScratch: boolean) => void;
 }
 
 export const defaultWordConfig: WordConfigStateType = {
   revealPerWord: 2,
+  isFillFromScratch: true,
 };
 
 export const useConfigStore = create<
@@ -34,6 +37,12 @@ export const useConfigStore = create<
         setRevealPerWord: (revealPerWord) => {
           set((state) => {
             state.revealPerWord = revealPerWord;
+          });
+        },
+        isFillFromScratch: defaultWordConfig.isFillFromScratch,
+        setIsFillFromScratch: (isFillFromScratch) => {
+          set((state) => {
+            state.isFillFromScratch = isFillFromScratch;
           });
         },
       };

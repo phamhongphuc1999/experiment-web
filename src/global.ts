@@ -231,10 +231,9 @@ export type BaseSupbaseQueryParamsType<T, SortByType = string> = {
   pagination?: PaginationType;
 };
 
-export type CategoryParamsType = BaseSupbaseQueryParamsType<
-  { title: string },
-  'create_at' | 'update_at'
->;
+export type CategorySortByType = 'create_at' | 'update_at';
+
+export type CategoryParamsType = BaseSupbaseQueryParamsType<{ title: string }, CategorySortByType>;
 
 export type CategoryTableType = {
   id: string;
