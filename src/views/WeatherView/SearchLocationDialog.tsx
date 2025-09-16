@@ -19,27 +19,27 @@ import { useLocation } from 'src/hooks/queries/location.query';
 import { cn } from 'src/lib/utils';
 import { useWeatherParamsStore } from 'src/states/weather-params.state';
 import { useWeatherStore } from 'src/states/weather.state';
+import { useDebounceValue } from 'usehooks-ts';
 
 export default function SearchLocationDialog() {
   const { setState } = useWeatherParamsStore();
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [filterText, setFilterText] = useState('');
   const { locations, enqueueLocation } = useWeatherStore();
+  const [debouncedText] = useDebounceValue(searchText, 500);
 
-  const { data, isLoading } = useLocation(filterText);
+  const { data, isLoading } = useLocation(debouncedText);
 
   const { realData, isRecent } = useMemo(() => {
-    if (filterText.length > 0) return { realData: data?.results || [], isRecent: false };
+    if (debouncedText.length > 0) return { realData: data?.results || [], isRecent: false };
     return { realData: locations, isRecent: true };
-  }, [data?.results, filterText.length, locations]);
+  }, [data?.results, debouncedText.length, locations]);
 
   function onLocation(location: LocationType) {
     enqueueLocation(location);
     setState({ latitude: location.latitude, longitude: location.longitude });
     setOpen(false);
     setSearchText('');
-    setFilterText('');
   }
 
   function gps() {
@@ -72,7 +72,7 @@ export default function SearchLocationDialog() {
             <SearchInput
               value={searchText}
               placeholder="Search location"
-              events={{ setSearchText, setFilterText }}
+              events={{ setSearchText }}
             />
             <Location className="size-8 cursor-pointer" onClick={gps} />
           </div>

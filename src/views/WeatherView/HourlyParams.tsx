@@ -16,17 +16,20 @@ import { WeatherHourlyConfig } from 'src/configs/constance';
 import { WeatherHourlyVariableType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { useWeatherParamsStore } from 'src/states/weather-params.state';
+import { useDebounceValue } from 'usehooks-ts';
 
 export default function HourlyParams(props: ComponentProps<'div'>) {
   const [isOpen, setIsOpen] = useState(false);
   const { state, setState } = useWeatherParamsStore();
   const [searchText, setSearchText] = useState('');
-  const [filterText, setFilterText] = useState('');
+  const [debouncedText] = useDebounceValue(searchText, 500);
 
   const config = useMemo(() => {
     const rawConfig = Object.values(WeatherHourlyConfig);
-    return rawConfig.filter((item) => item.title.toLowerCase().includes(filterText.toLowerCase()));
-  }, [filterText]);
+    return rawConfig.filter((item) =>
+      item.title.toLowerCase().includes(debouncedText.toLowerCase())
+    );
+  }, [debouncedText]);
 
   function onCheckChange(checked: CheckedState, id: WeatherHourlyVariableType) {
     const prevState = state.hourly || [];
@@ -50,7 +53,7 @@ export default function HourlyParams(props: ComponentProps<'div'>) {
             rootprops={{ onClick: (event) => event.stopPropagation(), className: 'max-w-1/4' }}
             placeholder="Search hourly params"
             value={searchText}
-            events={{ setSearchText, setFilterText }}
+            events={{ setSearchText }}
           />
         </CollapsibleTrigger>
         <CollapsibleContent>

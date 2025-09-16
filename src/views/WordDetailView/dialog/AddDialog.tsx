@@ -11,10 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
+import { beVietnamPro } from 'src/configs/font-family';
 import { PairTableType, WordModeType } from 'src/global';
 import { useNewPairs } from 'src/hooks/actions/word.action';
 import { usePairByCategoryId } from 'src/hooks/queries/word.query';
+import { cn } from 'src/lib/utils';
 import { AddWordSchema } from 'src/schemas/word.schema';
+import { useDebounceValue } from 'usehooks-ts';
 import * as uuid from 'uuid';
 import WordSelect from '../WordSelect';
 
@@ -28,24 +31,23 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<{ [id: string]: PairTableType }>({});
   const [searchEn, setSearchEn] = useState('');
-  const [filterEn, setFilterEn] = useState('');
+  const [debouncedEn] = useDebounceValue(searchEn, 500);
   const [searchVi, setSearchVi] = useState('');
-  const [filterVi, setFilterVi] = useState('');
+  const [debouncedVi] = useDebounceValue(searchVi, 500);
   const [note, setNote] = useState<WordModeType | undefined>(undefined);
   const { refetch } = usePairByCategoryId(categoryId);
+  const _data = Object.values(data);
 
   function onAddPair() {
-    if (AddWordSchema.isValidSync({ en: filterEn, vi: filterVi })) {
+    if (AddWordSchema.isValidSync({ en: debouncedEn, vi: debouncedVi })) {
       const id = uuid.v4();
-      const _value = { id, en: filterEn, vi: filterVi, note, category_id: categoryId };
+      const _value = { id, en: debouncedEn, vi: debouncedVi, note, category_id: categoryId };
       setData((preValue) => {
         return { ...preValue, [id]: { ..._value } };
       });
 
       setSearchEn('');
-      setFilterEn('');
       setSearchVi('');
-      setFilterVi('');
       setNote(undefined);
     } else toast.error('Please fill new pair');
   }
@@ -71,9 +73,7 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
       refetch();
       toast.success('add successfully');
       setSearchEn('');
-      setFilterEn('');
       setSearchVi('');
-      setFilterVi('');
       setNote(undefined);
       setData({});
       setOpen(false);
@@ -91,22 +91,36 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
         </DialogHeader>
         <form onSubmit={onSubmit}>
           <div className="flex items-center gap-3">
-            <Button type="submit" color="secondary">
+            <Button type="submit" color="secondary" disabled={_data.length == 0}>
               Confirm
             </Button>
-            <Button onClick={onAddPair}>Add</Button>
+            <Button onClick={onAddPair} disabled={searchEn.length == 0 || searchVi.length == 0}>
+              Add
+            </Button>
           </div>
-          <div className="mt-3">
-            {Object.values(data).map((item) => {
+          <div className="mt-3 h-52 overflow-y-scroll">
+            {_data.reverse().map((item) => {
               return (
                 <div
                   key={item.id}
-                  className="hover:bg-muted flex items-center justify-between gap-3 rounded-sm p-2"
+                  className="hover:bg-muted mt-1 flex items-center justify-between gap-3 rounded-sm border p-2"
                 >
-                  <div className="flex items-center gap-3">
-                    <TitleBox title="en" value={item.en} />
-                    <TitleBox title="vi" value={item.vi} />
-                    <TitleBox title="note" value={item.note} />
+                  <div className="flex flex-1 flex-wrap items-center gap-3">
+                    <TitleBox
+                      title="en"
+                      value={item.en}
+                      valueProps={{ className: 'text-nowrap' }}
+                    />
+                    <TitleBox
+                      title="vi"
+                      value={item.vi}
+                      valueProps={{ className: cn('text-nowrap', beVietnamPro.className) }}
+                    />
+                    <TitleBox
+                      title="note"
+                      value={item.note || '--'}
+                      valueProps={{ className: 'text-nowrap' }}
+                    />
                   </div>
                   <Trash
                     size={14}
@@ -122,12 +136,13 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
             <SearchInput
               placeholder="en"
               value={searchEn}
-              events={{ setFilterText: setFilterEn, setSearchText: setSearchEn }}
+              events={{ setSearchText: setSearchEn }}
             />
             <SearchInput
               placeholder="vi"
               value={searchVi}
-              events={{ setFilterText: setFilterVi, setSearchText: setSearchVi }}
+              events={{ setSearchText: setSearchVi }}
+              className={cn(beVietnamPro.className, 'font-sans')}
             />
             <TitleBox
               title="Note"

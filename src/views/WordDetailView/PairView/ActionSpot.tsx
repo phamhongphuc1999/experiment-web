@@ -55,6 +55,7 @@ export default function ActionSpot({ pairs }: Props) {
         )}
         {status == 'reset' && <Button onClick={() => init(pairs)}>Reset</Button>}
         <TitleBox title="Time" value={currentRound} />
+        <TitleBox title="Number of Records" value={result[currentRound].reorderPairs.length} />
         {currentRound > 1 && <PairDetailResultDialog />}
       </div>
       <div className="mt-2">

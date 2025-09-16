@@ -5,6 +5,7 @@ import { PairTableType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { useWordPairsStore } from 'src/states/wordPairs.state';
 import ActionSpot from './ActionSpot';
+import RevealSpot from './RevealSpot';
 
 interface Props extends ComponentProps<'div'> {
   pairs: Array<PairTableType>;
@@ -33,6 +34,7 @@ export default function PairView({ pairs }: Props) {
       {gameStatus != 'init' && (
         <>
           <ActionSpot pairs={pairs} />
+          <RevealSpot />
           {result[currentRound].reorderPairs.map((pair) => {
             const point = result[currentRound].points[pair.id];
             const status = point.status;

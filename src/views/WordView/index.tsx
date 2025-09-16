@@ -22,18 +22,19 @@ import { CategorySortByType, SortOrderType } from 'src/global';
 import { useCategories } from 'src/hooks/queries/word.query';
 import { formatText, postgrestMoment } from 'src/services';
 import { useDialogStore } from 'src/states/dialog.state';
+import { useDebounceValue } from 'usehooks-ts';
 
 export default function WordView() {
   const { setDialog } = useDialogStore();
   const router = useRouter();
-  const [filterText, setFilterText] = useState('');
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<CategorySortByType>('update_at');
   const [orderBy, setOrderBy] = useState<SortOrderType>('descending');
+  const [debouncedText] = useDebounceValue(searchText, 500);
 
   const { data, isPending } = useCategories({
-    filter: { title: filterText, sortBy, sortOrder: orderBy },
+    filter: { title: debouncedText, sortBy, sortOrder: orderBy },
     pagination: { page: currentPage },
   });
 
@@ -65,7 +66,7 @@ export default function WordView() {
           placeholder="Search category"
           rootprops={{ className: 'w-fit' }}
           value={searchText}
-          events={{ setFilterText, setSearchText }}
+          events={{ setSearchText }}
         />
       </div>
       <Table className="mt-3">
