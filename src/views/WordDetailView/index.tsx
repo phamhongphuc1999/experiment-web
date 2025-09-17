@@ -18,7 +18,7 @@ function WordDetailViewLayout({ category }: LayoutProps) {
   return (
     <div className="flex h-full flex-col">
       <AppBreadcrumb items={[{ title: 'Word', href: '/word' }, { title: category.title }]} />
-      <CategoryOverview category={category} />
+      <CategoryOverview showLearn category={category} />
       <div className="mt-3 min-h-0 flex-1 overflow-auto">
         {isPending ? (
           <ClockLoaderBox iconProps={{ size: 48 }} />

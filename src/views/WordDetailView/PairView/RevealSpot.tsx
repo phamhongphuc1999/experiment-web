@@ -1,3 +1,4 @@
+import { beVietnamPro } from 'src/configs/font-family';
 import { useWordPairsStore } from 'src/states/wordPairs.state';
 
 export default function RevealSpot() {
@@ -13,7 +14,8 @@ export default function RevealSpot() {
         return isReveal ? (
           <div key={pair.id}>
             <p>
-              {pair.vi} {'->'} <span className="text-destructive">{point.userEn}</span> {'->'}{' '}
+              <span className={beVietnamPro.className}>{pair.vi}</span> {'->'}{' '}
+              <span className="text-destructive">{point.userEn}</span> {'->'}{' '}
               <span className="text-green-400">{pair.en}</span>
             </p>
           </div>

@@ -2,6 +2,7 @@ import { ComponentProps, useEffect, useRef, useState } from 'react';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { PairTableType } from 'src/global';
+import { cn } from 'src/lib/utils';
 import { useConfigStore } from 'src/states/config.state';
 import { useWordPairsStore } from 'src/states/wordPairs.state';
 import PairDetailResultDialog from '../dialog/PairDetailResultDialog';
@@ -44,7 +45,7 @@ export default function ActionSpot({ pairs, ...props }: Props) {
   }
 
   return (
-    <div {...props}>
+    <div {...props} className={cn('rounded-sm border p-3', props.className)}>
       <div className="flex flex-wrap items-center gap-2">
         <Button onClick={onCheck}>Check</Button>
         {(status == 'showError' || status == 'revealing') && (
