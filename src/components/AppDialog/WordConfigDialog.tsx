@@ -15,9 +15,15 @@ export default function WordConfigDialog() {
     setRevealPerWord: setStorageRevealPerWord,
     isFillFromScratch: storageIsFillFromScratch,
     setIsFillFromScratch: setStorageIsFillFromScratch,
+    learnMode: storageLearnMode,
+    setLearnMode: setStorageLearnMode,
+    learnPerWord: storageLearnPerWord,
+    setLearnPerWord: setStorageLearnPerWord,
   } = useConfigStore();
   const [revealPerWord, setRevealPerWord] = useState(storageRevealPerWord);
   const [isFillFromScratch, setIsFillFromScratch] = useState(storageIsFillFromScratch);
+  const [learnMode, setLearnMode] = useState<'normal' | 'countdown'>('normal');
+  const [learnPerWord, setLearnPerWord] = useState(storageLearnPerWord);
 
   useEffect(() => {
     setRevealPerWord(storageRevealPerWord);
@@ -27,11 +33,21 @@ export default function WordConfigDialog() {
     setIsFillFromScratch(storageIsFillFromScratch);
   }, [storageIsFillFromScratch]);
 
+  useEffect(() => {
+    setLearnMode(storageLearnMode);
+  }, [storageLearnMode]);
+
+  useEffect(() => {
+    setLearnPerWord(storageLearnPerWord);
+  }, [storageLearnPerWord]);
+
   function onSaveConfig(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     if (revealPerWord != storageRevealPerWord) setStorageRevealPerWord(revealPerWord);
     if (isFillFromScratch != storageIsFillFromScratch)
       setStorageIsFillFromScratch(isFillFromScratch);
+    if (learnMode != storageLearnMode) setStorageLearnMode(learnMode);
+    if (learnPerWord != storageLearnPerWord) setStorageLearnPerWord(learnPerWord);
     toast.success('Save successfully!');
     setDialog(DIALOG_KEY.wordConfigDialog, false);
   }
@@ -47,15 +63,17 @@ export default function WordConfigDialog() {
         </DialogHeader>
         <form>
           <div className="grid grid-cols-3">
-            <BaseInput
-              className="col-span-3"
-              type="number"
-              placeholder="Reveal per word"
-              value={revealPerWord}
-              onChange={(event) => setRevealPerWord(parseInt(event.target.value))}
-            />
+            <div className="col-span-3 border-t pt-2">
+              <BaseInput
+                className="col-span-3"
+                type="number"
+                placeholder="Reveal per word"
+                value={revealPerWord}
+                onChange={(event) => setRevealPerWord(parseInt(event.target.value))}
+              />
+            </div>
             <TitleBox
-              className="col-span-3"
+              className="col-span-3 border-t pt-2"
               title="Is fill from scratch"
               value={
                 <Button onClick={() => setIsFillFromScratch((preValue) => !preValue)}>
@@ -63,6 +81,31 @@ export default function WordConfigDialog() {
                 </Button>
               }
             />
+            <div className="col-span-3 mt-2 border-t pt-2">
+              <p>Learn mode</p>
+              <div className="mt-2 flex items-center gap-2">
+                <Button
+                  variant={learnMode == 'normal' ? 'default' : 'outline'}
+                  onClick={() => setLearnMode('normal')}
+                >
+                  Normal
+                </Button>
+                <Button
+                  variant={learnMode == 'countdown' ? 'default' : 'outline'}
+                  onClick={() => setLearnMode('countdown')}
+                >
+                  Countdown
+                </Button>
+                {learnMode == 'countdown' && (
+                  <BaseInput
+                    type="number"
+                    placeholder="Learn per word"
+                    value={learnPerWord}
+                    onChange={(event) => setLearnPerWord(parseInt(event.target.value))}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           <Button type="submit" onClick={onSaveConfig} className="mt-3">
             Save

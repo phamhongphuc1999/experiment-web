@@ -6,6 +6,8 @@ import { immer } from 'zustand/middleware/immer';
 type WordConfigStateType = {
   revealPerWord: number;
   isFillFromScratch: boolean;
+  learnMode: 'normal' | 'countdown';
+  learnPerWord: number;
 };
 
 interface ConfigStateType extends WordConfigStateType {
@@ -13,11 +15,15 @@ interface ConfigStateType extends WordConfigStateType {
   setTheme: () => void;
   setRevealPerWord: (revealPerWord: number) => void;
   setIsFillFromScratch: (isFillFromScratch: boolean) => void;
+  setLearnMode: (learnMode: 'normal' | 'countdown') => void;
+  setLearnPerWord: (learnPerWord: number) => void;
 }
 
 export const defaultWordConfig: WordConfigStateType = {
   revealPerWord: 2,
   isFillFromScratch: true,
+  learnMode: 'normal',
+  learnPerWord: 5,
 };
 
 export const useConfigStore = create<
@@ -43,6 +49,18 @@ export const useConfigStore = create<
         setIsFillFromScratch: (isFillFromScratch) => {
           set((state) => {
             state.isFillFromScratch = isFillFromScratch;
+          });
+        },
+        learnMode: defaultWordConfig.learnMode,
+        setLearnMode: (learnMode) => {
+          set((state) => {
+            state.learnMode = learnMode;
+          });
+        },
+        learnPerWord: defaultWordConfig.learnPerWord,
+        setLearnPerWord: (learnPerWord) => {
+          set((state) => {
+            state.learnPerWord = learnPerWord;
           });
         },
       };

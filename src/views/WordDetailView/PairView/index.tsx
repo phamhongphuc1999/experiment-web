@@ -29,46 +29,44 @@ export default function PairView({ pairs }: Props) {
     changeEn(id, event.target.value);
   }
 
-  return (
-    <div className={cn('rounded-sm border p-2', gameStatus == 'reset' && 'border-green-400')}>
-      {gameStatus != 'init' && (
-        <>
-          <ActionSpot pairs={pairs} />
-          <RevealSpot />
-          {result[currentRound].reorderPairs.map((pair) => {
-            const point = result[currentRound].points[pair.id];
-            const status = point.status;
-            const userEn = point.userEn;
-            const isRed =
-              status == 'wrong' && (gameStatus == 'showError' || gameStatus == 'revealing');
-            const isReveal = gameStatus == 'revealing' && status == 'wrong';
+  return gameStatus != 'init' ? (
+    <div className="relative">
+      <ActionSpot pairs={pairs} className="bg-background sticky top-0 z-10" />
+      <div className="mt-3 min-h-0 flex-1 overflow-auto">
+        <RevealSpot />
+        {result[currentRound].reorderPairs.map((pair) => {
+          const point = result[currentRound].points[pair.id];
+          const status = point.status;
+          const userEn = point.userEn;
+          const isRed =
+            status == 'wrong' && (gameStatus == 'showError' || gameStatus == 'revealing');
+          const isReveal = gameStatus == 'revealing' && status == 'wrong';
 
-            return (
-              <div
-                key={pair.id}
-                className={cn('mt-2 gap-3 rounded-sm border p-2', isRed && 'border-destructive')}
-              >
-                <p>
-                  <span className={beVietnamPro.className}>{pair.vi}</span>{' '}
-                  {pair.note && <span>({pair.note})</span>}
-                  {isReveal && (
-                    <span className="text-green-400">
-                      {' -> '}
-                      {pair.en}
-                    </span>
-                  )}
-                </p>
-                <Input
-                  spellCheck={false}
-                  className="mt-2"
-                  value={userEn || ''}
-                  onChange={(event) => onOutputsChange(event, pair.id)}
-                />
-              </div>
-            );
-          })}
-        </>
-      )}
+          return (
+            <div
+              key={pair.id}
+              className={cn('mt-2 gap-3 rounded-sm border p-2', isRed && 'border-destructive')}
+            >
+              <p>
+                <span className={beVietnamPro.className}>{pair.vi}</span>{' '}
+                {pair.note && <span>({pair.note})</span>}
+                {isReveal && (
+                  <span className="text-green-400">
+                    {' -> '}
+                    {pair.en}
+                  </span>
+                )}
+              </p>
+              <Input
+                spellCheck={false}
+                className="mt-2"
+                value={userEn || ''}
+                onChange={(event) => onOutputsChange(event, pair.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
-  );
+  ) : null;
 }

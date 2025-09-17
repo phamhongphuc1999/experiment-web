@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowDown2, ArrowUp2, Setting } from 'iconsax-reactjs';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useState } from 'react';
 import AppBreadcrumb from 'src/components/AppBreadcrumb';
 import AppPagination from 'src/components/AppPagination';
@@ -9,6 +9,7 @@ import EmptyBox from 'src/components/box/EmptyBox';
 import { ClockLoaderBox } from 'src/components/ClockLoader';
 import CopyClipboard from 'src/components/CopyClipboard';
 import SearchInput from 'src/components/input/SearchInput';
+import { Button } from 'src/components/shadcn-ui/button';
 import {
   Table,
   TableBody,
@@ -26,7 +27,6 @@ import { useDebounceValue } from 'usehooks-ts';
 
 export default function WordView() {
   const { setDialog } = useDialogStore();
-  const router = useRouter();
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<CategorySortByType>('update_at');
@@ -37,10 +37,6 @@ export default function WordView() {
     filter: { title: debouncedText, sortBy, sortOrder: orderBy },
     pagination: { page: currentPage },
   });
-
-  function onRowClick(categoryId: string) {
-    router.push(`/word/${categoryId}`);
-  }
 
   function onSort(_sortBy: CategorySortByType) {
     if (_sortBy == sortBy)
@@ -94,16 +90,13 @@ export default function WordView() {
                 )}
               </div>
             </TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data?.data?.map((category) => {
             return (
-              <TableRow
-                key={category.id}
-                className="cursor-pointer"
-                onClick={() => onRowClick(category.id)}
-              >
+              <TableRow key={category.id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <p>{formatText(category.id)}</p>
@@ -113,6 +106,14 @@ export default function WordView() {
                 <TableCell>{category.title}</TableCell>
                 <TableCell>{postgrestMoment(category.create_at)}</TableCell>
                 <TableCell>{postgrestMoment(category.update_at)}</TableCell>
+                <TableCell>
+                  <Link href={`/word/${category.id}`}>
+                    <Button>Play</Button>
+                  </Link>
+                  <Link href={`/word/learn/${category.id}`} className="ml-2">
+                    <Button>Learn</Button>
+                  </Link>
+                </TableCell>
               </TableRow>
             );
           })}

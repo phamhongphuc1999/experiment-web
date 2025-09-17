@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ComponentProps, useEffect, useRef, useState } from 'react';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { PairTableType } from 'src/global';
@@ -6,11 +6,11 @@ import { useConfigStore } from 'src/states/config.state';
 import { useWordPairsStore } from 'src/states/wordPairs.state';
 import PairDetailResultDialog from '../dialog/PairDetailResultDialog';
 
-interface Props {
+interface Props extends ComponentProps<'div'> {
   pairs: Array<PairTableType>;
 }
 
-export default function ActionSpot({ pairs }: Props) {
+export default function ActionSpot({ pairs, ...props }: Props) {
   const [countdown, setCountdown] = useState(0);
   const { revealPerWord, isFillFromScratch } = useConfigStore();
   const _id = useRef<NodeJS.Timeout | null>(null);
@@ -44,7 +44,7 @@ export default function ActionSpot({ pairs }: Props) {
   }
 
   return (
-    <div>
+    <div {...props}>
       <div className="flex flex-wrap items-center gap-2">
         <Button onClick={onCheck}>Check</Button>
         {(status == 'showError' || status == 'revealing') && (

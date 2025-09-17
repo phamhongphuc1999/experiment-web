@@ -22,9 +22,9 @@ export function postgrestMoment(time: string) {
 }
 
 export function randomSubGroup(range: number) {
-  const _array = Array.from(Array(range).keys(), (key) => key + 1);
+  const _array = Array.from(Array(range).keys(), (key) => key);
   for (let i = range - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * i);
     [_array[i], _array[j]] = [_array[j], _array[i]];
   }
   return _array;

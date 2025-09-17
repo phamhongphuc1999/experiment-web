@@ -20,8 +20,8 @@ export default function BaseInput(props: Props) {
         {...props}
         className={cn([icon?.start && 'pl-8', icon?.end && 'pr-8', props.className])}
       />
-      <div className="absolute top-1/2 right-2.5 -translate-y-1/2">{icon?.end}</div>
       {props.placeholder && <label>{props.placeholder}</label>}
+      <div className="absolute top-1/2 right-2.5 -translate-y-1/2">{icon?.end}</div>
     </div>
   );
 }

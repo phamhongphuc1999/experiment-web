@@ -12,12 +12,14 @@ interface LayoutProps {
   category: CategoryTableType;
 }
 
-function WordDetailViewLayout({ category }: LayoutProps) {
+function WordLearnViewLayout({ category }: LayoutProps) {
   const { data: pairs, isPending } = usePairByCategoryId(category.id);
 
   return (
     <div className="flex h-full flex-col">
-      <AppBreadcrumb items={[{ title: 'Word', href: '/word' }, { title: category.title }]} />
+      <AppBreadcrumb
+        items={[{ title: 'Word', href: '/word' }, { title: 'learn' }, { title: category.title }]}
+      />
       <CategoryOverview category={category} />
       <div className="mt-3 min-h-0 flex-1 overflow-auto">
         {isPending ? (
@@ -27,7 +29,7 @@ function WordDetailViewLayout({ category }: LayoutProps) {
             {pairs?.data == undefined || pairs?.data?.length == 0 ? (
               <EmptyBox />
             ) : (
-              <PairView pairs={pairs.data} />
+              <PairView categoryId={category.id} pairs={pairs.data} />
             )}
           </div>
         )}
@@ -40,12 +42,12 @@ interface Props {
   id: string;
 }
 
-export default function WordDetailView({ id }: Props) {
+export default function WordLearnView({ id }: Props) {
   const { data: category, isPending } = useCategoryById(id);
 
   return isPending || category?.data == undefined ? (
     <ClockLoaderBox iconProps={{ size: 48 }} />
   ) : (
-    <WordDetailViewLayout category={category.data} />
+    <WordLearnViewLayout category={category.data} />
   );
 }

@@ -13,7 +13,7 @@ export type ResultPairType = {
 };
 
 export type WordPairsStateType = {
-  status: 'init' | 'playing' | 'showError' | 'revealing' | 'reset';
+  status: 'init' | 'playing' | 'showError' | 'revealing' | 'reset' | 'learning';
   currentRound: number;
   pairs: { [id: string]: PairTableType };
   result: { [round: number]: ResultPairType };
@@ -21,6 +21,7 @@ export type WordPairsStateType = {
   events: {
     changeEn: (id: string, value: string) => void;
     onCheck: () => void;
+    onLearn: () => void;
     onReveal: () => void;
     onNextRound: (isFillFromScratch: boolean) => void;
   };
@@ -45,8 +46,8 @@ export const useWordPairsStore = create<WordPairsStateType, [['zustand/immer', u
           const reorderPairs: Array<PairTableType> = [];
           const points: { [id: string]: { userEn: string; status: 'correct' | 'wrong' } } = {};
           for (const _n of num) {
-            reorderPairs.push(pairs[_n - 1]);
-            points[pairs[_n - 1].id] = { userEn: '', status: 'wrong' };
+            reorderPairs.push(pairs[_n]);
+            points[pairs[_n].id] = { userEn: '', status: 'wrong' };
           }
           state.currentRound = 1;
           state.result = {
@@ -97,6 +98,11 @@ export const useWordPairsStore = create<WordPairsStateType, [['zustand/immer', u
             }
           });
         },
+        onLearn: () => {
+          set((state) => {
+            state.status = 'learning';
+          });
+        },
         onReveal: () => {
           set((state) => {
             state.status = 'revealing';
@@ -110,8 +116,8 @@ export const useWordPairsStore = create<WordPairsStateType, [['zustand/immer', u
               const reorderPairs: Array<PairTableType> = [];
               const points: { [id: string]: { userEn: string; status: 'correct' | 'wrong' } } = {};
               for (const _n of num) {
-                reorderPairs.push(_pairs[_n - 1]);
-                points[_pairs[_n - 1].id] = { userEn: '', status: 'wrong' };
+                reorderPairs.push(_pairs[_n]);
+                points[_pairs[_n].id] = { userEn: '', status: 'wrong' };
               }
               state.result = {
                 ...state.result,
@@ -136,8 +142,8 @@ export const useWordPairsStore = create<WordPairsStateType, [['zustand/immer', u
               const reorderPairs: Array<PairTableType> = [];
               const points: { [id: string]: { userEn: string; status: 'correct' | 'wrong' } } = {};
               for (const _n of num) {
-                reorderPairs.push(_pairs[_n - 1]);
-                points[_pairs[_n - 1].id] = { userEn: '', status: 'wrong' };
+                reorderPairs.push(_pairs[_n]);
+                points[_pairs[_n].id] = { userEn: '', status: 'wrong' };
               }
               state.result = {
                 ...state.result,
