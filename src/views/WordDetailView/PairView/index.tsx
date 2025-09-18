@@ -1,4 +1,4 @@
-import { ChangeEvent, ComponentProps, useEffect } from 'react';
+import { ChangeEvent, ComponentProps, KeyboardEvent, useEffect, useRef } from 'react';
 import { Input } from 'src/components/shadcn-ui/input';
 import { beVietnamPro } from 'src/configs/font-family';
 import { PairTableType } from 'src/global';
@@ -19,6 +19,7 @@ export default function PairView({ pairs }: Props) {
     events: { changeEn },
     status: gameStatus,
   } = useWordPairsStore();
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     init(pairs);
@@ -29,12 +30,34 @@ export default function PairView({ pairs }: Props) {
     changeEn(id, event.target.value);
   }
 
+  function _effect(_ref: HTMLInputElement | null) {
+    if (_ref) {
+      _ref.focus();
+      _ref.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+  }
+
+  function onKeyDown(event: KeyboardEvent<HTMLInputElement>, index: number) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const _down = inputRefs.current[index + 1];
+      if (_down) _effect(_down);
+      else _effect(inputRefs.current[0]);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (index == 0) {
+        const _up = inputRefs.current[result[currentRound].reorderPairs.length - 1];
+        _effect(_up);
+      } else _effect(inputRefs.current[index - 1]);
+    }
+  }
+
   return gameStatus != 'init' ? (
     <div className="relative">
       <ActionSpot pairs={pairs} className="bg-background sticky top-0 z-10" />
       <div className="mt-3 min-h-0 flex-1 overflow-auto">
         <RevealSpot />
-        {result[currentRound].reorderPairs.map((pair) => {
+        {result[currentRound].reorderPairs.map((pair, index) => {
           const point = result[currentRound].points[pair.id];
           const status = point.status;
           const userEn = point.userEn;
@@ -58,10 +81,14 @@ export default function PairView({ pairs }: Props) {
                 )}
               </p>
               <Input
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
                 spellCheck={false}
                 className="mt-2"
                 value={userEn || ''}
                 onChange={(event) => onOutputsChange(event, pair.id)}
+                onKeyDown={(event) => onKeyDown(event, index)}
               />
             </div>
           );

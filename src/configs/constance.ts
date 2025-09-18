@@ -1,6 +1,7 @@
 import { WeatherDailyVariableType, WeatherHourlyVariableType } from 'src/global';
 
 export const ITEM_PER_PAGE = 10;
+export const MAX_CARO_SIZE = 40;
 
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
@@ -20,6 +21,7 @@ export const QUERY_KEY = {
 
 export enum DIALOG_KEY {
   wordConfigDialog = 'wordConfigDialog',
+  caroConfigDialog = 'caroConfigDialog',
 }
 
 export const WeatherHourlyConfig: {
