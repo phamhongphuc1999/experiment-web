@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { ITEM_PER_PAGE } from 'src/configs/constance';
+import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
 import { PaginationType } from 'src/global';
 
 export function hexToUint8Array(hex: string): Uint8Array {
@@ -40,4 +40,8 @@ export function getPaginationRange(pagination?: PaginationType) {
 
 export function formatText(s: string, frac = 3) {
   return s.length > frac * 2 + 5 ? `${s.substring(0, frac)}...${s.slice(-frac)}` : s;
+}
+
+export function generateAppMetadata(title: string) {
+  return { title: `${APP_NAME} | ${title}`, openGraph: { title: `${APP_NAME} | ${title}` } };
 }

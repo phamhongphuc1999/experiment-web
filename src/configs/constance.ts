@@ -22,6 +22,7 @@ export const QUERY_KEY = {
 export enum DIALOG_KEY {
   wordConfigDialog = 'wordConfigDialog',
   caroConfigDialog = 'caroConfigDialog',
+  caroConnectionDialog = 'caroConnectionDialog',
 }
 
 export const WeatherHourlyConfig: {

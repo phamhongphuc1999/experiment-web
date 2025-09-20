@@ -1,7 +1,8 @@
+import { generateAppMetadata } from 'src/services';
 import LoginView from 'src/views/LoginView';
 
 export async function generateMetadata() {
-  return { title: 'Experiment App | Login', openGraph: { title: 'Experiment App | Login' } };
+  return generateAppMetadata('Login');
 }
 
 export default function Login() {

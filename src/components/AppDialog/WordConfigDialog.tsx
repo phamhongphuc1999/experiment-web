@@ -41,7 +41,7 @@ export default function WordConfigDialog() {
     setLearnPerWord(storageLearnPerWord);
   }, [storageLearnPerWord]);
 
-  function onSaveConfig(event: MouseEvent<HTMLButtonElement>) {
+  function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
     if (revealPerWord != storageRevealPerWord) setStorageRevealPerWord(revealPerWord);
     if (isFillFromScratch != storageIsFillFromScratch)
@@ -61,7 +61,7 @@ export default function WordConfigDialog() {
         <DialogHeader>
           <DialogTitle>Word config</DialogTitle>
         </DialogHeader>
-        <form>
+        <form onSubmit={onSaveConfig}>
           <div className="grid grid-cols-3">
             <div className="col-span-3 border-t pt-2">
               <BaseInput
@@ -107,7 +107,7 @@ export default function WordConfigDialog() {
               </div>
             </div>
           </div>
-          <Button type="submit" onClick={onSaveConfig} className="mt-3">
+          <Button type="submit" className="mt-3">
             Save
           </Button>
         </form>
