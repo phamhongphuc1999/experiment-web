@@ -4,19 +4,18 @@ import { ComponentProps, useLayoutEffect, useRef, useState } from 'react';
 import { MAX_CARO_SIZE } from 'src/configs/constance';
 import { cn } from 'src/lib/utils';
 import { isWinBlock } from 'src/services/caro.utils';
-import { useCaroBoardStore } from 'src/states/caroBoard.state';
-import { useCaroConfigStore } from 'src/states/caroConfig.state';
+import { useCaroStore } from 'src/states/caro.state';
 import ConfigColumn from './ConfigColumn';
 
 export default function CaroBoard(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { numberOfRows, numberOfColumns } = useCaroConfigStore();
   const [size, setSize] = useState(0);
   const {
+    metadata: { numberOfRows, numberOfColumns },
     steps,
     winState,
     events: { move },
-  } = useCaroBoardStore();
+  } = useCaroStore();
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -57,13 +56,14 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               <div
                 key={location}
                 className={cn(
-                  'bg-background flex cursor-pointer items-center justify-center',
+                  'flex items-center justify-center',
                   _turn == 0 && cn('text-chart-5', _isWinBlock && 'border-chart-5 border'),
-                  _turn == 1 && cn('text-chart-2', _isWinBlock && 'border-chart-2 border')
+                  _turn == 1 && cn('text-chart-2', _isWinBlock && 'border-chart-2 border'),
+                  winState ? 'bg-background/50' : 'bg-background cursor-pointer'
                 )}
                 style={{ width: size, height: size }}
                 onClick={() => {
-                  if (_turn == undefined) move(location);
+                  if (_turn == undefined || !winState) move(location);
                 }}
               >
                 {_turn == undefined ? location : _turn == 0 ? 'x' : 'o'}

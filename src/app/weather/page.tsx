@@ -1,7 +1,8 @@
+import { generateAppMetadata } from 'src/services';
 import WeatherView from 'src/views/WeatherView';
 
 export async function generateMetadata() {
-  return { title: 'Experiment App | Weather', openGraph: { title: 'Experiment App | Weather' } };
+  return generateAppMetadata('Weather');
 }
 
 export default function Weather() {
