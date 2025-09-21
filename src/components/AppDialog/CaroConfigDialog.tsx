@@ -71,7 +71,7 @@ export default function CaroConfigDialog({ triggerProps }: Props) {
   return (
     <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
       <DialogTrigger {...triggerProps} className={cn('cursor-pointer', triggerProps?.className)}>
-        <Setting size={14} />
+        <Setting size={16} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

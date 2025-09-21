@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react';
 import CaroConfigDialog from 'src/components/AppDialog/CaroConfigDialog';
 import CaroConnectionDialog from 'src/components/AppDialog/CaroConnectionDialog';
+import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { cn } from 'src/lib/utils';
@@ -22,6 +23,7 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
       <div className="flex items-center gap-2">
         <CaroConfigDialog />
         <CaroConnectionDialog />
+        <CaroMessengerDialog />
       </div>
       <TitleBox
         title={winState ? 'Winner' : 'Turn'}

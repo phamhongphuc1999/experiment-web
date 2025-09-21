@@ -66,7 +66,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   if (_turn == undefined || !winState) move(location);
                 }}
               >
-                {_turn == undefined ? location : _turn == 0 ? 'x' : 'o'}
+                {_turn == undefined ? '' : _turn == 0 ? 'x' : 'o'}
               </div>
             );
           })}

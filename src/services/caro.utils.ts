@@ -1,4 +1,4 @@
-import { CaroWinType, WinStateType } from 'src/global';
+import { CaroMessageType, CaroWinType, WinStateType } from 'src/global';
 
 type ParamsType = {
   steps: { [key: number]: 0 | 1 };
@@ -232,4 +232,17 @@ export function isWinBlock(result: WinStateType, location: number) {
     }
   }
   return isOk;
+}
+
+export function createCaroMessage(type: CaroMessageType, message: string | number) {
+  return `${type}:${message}`;
+}
+
+export function decodeCaroMessage(message: string) {
+  const [type, realMessage] = message.split(':');
+  const realType = type as CaroMessageType;
+  if (realType == 'chat') return { type: realType, message: realMessage };
+  else if (realType == 'step') return { type: realType, message: parseInt(realMessage) };
+  else if (realType == 'system') return { type: realType, message: JSON.parse(realMessage) };
+  return undefined;
 }

@@ -1,7 +1,9 @@
 import { CloudConnection } from 'iconsax-reactjs';
 import { useState } from 'react';
+import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { DIALOG_KEY } from 'src/configs/constance';
+import { RoleType, useCaroConnectionContext } from 'src/context/caroConnection.context';
 import { useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import {
@@ -11,15 +13,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../../shadcn-ui/dialog';
-import CreateConnection from './CreateConnection';
-import ReceiveOffer from './ReceiveOffer';
+import GuestConnection from './GuestConnection';
+import HostConnection from './HostConnection';
 
 export default function CaroConnectionDialog() {
-  const [mode, setMode] = useState<'host' | 'guard'>('host');
   const { dialog, setDialog } = useDialogStore();
   const {
     metadata: { playMode },
   } = useCaroStore();
+  const [role, setRole] = useState<RoleType>('host');
+  const { peer } = useCaroConnectionContext();
 
   return playMode == 'online' ? (
     <Dialog
@@ -27,7 +30,7 @@ export default function CaroConnectionDialog() {
       onOpenChange={(open) => setDialog(DIALOG_KEY.caroConnectionDialog, open)}
     >
       <DialogTrigger className="cursor-pointer">
-        <CloudConnection size={14} />
+        <CloudConnection size={16} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -35,21 +38,32 @@ export default function CaroConnectionDialog() {
         </DialogHeader>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => setMode('host')}
-            variant={mode == 'host' ? 'default' : 'secondary'}
+            onClick={() => setRole('host')}
+            variant={role == 'host' ? 'default' : 'secondary'}
+            disabled={Boolean(peer)}
           >
-            Create connection
+            Host
           </Button>
           <Button
-            onClick={() => setMode('guard')}
-            variant={mode == 'guard' ? 'default' : 'secondary'}
+            onClick={() => setRole('guest')}
+            variant={role == 'guest' ? 'default' : 'secondary'}
+            disabled={Boolean(peer)}
           >
-            Receive to friend connection
+            Guest
           </Button>
         </div>
-        <div className="rounded-sm border p-2">
-          {mode == 'host' ? <CreateConnection /> : <ReceiveOffer />}
-        </div>
+        <p className="text-sm">{`You are connecting as a ${role}`}</p>
+        <TitleBox
+          title="Connection status"
+          value={
+            peer?.connected ? (
+              <p className="text-sm text-emerald-400">Connected</p>
+            ) : (
+              <p className="text-sm text-shadow-amber-400">Connecting</p>
+            )
+          }
+        />
+        {role == 'host' ? <HostConnection /> : <GuestConnection />}
       </DialogContent>
     </Dialog>
   ) : null;

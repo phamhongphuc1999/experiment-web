@@ -294,4 +294,6 @@ export type CaroWinType = 'subCross' | 'mainCross' | 'vertical' | 'horizontal';
 export type WinStateType = {
   mode: CaroWinType[];
 } & { [id in CaroWinType]: Array<number> };
+
+export type CaroMessageType = 'system' | 'chat' | 'step';
 // end caro
