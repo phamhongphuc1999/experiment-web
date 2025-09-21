@@ -287,3 +287,13 @@ export type SupbaseResponseType<T> = BaseSupbaseResponseType & { data: Array<T> 
 
 export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T };
 // end word
+
+// start caro
+export type CaroWinType = 'subCross' | 'mainCross' | 'vertical' | 'horizontal';
+
+export type WinStateType = {
+  mode: CaroWinType[];
+} & { [id in CaroWinType]: Array<number> };
+
+export type CaroMessageType = 'system' | 'chat' | 'step';
+// end caro
