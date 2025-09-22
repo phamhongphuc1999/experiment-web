@@ -292,7 +292,7 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 export type CaroWinType = 'subCross' | 'mainCross' | 'vertical' | 'horizontal';
 
 export type WinStateType = {
-  mode: CaroWinType[];
+  winMode: CaroWinType[];
 } & { [id in CaroWinType]: Array<number> };
 
 export type CaroMessageType = 'system' | 'chat' | 'step';

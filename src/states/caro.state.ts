@@ -21,7 +21,7 @@ type CaroStateType = {
     setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
     move: (location: number) => void;
     undo: () => void;
-    reset: () => void;
+    reset: (turn?: 0 | 1) => void;
   };
   winState?: WinStateType;
 };
@@ -52,7 +52,7 @@ export const useCaroStore = create<CaroStateType, [['zustand/immer', unknown]]>(
               numberOfRows,
               numberOfColumns,
             });
-            if (_winState.mode.length > 0) {
+            if (_winState.winMode.length > 0) {
               state.winState = _winState;
               state.metadata.status = 'win';
             } else state.turn = (1 - state.turn) as 1 | 0;
@@ -69,10 +69,10 @@ export const useCaroStore = create<CaroStateType, [['zustand/immer', unknown]]>(
             }
           });
         },
-        reset: () => {
+        reset: (turn) => {
           set((state) => {
             state.metadata.status = 'playing';
-            state.turn = 0;
+            if (turn != undefined) state.turn = turn;
             state.steps = {};
             state.stepsOrder = [];
             state.winState = undefined;

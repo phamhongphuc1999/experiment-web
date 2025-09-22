@@ -47,7 +47,7 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
           Undo
         </Button>
       )}
-      {winState && <Button onClick={reset}>New game</Button>}
+      {winState && <Button onClick={() => reset()}>New game</Button>}
     </div>
   );
 }

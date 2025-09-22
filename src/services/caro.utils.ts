@@ -1,5 +1,7 @@
 import { CaroMessageType, CaroWinType, WinStateType } from 'src/global';
 
+type BlockMode = 'opposite' | 'wall' | undefined;
+
 type ParamsType = {
   steps: { [key: number]: 0 | 1 };
   currentStep: number;
@@ -8,222 +10,158 @@ type ParamsType = {
   numberOfColumns: number;
 };
 
-function checkUpLeftCross(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfColumns } = params;
-  const stepsShouldBeCheck = Math.min(
-    currentStep % numberOfColumns,
-    Math.floor(currentStep / numberOfColumns)
-  );
+type SideReturnType = {
+  cells: Array<number>;
+  blockMode: BlockMode;
+};
+
+function caroCheck(
+  params: ParamsType,
+  stepShouldByCheckFunc: (params: ParamsType) => number,
+  checkingStepFunc: (params: ParamsType, checkingStep: number) => number
+): SideReturnType {
+  const { steps, currentStep, currentPlayer } = params;
+  const stepsShouldBeCheck = stepShouldByCheckFunc(params);
   let checkingStep = currentStep;
   let counter = 0;
   const result: Array<number> = [];
-  let isBlocked = false;
+  let blockMode: BlockMode = undefined;
   while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep - (numberOfColumns + 1);
+    checkingStep = checkingStepFunc(params, checkingStep);
     if (steps[checkingStep] == currentPlayer) {
       counter++;
       result.push(checkingStep);
     } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
+      if (steps[checkingStep] != undefined) blockMode = 'opposite';
       break;
     }
   }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
+  if (counter >= stepsShouldBeCheck) blockMode = 'wall';
+  return { cells: result, blockMode };
+}
+
+function checkUpLeftCross(params: ParamsType) {
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfColumns }) =>
+      Math.min(currentStep % numberOfColumns, Math.floor(currentStep / numberOfColumns)),
+    ({ numberOfColumns }, checkingStep) => checkingStep - (numberOfColumns + 1)
+  );
 }
 
 function checkUp(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfColumns } = params;
-  const stepsShouldBeCheck = Math.floor(currentStep / numberOfColumns);
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep - numberOfColumns;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfColumns }) => Math.floor(currentStep / numberOfColumns),
+    ({ numberOfColumns }, checkingStep) => checkingStep - numberOfColumns
+  );
 }
 
 function checkUpRightCross(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfColumns } = params;
-  const stepsShouldBeCheck = Math.min(
-    numberOfColumns - (currentStep % numberOfColumns) - 1,
-    Math.floor(currentStep / numberOfColumns)
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfColumns }) =>
+      Math.min(
+        numberOfColumns - (currentStep % numberOfColumns) - 1,
+        Math.floor(currentStep / numberOfColumns)
+      ),
+    ({ numberOfColumns }, checkingStep) => checkingStep - numberOfColumns + 1
   );
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep - numberOfColumns + 1;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
 }
 
 function checkBottomLeftCross(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfRows, numberOfColumns } = params;
-  const stepsShouldBeCheck = Math.min(
-    currentStep % numberOfColumns,
-    numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfRows, numberOfColumns }) =>
+      Math.min(
+        currentStep % numberOfColumns,
+        numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
+      ),
+    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns - 1
   );
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep + numberOfColumns - 1;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
 }
 
 function checkBottom(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfRows, numberOfColumns } = params;
-  const stepsShouldBeCheck = numberOfRows - Math.floor(currentStep / numberOfColumns) - 1;
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep + numberOfColumns;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfRows, numberOfColumns }) =>
+      numberOfRows - Math.floor(currentStep / numberOfColumns) - 1,
+    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns
+  );
 }
 
 function checkBottomRightCross(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfRows, numberOfColumns } = params;
-  const stepsShouldBeCheck = Math.min(
-    numberOfColumns - (currentStep % numberOfColumns) - 1,
-    numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfRows, numberOfColumns }) =>
+      Math.min(
+        numberOfColumns - (currentStep % numberOfColumns) - 1,
+        numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
+      ),
+    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns + 1
   );
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep + numberOfColumns + 1;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
 }
 
 function checkLeft(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfColumns } = params;
-  const stepsShouldBeCheck = currentStep % numberOfColumns;
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep - 1;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfColumns }) => currentStep % numberOfColumns,
+    (_, checkingStep) => checkingStep - 1
+  );
 }
 
 function checkRight(params: ParamsType) {
-  const { steps, currentStep, currentPlayer, numberOfColumns } = params;
-  const stepsShouldBeCheck = numberOfColumns - (currentStep % numberOfColumns) - 1;
-  let checkingStep = currentStep;
-  let counter = 0;
-  const result: Array<number> = [];
-  let isBlocked = false;
-  while (stepsShouldBeCheck > counter) {
-    checkingStep = checkingStep + 1;
-    if (steps[checkingStep] == currentPlayer) {
-      counter++;
-      result.push(checkingStep);
-    } else {
-      if (steps[checkingStep] != undefined) isBlocked = true;
-      break;
-    }
-  }
-  if (counter >= stepsShouldBeCheck) isBlocked = true;
-  return { cells: result, isBlocked };
+  return caroCheck(
+    params,
+    ({ currentStep, numberOfColumns }) => numberOfColumns - (currentStep % numberOfColumns) - 1,
+    (_, checkingStep) => checkingStep + 1
+  );
+}
+
+const config: {
+  [id in CaroWinType]: {
+    side1Func: (params: ParamsType) => SideReturnType;
+    side2Func: (params: ParamsType) => SideReturnType;
+  };
+} = {
+  subCross: { side1Func: checkUpLeftCross, side2Func: checkBottomRightCross },
+  vertical: { side1Func: checkUp, side2Func: checkBottom },
+  mainCross: { side1Func: checkUpRightCross, side2Func: checkBottomLeftCross },
+  horizontal: { side1Func: checkLeft, side2Func: checkRight },
+};
+
+export function _analyticStep(type: CaroWinType, params: ParamsType) {
+  const side1 = config[type].side1Func(params);
+  const side2 = config[type].side2Func(params);
+  const _len = side1.cells.length + side2.cells.length;
+  const isWin = _len >= 4 && side1.blockMode != 'opposite' && side2.blockMode != 'opposite';
+  return { isWin, arr: side1.cells.concat(side2.cells) };
 }
 
 export function checkWin(params: ParamsType): WinStateType {
-  const upLeftCross = checkUpLeftCross(params);
-  const up = checkUp(params);
-  const upRightCross = checkUpRightCross(params);
-  const bottomLeftCross = checkBottomLeftCross(params);
-  const bottom = checkBottom(params);
-  const bottomRightCross = checkBottomRightCross(params);
-  const left = checkLeft(params);
-  const right = checkRight(params);
+  const subCross = _analyticStep('subCross', params);
+  const vertical = _analyticStep('vertical', params);
+  const horizontal = _analyticStep('horizontal', params);
+  const mainCross = _analyticStep('mainCross', params);
 
-  const subCross = upLeftCross.cells.length + bottomRightCross.cells.length;
-  const mainCross = upRightCross.cells.length + bottomLeftCross.cells.length;
-  const vertical = up.cells.length + bottom.cells.length;
-  const horizontal = left.cells.length + right.cells.length;
-
-  const mode: Array<CaroWinType> = [];
-  if (subCross >= 4 && (!upLeftCross.isBlocked || !bottomRightCross.isBlocked))
-    mode.push('subCross');
-  if (mainCross >= 4 && (!upRightCross.isBlocked || !bottomLeftCross.isBlocked))
-    mode.push('mainCross');
-  if (vertical >= 4 && (!up.isBlocked || !bottom.isBlocked)) mode.push('vertical');
-  if (horizontal >= 4 && (!left.isBlocked || !right.isBlocked)) mode.push('horizontal');
-
+  const winMode: Array<CaroWinType> = [];
+  if (subCross.isWin) winMode.push('subCross');
+  if (vertical.isWin) winMode.push('vertical');
+  if (horizontal.isWin) winMode.push('horizontal');
+  if (mainCross.isWin) winMode.push('mainCross');
   const { currentStep } = params;
 
   return {
-    subCross: upLeftCross.cells.concat(bottomRightCross.cells).concat(currentStep),
-    mainCross: upRightCross.cells.concat(bottomLeftCross.cells).concat(currentStep),
-    vertical: up.cells.concat(bottom.cells).concat(currentStep),
-    horizontal: left.cells.concat(right.cells).concat(currentStep),
-    mode,
+    subCross: subCross.arr.concat(currentStep),
+    mainCross: mainCross.arr.concat(currentStep),
+    vertical: vertical.arr.concat(currentStep),
+    horizontal: horizontal.arr.concat(currentStep),
+    winMode,
   };
 }
 
 export function isWinBlock(result: WinStateType, location: number) {
-  const winMode = result.mode;
+  const winMode = result.winMode;
   let isOk = false;
   for (const mode of winMode) {
     if (result[mode].includes(location)) {

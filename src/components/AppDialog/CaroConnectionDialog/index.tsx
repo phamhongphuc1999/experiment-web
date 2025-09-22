@@ -1,6 +1,5 @@
 import { CloudConnection } from 'iconsax-reactjs';
 import { useState } from 'react';
-import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { RoleType, useCaroConnectionContext } from 'src/context/caroConnection.context';
@@ -22,7 +21,7 @@ export default function CaroConnectionDialog() {
     metadata: { playMode },
   } = useCaroStore();
   const [role, setRole] = useState<RoleType>('host');
-  const { peer } = useCaroConnectionContext();
+  const { peer, connectionType } = useCaroConnectionContext();
 
   return playMode == 'online' ? (
     <Dialog
@@ -52,17 +51,21 @@ export default function CaroConnectionDialog() {
             Guest
           </Button>
         </div>
-        <p className="text-sm">{`You are connecting as a ${role}`}</p>
-        <TitleBox
-          title="Connection status"
-          value={
-            peer?.connected ? (
-              <p className="text-sm text-emerald-400">Connected</p>
+        {connectionType == 'init' ? (
+          <p className="text-sm">
+            You are a <span className="text-chart-3">{role}</span>
+          </p>
+        ) : (
+          <p className="text-sm">
+            You{' '}
+            {connectionType == 'connected' ? (
+              <span className="text-sm text-emerald-400">connected</span>
             ) : (
-              <p className="text-sm text-shadow-amber-400">Connecting</p>
-            )
-          }
-        />
+              <span className="text-sm text-shadow-amber-400">are connecting</span>
+            )}{' '}
+            as a <span className="text-chart-3">{role}</span>
+          </p>
+        )}
         {role == 'host' ? <HostConnection /> : <GuestConnection />}
       </DialogContent>
     </Dialog>
