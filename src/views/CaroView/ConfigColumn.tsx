@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react';
 import CaroConfigDialog from 'src/components/AppDialog/CaroConfigDialog';
 import CaroConnectionDialog from 'src/components/AppDialog/CaroConnectionDialog';
+import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialog';
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
@@ -22,8 +23,8 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
     >
       <div className="flex items-center gap-2">
         <CaroConfigDialog />
+        <CaroInstructionDialog />
         <CaroConnectionDialog />
-        <CaroMessengerDialog />
       </div>
       <TitleBox
         title={winState ? 'Winner' : 'Turn'}
@@ -34,7 +35,7 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
         }}
         className="mt-2"
       />
-      {!winState && (
+      {!winState ? (
         <Button
           className={cn(
             'mt-2',
@@ -46,8 +47,12 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
         >
           Undo
         </Button>
+      ) : (
+        <Button onClick={() => reset()}>New game</Button>
       )}
-      {winState && <Button onClick={() => reset()}>New game</Button>}
+      <div className="mt-2">
+        <CaroMessengerDialog />
+      </div>
     </div>
   );
 }

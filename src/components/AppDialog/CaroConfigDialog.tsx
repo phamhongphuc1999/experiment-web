@@ -1,10 +1,9 @@
-import { DialogTriggerProps } from '@radix-ui/react-dialog';
 import { CloudConnection, Setting } from 'iconsax-reactjs';
 import { MouseEvent, useEffect, useState } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { cn } from 'src/lib/utils';
 import { PlayModeType, useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
+import AppTooltip from '../AppTooltip';
 import BaseInput from '../input/BaseInput';
 import { Button } from '../shadcn-ui/button';
 import {
@@ -15,11 +14,7 @@ import {
   DialogTrigger,
 } from '../shadcn-ui/dialog';
 
-interface Props {
-  triggerProps?: DialogTriggerProps;
-}
-
-export default function CaroConfigDialog({ triggerProps }: Props) {
+export default function CaroConfigDialog() {
   const { dialog, setDialog } = useDialogStore();
   const {
     metadata: { numberOfColumns, numberOfRows, playMode },
@@ -70,8 +65,10 @@ export default function CaroConfigDialog({ triggerProps }: Props) {
 
   return (
     <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
-      <DialogTrigger {...triggerProps} className={cn('cursor-pointer', triggerProps?.className)}>
-        <Setting size={16} />
+      <DialogTrigger>
+        <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
+          <Setting size={16} />
+        </AppTooltip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

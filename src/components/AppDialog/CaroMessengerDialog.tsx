@@ -1,5 +1,5 @@
 import { Messenger, Send } from 'iconsax-reactjs';
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { beVietnamPro } from 'src/configs/font-family';
 import { useCaroConnectionContext } from 'src/context/caroConnection.context';
 import { cn } from 'src/lib/utils';
@@ -13,9 +13,10 @@ import {
   DialogTrigger,
 } from '../shadcn-ui/dialog';
 import { Textarea } from '../shadcn-ui/textarea';
+import AppTooltip from '../AppTooltip';
 
 export default function CaroMessengerDialog() {
-  const { peer } = useCaroConnectionContext();
+  const { peer, connectionType } = useCaroConnectionContext();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const {
     chats,
@@ -23,15 +24,24 @@ export default function CaroMessengerDialog() {
   } = useCaroMessageStore();
   const [message, setMessage] = useState('');
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === 'Enter' && message.trim() !== '' && !e.shiftKey) {
-      e.preventDefault();
+  function _sendMessage(message: string) {
+    if (peer && message.length > 0) {
       addChats('yourChat', message);
-      if (peer) {
-        peer.send(createCaroMessage('chat', message));
-      }
+      peer.send(createCaroMessage('chat', message));
       setMessage('');
     }
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === 'Enter' && message.trim() !== '' && !event.shiftKey) {
+      event.preventDefault();
+      _sendMessage(message);
+    }
+  }
+
+  function onSendClick(event: MouseEvent<SVGElement>) {
+    event.preventDefault();
+    _sendMessage(message);
   }
 
   useEffect(() => {
@@ -39,10 +49,12 @@ export default function CaroMessengerDialog() {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [chats]);
 
-  return (
+  return connectionType == 'connected' ? (
     <Dialog>
       <DialogTrigger className="cursor-pointer">
-        <Messenger size={16} />
+        <AppTooltip tooltipContent="Message">
+          <Messenger size={24} />
+        </AppTooltip>
       </DialogTrigger>
       <DialogContent className="flex h-3/4 flex-col">
         <DialogHeader className="h-fit">
@@ -80,10 +92,10 @@ export default function CaroMessengerDialog() {
               className={cn(beVietnamPro.className, 'font-sans')}
               rows={1}
             />
-            <Send className="absolute top-2 right-2" />
+            <Send onClick={onSendClick} className="absolute top-2 right-2 cursor-pointer" />
           </div>
         </div>
       </DialogContent>
     </Dialog>
-  );
+  ) : null;
 }

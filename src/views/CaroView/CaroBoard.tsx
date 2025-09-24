@@ -2,6 +2,7 @@
 
 import { ComponentProps, useLayoutEffect, useRef, useState } from 'react';
 import { MAX_CARO_SIZE } from 'src/configs/constance';
+import useCaroAction from 'src/hooks/useCaroAction';
 import { cn } from 'src/lib/utils';
 import { isWinBlock } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
@@ -14,8 +15,8 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     metadata: { numberOfRows, numberOfColumns },
     steps,
     winState,
-    events: { move },
   } = useCaroStore();
+  const { move } = useCaroAction();
 
   useLayoutEffect(() => {
     if (!ref.current) return;

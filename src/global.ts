@@ -295,5 +295,10 @@ export type WinStateType = {
   winMode: CaroWinType[];
 } & { [id in CaroWinType]: Array<number> };
 
-export type CaroMessageType = 'system' | 'chat' | 'step';
+export type CaroSizeType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+};
+
+export type CaroMessageType = 'size' | 'chat' | 'step';
 // end caro

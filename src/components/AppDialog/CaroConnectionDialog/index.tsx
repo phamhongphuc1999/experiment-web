@@ -14,6 +14,7 @@ import {
 } from '../../shadcn-ui/dialog';
 import GuestConnection from './GuestConnection';
 import HostConnection from './HostConnection';
+import AppTooltip from 'src/components/AppTooltip';
 
 export default function CaroConnectionDialog() {
   const { dialog, setDialog } = useDialogStore();
@@ -29,7 +30,9 @@ export default function CaroConnectionDialog() {
       onOpenChange={(open) => setDialog(DIALOG_KEY.caroConnectionDialog, open)}
     >
       <DialogTrigger className="cursor-pointer">
-        <CloudConnection size={16} />
+        <AppTooltip tooltipContent="Connection" contentProps={{ side: 'bottom' }}>
+          <CloudConnection size={16} />
+        </AppTooltip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

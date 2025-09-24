@@ -173,14 +173,13 @@ export function isWinBlock(result: WinStateType, location: number) {
 }
 
 export function createCaroMessage(type: CaroMessageType, message: string | number) {
-  return `${type}:${message}`;
+  return `${type}_${message}`;
 }
 
 export function decodeCaroMessage(message: string) {
-  const [type, realMessage] = message.split(':');
+  const [type, realMessage] = message.split('_');
   const realType = type as CaroMessageType;
   if (realType == 'chat') return { type: realType, message: realMessage };
   else if (realType == 'step') return { type: realType, message: parseInt(realMessage) };
-  else if (realType == 'system') return { type: realType, message: JSON.parse(realMessage) };
-  return undefined;
+  else return { type: realType, message: JSON.parse(realMessage) };
 }
