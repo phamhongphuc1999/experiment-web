@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import { useMemo } from 'react';
 import { useCaroConnectionContext } from 'src/context/caroConnection.context';
 import { useCaroStore } from 'src/states/caro.state';
@@ -10,22 +11,31 @@ export default function useOnlineCaroState() {
   } = useCaroStore();
   const { role, connectionType } = useCaroConnectionContext();
 
-  const { playerTitle, playerName } = useMemo(() => {
-    let playerTitle = 'Turn';
-    if (winState) playerTitle = 'Winner';
+  const { playerText, isWin } = useMemo(() => {
+    let playerTitle = "'s turn";
+    if (winState) playerTitle = ' win';
     let playerName = '';
+    let isWin = false;
     if (playMode == 'online' && connectionType == 'connected') {
       if (role == 'host') {
-        if (turn == 0) playerName = 'You';
-        else playerName = 'Opponent';
+        if (turn == 0) {
+          playerName = 'You';
+          isWin = true;
+        } else playerName = 'Opponent';
       } else {
         if (turn == 0) playerName = 'Opponent';
-        else playerName = 'You';
+        else {
+          playerName = 'You';
+          isWin = true;
+        }
       }
-    } else playerName = `Player ${turn + 1}`;
+    } else {
+      playerName = `Player ${turn + 1}`;
+      isWin = true;
+    }
 
-    return { playerTitle, playerName };
+    return { playerText: `${playerName}${playerTitle}`, isWin: isWin && Boolean(winState) };
   }, [connectionType, playMode, role, turn, winState]);
 
-  return { playerTitle, playerName };
+  return { playerText, isWin };
 }

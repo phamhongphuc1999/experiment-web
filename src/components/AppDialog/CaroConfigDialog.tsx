@@ -1,4 +1,4 @@
-import { CloudConnection, Setting } from 'iconsax-reactjs';
+import { Airdrop, Setting } from 'iconsax-reactjs';
 import { MouseEvent, useEffect, useState } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { PlayModeType, useCaroStore } from 'src/states/caro.state';
@@ -38,7 +38,11 @@ export default function CaroConfigDialog() {
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setCaroMetadata({ numberOfRows: rows, numberOfColumns: columns, playMode: tempPlayMode });
+    setCaroMetadata({
+      numberOfRows: Math.min(rows, 100),
+      numberOfColumns: Math.min(columns, 100),
+      playMode: tempPlayMode,
+    });
     reset();
     setDialog(DIALOG_KEY.caroConfigDialog, false);
   }
@@ -93,12 +97,11 @@ export default function CaroConfigDialog() {
               </Button>
             </div>
             {tempPlayMode == 'online' && (
-              <div className="mt-1 text-xs">
-                When online mode is on, the connection icon{' '}
-                <CloudConnection className="inline" size={14} /> (right next to setting icon{' '}
-                <Setting className="inline" size={14} />) is showed, you should follow its
-                instruction to connect with your friends. Please press save button to confirm
-                changes.
+              <div className="mt-1 text-justify text-xs">
+                When online mode is on, the connection icon <Airdrop className="inline" size={14} />{' '}
+                (right next to setting icon <Setting className="inline" size={14} />) is showed, you
+                should follow its instruction to connect with your friends. Please press save button
+                to confirm changes.
               </div>
             )}
           </div>

@@ -289,10 +289,10 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 // end word
 
 // start caro
-export type CaroWinType = 'subCross' | 'mainCross' | 'vertical' | 'horizontal';
+export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
 export type WinStateType = {
-  winMode: CaroWinType[];
+  winMode: Array<CaroWinType>;
 } & { [id in CaroWinType]: Array<number> };
 
 export type CaroSizeType = {
@@ -300,5 +300,5 @@ export type CaroSizeType = {
   numberOfColumns: number;
 };
 
-export type CaroMessageType = 'size' | 'chat' | 'step';
+export type CaroMessageType = 'size' | 'chat' | 'move' | 'newGame';
 // end caro

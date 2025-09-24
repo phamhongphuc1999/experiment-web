@@ -62,7 +62,7 @@ export default function CaroConnectionProvider({ children }: Props) {
   } = useCaroMessageStore();
   const {
     metadata: { numberOfRows, numberOfColumns },
-    events: { setCaroMetadata, move },
+    events: { setCaroMetadata, move, reset },
   } = useCaroStore();
 
   const initConnection = useCallback((type: RoleType) => {
@@ -118,10 +118,10 @@ export default function CaroConnectionProvider({ children }: Props) {
               const { numberOfRows, numberOfColumns } = message as CaroSizeType;
               setCaroMetadata({ numberOfRows, numberOfColumns });
               toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
-            } else if (type == 'step') {
+            } else if (type == 'move') {
               const location = Number(message);
               move(location);
-            }
+            } else if (type == 'newGame') reset();
           } else toast.error('Message is not decoded');
         } catch (error) {
           console.error(error);
@@ -130,7 +130,7 @@ export default function CaroConnectionProvider({ children }: Props) {
 
       return () => peer.destroy();
     }
-  }, [addChats, move, peer, setCaroMetadata]);
+  }, [addChats, move, peer, setCaroMetadata, reset]);
 
   const contextData = useMemo<CaroConnectionContextType>(() => {
     return {

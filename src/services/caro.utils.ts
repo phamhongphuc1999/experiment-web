@@ -40,7 +40,7 @@ function caroCheck(
   return { cells: result, blockMode };
 }
 
-function checkUpLeftCross(params: ParamsType) {
+function checkTopLeftDiagonal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfColumns }) =>
@@ -49,7 +49,7 @@ function checkUpLeftCross(params: ParamsType) {
   );
 }
 
-function checkUp(params: ParamsType) {
+function checkTopVertical(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfColumns }) => Math.floor(currentStep / numberOfColumns),
@@ -57,7 +57,7 @@ function checkUp(params: ParamsType) {
   );
 }
 
-function checkUpRightCross(params: ParamsType) {
+function checkTopRightDiagonal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfColumns }) =>
@@ -69,7 +69,7 @@ function checkUpRightCross(params: ParamsType) {
   );
 }
 
-function checkBottomLeftCross(params: ParamsType) {
+function checkBottomLeftDiagonal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfRows, numberOfColumns }) =>
@@ -81,7 +81,7 @@ function checkBottomLeftCross(params: ParamsType) {
   );
 }
 
-function checkBottom(params: ParamsType) {
+function checkBottomVertical(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfRows, numberOfColumns }) =>
@@ -90,7 +90,7 @@ function checkBottom(params: ParamsType) {
   );
 }
 
-function checkBottomRightCross(params: ParamsType) {
+function checkBottomRightDiagonal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfRows, numberOfColumns }) =>
@@ -102,7 +102,7 @@ function checkBottomRightCross(params: ParamsType) {
   );
 }
 
-function checkLeft(params: ParamsType) {
+function checkLeftHorizontal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfColumns }) => currentStep % numberOfColumns,
@@ -110,7 +110,7 @@ function checkLeft(params: ParamsType) {
   );
 }
 
-function checkRight(params: ParamsType) {
+function checkRightHorizontal(params: ParamsType) {
   return caroCheck(
     params,
     ({ currentStep, numberOfColumns }) => numberOfColumns - (currentStep % numberOfColumns) - 1,
@@ -124,36 +124,36 @@ const config: {
     side2Func: (params: ParamsType) => SideReturnType;
   };
 } = {
-  subCross: { side1Func: checkUpLeftCross, side2Func: checkBottomRightCross },
-  vertical: { side1Func: checkUp, side2Func: checkBottom },
-  mainCross: { side1Func: checkUpRightCross, side2Func: checkBottomLeftCross },
-  horizontal: { side1Func: checkLeft, side2Func: checkRight },
+  leftDiagonal: { side1Func: checkTopLeftDiagonal, side2Func: checkBottomRightDiagonal },
+  rightDiagonal: { side1Func: checkTopRightDiagonal, side2Func: checkBottomLeftDiagonal },
+  vertical: { side1Func: checkTopVertical, side2Func: checkBottomVertical },
+  horizontal: { side1Func: checkLeftHorizontal, side2Func: checkRightHorizontal },
 };
 
 export function _analyticStep(type: CaroWinType, params: ParamsType) {
   const side1 = config[type].side1Func(params);
   const side2 = config[type].side2Func(params);
   const _len = side1.cells.length + side2.cells.length;
-  const isWin = _len >= 4 && side1.blockMode != 'opposite' && side2.blockMode != 'opposite';
+  const isWin = _len >= 4 && (side1.blockMode != 'opposite' || side2.blockMode != 'opposite');
   return { isWin, arr: side1.cells.concat(side2.cells) };
 }
 
 export function checkWin(params: ParamsType): WinStateType {
-  const subCross = _analyticStep('subCross', params);
+  const subCross = _analyticStep('leftDiagonal', params);
+  const mainCross = _analyticStep('rightDiagonal', params);
   const vertical = _analyticStep('vertical', params);
   const horizontal = _analyticStep('horizontal', params);
-  const mainCross = _analyticStep('mainCross', params);
 
   const winMode: Array<CaroWinType> = [];
-  if (subCross.isWin) winMode.push('subCross');
+  if (subCross.isWin) winMode.push('leftDiagonal');
+  if (mainCross.isWin) winMode.push('rightDiagonal');
   if (vertical.isWin) winMode.push('vertical');
   if (horizontal.isWin) winMode.push('horizontal');
-  if (mainCross.isWin) winMode.push('mainCross');
   const { currentStep } = params;
 
   return {
-    subCross: subCross.arr.concat(currentStep),
-    mainCross: mainCross.arr.concat(currentStep),
+    leftDiagonal: subCross.arr.concat(currentStep),
+    rightDiagonal: mainCross.arr.concat(currentStep),
     vertical: vertical.arr.concat(currentStep),
     horizontal: horizontal.arr.concat(currentStep),
     winMode,
@@ -180,7 +180,7 @@ export function decodeCaroMessage(message: string) {
   const [type, ...restMessage] = message.split('_');
   const realType = type as CaroMessageType;
   if (realType == 'chat') return { type: realType, message: restMessage[0] };
-  else if (realType == 'step') return { type: realType, message: parseInt(restMessage[0]) };
+  else if (realType == 'move') return { type: realType, message: parseInt(restMessage[0]) };
   else if (realType == 'size')
     return {
       type: realType,
@@ -189,4 +189,5 @@ export function decodeCaroMessage(message: string) {
         numberOfColumns: parseInt(restMessage[1]),
       },
     };
+  else if (realType == 'newGame') return { type: realType, message: null };
 }

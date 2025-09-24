@@ -1,5 +1,6 @@
 /* eslint-disable quotes */
-import { CloudConnection, Data, Setting } from 'iconsax-reactjs';
+import { Airdrop, Information, Setting } from 'iconsax-reactjs';
+import AppTooltip from '../AppTooltip';
 import {
   Dialog,
   DialogContent,
@@ -7,14 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../shadcn-ui/dialog';
-import AppTooltip from '../AppTooltip';
 
 export default function CaroInstructionDialog() {
   return (
     <Dialog>
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <Data size={16} />
+          <Information size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
@@ -25,10 +25,10 @@ export default function CaroInstructionDialog() {
           <p className="text-lg">1. How to play?</p>
           <p className="text-justify text-sm">
             {
-              "Your goal is to make five pieces of the same color in a vertical, horizontal or diagonal line, without being blocked at two opponent's pieces or an opponent's piece and the edge of the board."
+              "Your goal is to make five pieces of the same color in a vertical, horizontal or diagonal line, without being blocked at two opponent's pieces."
             }
           </p>
-          <p>
+          <p className="text-justify text-sm">
             {
               'The player1 will take the first move. After the first game is over, the winner will take the first move.'
             }
@@ -49,9 +49,9 @@ export default function CaroInstructionDialog() {
             {
               'Meanwhile, in online play mode, you and your friend can connect to other peer-to-peer online ('
             }
-            <CloudConnection className="inline" size={14} />
+            <Airdrop className="inline" size={14} />
             {
-              '). One of you will be the host, and the other will be the guest. The host create the connection and share the the signal (your signal) to the guest, the guest create the connection and parse host signal (friend signal) to find host device. After that, system will create guest signal, guest have to share the signal to the host to complete the connection. After the connection is established, you can start playing and chatting with each other.'
+              '). One of you will be the host, and the other will be the guest. The host create the connection and share the signal (your signal) to the guest, the guest create the connection and parse host signal (friend signal) to find host device. After that, system will create guest signal, guest have to share the signal to the host to complete the connection. After the connection is established, you can start playing and chatting with each other.'
             }
           </p>
           <p className="text-chart-3 text-justify text-sm">

@@ -19,7 +19,7 @@ export default function SignalTitleBox({ title, signal }: Props) {
       }
       value={
         <div className="max-h-[100px] overflow-scroll">
-          <pre className="m-0 w-full text-xs break-all whitespace-pre-wrap">{signal}</pre>
+          <pre className="m-0 w-full text-[8px] break-all whitespace-pre-wrap">{signal}</pre>
         </div>
       }
     />

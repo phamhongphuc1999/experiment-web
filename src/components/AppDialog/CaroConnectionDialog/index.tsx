@@ -1,5 +1,6 @@
-import { CloudConnection } from 'iconsax-reactjs';
+import { Airdrop } from 'iconsax-reactjs';
 import { useState } from 'react';
+import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { RoleType, useCaroConnectionContext } from 'src/context/caroConnection.context';
@@ -14,7 +15,6 @@ import {
 } from '../../shadcn-ui/dialog';
 import GuestConnection from './GuestConnection';
 import HostConnection from './HostConnection';
-import AppTooltip from 'src/components/AppTooltip';
 
 export default function CaroConnectionDialog() {
   const { dialog, setDialog } = useDialogStore();
@@ -31,7 +31,7 @@ export default function CaroConnectionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip tooltipContent="Connection" contentProps={{ side: 'bottom' }}>
-          <CloudConnection size={16} />
+          <Airdrop size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>

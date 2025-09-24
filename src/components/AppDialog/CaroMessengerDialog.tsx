@@ -52,8 +52,8 @@ export default function CaroMessengerDialog() {
   return connectionType == 'connected' ? (
     <Dialog>
       <DialogTrigger className="cursor-pointer">
-        <AppTooltip tooltipContent="Message">
-          <Messenger size={24} />
+        <AppTooltip tooltipContent="Message" contentProps={{ side: 'bottom' }}>
+          <Messenger size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="flex h-3/4 flex-col">
