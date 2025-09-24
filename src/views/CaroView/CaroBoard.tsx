@@ -3,6 +3,7 @@
 import { ComponentProps, useLayoutEffect, useRef, useState } from 'react';
 import { MAX_CARO_SIZE } from 'src/configs/constance';
 import useCaroAction from 'src/hooks/useCaroAction';
+import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
 import { cn } from 'src/lib/utils';
 import { isWinBlock } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
@@ -17,6 +18,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     winState,
   } = useCaroStore();
   const { move } = useCaroAction();
+  const { shouldDisableBoard } = useShouldDisableBoard();
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -36,6 +38,10 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     return () => observer.disconnect();
   }, [numberOfColumns, numberOfRows]);
+
+  function onMove(_turn: 0 | 1, location: number) {
+    if ((_turn == undefined || !winState) && !shouldDisableBoard) move(location);
+  }
 
   return (
     <div ref={ref} {...props} className={cn('flex justify-center', props.className)}>
@@ -58,14 +64,17 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                 key={location}
                 className={cn(
                   'flex items-center justify-center',
-                  _turn == 0 && cn('text-chart-5', _isWinBlock && 'border-chart-5 border'),
-                  _turn == 1 && cn('text-chart-2', _isWinBlock && 'border-chart-2 border'),
-                  winState ? 'bg-background/50' : 'bg-background cursor-pointer'
+                  _turn == 0 &&
+                    cn('text-chart-5 hover:bg-chart-5/5', _isWinBlock && 'border-chart-5 border'),
+                  _turn == 1 &&
+                    cn('text-chart-2 hover:bg-chart-2/5', _isWinBlock && 'border-chart-2 border'),
+                  _turn == undefined && 'hover:bg-background/60',
+                  winState
+                    ? 'bg-background/50'
+                    : cn('bg-background', shouldDisableBoard ? 'cursor-default' : 'cursor-pointer')
                 )}
                 style={{ width: size, height: size }}
-                onClick={() => {
-                  if (_turn == undefined || !winState) move(location);
-                }}
+                onClick={() => onMove(_turn, location)}
               >
                 {_turn == undefined ? '' : _turn == 0 ? 'x' : 'o'}
               </div>

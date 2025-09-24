@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import {
@@ -83,38 +82,11 @@ export default function CaroConnectionProvider({ children }: Props) {
     [peer]
   );
 
-  const _connectEvent = useCallback(() => {
-    if (peer) {
-      addChats('yourChat', 'Hello');
-      peer.send(createCaroMessage('chat', 'Hello'));
-      if (role == 'host') {
-        peer.send(createCaroMessage('size', JSON.stringify({ numberOfRows, numberOfColumns })));
-      }
-      setConnection('connected');
+  useEffect(() => {
+    if (peer && connection == 'connected' && role == 'host') {
+      peer.send(createCaroMessage('size', numberOfRows, numberOfColumns));
     }
-  }, [addChats, numberOfColumns, numberOfRows, peer, role]);
-
-  const _dataEvent = useCallback(
-    (data: any) => {
-      const sData = data.toString();
-      const result = decodeCaroMessage(sData);
-      if (result) {
-        const { type, message } = result;
-        if (type == 'chat') {
-          addChats('friendChat', message);
-          toast.info('New message!!');
-        } else if (type == 'size') {
-          const { numberOfRows, numberOfColumns } = message as CaroSizeType;
-          setCaroMetadata({ numberOfRows, numberOfColumns });
-          toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
-        } else if (type == 'step') {
-          const location = Number(message);
-          move(location);
-        }
-      } else toast.error('Message is not decoded');
-    },
-    [addChats, move, setCaroMetadata]
-  );
+  }, [connection, numberOfColumns, numberOfRows, peer, role]);
 
   useEffect(() => {
     if (peer) {
@@ -125,38 +97,40 @@ export default function CaroConnectionProvider({ children }: Props) {
       peer.on('connect', () => {
         addChats('yourChat', 'Hello');
         peer.send(createCaroMessage('chat', 'Hello'));
-        if (role == 'host') {
-          peer.send(createCaroMessage('size', JSON.stringify({ numberOfRows, numberOfColumns })));
-        }
         setConnection('connected');
       });
 
       peer.on('close', () => {
         setConnection('init');
+        toast.info('Connection closed');
       });
 
       peer.on('data', (data) => {
-        const sData = data.toString();
-        const result = decodeCaroMessage(sData);
-        if (result) {
-          const { type, message } = result;
-          if (type == 'chat') {
-            addChats('friendChat', message);
-            toast.info('New message!!');
-          } else if (type == 'size') {
-            const { numberOfRows, numberOfColumns } = message as CaroSizeType;
-            setCaroMetadata({ numberOfRows, numberOfColumns });
-            toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
-          } else if (type == 'step') {
-            const location = Number(message);
-            move(location);
-          }
-        } else toast.error('Message is not decoded');
+        try {
+          const sData = data.toString();
+          const result = decodeCaroMessage(sData);
+          if (result) {
+            const { type, message } = result;
+            if (type == 'chat') {
+              addChats('friendChat', message);
+              toast.info('New message!!');
+            } else if (type == 'size') {
+              const { numberOfRows, numberOfColumns } = message as CaroSizeType;
+              setCaroMetadata({ numberOfRows, numberOfColumns });
+              toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
+            } else if (type == 'step') {
+              const location = Number(message);
+              move(location);
+            }
+          } else toast.error('Message is not decoded');
+        } catch (error) {
+          console.error(error);
+        }
       });
 
       return () => peer.destroy();
     }
-  }, [addChats, move, numberOfColumns, numberOfRows, peer, role, setCaroMetadata]);
+  }, [addChats, move, peer, setCaroMetadata]);
 
   const contextData = useMemo<CaroConnectionContextType>(() => {
     return {

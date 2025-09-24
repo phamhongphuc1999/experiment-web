@@ -172,14 +172,21 @@ export function isWinBlock(result: WinStateType, location: number) {
   return isOk;
 }
 
-export function createCaroMessage(type: CaroMessageType, message: string | number) {
-  return `${type}_${message}`;
+export function createCaroMessage(type: CaroMessageType, ...message: Array<string | number>) {
+  return `${type}_${message.join('_')}`;
 }
 
 export function decodeCaroMessage(message: string) {
-  const [type, realMessage] = message.split('_');
+  const [type, ...restMessage] = message.split('_');
   const realType = type as CaroMessageType;
-  if (realType == 'chat') return { type: realType, message: realMessage };
-  else if (realType == 'step') return { type: realType, message: parseInt(realMessage) };
-  else return { type: realType, message: JSON.parse(realMessage) };
+  if (realType == 'chat') return { type: realType, message: restMessage[0] };
+  else if (realType == 'step') return { type: realType, message: parseInt(restMessage[0]) };
+  else if (realType == 'size')
+    return {
+      type: realType,
+      message: {
+        numberOfRows: parseInt(restMessage[0]),
+        numberOfColumns: parseInt(restMessage[1]),
+      },
+    };
 }

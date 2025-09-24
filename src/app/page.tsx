@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <CommonContainer>
       <p>
-        Hello, what do you want to do?. Let's play{' '}
+        Hello, what do you want to do? Let's play{' '}
         <Link href="/caro" className="text-orange-400 underline">
           caro
         </Link>

@@ -5,6 +5,7 @@ import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialo
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
+import useOnlineCaroState from 'src/hooks/useCaroTurnState';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 
@@ -15,6 +16,7 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
     winState,
     events: { undo, reset },
   } = useCaroStore();
+  const { playerTitle, playerName } = useOnlineCaroState();
 
   return (
     <div
@@ -27,11 +29,11 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
         <CaroConnectionDialog />
       </div>
       <TitleBox
-        title={winState ? 'Winner' : 'Turn'}
-        value={`Player ${turn + 1}`}
+        title={playerTitle}
+        value={playerName}
         titleProps={{ className: 'text-xs' }}
         valueProps={{
-          className: cn('text-sm', turn == 0 && 'text-chart-5', turn == 1 && 'text-chart-2'),
+          className: cn('text-xs', turn == 0 && 'text-chart-5', turn == 1 && 'text-chart-2'),
         }}
         className="mt-2"
       />
@@ -48,7 +50,9 @@ export default function ConfigColumn(props: ComponentProps<'div'>) {
           Undo
         </Button>
       ) : (
-        <Button onClick={() => reset()}>New game</Button>
+        <Button className="mt-2" onClick={() => reset()}>
+          New game
+        </Button>
       )}
       <div className="mt-2">
         <CaroMessengerDialog />
