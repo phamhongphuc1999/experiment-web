@@ -12,7 +12,7 @@ export default function LayoutWrapper({ children }: Props) {
     <EffectBox>
       <div className="min-h-screen">
         <AppHeader />
-        <Toaster />
+        <Toaster expand={true} position="top-right" richColors />
         <div className="h-screen pt-[55px]">{children}</div>
       </div>
     </EffectBox>

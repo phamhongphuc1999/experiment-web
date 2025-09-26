@@ -1,6 +1,8 @@
 import { Airdrop, Setting } from 'iconsax-reactjs';
 import { MouseEvent, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { DIALOG_KEY } from 'src/configs/constance';
+import { CaroConfigSchema } from 'src/schemas/caro.schema';
 import { PlayModeType, useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
@@ -36,15 +38,21 @@ export default function CaroConfigDialog() {
     setTemPlayMode(playMode);
   }, [playMode]);
 
+  function _check() {
+    return CaroConfigSchema.safeParse({ numberOfColumns, numberOfRows }).success;
+  }
+
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setCaroMetadata({
-      numberOfRows: Math.min(rows, 100),
-      numberOfColumns: Math.min(columns, 100),
-      playMode: tempPlayMode,
-    });
-    reset();
-    setDialog(DIALOG_KEY.caroConfigDialog, false);
+    if (_check()) {
+      setCaroMetadata({
+        numberOfRows: Math.min(rows, 30),
+        numberOfColumns: Math.min(columns, 30),
+        playMode: tempPlayMode,
+      });
+      reset();
+      setDialog(DIALOG_KEY.caroConfigDialog, false);
+    } else toast.error('Some thing went wrong');
   }
 
   function onNewGame() {

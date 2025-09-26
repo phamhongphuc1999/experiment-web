@@ -39,7 +39,7 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
   const _data = Object.values(data);
 
   function onAddPair() {
-    if (AddWordSchema.isValidSync({ en: debouncedEn, vi: debouncedVi })) {
+    if (AddWordSchema.safeParse({ en: debouncedEn, vi: debouncedVi }).success) {
       const id = uuid.v4();
       const _value = { id, en: debouncedEn, vi: debouncedVi, note, category_id: categoryId };
       setData((preValue) => {

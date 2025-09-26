@@ -1,6 +1,6 @@
-import { number, object } from 'yup';
+import { number, object } from 'zod';
 
 export const WeatherParamsSchema = object({
-  latitude: number().required(),
-  longitude: number().required(),
+  latitude: number(),
+  longitude: number(),
 });

@@ -1,6 +1,6 @@
-import { object, string } from 'yup';
+import { object, string } from 'zod';
 
 export const AddWordSchema = object({
-  en: string().required().min(1),
-  vi: string().required().min(1),
+  en: string().min(1),
+  vi: string().min(1),
 });

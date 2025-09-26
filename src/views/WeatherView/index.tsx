@@ -19,9 +19,7 @@ export default function WeatherView() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (WeatherParamsSchema.isValidSync(state)) {
-      await refetch();
-    }
+    if (WeatherParamsSchema.safeParse(state).success) await refetch();
   }
 
   return (

@@ -9,7 +9,7 @@ export function useWeather(
   query?: OptionalQueryType<WeatherApiType>
 ) {
   return useQuery({
-    enabled: WeatherParamsSchema.isValidSync(params),
+    enabled: WeatherParamsSchema.safeParse(params).success,
     ...query,
     queryKey: [QUERY_KEY.weather, params],
     queryFn: () => WeatherApi.getWeather(params as WeatherParamsType),
