@@ -37,6 +37,9 @@ export const useWeatherStore = create<
         }
         return persistedState;
       },
+      partialize: (state) => {
+        return { locations: state.locations };
+      },
     }
   )
 );

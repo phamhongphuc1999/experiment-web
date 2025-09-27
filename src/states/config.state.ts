@@ -76,6 +76,15 @@ export const useConfigStore = create<
         }
         return persistedState;
       },
+      partialize: (state) => {
+        return {
+          theme: state.theme,
+          revealPerWord: state.revealPerWord,
+          isFillFromScratch: state.isFillFromScratch,
+          learnMode: state.learnMode,
+          learnPerWord: state.learnPerWord,
+        };
+      },
     }
   )
 );

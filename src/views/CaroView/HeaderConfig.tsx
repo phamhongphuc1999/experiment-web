@@ -14,7 +14,6 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
     turn,
     stepsOrder,
-    winState,
     metadata: { playMode, gameType },
     numberOfBlindError,
     events: { undo },
@@ -23,40 +22,50 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
   const { reset } = useCaroAction();
 
   return (
-    <div {...props} className={cn('flex items-center gap-2', props.className)}>
-      <CaroConfigDialog />
-      <CaroInstructionDialog />
-      <CaroConnectionDialog />
-      <CaroMessengerDialog />
-      <p className={cn('text-xs', turn == 0 && 'text-chart-1', turn == 1 && 'text-chart-2')}>
-        {playerText}
-      </p>
+    <div {...props} className={cn('flex flex-col items-center gap-1', props.className)}>
+      <div className="flex items-center gap-2">
+        <CaroConfigDialog />
+        <CaroInstructionDialog />
+        <CaroConnectionDialog />
+        <CaroMessengerDialog />
+        <p className={cn('text-xs', turn == 0 && 'text-chart-1', turn == 1 && 'text-chart-2')}>
+          {playerText}
+        </p>
+        {!isWin ? (
+          <Button
+            size="sm"
+            variant="outline"
+            className={cn(
+              turn == 0 && 'text-chart-1 hover:text-chart-1/50',
+              turn == 1 && 'text-chart-2 hover:text-chart-2/50',
+              playMode == 'online' && 'hidden'
+            )}
+            onClick={undo}
+            disabled={stepsOrder.length == 0}
+          >
+            Undo
+          </Button>
+        ) : (
+          <Button disabled={!isWin} size="sm" onClick={() => reset()}>
+            New game
+          </Button>
+        )}
+      </div>
       {gameType == 'blind' && (
-        <TitleBox
-          title="error"
-          value={numberOfBlindError[turn]}
-          titleProps={{ className: 'text-destructive/50' }}
-          valueProps={{ className: 'text-destructive' }}
-        />
-      )}
-      {!winState ? (
-        <Button
-          size="sm"
-          variant="outline"
-          className={cn(
-            turn == 0 && 'text-chart-1 hover:text-chart-1/50',
-            turn == 1 && 'text-chart-2 hover:text-chart-2/50',
-            playMode == 'online' && 'hidden'
-          )}
-          onClick={undo}
-          disabled={stepsOrder.length == 0}
-        >
-          Undo
-        </Button>
-      ) : (
-        <Button disabled={!isWin} size="sm" onClick={() => reset()}>
-          New game
-        </Button>
+        <div className="flex items-center gap-2">
+          <TitleBox
+            title="Player1"
+            value={numberOfBlindError[0]}
+            titleProps={{ className: 'text-chart-1' }}
+            valueProps={{ className: 'text-destructive' }}
+          />
+          <TitleBox
+            title="Player2"
+            value={numberOfBlindError[1]}
+            titleProps={{ className: 'text-chart-2' }}
+            valueProps={{ className: 'text-destructive' }}
+          />
+        </div>
       )}
     </div>
   );

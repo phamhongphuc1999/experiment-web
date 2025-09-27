@@ -18,12 +18,14 @@ type CaroConfigContextType = {
   playMode: PlayModeType;
   gameType: CaroGameType;
   isOverride: boolean;
+  maxError: number;
   events: {
     setRows: Dispatch<SetStateAction<number>>;
     setColumns: Dispatch<SetStateAction<number>>;
     setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
     setGameType: Dispatch<SetStateAction<CaroGameType>>;
     setIsOverride: Dispatch<SetStateAction<boolean>>;
+    setMaxError: Dispatch<SetStateAction<number>>;
   };
 };
 
@@ -33,12 +35,14 @@ const caroConfigContextDefault: CaroConfigContextType = {
   playMode: 'offline',
   gameType: 'normal',
   isOverride: false,
+  maxError: 5,
   events: {
     setRows: () => {},
     setColumns: () => {},
     setPlayMode: () => {},
     setGameType: () => {},
     setIsOverride: () => {},
+    setMaxError: () => {},
   },
 };
 
@@ -56,6 +60,7 @@ export default function CaroConfigProvider({ children }: Props) {
   const [playMode, setPlayMode] = useState(metadata.playMode);
   const [gameType, setGameType] = useState(metadata.gameType);
   const [isOverride, setIsOverride] = useState(metadata.isOverride);
+  const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
 
   useEffect(() => {
     setColumns(metadata.numberOfColumns);
@@ -77,6 +82,10 @@ export default function CaroConfigProvider({ children }: Props) {
     setIsOverride(metadata.isOverride);
   }, [metadata.isOverride]);
 
+  useEffect(() => {
+    setMaxError(metadata.maxNumberOfBlindError);
+  }, [metadata.maxNumberOfBlindError]);
+
   const contextData = useMemo<CaroConfigContextType>(() => {
     return {
       rows,
@@ -84,9 +93,10 @@ export default function CaroConfigProvider({ children }: Props) {
       playMode,
       gameType,
       isOverride,
-      events: { setRows, setColumns, setPlayMode, setGameType, setIsOverride },
+      maxError,
+      events: { setRows, setColumns, setPlayMode, setGameType, setIsOverride, setMaxError },
     };
-  }, [columns, playMode, rows, gameType, isOverride]);
+  }, [columns, playMode, rows, gameType, isOverride, maxError]);
 
   return <CaroConfigContext.Provider value={contextData}>{children}</CaroConfigContext.Provider>;
 }

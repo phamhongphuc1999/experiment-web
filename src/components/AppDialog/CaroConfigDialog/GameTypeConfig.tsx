@@ -1,11 +1,15 @@
+import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConfigContext } from './caroConfig.context';
+import AppTooltip from 'src/components/AppTooltip';
+import { InfoCircle } from 'iconsax-reactjs';
 
 export default function GameTypeConfig() {
   const {
     gameType,
     isOverride,
-    events: { setGameType, setIsOverride },
+    maxError,
+    events: { setGameType, setIsOverride, setMaxError },
   } = useCaroConfigContext();
 
   return (
@@ -31,6 +35,24 @@ export default function GameTypeConfig() {
           Blind
         </Button>
       </div>
+      {gameType == 'blind' && (
+        <div className="mt-2">
+          <BaseInput
+            name="maximum-errors"
+            placeholder="Maximum number of errors"
+            type="number"
+            value={maxError}
+            onChange={(event) => setMaxError(parseInt(event.target.value))}
+            icon={{
+              end: (
+                <AppTooltip tooltipContent="The maximum move that player can make in blind mode">
+                  <InfoCircle size={14} />
+                </AppTooltip>
+              ),
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
