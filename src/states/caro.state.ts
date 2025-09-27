@@ -4,9 +4,13 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 export type PlayModeType = 'offline' | 'online' | 'machine';
+export type CaroGameType = 'normal' | 'blind';
+export const MAX_BLIND_ERROR = 5;
 
 type CaroMetadataType = {
   playMode: PlayModeType;
+  gameType: CaroGameType;
+  isOverride: boolean;
   status: 'playing' | 'win';
   numberOfRows: number;
   numberOfColumns: number;
@@ -14,6 +18,8 @@ type CaroMetadataType = {
 
 type CaroStateType = {
   metadata: CaroMetadataType;
+  numberOfBlindError: { 0: number; 1: number };
+  isBlindForceOver: boolean;
   turn: 0 | 1;
   steps: { [key: number]: 0 | 1 };
   stepsOrder: Array<number>;
@@ -22,6 +28,7 @@ type CaroStateType = {
     move: (location: number) => void;
     undo: () => void;
     reset: (turn?: 0 | 1) => void;
+    countNumberOfBlindError: (turn: 0 | 1) => void;
   };
   winState?: WinStateType;
 };
@@ -31,10 +38,14 @@ export const useCaroStore = create<CaroStateType, [['zustand/immer', unknown]]>(
     return {
       metadata: {
         playMode: 'offline',
+        gameType: 'normal',
+        isOverride: false,
+        status: 'playing',
         numberOfRows: 10,
         numberOfColumns: 10,
-        status: 'playing',
       },
+      numberOfBlindError: { 0: 0, 1: 0 },
+      isBlindForceOver: false,
       turn: 0,
       steps: {},
       stepsOrder: [],
@@ -72,10 +83,22 @@ export const useCaroStore = create<CaroStateType, [['zustand/immer', unknown]]>(
         reset: (turn) => {
           set((state) => {
             state.metadata.status = 'playing';
+            state.numberOfBlindError = { 0: 0, 1: 0 };
             if (turn != undefined) state.turn = turn;
             state.steps = {};
             state.stepsOrder = [];
             state.winState = undefined;
+            state.isBlindForceOver = false;
+          });
+        },
+        countNumberOfBlindError: (turn: 0 | 1) => {
+          set((state) => {
+            const currentErrors = state.numberOfBlindError[turn];
+            state.numberOfBlindError[turn] = currentErrors + 1;
+            if (state.numberOfBlindError[turn] > MAX_BLIND_ERROR) {
+              state.isBlindForceOver = true;
+              state.turn = (1 - state.turn) as 1 | 0;
+            }
           });
         },
         setCaroMetadata: (metadata: Partial<CaroMetadataType>) => {

@@ -5,13 +5,14 @@ import { ComponentProps } from 'react';
 import BaseInput from './BaseInput';
 
 interface Props extends ComponentProps<'input'> {
+  name: string;
   rootprops?: ComponentProps<'div'>;
   events: {
     setSearchText: (value: string) => void;
   };
 }
 
-export default function SearchInput({ rootprops, events, ...props }: Props) {
+export default function SearchInput({ name, rootprops, events, ...props }: Props) {
   function onTextChange(text: string) {
     events.setSearchText(text);
   }
@@ -23,6 +24,7 @@ export default function SearchInput({ rootprops, events, ...props }: Props) {
   return (
     <BaseInput
       {...props}
+      name={name}
       rootprops={rootprops}
       onChange={(event) => onTextChange(event.target.value)}
       icon={{

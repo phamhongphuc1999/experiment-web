@@ -66,6 +66,7 @@ export default function WordConfigDialog() {
             <div className="col-span-3 border-t pt-2">
               <BaseInput
                 className="col-span-3"
+                name="reveal-word"
                 type="number"
                 placeholder="Reveal per word"
                 value={revealPerWord}
@@ -99,6 +100,7 @@ export default function WordConfigDialog() {
                 {learnMode == 'countdown' && (
                   <BaseInput
                     type="number"
+                    name="learn-word"
                     placeholder="Learn per word"
                     value={learnPerWord}
                     onChange={(event) => setLearnPerWord(parseInt(event.target.value))}

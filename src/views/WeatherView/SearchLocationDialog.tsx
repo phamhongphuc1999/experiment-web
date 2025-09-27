@@ -73,6 +73,7 @@ export default function SearchLocationDialog() {
               value={searchText}
               placeholder="Search location"
               events={{ setSearchText }}
+              name="search-location"
             />
             <Location className="size-8 cursor-pointer" onClick={gps} />
           </div>

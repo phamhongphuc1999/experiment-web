@@ -54,6 +54,7 @@ export default function DailyParams(props: ComponentProps<'div'>) {
             placeholder="Search daily params"
             value={searchText}
             events={{ setSearchText }}
+            name="search-daily-params"
           />
         </CollapsibleTrigger>
         <CollapsibleContent>

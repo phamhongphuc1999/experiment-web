@@ -134,11 +134,13 @@ export default function AddDialog({ categoryId, categoryTitle }: Props) {
           <div className="mt-3 gap-3 border-t pt-2">
             <TitleBox title="Category" value={categoryTitle} />
             <SearchInput
+              name="search-en"
               placeholder="en"
               value={searchEn}
               events={{ setSearchText: setSearchEn }}
             />
             <SearchInput
+              name="search-vi"
               placeholder="vi"
               value={searchVi}
               events={{ setSearchText: setSearchVi }}

@@ -3,6 +3,7 @@ import CaroConfigDialog from 'src/components/AppDialog/CaroConfigDialog';
 import CaroConnectionDialog from 'src/components/AppDialog/CaroConnectionDialog';
 import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialog';
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
+import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import useCaroAction from 'src/hooks/useCaroAction';
 import useOnlineCaroState from 'src/hooks/useCaroTurnState';
@@ -14,6 +15,8 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
     turn,
     stepsOrder,
     winState,
+    metadata: { playMode, gameType },
+    numberOfBlindError,
     events: { undo },
   } = useCaroStore();
   const { playerText, isWin } = useOnlineCaroState();
@@ -28,13 +31,22 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
       <p className={cn('text-xs', turn == 0 && 'text-chart-1', turn == 1 && 'text-chart-2')}>
         {playerText}
       </p>
+      {gameType == 'blind' && (
+        <TitleBox
+          title="error"
+          value={numberOfBlindError[turn]}
+          titleProps={{ className: 'text-destructive/50' }}
+          valueProps={{ className: 'text-destructive' }}
+        />
+      )}
       {!winState ? (
         <Button
           size="sm"
           variant="outline"
           className={cn(
             turn == 0 && 'text-chart-1 hover:text-chart-1/50',
-            turn == 1 && 'text-chart-2 hover:text-chart-2/50'
+            turn == 1 && 'text-chart-2 hover:text-chart-2/50',
+            playMode == 'online' && 'hidden'
           )}
           onClick={undo}
           disabled={stepsOrder.length == 0}

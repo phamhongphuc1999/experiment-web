@@ -1,0 +1,112 @@
+import { Setting } from 'iconsax-reactjs';
+import { MouseEvent } from 'react';
+import { DIALOG_KEY } from 'src/configs/constance';
+import { CaroConfigSchema } from 'src/schemas/caro.schema';
+import { zodError } from 'src/services';
+import { useCaroStore } from 'src/states/caro.state';
+import { useDialogStore } from 'src/states/dialog.state';
+import AppTooltip from '../../AppTooltip';
+import { Button } from '../../shadcn-ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../../shadcn-ui/dialog';
+import BoardSizeConfig from './BoardSizeConfig';
+import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
+import GameTypeConfig from './GameTypeConfig';
+import PlayModeConfig from './PlayModeConfig';
+
+function CaroConfigDialogLayout() {
+  const { dialog, setDialog } = useDialogStore();
+  const {
+    metadata,
+    events: { reset, setCaroMetadata },
+  } = useCaroStore();
+  const {
+    rows,
+    columns,
+    playMode,
+    gameType,
+    isOverride,
+    events: { setColumns, setRows, setPlayMode, setGameType, setIsOverride },
+  } = useCaroConfigContext();
+
+  function _check() {
+    const result = CaroConfigSchema.safeParse({ numberOfColumns: columns, numberOfRows: rows });
+    zodError(result.error);
+    return result.success;
+  }
+
+  function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (_check()) {
+      setCaroMetadata({
+        numberOfRows: rows,
+        numberOfColumns: columns,
+        playMode,
+        gameType,
+        isOverride,
+      });
+      reset();
+      setDialog(DIALOG_KEY.caroConfigDialog, false);
+    }
+  }
+
+  function onNewGame() {
+    reset();
+    setDialog(DIALOG_KEY.caroConfigDialog, false);
+  }
+
+  function onOpenChange(open: boolean) {
+    setRows(metadata.numberOfRows);
+    setColumns(metadata.numberOfColumns);
+    setPlayMode(metadata.playMode);
+    setGameType(metadata.gameType);
+    setIsOverride(metadata.isOverride);
+    setDialog(DIALOG_KEY.caroConfigDialog, open);
+  }
+
+  function onCancel() {
+    onOpenChange(false);
+  }
+
+  return (
+    <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
+      <DialogTrigger>
+        <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
+          <Setting size={16} />
+        </AppTooltip>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Caro config</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={onSaveConfig}>
+          <PlayModeConfig />
+          <GameTypeConfig />
+          <BoardSizeConfig />
+          <div className="mt-4 flex items-center justify-between">
+            <Button onClick={onNewGame}>New game</Button>
+            <div>
+              <Button onClick={onCancel} variant="destructive" className="mr-2">
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default function CaroConfigDialog() {
+  return (
+    <CaroConfigProvider>
+      <CaroConfigDialogLayout />
+    </CaroConfigProvider>
+  );
+}

@@ -60,6 +60,7 @@ export default function WordView() {
         </div>
         <SearchInput
           placeholder="Search category"
+          name="search-category"
           rootprops={{ className: 'w-fit' }}
           value={searchText}
           events={{ setSearchText }}

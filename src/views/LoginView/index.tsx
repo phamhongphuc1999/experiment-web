@@ -21,8 +21,8 @@ export default function LoginView() {
   return (
     <CommonContainer className="bg-sidebar-accent mt-4 !max-w-lg rounded-xl shadow-2xl">
       <form>
-        <BaseInput placeholder="Email" />
-        <BaseInput placeholder="Password" />
+        <BaseInput placeholder="Email" name="email" />
+        <BaseInput placeholder="Password" name="password" />
         <Button type="submit" className="w-full">
           Login
         </Button>

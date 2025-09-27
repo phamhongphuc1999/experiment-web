@@ -54,6 +54,7 @@ export default function HourlyParams(props: ComponentProps<'div'>) {
             placeholder="Search hourly params"
             value={searchText}
             events={{ setSearchText }}
+            name="search-hourly-params"
           />
         </CollapsibleTrigger>
         <CollapsibleContent>

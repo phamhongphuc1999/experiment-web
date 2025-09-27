@@ -33,6 +33,7 @@ export default function WeatherView() {
           <div className="flex w-full items-center gap-2">
             <BaseInput
               placeholder="Latitude"
+              name="latitude"
               type="number"
               rootprops={{ className: 'md:w-1/4 w-1/3' }}
               value={state.latitude || ''}
@@ -40,6 +41,7 @@ export default function WeatherView() {
             />
             <BaseInput
               placeholder="Longitude"
+              name="longitude"
               type="number"
               rootprops={{ className: 'md:w-1/4 w-1/3' }}
               value={state.longitude || ''}

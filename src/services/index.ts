@@ -1,6 +1,8 @@
 import moment from 'moment';
+import { toast } from 'sonner';
 import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
 import { PaginationType } from 'src/global';
+import { ZodError } from 'zod';
 
 export function hexToUint8Array(hex: string): Uint8Array {
   if (hex.length % 2 !== 0) {
@@ -44,4 +46,11 @@ export function formatText(s: string, frac = 3) {
 
 export function generateAppMetadata(title: string) {
   return { title: `${APP_NAME} | ${title}`, openGraph: { title: `${APP_NAME} | ${title}` } };
+}
+
+export function zodError<T>(error?: ZodError<T>) {
+  if (error && error.issues.length > 0) {
+    const issue = error.issues[0];
+    toast.error(`${String(issue.path[0])}: ${issue.message}`);
+  }
 }

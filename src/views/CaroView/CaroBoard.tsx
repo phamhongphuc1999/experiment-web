@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, useLayoutEffect, useRef, useState } from 'react';
+import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { MAX_CARO_SIZE } from 'src/configs/constance';
 import useCaroAction from 'src/hooks/useCaroAction';
 import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
@@ -10,15 +10,24 @@ import { useCaroStore } from 'src/states/caro.state';
 import HeaderConfig from './HeaderConfig';
 
 export default function CaroBoard(props: ComponentProps<'div'>) {
+  const caroRef = useRef<HTMLDivElement | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { numberOfRows, numberOfColumns },
+    metadata: { numberOfRows, numberOfColumns, isOverride, gameType },
+    numberOfBlindError,
+    isBlindForceOver,
     steps,
+    stepsOrder,
     winState,
+    events: { countNumberOfBlindError },
   } = useCaroStore();
   const { move } = useCaroAction();
   const { shouldDisableBoard } = useShouldDisableBoard();
+
+  const errorCount = useMemo(() => {
+    return numberOfBlindError[0] + numberOfBlindError[1];
+  }, [numberOfBlindError]);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -40,8 +49,31 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   }, [numberOfColumns, numberOfRows]);
 
   function onMove(_turn: 0 | 1, location: number) {
-    if ((_turn == undefined || !winState) && !shouldDisableBoard) move(location);
+    const isWin = winState != undefined || isBlindForceOver == true;
+
+    if (gameType == 'blind') {
+      if (steps[location] != undefined) countNumberOfBlindError(_turn);
+    }
+
+    if (isOverride) {
+      if (!isWin && !shouldDisableBoard && steps[location] != _turn) move(location);
+    } else if (_turn == undefined && !isWin && !shouldDisableBoard) move(location);
   }
+
+  useEffect(() => {
+    if (errorCount > 0 && gameType == 'blind') {
+      const el = caroRef.current;
+      if (!el) return;
+
+      el.classList.remove('shake-animation');
+      void el.offsetWidth;
+      el.classList.add('shake-animation');
+
+      const handle = () => el.classList.remove('shake-animation');
+      el.addEventListener('animationend', handle);
+      return () => el.removeEventListener('animationend', handle);
+    }
+  }, [errorCount, gameType]);
 
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
@@ -49,6 +81,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
       <div ref={ref} className="flex h-full w-full justify-center overflow-hidden">
         {size > 0 && (
           <div
+            ref={caroRef}
             style={{
               width: numberOfColumns * size + numberOfColumns + 1,
               height: numberOfRows * size + numberOfRows + 1,
@@ -59,6 +92,15 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               const _turn = steps[location];
               let _isWinBlock = false;
               if (winState) _isWinBlock = isWinBlock(winState, location);
+              let _icon = '';
+              const isWin = winState != undefined || isBlindForceOver == true;
+              if (
+                gameType != 'blind' ||
+                (gameType == 'blind' && (isWin || stepsOrder.at(-1) == location))
+              ) {
+                if (_turn == 0) _icon = 'x';
+                else if (_turn == 1) _icon = 'o';
+              }
 
               return (
                 <div
@@ -70,7 +112,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                     _turn == 1 &&
                       cn('text-chart-2 hover:bg-chart-2/5', _isWinBlock && 'border-chart-2 border'),
                     _turn == undefined && 'hover:bg-background/60',
-                    winState
+                    winState || isBlindForceOver
                       ? 'bg-background/50'
                       : cn(
                           'bg-background',
@@ -80,7 +122,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   style={{ width: size, height: size, fontSize: size * 0.7 }}
                   onClick={() => onMove(_turn, location)}
                 >
-                  {_turn == undefined ? '' : _turn == 0 ? 'x' : 'o'}
+                  {_icon}
                 </div>
               );
             })}

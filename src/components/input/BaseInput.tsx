@@ -3,6 +3,7 @@ import { cn } from 'src/lib/utils';
 import { Input } from '../shadcn-ui/input';
 
 interface Props extends ComponentProps<'input'> {
+  name: string;
   rootprops?: ComponentProps<'div'>;
   icon?: {
     start?: ReactNode;
@@ -10,18 +11,23 @@ interface Props extends ComponentProps<'input'> {
   };
 }
 
-export default function BaseInput(props: Props) {
-  const { rootprops, icon } = props;
-
+export default function BaseInput({ name, rootprops, icon, ...props }: Props) {
   return (
-    <div {...rootprops} className={cn('input-group inline-block w-full', rootprops?.className)}>
-      <div className="absolute top-1/2 left-2.5 -translate-y-1/2">{icon?.start}</div>
+    <div
+      {...rootprops}
+      className={cn('input-group mt-4 inline-block w-full', rootprops?.className)}
+    >
+      {icon?.start && (
+        <div className="absolute top-1/2 left-2.5 -translate-y-1/2">{icon.start}</div>
+      )}
       <Input
         {...props}
+        name={name}
+        id={name}
         className={cn([icon?.start && 'pl-8', icon?.end && 'pr-8', props.className])}
       />
-      {props.placeholder && <label>{props.placeholder}</label>}
-      <div className="absolute top-1/2 right-2.5 -translate-y-1/2">{icon?.end}</div>
+      {props.placeholder && <label htmlFor={name}>{props.placeholder}</label>}
+      {icon?.end && <div className="absolute top-1/2 right-2.5 -translate-y-1/2">{icon.end}</div>}
     </div>
   );
 }

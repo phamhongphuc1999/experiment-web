@@ -25,6 +25,7 @@ export default function GuestConnection() {
           ) : (
             <BaseInput
               placeholder="Friend signal"
+              name="guest-friend-signal"
               value={signal}
               onChange={(event) => setSignal(event.target.value)}
               icon={{ end: <Button onClick={() => setFriendSignal(signal)}>Confirm</Button> }}
