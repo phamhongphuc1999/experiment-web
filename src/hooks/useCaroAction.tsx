@@ -5,7 +5,7 @@ import { useCaroStore } from 'src/states/caro.state';
 
 export default function useCaroAction() {
   const {
-    events: { move, reset },
+    events: { move, undo, reset },
   } = useCaroStore();
   const { peer } = useCaroConnectionContext();
 
@@ -17,6 +17,11 @@ export default function useCaroAction() {
     [move, peer]
   );
 
+  const handleUndo = useCallback(() => {
+    undo();
+    if (peer) peer.send(createCaroMessage('undo'));
+  }, [peer, undo]);
+
   const handleReset = useCallback(
     (turn?: 0 | 1) => {
       reset(turn);
@@ -25,5 +30,5 @@ export default function useCaroAction() {
     [peer, reset]
   );
 
-  return { move: handleMove, reset: handleReset };
+  return { move: handleMove, undo: handleUndo, reset: handleReset };
 }

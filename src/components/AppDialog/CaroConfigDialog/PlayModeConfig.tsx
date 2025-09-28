@@ -1,5 +1,6 @@
 import { Airdrop, Setting } from 'iconsax-reactjs';
 import { Button } from 'src/components/shadcn-ui/button';
+import { useCaroConnectionContext } from 'src/context/caroConnection.context';
 import { PlayModeType } from 'src/states/caro.state';
 import { useCaroConfigContext } from './caroConfig.context';
 
@@ -8,9 +9,11 @@ export default function PlayModeConfig() {
     playMode,
     events: { setPlayMode },
   } = useCaroConfigContext();
+  const { peer } = useCaroConnectionContext();
 
   function onChangePlayMode(playMode: PlayModeType) {
     setPlayMode(playMode);
+    if (playMode == 'offline' && peer) peer.destroy();
   }
 
   return (

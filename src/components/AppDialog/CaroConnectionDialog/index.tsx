@@ -38,21 +38,33 @@ export default function CaroConnectionDialog() {
         <DialogHeader>
           <DialogTitle>Caro peer-to-peer connection</DialogTitle>
         </DialogHeader>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => setRole('host')}
-            variant={role == 'host' ? 'default' : 'secondary'}
-            disabled={Boolean(peer)}
-          >
-            Host
-          </Button>
-          <Button
-            onClick={() => setRole('guest')}
-            variant={role == 'guest' ? 'default' : 'secondary'}
-            disabled={Boolean(peer)}
-          >
-            Guest
-          </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setRole('host')}
+              variant={role == 'host' ? 'default' : 'secondary'}
+              disabled={Boolean(peer)}
+            >
+              Host
+            </Button>
+            <Button
+              onClick={() => setRole('guest')}
+              variant={role == 'guest' ? 'default' : 'secondary'}
+              disabled={Boolean(peer)}
+            >
+              Guest
+            </Button>
+          </div>
+          {connectionType == 'connected' && (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (peer) peer.destroy();
+              }}
+            >
+              Disconnect
+            </Button>
+          )}
         </div>
         {connectionType == 'init' ? (
           <p className="text-sm">

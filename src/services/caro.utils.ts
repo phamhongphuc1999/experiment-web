@@ -1,4 +1,5 @@
 import { CaroMessageType, CaroWinType, WinStateType } from 'src/global';
+import { CaroGameType } from 'src/states/caro.state';
 
 type BlockMode = 'opposite' | 'wall' | undefined;
 
@@ -176,18 +177,27 @@ export function createCaroMessage(type: CaroMessageType, ...message: Array<strin
   return `${type}_${message.join('_')}`;
 }
 
+export type SyncReturnType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+  gameType: CaroGameType;
+  isOverride: boolean;
+};
+
 export function decodeCaroMessage(message: string) {
   const [type, ...restMessage] = message.split('_');
   const realType = type as CaroMessageType;
   if (realType == 'chat') return { type: realType, message: restMessage[0] };
   else if (realType == 'move') return { type: realType, message: parseInt(restMessage[0]) };
-  else if (realType == 'size')
+  else if (realType == 'sync')
     return {
       type: realType,
       message: {
         numberOfRows: parseInt(restMessage[0]),
         numberOfColumns: parseInt(restMessage[1]),
+        gameType: restMessage[2] as CaroGameType,
+        isOverride: restMessage[3] == '0' ? false : true,
       },
     };
-  else if (realType == 'newGame') return { type: realType, message: null };
+  else if (realType == 'newGame' || realType == 'undo') return { type: realType, message: null };
 }

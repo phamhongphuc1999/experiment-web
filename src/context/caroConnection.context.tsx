@@ -11,8 +11,7 @@ import {
 } from 'react';
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
-import { CaroSizeType } from 'src/global';
-import { createCaroMessage, decodeCaroMessage } from 'src/services/caro.utils';
+import { createCaroMessage, decodeCaroMessage, SyncReturnType } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import { useCaroMessageStore } from 'src/states/caroMessage.state';
 
@@ -61,8 +60,8 @@ export default function CaroConnectionProvider({ children }: Props) {
     events: { addChats },
   } = useCaroMessageStore();
   const {
-    metadata: { numberOfRows, numberOfColumns },
-    events: { setCaroMetadata, move, reset },
+    metadata: { numberOfRows, numberOfColumns, gameType, isOverride },
+    events: { setCaroMetadata, move, undo, reset },
   } = useCaroStore();
 
   const initConnection = useCallback((type: RoleType) => {
@@ -84,9 +83,11 @@ export default function CaroConnectionProvider({ children }: Props) {
 
   useEffect(() => {
     if (peer && connection == 'connected' && role == 'host') {
-      peer.send(createCaroMessage('size', numberOfRows, numberOfColumns));
+      peer.send(
+        createCaroMessage('sync', numberOfRows, numberOfColumns, gameType, isOverride ? 1 : 0)
+      );
     }
-  }, [connection, numberOfColumns, numberOfRows, peer, role]);
+  }, [connection, gameType, isOverride, numberOfColumns, numberOfRows, peer, role]);
 
   useEffect(() => {
     if (peer) {
@@ -100,11 +101,6 @@ export default function CaroConnectionProvider({ children }: Props) {
         setConnection('connected');
       });
 
-      peer.on('close', () => {
-        setConnection('init');
-        toast.info('Connection closed');
-      });
-
       peer.on('data', (data) => {
         try {
           const sData = data.toString();
@@ -114,13 +110,20 @@ export default function CaroConnectionProvider({ children }: Props) {
             if (type == 'chat') {
               addChats('friendChat', message);
               toast.info('New message!!');
-            } else if (type == 'size') {
-              const { numberOfRows, numberOfColumns } = message as CaroSizeType;
-              setCaroMetadata({ numberOfRows, numberOfColumns });
+            } else if (type == 'sync') {
+              const { numberOfRows, numberOfColumns, gameType, isOverride } =
+                message as SyncReturnType;
+              setCaroMetadata({ numberOfRows, numberOfColumns, gameType, isOverride });
               toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
+              toast.info(
+                `Set game type to ${gameType} ${isOverride ? 'with' : 'without'} override`
+              );
             } else if (type == 'move') {
               const location = Number(message);
               move(location);
+            } else if (type == 'undo') {
+              undo();
+              toast.warning('Opponent undo caro board');
             } else if (type == 'newGame') reset();
           } else toast.error('Message is not decoded');
         } catch (error) {
@@ -128,9 +131,20 @@ export default function CaroConnectionProvider({ children }: Props) {
         }
       });
 
+      peer.on('error', (error) => {
+        console.error('Caro peer-to-peer error:', error);
+        toast.error(String(error));
+      });
+
+      peer.on('close', () => {
+        setConnection('init');
+        toast.info('Connection closed');
+        if (peer) peer.destroy();
+      });
+
       return () => peer.destroy();
     }
-  }, [addChats, move, peer, setCaroMetadata, reset]);
+  }, [addChats, move, peer, setCaroMetadata, reset, undo]);
 
   const contextData = useMemo<CaroConnectionContextType>(() => {
     return {

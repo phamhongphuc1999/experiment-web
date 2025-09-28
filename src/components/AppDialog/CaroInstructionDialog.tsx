@@ -50,7 +50,7 @@ export default function CaroInstructionDialog() {
             {'Click on the icon'}{' '}
             <Setting onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
             {
-              'to open the config dialog. In the config dialog, you can change the play mode and the board size. When you press save button, your changes will be applied and the new game will be started.'
+              'to open the config dialog. In the config dialog, you can change control the caro board. When you press save button, your changes will be applied and the new game will be started.'
             }
           </div>
           <p className="mt-2 text-lg">3. Play mode</p>
@@ -76,7 +76,7 @@ export default function CaroInstructionDialog() {
           <p className="mt-2 text-lg">4. Online play mode</p>
           <p className="text-justify text-sm">
             {
-              'The host, currently as the player1, has the right to change the board size and take the first move. When the connection is established, the board size will be synced to the guest. After the first game is over, the right to change board size and play the first move will be transferred to the winner.'
+              'The host, currently as the player1, has the right to control the configuration and take the first move. When the connection is established, the configuration will be synced to the guest. After the first game is over, the right to control the configuration and play the first move will be transferred to the winner.'
             }
           </p>
           <p className="mt-2 text-lg">5. Game type</p>

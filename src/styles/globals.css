@@ -242,5 +242,6 @@ input[type='number'] {
 .shake-animation {
   animation: shakeY 500ms ease-in-out;
   @apply !bg-destructive;
+  @apply !border-destructive;
 }
 /* Shake animation */

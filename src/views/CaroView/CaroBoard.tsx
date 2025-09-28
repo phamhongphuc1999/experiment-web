@@ -20,6 +20,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     steps,
     stepsOrder,
     winState,
+    turn: storageTurn,
     events: { countNumberOfBlindError },
   } = useCaroStore();
   const { move } = useCaroAction();
@@ -48,16 +49,16 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     return () => observer.disconnect();
   }, [numberOfColumns, numberOfRows]);
 
-  function onMove(_turn: 0 | 1, location: number) {
+  function onMove(location: number) {
     const isWin = winState != undefined || isBlindForceOver == true;
 
     if (gameType == 'blind') {
-      if (steps[location] != undefined) countNumberOfBlindError(_turn);
+      if (steps[location] != undefined) countNumberOfBlindError(storageTurn);
     }
 
     if (isOverride) {
-      if (!isWin && !shouldDisableBoard && steps[location] != _turn) move(location);
-    } else if (_turn == undefined && !isWin && !shouldDisableBoard) move(location);
+      if (!isWin && !shouldDisableBoard && steps[location] != storageTurn) move(location);
+    } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) move(location);
   }
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               width: numberOfColumns * size + numberOfColumns + 1,
               height: numberOfRows * size + numberOfRows + 1,
             }}
-            className="bg-border border-px flex flex-wrap gap-px border"
+            className="bg-border border-px border-ring flex flex-wrap gap-px border"
           >
             {Array.from({ length: numberOfRows * numberOfColumns }).map((_, location) => {
               const _turn = steps[location];
@@ -108,19 +109,25 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   className={cn(
                     'flex items-center justify-center',
                     _turn == 0 &&
-                      cn('text-chart-1 hover:bg-chart-1/5', _isWinBlock && 'border-chart-1 border'),
+                      cn(
+                        'text-chart-1 hover:!bg-chart-1/30',
+                        _isWinBlock && 'border-chart-1 border'
+                      ),
                     _turn == 1 &&
-                      cn('text-chart-2 hover:bg-chart-2/5', _isWinBlock && 'border-chart-2 border'),
+                      cn(
+                        'text-chart-2 hover:!bg-chart-2/30',
+                        _isWinBlock && 'border-chart-2 border'
+                      ),
                     _turn == undefined && 'hover:bg-background/60',
                     winState || isBlindForceOver
-                      ? 'bg-background/50'
+                      ? 'bg-background/80'
                       : cn(
                           'bg-background',
                           shouldDisableBoard ? 'cursor-default' : 'cursor-pointer'
                         )
                   )}
                   style={{ width: size, height: size, fontSize: size * 0.7 }}
-                  onClick={() => onMove(_turn, location)}
+                  onClick={() => onMove(location)}
                 >
                   {_icon}
                 </div>

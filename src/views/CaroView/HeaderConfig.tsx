@@ -7,6 +7,7 @@ import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
 import useCaroAction from 'src/hooks/useCaroAction';
 import useOnlineCaroState from 'src/hooks/useCaroTurnState';
+import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 
@@ -14,12 +15,12 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
     turn,
     stepsOrder,
-    metadata: { playMode, gameType },
     numberOfBlindError,
-    events: { undo },
+    metadata: { gameType },
   } = useCaroStore();
   const { playerText, isWin } = useOnlineCaroState();
-  const { reset } = useCaroAction();
+  const { undo, reset } = useCaroAction();
+  const { shouldDisableBoard } = useShouldDisableBoard();
 
   return (
     <div {...props} className={cn('flex flex-col items-center gap-1', props.className)}>
@@ -37,11 +38,10 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
             variant="outline"
             className={cn(
               turn == 0 && 'text-chart-1 hover:text-chart-1/50',
-              turn == 1 && 'text-chart-2 hover:text-chart-2/50',
-              playMode == 'online' && 'hidden'
+              turn == 1 && 'text-chart-2 hover:text-chart-2/50'
             )}
             onClick={undo}
-            disabled={stepsOrder.length == 0}
+            disabled={stepsOrder.length <= 1 || shouldDisableBoard}
           >
             Undo
           </Button>

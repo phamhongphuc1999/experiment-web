@@ -300,5 +300,5 @@ export type CaroSizeType = {
   numberOfColumns: number;
 };
 
-export type CaroMessageType = 'size' | 'chat' | 'move' | 'newGame';
+export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 // end caro

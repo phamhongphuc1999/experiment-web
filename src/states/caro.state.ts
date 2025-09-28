@@ -15,6 +15,7 @@ type CaroMetadataType = {
   numberOfRows: number;
   numberOfColumns: number;
   maxNumberOfBlindError: number;
+  preWinner: number;
 };
 
 type CaroStateType = {
@@ -24,6 +25,7 @@ type CaroStateType = {
   turn: 0 | 1;
   steps: { [key: number]: 0 | 1 };
   stepsOrder: Array<number>;
+  winState?: WinStateType;
   events: {
     setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
     move: (location: number) => void;
@@ -31,7 +33,6 @@ type CaroStateType = {
     reset: (turn?: 0 | 1) => void;
     countNumberOfBlindError: (turn: 0 | 1) => void;
   };
-  winState?: WinStateType;
 };
 
 export const useCaroStore = create<
@@ -49,6 +50,7 @@ export const useCaroStore = create<
           numberOfRows: 10,
           numberOfColumns: 10,
           maxNumberOfBlindError: 5,
+          preWinner: 0,
         },
         numberOfBlindError: { 0: 0, 1: 0 },
         isBlindForceOver: false,
@@ -78,11 +80,14 @@ export const useCaroStore = create<
           undo: () => {
             set((state) => {
               const len = state.stepsOrder.length;
-              if (len > 0) {
-                const currentStep = state.stepsOrder[len - 1];
+              if (len > 1) {
+                let currentStep = state.stepsOrder[len - 1];
                 delete state.steps[currentStep];
                 state.stepsOrder.pop();
-                state.turn = (1 - state.turn) as 1 | 0;
+
+                currentStep = state.stepsOrder[len - 2];
+                delete state.steps[currentStep];
+                state.stepsOrder.pop();
               }
             });
           },
@@ -91,6 +96,7 @@ export const useCaroStore = create<
               state.metadata.status = 'playing';
               state.numberOfBlindError = { 0: 0, 1: 0 };
               if (turn != undefined) state.turn = turn;
+              state.metadata.preWinner = state.turn;
               state.steps = {};
               state.stepsOrder = [];
               state.winState = undefined;
@@ -128,7 +134,23 @@ export const useCaroStore = create<
       },
       partialize: (state) => {
         const { events, ...rest } = state;
-        return rest;
+        if (rest.metadata.playMode == 'online') {
+          const metadata: CaroMetadataType = {
+            ...rest.metadata,
+            playMode: 'offline',
+            preWinner: 0,
+            status: 'playing',
+          };
+          return {
+            ...rest,
+            metadata,
+            isBlindForceOver: false,
+            turn: 0,
+            steps: {},
+            stepsOrder: [],
+            winState: undefined,
+          };
+        } else return rest;
       },
     }
   )
