@@ -13,7 +13,7 @@ export default function PlayModeConfig() {
 
   function onChangePlayMode(playMode: PlayModeType) {
     setPlayMode(playMode);
-    if (playMode == 'offline' && peer) peer.destroy();
+    if (playMode != 'online' && peer) peer.destroy();
   }
 
   return (
@@ -31,6 +31,12 @@ export default function PlayModeConfig() {
           onClick={() => onChangePlayMode('online')}
         >
           Online
+        </Button>
+        <Button
+          variant={playMode == 'machine' ? 'default' : 'outline'}
+          onClick={() => onChangePlayMode('machine')}
+        >
+          Machine
         </Button>
       </div>
       {playMode == 'online' && (

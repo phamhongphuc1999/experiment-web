@@ -55,8 +55,11 @@ export default function CaroInstructionDialog() {
           </div>
           <p className="mt-2 text-lg">3. Play mode</p>
           <p className="text-justify text-sm">
-            {'This game has two modes:'} <span className="text-green-400">offline</span> {'and'}{' '}
+            {'This game has three modes:'} <span className="text-green-400">offline</span>
+            {', '}
             <span className="text-green-400">online</span>
+            {', and '}
+            <span className="text-green-400">machine</span>
             {'. You and your friend can play in one device on offline play mode.'}
           </p>
           <p className="text-justify text-sm">
@@ -91,6 +94,11 @@ export default function CaroInstructionDialog() {
             <p className="text-justify text-sm">
               {
                 "In blind type, only the latest move is shown on the game board; others are hidden, and players must depend on their memory to play their move. If a player makes at least a pre-defined number of mistakes (try to play from the grid that has already been played), the game's over, and the remaining player is the winner."
+              }
+            </p>
+            <p className="text-justify text-sm">
+              {
+                'You can enable override mode. In this mode, you can play on the grid that the opponent has already played.'
               }
             </p>
           </p>

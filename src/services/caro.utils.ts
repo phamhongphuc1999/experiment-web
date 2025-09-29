@@ -131,7 +131,7 @@ const config: {
   horizontal: { side1Func: checkLeftHorizontal, side2Func: checkRightHorizontal },
 };
 
-export function _analyticStep(type: CaroWinType, params: ParamsType) {
+function _analyticStep(type: CaroWinType, params: ParamsType) {
   const side1 = config[type].side1Func(params);
   const side2 = config[type].side2Func(params);
   const _len = side1.cells.length + side2.cells.length;
@@ -140,37 +140,44 @@ export function _analyticStep(type: CaroWinType, params: ParamsType) {
 }
 
 export function checkWin(params: ParamsType): WinStateType {
-  const subCross = _analyticStep('leftDiagonal', params);
-  const mainCross = _analyticStep('rightDiagonal', params);
+  const leftDiagonal = _analyticStep('leftDiagonal', params);
+  const rightDiagonal = _analyticStep('rightDiagonal', params);
   const vertical = _analyticStep('vertical', params);
   const horizontal = _analyticStep('horizontal', params);
+  const { currentStep } = params;
+  const locations: WinStateType['locations'] = {};
 
   const winMode: Array<CaroWinType> = [];
-  if (subCross.isWin) winMode.push('leftDiagonal');
-  if (mainCross.isWin) winMode.push('rightDiagonal');
-  if (vertical.isWin) winMode.push('vertical');
-  if (horizontal.isWin) winMode.push('horizontal');
-  const { currentStep } = params;
-
-  return {
-    leftDiagonal: subCross.arr.concat(currentStep),
-    rightDiagonal: mainCross.arr.concat(currentStep),
-    vertical: vertical.arr.concat(currentStep),
-    horizontal: horizontal.arr.concat(currentStep),
-    winMode,
-  };
-}
-
-export function isWinBlock(result: WinStateType, location: number) {
-  const winMode = result.winMode;
-  let isOk = false;
-  for (const mode of winMode) {
-    if (result[mode].includes(location)) {
-      isOk = true;
-      break;
+  if (leftDiagonal.isWin) {
+    winMode.push('leftDiagonal');
+    for (const _location of leftDiagonal.arr.concat(currentStep)) {
+      if (!locations[_location]) locations[_location] = {};
+      locations[_location]['leftDiagonal'] = true;
     }
   }
-  return isOk;
+  if (rightDiagonal.isWin) {
+    winMode.push('rightDiagonal');
+    for (const _location of rightDiagonal.arr.concat(currentStep)) {
+      if (!locations[_location]) locations[_location] = {};
+      locations[_location]['rightDiagonal'] = true;
+    }
+  }
+  if (vertical.isWin) {
+    winMode.push('vertical');
+    for (const _location of vertical.arr.concat(currentStep)) {
+      if (!locations[_location]) locations[_location] = {};
+      locations[_location]['vertical'] = true;
+    }
+  }
+  if (horizontal.isWin) {
+    winMode.push('horizontal');
+    for (const _location of horizontal.arr.concat(currentStep)) {
+      if (!locations[_location]) locations[_location] = {};
+      locations[_location]['horizontal'] = true;
+    }
+  }
+
+  return { locations, winMode };
 }
 
 export function createCaroMessage(type: CaroMessageType, ...message: Array<string | number>) {
