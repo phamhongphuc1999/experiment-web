@@ -1,4 +1,4 @@
-import { Setting } from 'iconsax-reactjs';
+import { Setting2 } from 'iconsax-reactjs';
 import Link from 'next/link';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { CategoryTableType } from 'src/global';
@@ -27,7 +27,7 @@ export default function CategoryOverview({ showLearn = false, category }: Props)
           <Button>Learn</Button>
         </Link>
       )}
-      <Setting
+      <Setting2
         className="cursor-pointer"
         onClick={() => setDialog(DIALOG_KEY.wordConfigDialog, true)}
       />

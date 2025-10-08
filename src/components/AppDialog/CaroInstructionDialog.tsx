@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { Airdrop, Information, Setting } from 'iconsax-reactjs';
+import { Bluetooth, InfoCircle, Setting2 } from 'iconsax-reactjs';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
@@ -26,7 +26,7 @@ export default function CaroInstructionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <Information size={16} />
+          <InfoCircle size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:!max-w-4xl">
@@ -48,7 +48,7 @@ export default function CaroInstructionDialog() {
           <p className="mt-2 text-lg">2. Setting</p>
           <div className="text-justify text-sm">
             {'Click on the icon'}{' '}
-            <Setting onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
+            <Setting2 onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
             {
               'to open the config dialog. In the config dialog, you can change control the caro board. When you press save button, your changes will be applied and the new game will be started.'
             }
@@ -66,7 +66,7 @@ export default function CaroInstructionDialog() {
             {
               'Meanwhile, in online play mode, you and your friend can connect to other peer-to-peer online ('
             }
-            <Airdrop className="inline" size={14} />
+            <Bluetooth className="inline" size={14} />
             {
               '). One of you will be the host, and the other will be the guest. The host create the connection and share the signal (your signal) to the guest, the guest create the connection and parse host signal (friend signal) to find host device. After that, system will create guest signal, guest have to share the signal to the host to complete the connection. After the connection is established, you can start playing and chatting with each other.'
             }

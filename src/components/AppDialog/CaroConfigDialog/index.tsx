@@ -1,4 +1,4 @@
-import { Setting } from 'iconsax-reactjs';
+import { Setting2 } from 'iconsax-reactjs';
 import { MouseEvent } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { CaroConfigSchema } from 'src/schemas/caro.schema';
@@ -77,7 +77,7 @@ function CaroConfigDialogLayout() {
     <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
       <DialogTrigger>
         <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
-          <Setting size={16} />
+          <Setting2 size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>

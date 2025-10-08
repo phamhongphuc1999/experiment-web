@@ -1,4 +1,4 @@
-import { Airdrop } from 'iconsax-reactjs';
+import { Bluetooth } from 'iconsax-reactjs';
 import { useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
@@ -31,7 +31,7 @@ export default function CaroConnectionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip tooltipContent="Connection" contentProps={{ side: 'bottom' }}>
-          <Airdrop size={16} />
+          <Bluetooth size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>

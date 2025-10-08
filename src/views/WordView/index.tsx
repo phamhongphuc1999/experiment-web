@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown2, ArrowUp2, Setting } from 'iconsax-reactjs';
+import { ArrowDown2, ArrowUp2, Setting2 } from 'iconsax-reactjs';
 import Link from 'next/link';
 import { useState } from 'react';
 import AppBreadcrumb from 'src/components/AppBreadcrumb';
@@ -52,7 +52,7 @@ export default function WordView() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AppBreadcrumb items={[{ title: 'Word' }]} />
-          <Setting
+          <Setting2
             size={14}
             className="cursor-pointer"
             onClick={() => setDialog(DIALOG_KEY.wordConfigDialog, true)}
