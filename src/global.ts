@@ -293,7 +293,10 @@ export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horiz
 
 export type WinStateType = {
   winMode: Array<CaroWinType>;
-} & { [id in CaroWinType]: Array<number> };
+  locations: {
+    [location: number]: Partial<{ [type in CaroWinType]: boolean }>;
+  };
+};
 
 export type CaroSizeType = {
   numberOfRows: number;

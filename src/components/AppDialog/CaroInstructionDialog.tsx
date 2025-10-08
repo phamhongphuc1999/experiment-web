@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { Airdrop, Information, Setting } from 'iconsax-reactjs';
+import { Bluetooth, InfoCircle, Setting2 } from 'iconsax-reactjs';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
@@ -26,7 +26,7 @@ export default function CaroInstructionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <Information size={16} />
+          <InfoCircle size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:!max-w-4xl">
@@ -48,22 +48,25 @@ export default function CaroInstructionDialog() {
           <p className="mt-2 text-lg">2. Setting</p>
           <div className="text-justify text-sm">
             {'Click on the icon'}{' '}
-            <Setting onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
+            <Setting2 onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
             {
               'to open the config dialog. In the config dialog, you can change control the caro board. When you press save button, your changes will be applied and the new game will be started.'
             }
           </div>
           <p className="mt-2 text-lg">3. Play mode</p>
           <p className="text-justify text-sm">
-            {'This game has two modes:'} <span className="text-green-400">offline</span> {'and'}{' '}
+            {'This game has three modes:'} <span className="text-green-400">offline</span>
+            {', '}
             <span className="text-green-400">online</span>
+            {', and '}
+            <span className="text-green-400">machine</span>
             {'. You and your friend can play in one device on offline play mode.'}
           </p>
           <p className="text-justify text-sm">
             {
               'Meanwhile, in online play mode, you and your friend can connect to other peer-to-peer online ('
             }
-            <Airdrop className="inline" size={14} />
+            <Bluetooth className="inline" size={14} />
             {
               '). One of you will be the host, and the other will be the guest. The host create the connection and share the signal (your signal) to the guest, the guest create the connection and parse host signal (friend signal) to find host device. After that, system will create guest signal, guest have to share the signal to the host to complete the connection. After the connection is established, you can start playing and chatting with each other.'
             }
@@ -91,6 +94,11 @@ export default function CaroInstructionDialog() {
             <p className="text-justify text-sm">
               {
                 "In blind type, only the latest move is shown on the game board; others are hidden, and players must depend on their memory to play their move. If a player makes at least a pre-defined number of mistakes (try to play from the grid that has already been played), the game's over, and the remaining player is the winner."
+              }
+            </p>
+            <p className="text-justify text-sm">
+              {
+                'You can enable override mode. In this mode, you can play on the grid that the opponent has already played.'
               }
             </p>
           </p>

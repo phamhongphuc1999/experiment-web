@@ -1,4 +1,4 @@
-import { Airdrop, Setting } from 'iconsax-reactjs';
+import { Bluetooth, Setting2 } from 'iconsax-reactjs';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConnectionContext } from 'src/context/caroConnection.context';
 import { PlayModeType } from 'src/states/caro.state';
@@ -13,7 +13,7 @@ export default function PlayModeConfig() {
 
   function onChangePlayMode(playMode: PlayModeType) {
     setPlayMode(playMode);
-    if (playMode == 'offline' && peer) peer.destroy();
+    if (playMode != 'online' && peer) peer.destroy();
   }
 
   return (
@@ -32,11 +32,17 @@ export default function PlayModeConfig() {
         >
           Online
         </Button>
+        <Button
+          variant={playMode == 'machine' ? 'default' : 'outline'}
+          onClick={() => onChangePlayMode('machine')}
+        >
+          Machine
+        </Button>
       </div>
       {playMode == 'online' && (
         <div className="mt-1 text-justify text-xs">
-          When online mode is on, the connection icon <Airdrop className="inline" size={14} />{' '}
-          (right next to setting icon <Setting className="inline" size={14} />) is showed, you
+          When online mode is on, the connection icon <Bluetooth className="inline" size={14} />{' '}
+          (right next to setting icon <Setting2 className="inline" size={14} />) is showed, you
           should follow its instruction to connect with your friends. Please press save button to
           confirm changes.
         </div>

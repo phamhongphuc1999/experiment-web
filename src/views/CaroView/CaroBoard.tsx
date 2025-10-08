@@ -5,7 +5,6 @@ import { MAX_CARO_SIZE } from 'src/configs/constance';
 import useCaroAction from 'src/hooks/useCaroAction';
 import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
 import { cn } from 'src/lib/utils';
-import { isWinBlock } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import HeaderConfig from './HeaderConfig';
 
@@ -91,8 +90,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
           >
             {Array.from({ length: numberOfRows * numberOfColumns }).map((_, location) => {
               const _turn = steps[location];
-              let _isWinBlock = false;
-              if (winState) _isWinBlock = isWinBlock(winState, location);
+              const _winTypes = winState?.locations?.[location];
               let _icon = '';
               const isWin = winState != undefined || isBlindForceOver == true;
               if (
@@ -110,13 +108,15 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                     'flex items-center justify-center',
                     _turn == 0 &&
                       cn(
-                        'text-chart-1 hover:!bg-chart-1/30',
-                        _isWinBlock && 'border-chart-1 border'
+                        'text-chart-1',
+                        _winTypes && 'border-chart-1 relative border',
+                        gameType == 'normal' ? 'hover:!bg-chart-1/30' : 'hover:bg-background/60'
                       ),
                     _turn == 1 &&
                       cn(
-                        'text-chart-2 hover:!bg-chart-2/30',
-                        _isWinBlock && 'border-chart-2 border'
+                        'text-chart-2',
+                        _winTypes && 'border-chart-2 relative border',
+                        gameType == 'normal' ? 'hover:!bg-chart-2/30' : 'hover:bg-background/60'
                       ),
                     _turn == undefined && 'hover:bg-background/60',
                     winState || isBlindForceOver
@@ -130,6 +130,38 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   onClick={() => onMove(location)}
                 >
                   {_icon}
+                  {_winTypes?.horizontal && (
+                    <div
+                      className={cn(
+                        'absolute top-1/2 h-px w-full -translate-y-1/2',
+                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
+                      )}
+                    />
+                  )}
+                  {_winTypes?.vertical && (
+                    <div
+                      className={cn(
+                        'absolute left-1/2 h-full w-px -translate-x-1/2',
+                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
+                      )}
+                    />
+                  )}
+                  {_winTypes?.leftDiagonal && (
+                    <div
+                      className={cn(
+                        'absolute top-1/2 left-1/2 h-px w-[140%] origin-center -translate-1/2 rotate-45',
+                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
+                      )}
+                    />
+                  )}
+                  {_winTypes?.rightDiagonal && (
+                    <div
+                      className={cn(
+                        'absolute top-1/2 left-1/2 h-px w-[140%] origin-center -translate-1/2 -rotate-45',
+                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
+                      )}
+                    />
+                  )}
                 </div>
               );
             })}

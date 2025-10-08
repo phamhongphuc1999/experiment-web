@@ -63,7 +63,7 @@ export default function GameTypeConfig() {
             onChange={(event) => setMaxError(parseInt(event.target.value))}
             icon={{
               end: (
-                <AppTooltip tooltipContent="The maximum move that player can make in blind mode">
+                <AppTooltip tooltipContent="The maximum number of errors that player can make in blind mode">
                   <InfoCircle size={14} />
                 </AppTooltip>
               ),
