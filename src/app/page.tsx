@@ -22,6 +22,16 @@ export default function Home() {
         </Link>
         .
       </p>
+      <p className="mt-2">More routes in my app</p>
+      <ul className="list-inside list-disc">
+        <Link href="/weather" className="inline-block hover:text-orange-400 hover:underline">
+          <li>weather</li>
+        </Link>
+        <br />
+        <Link href="/encrypt" className="inline-block hover:text-orange-400 hover:underline">
+          <li>encrypt</li>
+        </Link>
+      </ul>
     </CommonContainer>
   );
 }

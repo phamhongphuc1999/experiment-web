@@ -39,6 +39,22 @@ export default function ActionSpot({ pairs, ...props }: Props) {
     };
   }, [countdown]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+        return;
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        onCheck();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onCheck]);
+
   function _onReveal() {
     setCountdown(revealPerWord * result[currentRound].numberOfError);
     onReveal();

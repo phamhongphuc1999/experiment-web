@@ -23,7 +23,7 @@ export default function LoginView() {
       <form>
         <BaseInput placeholder="Email" name="email" />
         <BaseInput placeholder="Password" name="password" />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="mt-4 w-full">
           Login
         </Button>
         <p className="my-3 text-center text-lg font-semibold">Or</p>

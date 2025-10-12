@@ -13,10 +13,7 @@ interface Props extends ComponentProps<'input'> {
 
 export default function BaseInput({ name, rootprops, icon, ...props }: Props) {
   return (
-    <div
-      {...rootprops}
-      className={cn('input-group mt-4 inline-block w-full', rootprops?.className)}
-    >
+    <div {...rootprops} className={cn('input-group inline-block w-full', rootprops?.className)}>
       {icon?.start && (
         <div className="absolute top-1/2 left-2.5 -translate-y-1/2">{icon.start}</div>
       )}

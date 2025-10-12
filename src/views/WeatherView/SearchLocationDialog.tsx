@@ -68,18 +68,18 @@ export default function SearchLocationDialog() {
           <DialogTitle>Search location</DialogTitle>
         </DialogHeader>
         <div>
-          <div className="flex items-center gap-3">
+          <div className="mt-2 flex items-center gap-3">
             <SearchInput
               value={searchText}
               placeholder="Search location"
               events={{ setSearchText }}
               name="search-location"
             />
-            <Location className="size-8 cursor-pointer" onClick={gps} />
+            <Location className="size-6 cursor-pointer" onClick={gps} />
           </div>
           {isLoading ? (
             <div className="mt-4 flex flex-col items-center">
-              <ClockLoader />
+              <ClockLoader size={32} />
             </div>
           ) : (
             <div className="mt-4">
@@ -93,7 +93,7 @@ export default function SearchLocationDialog() {
                   return (
                     <div
                       key={item.id}
-                      className={cn('px-4 py-1', index > 0 && 'border-t')}
+                      className={cn('hover:bg-popover/50 px-4 py-1', index > 0 && 'border-t')}
                       onClick={() => onLocation(item)}
                     >
                       <div>

@@ -245,3 +245,11 @@ input[type='number'] {
   @apply !border-destructive;
 }
 /* Shake animation */
+
+.no-copy {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}

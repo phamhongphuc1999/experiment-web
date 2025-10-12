@@ -13,7 +13,7 @@ export default function RevealSpot() {
 
         return isReveal ? (
           <div key={pair.id}>
-            <p>
+            <p className="no-copy">
               <span className={beVietnamPro.className}>{pair.vi}</span> {'->'}{' '}
               <span className="text-destructive">{point.userEn}</span> {'->'}{' '}
               <span className="text-green-400">{pair.en}</span>
