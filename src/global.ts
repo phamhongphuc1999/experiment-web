@@ -289,6 +289,9 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 // end word
 
 // start caro
+export type RoleType = 'host' | 'guest';
+export type ConnectionType = 'init' | 'connecting' | 'connected';
+
 export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
 export type WinStateType = {

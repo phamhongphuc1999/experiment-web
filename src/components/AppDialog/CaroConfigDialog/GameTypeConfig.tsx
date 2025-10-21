@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
-import { useCaroConnectionContext } from 'src/context/caroConnection.context';
+import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { useCaroStore } from 'src/states/caro.state';
 import { useCaroConfigContext } from './caroConfig.context';
 

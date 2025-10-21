@@ -1,6 +1,6 @@
 'use client';
 
-import CaroConnectionProvider from 'src/context/caroConnection.context';
+import CaroConnectionProvider from 'src/context/caro-connection.context';
 import CaroBoard from './CaroBoard';
 
 export default function CaroView() {

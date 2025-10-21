@@ -86,21 +86,21 @@ export default function CaroInstructionDialog() {
           <p className="text-justify text-sm">
             {'This game support two game types:'} <span className="text-green-400">normal</span>{' '}
             {'and'} <span className="text-green-400">blind</span>.
-            <p className="text-justify text-sm">
-              {
-                'Normal type is just an ordinary traditional caro game, where two players perform their move until one of them wins.'
-              }
-            </p>
-            <p className="text-justify text-sm">
-              {
-                "In blind type, only the latest move is shown on the game board; others are hidden, and players must depend on their memory to play their move. If a player makes at least a pre-defined number of mistakes (try to play from the grid that has already been played), the game's over, and the remaining player is the winner."
-              }
-            </p>
-            <p className="text-justify text-sm">
-              {
-                'You can enable override mode. In this mode, you can play on the grid that the opponent has already played.'
-              }
-            </p>
+          </p>
+          <p className="text-justify text-sm">
+            {
+              'Normal type is just an ordinary traditional caro game, where two players perform their move until one of them wins.'
+            }
+          </p>
+          <p className="text-justify text-sm">
+            {
+              "In blind type, only the latest move is shown on the game board; others are hidden, and players must depend on their memory to play their move. If a player makes at least a pre-defined number of mistakes (try to play from the grid that has already been played), the game's over, and the remaining player is the winner."
+            }
+          </p>
+          <p className="text-justify text-sm">
+            {
+              'You can enable override mode. In this mode, you can play on the grid that the opponent has already played.'
+            }
           </p>
         </div>
       </DialogContent>

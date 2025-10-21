@@ -3,7 +3,8 @@ import { useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { RoleType, useCaroConnectionContext } from 'src/context/caroConnection.context';
+import { useCaroConnectionContext } from 'src/context/caro-connection.context';
+import { RoleType } from 'src/global';
 import { useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import {

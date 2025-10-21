@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useCaroConnectionContext } from 'src/context/caroConnection.context';
+import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { useCaroStore } from 'src/states/caro.state';
 
 export default function useShouldDisableBoard() {

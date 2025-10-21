@@ -13,5 +13,5 @@ export default function AuthWrapper({ children }: PropsWithChildren) {
     });
   }, [router]);
 
-  return <>{children}</>;
+  return children;
 }

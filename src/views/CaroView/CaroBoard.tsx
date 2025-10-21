@@ -100,6 +100,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                 if (_turn == 0) _icon = 'x';
                 else if (_turn == 1) _icon = 'o';
               }
+              const isCurrent = stepsOrder.at(-1) == location;
 
               return (
                 <div
@@ -110,13 +111,15 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                       cn(
                         'text-chart-1',
                         _winTypes && 'border-chart-1 relative border',
-                        gameType == 'normal' ? 'hover:!bg-chart-1/30' : 'hover:bg-background/60'
+                        gameType == 'normal' ? 'hover:!bg-chart-1/30' : 'hover:bg-background/60',
+                        isCurrent && '!bg-chart-1/20'
                       ),
                     _turn == 1 &&
                       cn(
                         'text-chart-2',
                         _winTypes && 'border-chart-2 relative border',
-                        gameType == 'normal' ? 'hover:!bg-chart-2/30' : 'hover:bg-background/60'
+                        gameType == 'normal' ? 'hover:!bg-chart-2/30' : 'hover:bg-background/60',
+                        isCurrent && '!bg-chart-2/20'
                       ),
                     _turn == undefined && 'hover:bg-background/60',
                     winState || isBlindForceOver

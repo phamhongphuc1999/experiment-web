@@ -28,7 +28,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
         <CaroConfigDialog />
         <CaroInstructionDialog />
         <CaroConnectionDialog />
-        <CaroMessengerDialog />
+        <CaroMessengerDialog gameType="caro" />
         <p className={cn('text-xs', turn == 0 && 'text-chart-1', turn == 1 && 'text-chart-2')}>
           {playerText}
         </p>

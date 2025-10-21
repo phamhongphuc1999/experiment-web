@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import TitleBox from 'src/components/box/TitleBox';
 import CopyClipboard from 'src/components/CopyClipboard';
 
@@ -12,10 +13,10 @@ export default function SignalTitleBox({ title, signal }: Props) {
       className="mt-2 items-start"
       valueProps={{ className: 'flex items-center' }}
       title={
-        <>
+        <Fragment>
           <p className="text-sm">{title}</p>
           <CopyClipboard copyText={signal} iconprops={{ size: 16 }} />
-        </>
+        </Fragment>
       }
       value={
         <div className="max-h-[100px] overflow-scroll">

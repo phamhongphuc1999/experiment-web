@@ -11,14 +11,12 @@ import {
 } from 'react';
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
+import { ConnectionType, RoleType } from 'src/global';
 import { createCaroMessage, decodeCaroMessage, SyncReturnType } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
-import { useCaroMessageStore } from 'src/states/caroMessage.state';
+import { useGameMessengerChat } from 'src/states/messenger.state';
 
-export type RoleType = 'host' | 'guest';
-export type ConnectionType = 'init' | 'connecting' | 'connected';
-
-type CaroConnectionContextType = {
+export type CaroConnectionContextType = {
   peer: Instance | null;
   yourSignal: string;
   friendSignal: string;
@@ -58,7 +56,7 @@ export default function CaroConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<ConnectionType>('init');
   const {
     events: { addChats },
-  } = useCaroMessageStore();
+  } = useGameMessengerChat('caro');
   const {
     metadata: { numberOfRows, numberOfColumns, gameType, isOverride },
     events: { setCaroMetadata, move, undo, reset },
