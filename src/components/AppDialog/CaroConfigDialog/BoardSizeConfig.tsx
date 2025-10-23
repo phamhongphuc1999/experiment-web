@@ -1,47 +1,25 @@
-import { InfoCircle } from 'iconsax-reactjs';
-import AppTooltip from 'src/components/AppTooltip';
-import BaseInput from 'src/components/input/BaseInput';
+import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConfigContext } from './caroConfig.context';
 
 export default function BoardSizeConfig() {
   const {
-    rows,
-    columns,
-    events: { setRows, setColumns },
+    size,
+    events: { setSize },
   } = useCaroConfigContext();
 
   return (
     <div className="mt-2 rounded-sm border p-2">
       <p className="text-sm font-bold">Caro board</p>
-      <div className="flex items-center gap-2">
-        <BaseInput
-          type="number"
-          placeholder="Number of rows"
-          name="rows"
-          value={rows}
-          onChange={(event) => setRows(parseInt(event.target.value))}
-          icon={{
-            end: (
-              <AppTooltip tooltipContent="30 >= number of rows >= 5">
-                <InfoCircle size={14} />
-              </AppTooltip>
-            ),
-          }}
-        />
-        <BaseInput
-          type="number"
-          placeholder="Number of columns"
-          name="columns"
-          value={columns}
-          onChange={(event) => setColumns(parseInt(event.target.value))}
-          icon={{
-            end: (
-              <AppTooltip tooltipContent="30 >= number of columns >= 5">
-                <InfoCircle size={14} />
-              </AppTooltip>
-            ),
-          }}
-        />
+      <div className="mt-2 flex items-center gap-2">
+        <Button variant={size == 3 ? 'default' : 'outline'} onClick={() => setSize(3)}>
+          3x3
+        </Button>
+        <Button variant={size == 10 ? 'default' : 'outline'} onClick={() => setSize(10)}>
+          10x10
+        </Button>
+        <Button variant={size == 15 ? 'default' : 'outline'} onClick={() => setSize(15)}>
+          15x15
+        </Button>
       </div>
     </div>
   );

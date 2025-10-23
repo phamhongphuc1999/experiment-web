@@ -291,6 +291,10 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 // start caro
 export type RoleType = 'host' | 'guest';
 export type ConnectionType = 'init' | 'connecting' | 'connected';
+export type PlayModeType = 'offline' | 'online' | 'machine';
+export type CaroGameType = 'normal' | 'blind';
+export type CaroWinModeType = 'blockOpponent' | 'non-blockOpponent';
+export type CaroSizeBoardType = 3 | 10 | 15;
 
 export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
@@ -299,11 +303,6 @@ export type WinStateType = {
   locations: {
     [location: number]: Partial<{ [type in CaroWinType]: boolean }>;
   };
-};
-
-export type CaroSizeType = {
-  numberOfRows: number;
-  numberOfColumns: number;
 };
 
 export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';

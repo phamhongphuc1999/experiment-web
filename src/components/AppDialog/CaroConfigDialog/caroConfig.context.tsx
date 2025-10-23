@@ -10,39 +10,40 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CaroGameType, PlayModeType, useCaroStore } from 'src/states/caro.state';
+import { CaroGameType, CaroSizeBoardType, CaroWinModeType, PlayModeType } from 'src/global';
+import { useCaroStore } from 'src/states/caro.state';
 
 type CaroConfigContextType = {
-  rows: number;
-  columns: number;
+  size: CaroSizeBoardType;
   playMode: PlayModeType;
   gameType: CaroGameType;
+  winMode: CaroWinModeType;
   isOverride: boolean;
   maxError: number;
   events: {
-    setRows: Dispatch<SetStateAction<number>>;
-    setColumns: Dispatch<SetStateAction<number>>;
+    setSize: Dispatch<SetStateAction<CaroSizeBoardType>>;
     setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
     setGameType: Dispatch<SetStateAction<CaroGameType>>;
     setIsOverride: Dispatch<SetStateAction<boolean>>;
     setMaxError: Dispatch<SetStateAction<number>>;
+    setWinMode: Dispatch<SetStateAction<CaroWinModeType>>;
   };
 };
 
 const caroConfigContextDefault: CaroConfigContextType = {
-  rows: 0,
-  columns: 0,
+  size: 10,
   playMode: 'offline',
   gameType: 'normal',
+  winMode: 'blockOpponent',
   isOverride: false,
   maxError: 5,
   events: {
-    setRows: () => {},
-    setColumns: () => {},
+    setSize: () => {},
     setPlayMode: () => {},
     setGameType: () => {},
     setIsOverride: () => {},
     setMaxError: () => {},
+    setWinMode: () => {},
   },
 };
 
@@ -55,20 +56,20 @@ interface Props {
 export default function CaroConfigProvider({ children }: Props) {
   const { metadata } = useCaroStore();
 
-  const [rows, setRows] = useState(metadata.numberOfRows);
-  const [columns, setColumns] = useState(metadata.numberOfColumns);
+  const [size, setSize] = useState(metadata.size);
   const [playMode, setPlayMode] = useState(metadata.playMode);
   const [gameType, setGameType] = useState(metadata.gameType);
+  const [winMode, setWinMode] = useState(metadata.winMode);
   const [isOverride, setIsOverride] = useState(metadata.isOverride);
   const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
 
   useEffect(() => {
-    setColumns(metadata.numberOfColumns);
-  }, [metadata.numberOfColumns]);
+    setWinMode(metadata.winMode);
+  }, [metadata.winMode]);
 
   useEffect(() => {
-    setRows(metadata.numberOfRows);
-  }, [metadata.numberOfRows]);
+    setSize(metadata.size);
+  }, [metadata.size]);
 
   useEffect(() => {
     setPlayMode(metadata.playMode);
@@ -88,15 +89,15 @@ export default function CaroConfigProvider({ children }: Props) {
 
   const contextData = useMemo<CaroConfigContextType>(() => {
     return {
-      rows,
-      columns,
+      size,
       playMode,
       gameType,
+      winMode,
       isOverride,
       maxError,
-      events: { setRows, setColumns, setPlayMode, setGameType, setIsOverride, setMaxError },
+      events: { setSize, setPlayMode, setGameType, setWinMode, setIsOverride, setMaxError },
     };
-  }, [columns, playMode, rows, gameType, isOverride, maxError]);
+  }, [size, playMode, winMode, gameType, isOverride, maxError]);
 
   return <CaroConfigContext.Provider value={contextData}>{children}</CaroConfigContext.Provider>;
 }

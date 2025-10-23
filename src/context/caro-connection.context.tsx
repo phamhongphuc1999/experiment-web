@@ -58,7 +58,7 @@ export default function CaroConnectionProvider({ children }: Props) {
     events: { addChats },
   } = useGameMessengerChat('caro');
   const {
-    metadata: { numberOfRows, numberOfColumns, gameType, isOverride },
+    metadata: { size, gameType, isOverride },
     events: { setCaroMetadata, move, undo, reset },
   } = useCaroStore();
 
@@ -81,11 +81,9 @@ export default function CaroConnectionProvider({ children }: Props) {
 
   useEffect(() => {
     if (peer && connection == 'connected' && role == 'host') {
-      peer.send(
-        createCaroMessage('sync', numberOfRows, numberOfColumns, gameType, isOverride ? 1 : 0)
-      );
+      peer.send(createCaroMessage('sync', size, gameType, isOverride ? 1 : 0));
     }
-  }, [connection, gameType, isOverride, numberOfColumns, numberOfRows, peer, role]);
+  }, [connection, gameType, isOverride, size, peer, role]);
 
   useEffect(() => {
     if (peer) {
@@ -109,10 +107,9 @@ export default function CaroConnectionProvider({ children }: Props) {
               addChats('friendChat', message);
               toast.info('New message!!');
             } else if (type == 'sync') {
-              const { numberOfRows, numberOfColumns, gameType, isOverride } =
-                message as SyncReturnType;
-              setCaroMetadata({ numberOfRows, numberOfColumns, gameType, isOverride });
-              toast.info(`Set board size to ${numberOfRows} rows and ${numberOfColumns} columns`);
+              const { size, gameType, isOverride } = message as SyncReturnType;
+              setCaroMetadata({ size, gameType, isOverride });
+              toast.info(`Set board size to ${size}x${size}`);
               toast.info(
                 `Set game type to ${gameType} ${isOverride ? 'with' : 'without'} override`
               );

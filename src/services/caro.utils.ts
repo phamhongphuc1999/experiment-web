@@ -1,5 +1,11 @@
-import { CaroMessageType, CaroWinType, WinStateType } from 'src/global';
-import { CaroGameType } from 'src/states/caro.state';
+import {
+  CaroGameType,
+  CaroMessageType,
+  CaroSizeBoardType,
+  CaroWinModeType,
+  CaroWinType,
+  WinStateType,
+} from 'src/global';
 
 type BlockMode = 'opposite' | 'wall' | undefined;
 
@@ -7,8 +13,7 @@ type ParamsType = {
   steps: { [key: number]: 0 | 1 };
   currentStep: number;
   currentPlayer: number;
-  numberOfRows: number;
-  numberOfColumns: number;
+  size: CaroSizeBoardType;
 };
 
 type SideReturnType = {
@@ -44,69 +49,58 @@ function caroCheck(
 function checkTopLeftDiagonal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfColumns }) =>
-      Math.min(currentStep % numberOfColumns, Math.floor(currentStep / numberOfColumns)),
-    ({ numberOfColumns }, checkingStep) => checkingStep - (numberOfColumns + 1)
+    ({ currentStep, size }) => Math.min(currentStep % size, Math.floor(currentStep / size)),
+    ({ size }, checkingStep) => checkingStep - (size + 1)
   );
 }
 
 function checkTopVertical(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfColumns }) => Math.floor(currentStep / numberOfColumns),
-    ({ numberOfColumns }, checkingStep) => checkingStep - numberOfColumns
+    ({ currentStep, size }) => Math.floor(currentStep / size),
+    ({ size }, checkingStep) => checkingStep - size
   );
 }
 
 function checkTopRightDiagonal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfColumns }) =>
-      Math.min(
-        numberOfColumns - (currentStep % numberOfColumns) - 1,
-        Math.floor(currentStep / numberOfColumns)
-      ),
-    ({ numberOfColumns }, checkingStep) => checkingStep - numberOfColumns + 1
+    ({ currentStep, size }) =>
+      Math.min(size - (currentStep % size) - 1, Math.floor(currentStep / size)),
+    ({ size }, checkingStep) => checkingStep - size + 1
   );
 }
 
 function checkBottomLeftDiagonal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfRows, numberOfColumns }) =>
-      Math.min(
-        currentStep % numberOfColumns,
-        numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
-      ),
-    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns - 1
+    ({ currentStep, size }) =>
+      Math.min(currentStep % size, size - Math.floor(currentStep / size) - 1),
+    ({ size }, checkingStep) => checkingStep + size - 1
   );
 }
 
 function checkBottomVertical(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfRows, numberOfColumns }) =>
-      numberOfRows - Math.floor(currentStep / numberOfColumns) - 1,
-    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns
+    ({ currentStep, size }) => size - Math.floor(currentStep / size) - 1,
+    ({ size }, checkingStep) => checkingStep + size
   );
 }
 
 function checkBottomRightDiagonal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfRows, numberOfColumns }) =>
-      Math.min(
-        numberOfColumns - (currentStep % numberOfColumns) - 1,
-        numberOfRows - Math.floor(currentStep / numberOfColumns) - 1
-      ),
-    ({ numberOfColumns }, checkingStep) => checkingStep + numberOfColumns + 1
+    ({ currentStep, size }) =>
+      Math.min(size - (currentStep % size) - 1, size - Math.floor(currentStep / size) - 1),
+    ({ size }, checkingStep) => checkingStep + size + 1
   );
 }
 
 function checkLeftHorizontal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfColumns }) => currentStep % numberOfColumns,
+    ({ currentStep, size }) => currentStep % size,
     (_, checkingStep) => checkingStep - 1
   );
 }
@@ -114,7 +108,7 @@ function checkLeftHorizontal(params: ParamsType) {
 function checkRightHorizontal(params: ParamsType) {
   return caroCheck(
     params,
-    ({ currentStep, numberOfColumns }) => numberOfColumns - (currentStep % numberOfColumns) - 1,
+    ({ currentStep, size }) => size - (currentStep % size) - 1,
     (_, checkingStep) => checkingStep + 1
   );
 }
@@ -131,19 +125,21 @@ const config: {
   horizontal: { side1Func: checkLeftHorizontal, side2Func: checkRightHorizontal },
 };
 
-function _analyticStep(type: CaroWinType, params: ParamsType) {
+function _analyticStep(type: CaroWinType, params: ParamsType, winMode: CaroWinModeType) {
   const side1 = config[type].side1Func(params);
   const side2 = config[type].side2Func(params);
   const _len = side1.cells.length + side2.cells.length;
-  const isWin = _len >= 4 && (side1.blockMode != 'opposite' || side2.blockMode != 'opposite');
+  const isBlock =
+    side1.blockMode == 'opposite' && side2.blockMode == 'opposite' && winMode == 'blockOpponent';
+  const isWin = _len >= 4 && !isBlock;
   return { isWin, arr: side1.cells.concat(side2.cells) };
 }
 
-export function checkWin(params: ParamsType): WinStateType {
-  const leftDiagonal = _analyticStep('leftDiagonal', params);
-  const rightDiagonal = _analyticStep('rightDiagonal', params);
-  const vertical = _analyticStep('vertical', params);
-  const horizontal = _analyticStep('horizontal', params);
+export function checkWin(params: ParamsType, winConfigMode: CaroWinModeType): WinStateType {
+  const leftDiagonal = _analyticStep('leftDiagonal', params, winConfigMode);
+  const rightDiagonal = _analyticStep('rightDiagonal', params, winConfigMode);
+  const vertical = _analyticStep('vertical', params, winConfigMode);
+  const horizontal = _analyticStep('horizontal', params, winConfigMode);
   const { currentStep } = params;
   const locations: WinStateType['locations'] = {};
 
@@ -185,8 +181,7 @@ export function createCaroMessage(type: CaroMessageType, ...message: Array<strin
 }
 
 export type SyncReturnType = {
-  numberOfRows: number;
-  numberOfColumns: number;
+  size: CaroSizeBoardType;
   gameType: CaroGameType;
   isOverride: boolean;
 };
@@ -200,10 +195,9 @@ export function decodeCaroMessage(message: string) {
     return {
       type: realType,
       message: {
-        numberOfRows: parseInt(restMessage[0]),
-        numberOfColumns: parseInt(restMessage[1]),
-        gameType: restMessage[2] as CaroGameType,
-        isOverride: restMessage[3] == '0' ? false : true,
+        size: restMessage[0] as unknown as CaroSizeBoardType,
+        gameType: restMessage[1] as CaroGameType,
+        isOverride: restMessage[2] == '0' ? false : true,
       },
     };
   else if (realType == 'newGame' || realType == 'undo') return { type: realType, message: null };

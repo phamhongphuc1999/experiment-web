@@ -13,7 +13,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { numberOfRows, numberOfColumns, isOverride, gameType },
+    metadata: { size: boardSize, isOverride, gameType },
     numberOfBlindError,
     isBlindForceOver,
     steps,
@@ -35,8 +35,8 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     const measure = () => {
       if (!ref.current) return;
       const { width, height } = ref.current.getBoundingClientRect();
-      const _column = (width - numberOfColumns - 1) / numberOfColumns;
-      const _row = (height - numberOfRows - 1) / numberOfRows;
+      const _column = (width - boardSize - 1) / boardSize;
+      const _row = (height - boardSize - 1) / boardSize;
       setSize(Math.min(_column, _row, MAX_CARO_SIZE));
     };
 
@@ -46,7 +46,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [numberOfColumns, numberOfRows]);
+  }, [boardSize]);
 
   function onMove(location: number) {
     const isWin = winState != undefined || isBlindForceOver == true;
@@ -83,12 +83,12 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
           <div
             ref={caroRef}
             style={{
-              width: numberOfColumns * size + numberOfColumns + 1,
-              height: numberOfRows * size + numberOfRows + 1,
+              width: boardSize * size + boardSize + 1,
+              height: boardSize * size + boardSize + 1,
             }}
             className="bg-border border-px border-ring flex flex-wrap gap-px border"
           >
-            {Array.from({ length: numberOfRows * numberOfColumns }).map((_, location) => {
+            {Array.from({ length: boardSize * boardSize }).map((_, location) => {
               const _turn = steps[location];
               const _winTypes = winState?.locations?.[location];
               let _icon = '';

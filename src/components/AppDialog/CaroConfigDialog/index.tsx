@@ -1,8 +1,6 @@
 import { Setting2 } from 'iconsax-reactjs';
 import { MouseEvent } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { CaroConfigSchema } from 'src/schemas/caro.schema';
-import { zodError } from 'src/services';
 import { useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../../AppTooltip';
@@ -18,6 +16,7 @@ import BoardSizeConfig from './BoardSizeConfig';
 import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
 import GameTypeConfig from './GameTypeConfig';
 import PlayModeConfig from './PlayModeConfig';
+import WinTypeConfig from './WinTypeConfig';
 
 function CaroConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
@@ -26,33 +25,19 @@ function CaroConfigDialogLayout() {
     events: { reset, setCaroMetadata },
   } = useCaroStore();
   const {
-    rows,
-    columns,
+    size,
     playMode,
     gameType,
     isOverride,
-    events: { setColumns, setRows, setPlayMode, setGameType, setIsOverride },
+    winMode,
+    events: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode },
   } = useCaroConfigContext();
-
-  function _check() {
-    const result = CaroConfigSchema.safeParse({ numberOfColumns: columns, numberOfRows: rows });
-    zodError(result.error);
-    return result.success;
-  }
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (_check()) {
-      setCaroMetadata({
-        numberOfRows: rows,
-        numberOfColumns: columns,
-        playMode,
-        gameType,
-        isOverride,
-      });
-      reset();
-      setDialog(DIALOG_KEY.caroConfigDialog, false);
-    }
+    setCaroMetadata({ size, playMode, gameType, isOverride, winMode });
+    reset();
+    setDialog(DIALOG_KEY.caroConfigDialog, false);
   }
 
   function onNewGame() {
@@ -61,11 +46,11 @@ function CaroConfigDialogLayout() {
   }
 
   function onOpenChange(open: boolean) {
-    setRows(metadata.numberOfRows);
-    setColumns(metadata.numberOfColumns);
+    setSize(metadata.size);
     setPlayMode(metadata.playMode);
     setGameType(metadata.gameType);
     setIsOverride(metadata.isOverride);
+    setWinMode(metadata.winMode);
     setDialog(DIALOG_KEY.caroConfigDialog, open);
   }
 
@@ -87,6 +72,7 @@ function CaroConfigDialogLayout() {
         <form onSubmit={onSaveConfig}>
           <PlayModeConfig />
           <GameTypeConfig />
+          <WinTypeConfig />
           <BoardSizeConfig />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>

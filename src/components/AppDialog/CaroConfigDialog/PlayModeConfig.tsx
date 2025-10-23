@@ -1,7 +1,7 @@
 import { Bluetooth, Setting2 } from 'iconsax-reactjs';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
-import { PlayModeType } from 'src/states/caro.state';
+import { PlayModeType } from 'src/global';
 import { useCaroConfigContext } from './caroConfig.context';
 
 export default function PlayModeConfig() {

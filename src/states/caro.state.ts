@@ -1,19 +1,22 @@
-import { WinStateType } from 'src/global';
+import {
+  CaroGameType,
+  CaroSizeBoardType,
+  CaroWinModeType,
+  PlayModeType,
+  WinStateType,
+} from 'src/global';
 import { checkWin } from 'src/services/caro.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-export type PlayModeType = 'offline' | 'online' | 'machine';
-export type CaroGameType = 'normal' | 'blind';
-
 type CaroMetadataType = {
   playMode: PlayModeType;
   gameType: CaroGameType;
+  winMode: CaroWinModeType;
   isOverride: boolean;
   status: 'playing' | 'win';
-  numberOfRows: number;
-  numberOfColumns: number;
+  size: CaroSizeBoardType;
   maxNumberOfBlindError: number;
   preWinner: number;
 };
@@ -45,10 +48,10 @@ export const useCaroStore = create<
         metadata: {
           playMode: 'offline',
           gameType: 'normal',
+          winMode: 'blockOpponent',
           isOverride: false,
           status: 'playing',
-          numberOfRows: 10,
-          numberOfColumns: 10,
+          size: 10,
           maxNumberOfBlindError: 5,
           preWinner: 0,
         },
@@ -63,14 +66,11 @@ export const useCaroStore = create<
               state.steps[location] = state.turn;
               state.stepsOrder.push(location);
 
-              const { numberOfRows, numberOfColumns } = state.metadata;
-              const _winState = checkWin({
-                steps: state.steps,
-                currentStep: location,
-                currentPlayer: state.turn,
-                numberOfRows,
-                numberOfColumns,
-              });
+              const { size, winMode } = state.metadata;
+              const _winState = checkWin(
+                { steps: state.steps, currentStep: location, currentPlayer: state.turn, size },
+                winMode
+              );
               if (_winState.winMode.length > 0) {
                 state.winState = _winState;
                 state.metadata.status = 'win';
@@ -125,11 +125,7 @@ export const useCaroStore = create<
       name: 'experiment.caro',
       version: 1.0,
       migrate(persistedState, version) {
-        if (version < 1.0) {
-          return {
-            ...(persistedState as CaroStateType),
-          };
-        }
+        if (version < 1.0) return { ...(persistedState as CaroStateType) };
         return persistedState;
       },
       partialize: (state) => {

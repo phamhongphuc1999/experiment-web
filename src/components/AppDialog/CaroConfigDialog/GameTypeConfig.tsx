@@ -54,7 +54,7 @@ export default function GameTypeConfig() {
         </Button>
       </div>
       {gameType == 'blind' && (
-        <div className="mt-2">
+        <div className="mt-6">
           <BaseInput
             name="maximum-errors"
             placeholder="Maximum number of errors"
