@@ -100,7 +100,7 @@ export default function HourlyResult({ hourlyUnits, hourly }: Props) {
           });
 
           return `
-            <div class="dark:bg-popup bg-gray-100 border dark:border-stroke-default border-gray-200 shadow-[inset_0px_-4px_4px_0px_#0000000a,_0px_14px_11px_-4px_#0000001f] p-2 rounded-lg">
+            <div class="dark:bg-popup bg-gray-100 border dark:border-stroke-default border-gray-200 shadow-[inset_0px_-4px_4px_0px_#0000000a,0px_14px_11px_-4px_#0000001f] p-2 rounded-lg">
               <span class="dark:text-content-1 text-gray-950">${date}</span>
               <div>${_mainSpot}</div>
             </div>

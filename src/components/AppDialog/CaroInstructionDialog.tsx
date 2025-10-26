@@ -29,7 +29,7 @@ export default function CaroInstructionDialog() {
           <InfoCircle size={16} />
         </AppTooltip>
       </DialogTrigger>
-      <DialogContent className="sm:!max-w-4xl">
+      <DialogContent className="sm:max-w-4xl!">
         <DialogHeader>
           <DialogTitle>Caro instruction</DialogTitle>
         </DialogHeader>
@@ -37,12 +37,7 @@ export default function CaroInstructionDialog() {
           <p className="text-lg">1. How to play?</p>
           <p className="text-justify text-sm">
             {
-              "Your goal is to make five pieces of the same color in a vertical, horizontal or diagonal line, without being blocked at two opponent's pieces."
-            }
-          </p>
-          <p className="text-justify text-sm">
-            {
-              'The player1 will take the first move. After the first game is over, the winner will take the first move.'
+              'Your goal is to make five pieces of the same color in a vertical, horizontal or diagonal line. The player1 will take the first move. After the first game is over, the winner will take the first move.'
             }
           </p>
           <p className="mt-2 text-lg">2. Setting</p>

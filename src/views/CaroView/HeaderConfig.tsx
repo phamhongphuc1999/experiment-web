@@ -5,9 +5,9 @@ import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialo
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
-import useCaroAction from 'src/hooks/useCaroAction';
-import useOnlineCaroState from 'src/hooks/useCaroTurnState';
-import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
+import useCaroAction from 'src/hooks/caro/useCaroAction';
+import useOnlineCaroState from 'src/hooks/caro/useCaroTurnState';
+import useShouldDisableBoard from 'src/hooks/caro/useShouldDisableBoard';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 

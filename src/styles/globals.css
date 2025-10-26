@@ -125,14 +125,14 @@
 .react-json-view {
   .icon-container {
     svg {
-      @apply !text-foreground;
+      @apply text-foreground!;
     }
   }
   span {
-    @apply !text-foreground;
+    @apply text-foreground!;
   }
   .object-size {
-    @apply !text-muted-foreground;
+    @apply text-muted-foreground!;
   }
 }
 
@@ -241,8 +241,8 @@ input[type='number'] {
 }
 .shake-animation {
   animation: shakeY 500ms ease-in-out;
-  @apply !bg-destructive;
-  @apply !border-destructive;
+  @apply bg-destructive!;
+  @apply border-destructive!;
 }
 /* Shake animation */
 
@@ -252,4 +252,10 @@ input[type='number'] {
   -moz-user-select: none;
   -ms-user-select: none;
   pointer-events: none;
+}
+
+.connect4-column:hover {
+  .connect4-item-turn-undefined {
+    @apply bg-background/40;
+  }
 }

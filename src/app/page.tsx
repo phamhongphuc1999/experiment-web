@@ -8,6 +8,10 @@ export default function Home() {
         Hello, what do you want to do? Let's play{' '}
         <Link href="/caro" className="text-orange-400 underline">
           caro
+        </Link>{' '}
+        or{' '}
+        <Link href="/connect-four" className="text-orange-400 underline">
+          connect four
         </Link>
         .
       </p>

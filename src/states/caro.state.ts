@@ -30,11 +30,11 @@ type CaroStateType = {
   stepsOrder: Array<number>;
   winState?: WinStateType;
   events: {
-    setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
     move: (location: number) => void;
     undo: () => void;
     reset: (turn?: 0 | 1) => void;
     countNumberOfBlindError: (turn: 0 | 1) => void;
+    setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
   };
 };
 

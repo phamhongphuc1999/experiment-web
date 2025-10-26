@@ -13,7 +13,7 @@ export default function ClockLoader({
 }: ClockLoaderProps) {
   return (
     <div
-      className="ClockLoader_root relative inline-block rounded-[50%] border-[1px] perspective-[800]"
+      className="ClockLoader_root relative inline-block rounded-[50%] border perspective-[800]"
       style={
         {
           width: size,

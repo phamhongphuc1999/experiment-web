@@ -1,7 +1,8 @@
 import { WeatherDailyVariableType, WeatherHourlyVariableType } from 'src/global';
 
 export const ITEM_PER_PAGE = 10;
-export const MAX_CARO_SIZE = 40;
+export const MAX_CARO_BOARD_SIZE = 50;
+export const MAX_CONNECT4_BOARD_SIZE = 80;
 
 export const LS = {
   playMode: 'playMode',
@@ -29,6 +30,7 @@ export enum DIALOG_KEY {
   caroConfigDialog = 'caroConfigDialog',
   caroConnectionDialog = 'caroConnectionDialog',
   caroInstructionDialog = 'caroInstructionDialog',
+  connect4InstructionDialog = 'connect4InstructionDialog',
 }
 
 export const WeatherHourlyConfig: {

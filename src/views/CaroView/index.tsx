@@ -1,5 +1,3 @@
-'use client';
-
 import CaroConnectionProvider from 'src/context/caro-connection.context';
 import CaroBoard from './CaroBoard';
 

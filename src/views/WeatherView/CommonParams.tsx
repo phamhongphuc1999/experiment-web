@@ -48,7 +48,7 @@ export default function CommonParams(props: ComponentProps<'div'>) {
           <Select
             onValueChange={(value) => setState({ wind_speed_unit: value as WindSpeedUnitType })}
           >
-            <SelectTrigger className="w-[80px]">
+            <SelectTrigger className="w-20">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

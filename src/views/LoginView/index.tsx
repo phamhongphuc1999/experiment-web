@@ -19,7 +19,7 @@ export default function LoginView() {
   }
 
   return (
-    <CommonContainer className="bg-sidebar-accent mt-4 !max-w-lg rounded-xl shadow-2xl">
+    <CommonContainer className="bg-sidebar-accent mt-4 max-w-lg! rounded-xl shadow-2xl">
       <form>
         <BaseInput placeholder="Email" name="email" />
         <BaseInput placeholder="Password" name="password" />

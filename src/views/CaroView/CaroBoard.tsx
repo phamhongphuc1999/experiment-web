@@ -1,9 +1,9 @@
 'use client';
 
 import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { MAX_CARO_SIZE } from 'src/configs/constance';
-import useCaroAction from 'src/hooks/useCaroAction';
-import useShouldDisableBoard from 'src/hooks/useShouldDisableBoard';
+import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
+import useCaroAction from 'src/hooks/caro/useCaroAction';
+import useShouldDisableBoard from 'src/hooks/caro/useShouldDisableBoard';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 import HeaderConfig from './HeaderConfig';
@@ -37,7 +37,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
       const { width, height } = ref.current.getBoundingClientRect();
       const _column = (width - boardSize - 1) / boardSize;
       const _row = (height - boardSize - 1) / boardSize;
-      setSize(Math.min(_column, _row, MAX_CARO_SIZE));
+      setSize(Math.min(_column, _row, MAX_CARO_BOARD_SIZE));
     };
 
     measure();
@@ -111,15 +111,15 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                       cn(
                         'text-chart-1',
                         _winTypes && 'border-chart-1 relative border',
-                        gameType == 'normal' ? 'hover:!bg-chart-1/30' : 'hover:bg-background/60',
-                        isCurrent && '!bg-chart-1/20'
+                        gameType == 'normal' ? 'hover:bg-chart-1/30!' : 'hover:bg-background/60',
+                        isCurrent && 'bg-chart-1/20!'
                       ),
                     _turn == 1 &&
                       cn(
                         'text-chart-2',
                         _winTypes && 'border-chart-2 relative border',
-                        gameType == 'normal' ? 'hover:!bg-chart-2/30' : 'hover:bg-background/60',
-                        isCurrent && '!bg-chart-2/20'
+                        gameType == 'normal' ? 'hover:bg-chart-2/30!' : 'hover:bg-background/60',
+                        isCurrent && 'bg-chart-2/20!'
                       ),
                     _turn == undefined && 'hover:bg-background/60',
                     winState || isBlindForceOver
