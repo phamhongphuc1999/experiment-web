@@ -4,15 +4,16 @@ import {
   CaroSizeBoardType,
   CaroWinModeType,
   CaroWinType,
+  TurnType,
   WinStateType,
 } from 'src/global';
 
 type BlockMode = 'opposite' | 'wall' | undefined;
 
 type ParamsType = {
-  steps: { [key: number]: 0 | 1 };
+  steps: { [key: number]: TurnType };
   currentStep: number;
-  currentPlayer: number;
+  currentPlayer: TurnType;
   size: CaroSizeBoardType;
 };
 

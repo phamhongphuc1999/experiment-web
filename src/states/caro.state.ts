@@ -3,6 +3,7 @@ import {
   CaroSizeBoardType,
   CaroWinModeType,
   PlayModeType,
+  TurnType,
   WinStateType,
 } from 'src/global';
 import { checkWin } from 'src/services/caro.utils';
@@ -25,15 +26,15 @@ type CaroStateType = {
   metadata: CaroMetadataType;
   numberOfBlindError: { 0: number; 1: number };
   isBlindForceOver: boolean;
-  turn: 0 | 1;
-  steps: { [key: number]: 0 | 1 };
+  turn: TurnType;
+  steps: { [key: number]: TurnType };
   stepsOrder: Array<number>;
   winState?: WinStateType;
   events: {
     move: (location: number) => void;
     undo: () => void;
-    reset: (turn?: 0 | 1) => void;
-    countNumberOfBlindError: (turn: 0 | 1) => void;
+    reset: (turn?: TurnType) => void;
+    countNumberOfBlindError: (turn: TurnType) => void;
     setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
   };
 };
@@ -74,7 +75,7 @@ export const useCaroStore = create<
               if (_winState.winMode.length > 0) {
                 state.winState = _winState;
                 state.metadata.status = 'win';
-              } else state.turn = (1 - state.turn) as 1 | 0;
+              } else state.turn = (1 - state.turn) as TurnType;
             });
           },
           undo: () => {
@@ -103,13 +104,13 @@ export const useCaroStore = create<
               state.isBlindForceOver = false;
             });
           },
-          countNumberOfBlindError: (turn: 0 | 1) => {
+          countNumberOfBlindError: (turn: TurnType) => {
             set((state) => {
               const currentErrors = state.numberOfBlindError[turn];
               state.numberOfBlindError[turn] = currentErrors + 1;
               if (state.numberOfBlindError[turn] > state.metadata.maxNumberOfBlindError) {
                 state.isBlindForceOver = true;
-                state.turn = (1 - state.turn) as 1 | 0;
+                state.turn = (1 - state.turn) as TurnType;
               }
             });
           },

@@ -1,18 +1,23 @@
 'use client';
 
-import { ComponentProps, useLayoutEffect, useRef, useState } from 'react';
+import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { MAX_CONNECT4_BOARD_SIZE } from 'src/configs/constance';
 import { cn } from 'src/lib/utils';
 import { useConnect4Store } from 'src/states/connect4.state';
 import HeaderConfig from './HeaderConfig';
 
-export default function ConnectFourBoard(props: ComponentProps<'div'>) {
+export default function Connect4Board(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
     metadata: { numberOfRows, numberOfColumns },
     steps,
+    events: { move },
   } = useConnect4Store();
+
+  const { itemSize } = useMemo(() => {
+    return { itemSize: size * 0.7 };
+  }, [size]);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -47,21 +52,35 @@ export default function ConnectFourBoard(props: ComponentProps<'div'>) {
           >
             {Array.from({ length: numberOfColumns }).map((_, column) => {
               return (
-                <div key={column} className="connect4-column flex flex-col-reverse justify-between">
+                <div
+                  key={column}
+                  className="connect4-column flex flex-col-reverse justify-between"
+                  onClick={() => move(column)}
+                >
                   {Array.from({ length: numberOfRows }).map((_, row) => {
-                    const location = column * numberOfRows + row;
-                    const _turn = steps[location];
+                    const _turn = steps[column]?.[row];
 
                     return (
                       <div
-                        key={location}
+                        key={`${column}_${row}`}
                         className={cn(
                           'bg-background flex cursor-pointer items-center justify-center',
                           _turn == undefined && 'connect4-item-turn-undefined'
                         )}
                         style={{ width: size, height: size, fontSize: size * 0.7 }}
                       >
-                        {location}
+                        {_turn == 0 && (
+                          <div
+                            className="bg-chart-1 rounded-full"
+                            style={{ width: itemSize, height: itemSize }}
+                          />
+                        )}
+                        {_turn == 1 && (
+                          <div
+                            className="bg-chart-2 rounded-full"
+                            style={{ width: itemSize, height: itemSize }}
+                          />
+                        )}
                       </div>
                     );
                   })}

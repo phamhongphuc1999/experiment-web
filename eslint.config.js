@@ -11,7 +11,7 @@ export default tseslint.config([
   globalIgnores(['dist', '.next']),
   {
     files: ['**/*.{ts,tsx}'],
-    ignores: ['/out/**', '/resources/**', '/coverage/**', '/.next/**'],
+    ignores: ['/out/**', '/resources/**', '/coverage/**', '/.next/**', 'next-env.d.ts'],
     plugins: {
       import: eslintPluginImport,
       prettier: prettierPlugin,

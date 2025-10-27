@@ -8,9 +8,9 @@ import { ConnectionType, RoleType } from 'src/global';
 import { useGameMessengerChat } from 'src/states/messenger.state';
 import { CaroConnectionContextType } from './caro-connection.context';
 
-type ConnectFourConnectionContextType = CaroConnectionContextType;
+type Connect4ConnectionContextType = CaroConnectionContextType;
 
-const connectFourConnectionContextDefault: ConnectFourConnectionContextType = {
+const connect4ConnectionContextDefault: Connect4ConnectionContextType = {
   peer: null,
   yourSignal: '',
   friendSignal: '',
@@ -22,15 +22,15 @@ const connectFourConnectionContextDefault: ConnectFourConnectionContextType = {
   },
 };
 
-const ConnectFourConnectionContext = createContext<ConnectFourConnectionContextType>(
-  connectFourConnectionContextDefault
+const Connect4ConnectionContext = createContext<Connect4ConnectionContextType>(
+  connect4ConnectionContextDefault
 );
 
 interface Props {
   children: ReactNode;
 }
 
-export default function ConnectFourConnectionProvider({ children }: Props) {
+export default function Connect4ConnectionProvider({ children }: Props) {
   const [peer, setPeer] = useState<Instance | null>(null);
   const [role, setRole] = useState<RoleType>('host');
   const [yourSignal, setYourSignal] = useState('');
@@ -38,7 +38,7 @@ export default function ConnectFourConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<ConnectionType>('init');
   const {
     events: { addChats },
-  } = useGameMessengerChat('connect-four');
+  } = useGameMessengerChat('connect4');
 
   const initConnection = useCallback((type: RoleType) => {
     const p = new Peer({ initiator: type == 'host' ? true : false, trickle: false });
@@ -69,12 +69,12 @@ export default function ConnectFourConnectionProvider({ children }: Props) {
   }, [initConnection, peer, yourSignal, friendSignal, role, connection, _setFriendSignal]);
 
   return (
-    <ConnectFourConnectionContext.Provider value={contextData}>
+    <Connect4ConnectionContext.Provider value={contextData}>
       {children}
-    </ConnectFourConnectionContext.Provider>
+    </Connect4ConnectionContext.Provider>
   );
 }
 
-export function useConnectFourConnectionContext() {
-  return useContext(ConnectFourConnectionContext);
+export function useConnect4ConnectionContext() {
+  return useContext(Connect4ConnectionContext);
 }

@@ -10,8 +10,8 @@ export default function Home() {
           caro
         </Link>{' '}
         or{' '}
-        <Link href="/connect-four" className="text-orange-400 underline">
-          connect four
+        <Link href="/connect4" className="text-orange-400 underline">
+          connect4
         </Link>
         .
       </p>

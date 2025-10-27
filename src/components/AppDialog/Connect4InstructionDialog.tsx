@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '../shadcn-ui/dialog';
 
-export default function ConnectFourInstructionDialog() {
+export default function Connect4InstructionDialog() {
   const { dialog, setDialog } = useDialogStore();
 
   return (

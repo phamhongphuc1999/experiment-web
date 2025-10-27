@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
+import { TurnType } from 'src/global';
 import { createCaroMessage } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 
@@ -23,7 +24,7 @@ export default function useCaroAction() {
   }, [peer, undo]);
 
   const handleReset = useCallback(
-    (turn?: 0 | 1) => {
+    (turn?: TurnType) => {
       reset(turn);
       if (peer) peer.send(createCaroMessage('newGame'));
     },

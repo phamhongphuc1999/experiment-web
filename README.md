@@ -13,3 +13,7 @@ bun install
 ```shell
 bun dev
 ```
+
+### Host
+
+- https://experiment.peter-present.xyz/

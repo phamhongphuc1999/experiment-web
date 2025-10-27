@@ -1,0 +1,68 @@
+import { Setting2 } from 'iconsax-reactjs';
+import { Button } from 'src/components/shadcn-ui/button';
+import { DIALOG_KEY } from 'src/configs/constance';
+import { useConnect4Store } from 'src/states/connect4.state';
+import { useDialogStore } from 'src/states/dialog.state';
+import AppTooltip from '../../AppTooltip';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../../shadcn-ui/dialog';
+import Connect4ConfigProvider from './connect4Config.context';
+
+function Connect4ConfigDialogLayout() {
+  const { dialog, setDialog } = useDialogStore();
+  const {
+    events: { reset },
+  } = useConnect4Store();
+
+  function onNewGame() {
+    reset();
+    setDialog(DIALOG_KEY.connect4ConfigDialog, false);
+  }
+
+  function onOpenChange(open: boolean) {
+    setDialog(DIALOG_KEY.connect4ConfigDialog, open);
+  }
+
+  function onCancel() {
+    onOpenChange(false);
+  }
+
+  return (
+    <Dialog open={dialog[DIALOG_KEY.connect4ConfigDialog]} onOpenChange={onOpenChange}>
+      <DialogTrigger>
+        <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
+          <Setting2 size={16} />
+        </AppTooltip>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Connect4 config</DialogTitle>
+        </DialogHeader>
+        <form>
+          <div className="mt-4 flex items-center justify-between">
+            <Button onClick={onNewGame}>New game</Button>
+            <div>
+              <Button onClick={onCancel} variant="destructive" className="mr-2">
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default function Connect4ConfigDialog() {
+  return (
+    <Connect4ConfigProvider>
+      <Connect4ConfigDialogLayout />
+    </Connect4ConfigProvider>
+  );
+}

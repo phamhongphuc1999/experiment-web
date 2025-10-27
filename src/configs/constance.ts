@@ -30,6 +30,7 @@ export enum DIALOG_KEY {
   caroConfigDialog = 'caroConfigDialog',
   caroConnectionDialog = 'caroConnectionDialog',
   caroInstructionDialog = 'caroInstructionDialog',
+  connect4ConfigDialog = 'connect4ConfigDialog',
   connect4InstructionDialog = 'connect4InstructionDialog',
 }
 
