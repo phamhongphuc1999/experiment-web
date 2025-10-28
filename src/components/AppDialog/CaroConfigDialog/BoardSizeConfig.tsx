@@ -4,7 +4,7 @@ import { useCaroConfigContext } from './caroConfig.context';
 export default function BoardSizeConfig() {
   const {
     size,
-    events: { setSize },
+    fn: { setSize },
   } = useCaroConfigContext();
 
   return (

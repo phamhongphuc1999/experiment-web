@@ -32,6 +32,7 @@ export enum DIALOG_KEY {
   caroInstructionDialog = 'caroInstructionDialog',
   connect4ConfigDialog = 'connect4ConfigDialog',
   connect4InstructionDialog = 'connect4InstructionDialog',
+  routingGameDialog = 'routingGameDialog',
 }
 
 export const WeatherHourlyConfig: {

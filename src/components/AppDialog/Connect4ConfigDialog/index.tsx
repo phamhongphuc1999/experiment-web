@@ -16,7 +16,7 @@ import Connect4ConfigProvider from './connect4Config.context';
 function Connect4ConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
   const {
-    events: { reset },
+    fn: { reset },
   } = useConnect4Store();
 
   function onNewGame() {

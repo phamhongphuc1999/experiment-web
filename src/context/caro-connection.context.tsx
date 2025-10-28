@@ -22,7 +22,7 @@ export type CaroConnectionContextType = {
   friendSignal: string;
   role: RoleType;
   connectionType: ConnectionType;
-  events: {
+  fn: {
     initConnection: (role: RoleType) => void;
     setFriendSignal: (friendSignal: string) => void;
   };
@@ -34,7 +34,7 @@ const caroConnectionContextDefault: CaroConnectionContextType = {
   friendSignal: '',
   role: 'host',
   connectionType: 'init',
-  events: {
+  fn: {
     initConnection: () => {},
     setFriendSignal: () => {},
   },
@@ -55,11 +55,11 @@ export default function CaroConnectionProvider({ children }: Props) {
   const [friendSignal, setFriendSignal] = useState('');
   const [connection, setConnection] = useState<ConnectionType>('init');
   const {
-    events: { addChats },
+    fn: { addChats },
   } = useGameMessengerChat('caro');
   const {
     metadata: { size, gameType, isOverride },
-    events: { setCaroMetadata, move, undo, reset },
+    fn: { setCaroMetadata, move, undo, reset },
   } = useCaroStore();
 
   const initConnection = useCallback((type: RoleType) => {
@@ -148,7 +148,7 @@ export default function CaroConnectionProvider({ children }: Props) {
       friendSignal,
       role,
       connectionType: connection,
-      events: { initConnection, setFriendSignal: _setFriendSignal },
+      fn: { initConnection, setFriendSignal: _setFriendSignal },
     };
   }, [initConnection, peer, yourSignal, friendSignal, role, connection, _setFriendSignal]);
 

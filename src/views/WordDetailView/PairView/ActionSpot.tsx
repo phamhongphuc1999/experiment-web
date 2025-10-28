@@ -20,7 +20,7 @@ export default function ActionSpot({ pairs, ...props }: Props) {
     currentRound,
     result,
     init,
-    events: { onCheck, onReveal, onNextRound },
+    fn: { onCheck, onReveal, onNextRound },
   } = useWordPairsStore();
 
   useEffect(() => {

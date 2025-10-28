@@ -1,9 +1,9 @@
 'use client';
 
 import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
-import useCaroAction from 'src/hooks/caro/useCaroAction';
-import useShouldDisableBoard from 'src/hooks/caro/useShouldDisableBoard';
+import { useCaroStateContext } from 'src/context/caro-state.context';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 import HeaderConfig from './HeaderConfig';
@@ -20,10 +20,12 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     stepsOrder,
     winState,
     turn: storageTurn,
-    events: { countNumberOfBlindError },
+    fn: { countNumberOfBlindError },
   } = useCaroStore();
-  const { move } = useCaroAction();
-  const { shouldDisableBoard } = useShouldDisableBoard();
+  const {
+    shouldDisableBoard,
+    fn: { move },
+  } = useCaroStateContext();
 
   const errorCount = useMemo(() => {
     return numberOfBlindError[0] + numberOfBlindError[1];
@@ -133,38 +135,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   onClick={() => onMove(location)}
                 >
                   {_icon}
-                  {_winTypes?.horizontal && (
-                    <div
-                      className={cn(
-                        'absolute top-1/2 h-px w-full -translate-y-1/2',
-                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
-                      )}
-                    />
-                  )}
-                  {_winTypes?.vertical && (
-                    <div
-                      className={cn(
-                        'absolute left-1/2 h-full w-px -translate-x-1/2',
-                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
-                      )}
-                    />
-                  )}
-                  {_winTypes?.leftDiagonal && (
-                    <div
-                      className={cn(
-                        'absolute top-1/2 left-1/2 h-px w-[140%] origin-center -translate-1/2 rotate-45',
-                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
-                      )}
-                    />
-                  )}
-                  {_winTypes?.rightDiagonal && (
-                    <div
-                      className={cn(
-                        'absolute top-1/2 left-1/2 h-px w-[140%] origin-center -translate-1/2 -rotate-45',
-                        _turn == 0 ? 'bg-chart-1' : 'bg-chart-2'
-                      )}
-                    />
-                  )}
+                  <GameWinLines turn={_turn} winTypes={_winTypes} />
                 </div>
               );
             })}

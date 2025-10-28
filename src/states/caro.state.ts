@@ -30,7 +30,7 @@ type CaroStateType = {
   steps: { [key: number]: TurnType };
   stepsOrder: Array<number>;
   winState?: WinStateType;
-  events: {
+  fn: {
     move: (location: number) => void;
     undo: () => void;
     reset: (turn?: TurnType) => void;
@@ -61,7 +61,7 @@ export const useCaroStore = create<
         turn: 0,
         steps: {},
         stepsOrder: [],
-        events: {
+        fn: {
           move: (location) => {
             set((state) => {
               state.steps[location] = state.turn;
@@ -130,7 +130,7 @@ export const useCaroStore = create<
         return persistedState;
       },
       partialize: (state) => {
-        const { events, ...rest } = state;
+        const { fn, ...rest } = state;
         if (rest.metadata.playMode == 'online') {
           const metadata: CaroMetadataType = {
             ...rest.metadata,

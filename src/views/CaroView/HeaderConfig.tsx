@@ -3,11 +3,10 @@ import CaroConfigDialog from 'src/components/AppDialog/CaroConfigDialog';
 import CaroConnectionDialog from 'src/components/AppDialog/CaroConnectionDialog';
 import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialog';
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
+import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import TitleBox from 'src/components/box/TitleBox';
 import { Button } from 'src/components/shadcn-ui/button';
-import useCaroAction from 'src/hooks/caro/useCaroAction';
-import useOnlineCaroState from 'src/hooks/caro/useCaroTurnState';
-import useShouldDisableBoard from 'src/hooks/caro/useShouldDisableBoard';
+import { useCaroStateContext } from 'src/context/caro-state.context';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 
@@ -18,13 +17,17 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
     numberOfBlindError,
     metadata: { gameType },
   } = useCaroStore();
-  const { playerText, isWin } = useOnlineCaroState();
-  const { undo, reset } = useCaroAction();
-  const { shouldDisableBoard } = useShouldDisableBoard();
+  const {
+    shouldDisableBoard,
+    playerText,
+    isOver,
+    fn: { undo, reset },
+  } = useCaroStateContext();
 
   return (
     <div {...props} className={cn('flex flex-col items-center gap-1', props.className)}>
       <div className="flex items-center gap-2">
+        <RoutingGameDialog game="caro" />
         <CaroConfigDialog />
         <CaroInstructionDialog />
         <CaroConnectionDialog />
@@ -32,7 +35,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
         <p className={cn('text-xs', turn == 0 && 'text-chart-1', turn == 1 && 'text-chart-2')}>
           {playerText}
         </p>
-        {!isWin ? (
+        {!isOver ? (
           <Button
             size="sm"
             variant="outline"
@@ -46,7 +49,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
             Undo
           </Button>
         ) : (
-          <Button disabled={!isWin} size="sm" onClick={() => reset()}>
+          <Button disabled={!isOver} size="sm" onClick={() => reset()}>
             New game
           </Button>
         )}

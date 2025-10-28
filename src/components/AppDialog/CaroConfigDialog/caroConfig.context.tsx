@@ -20,7 +20,7 @@ type CaroConfigContextType = {
   winMode: CaroWinModeType;
   isOverride: boolean;
   maxError: number;
-  events: {
+  fn: {
     setSize: Dispatch<SetStateAction<CaroSizeBoardType>>;
     setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
     setGameType: Dispatch<SetStateAction<CaroGameType>>;
@@ -37,7 +37,7 @@ const caroConfigContextDefault: CaroConfigContextType = {
   winMode: 'blockOpponent',
   isOverride: false,
   maxError: 5,
-  events: {
+  fn: {
     setSize: () => {},
     setPlayMode: () => {},
     setGameType: () => {},
@@ -95,7 +95,7 @@ export default function CaroConfigProvider({ children }: Props) {
       winMode,
       isOverride,
       maxError,
-      events: { setSize, setPlayMode, setGameType, setWinMode, setIsOverride, setMaxError },
+      fn: { setSize, setPlayMode, setGameType, setWinMode, setIsOverride, setMaxError },
     };
   }, [size, playMode, winMode, gameType, isOverride, maxError]);
 

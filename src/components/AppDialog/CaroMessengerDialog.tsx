@@ -24,7 +24,7 @@ export default function CaroMessengerDialog({ gameType }: Props) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const {
     chats,
-    events: { addChats },
+    fn: { addChats },
   } = useGameMessengerChat(gameType);
   const [message, setMessage] = useState('');
 

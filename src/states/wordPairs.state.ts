@@ -18,7 +18,7 @@ export type WordPairsStateType = {
   pairs: { [id: string]: PairTableType };
   result: { [round: number]: ResultPairType };
   init: (pairs: Array<PairTableType>) => void;
-  events: {
+  fn: {
     changeEn: (id: string, value: string) => void;
     onCheck: () => void;
     onLearn: () => void;
@@ -63,7 +63,7 @@ export const useWordPairsStore = create<WordPairsStateType, [['zustand/immer', u
           state.status = 'playing';
         });
       },
-      events: {
+      fn: {
         changeEn: (id: string, value: string) => {
           set((state) => {
             const answer = state.pairs[id];

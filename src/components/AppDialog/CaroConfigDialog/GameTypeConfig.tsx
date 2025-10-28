@@ -12,7 +12,7 @@ export default function GameTypeConfig() {
     gameType,
     isOverride,
     maxError,
-    events: { setGameType, setIsOverride, setMaxError },
+    fn: { setGameType, setIsOverride, setMaxError },
   } = useCaroConfigContext();
   const { role, connectionType } = useCaroConnectionContext();
   const {

@@ -9,7 +9,7 @@ export default function HostConnection() {
     peer,
     yourSignal,
     friendSignal,
-    events: { initConnection, setFriendSignal },
+    fn: { initConnection, setFriendSignal },
   } = useCaroConnectionContext();
   const [signal, setSignal] = useState('');
 

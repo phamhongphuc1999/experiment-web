@@ -16,7 +16,7 @@ const connect4ConnectionContextDefault: Connect4ConnectionContextType = {
   friendSignal: '',
   role: 'host',
   connectionType: 'init',
-  events: {
+  fn: {
     initConnection: () => {},
     setFriendSignal: () => {},
   },
@@ -37,7 +37,7 @@ export default function Connect4ConnectionProvider({ children }: Props) {
   const [friendSignal, setFriendSignal] = useState('');
   const [connection, setConnection] = useState<ConnectionType>('init');
   const {
-    events: { addChats },
+    fn: { addChats },
   } = useGameMessengerChat('connect4');
 
   const initConnection = useCallback((type: RoleType) => {
@@ -64,7 +64,7 @@ export default function Connect4ConnectionProvider({ children }: Props) {
       friendSignal,
       role,
       connectionType: connection,
-      events: { initConnection, setFriendSignal: _setFriendSignal },
+      fn: { initConnection, setFriendSignal: _setFriendSignal },
     };
   }, [initConnection, peer, yourSignal, friendSignal, role, connection, _setFriendSignal]);
 

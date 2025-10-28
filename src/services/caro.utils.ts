@@ -126,21 +126,27 @@ const config: {
   horizontal: { side1Func: checkLeftHorizontal, side2Func: checkRightHorizontal },
 };
 
-function _analyticStep(type: CaroWinType, params: ParamsType, winMode: CaroWinModeType) {
+function _analyticStep(
+  type: CaroWinType,
+  params: ParamsType,
+  winMode: CaroWinModeType,
+  sizeForWin: number
+) {
   const side1 = config[type].side1Func(params);
   const side2 = config[type].side2Func(params);
   const _len = side1.cells.length + side2.cells.length;
   const isBlock =
     side1.blockMode == 'opposite' && side2.blockMode == 'opposite' && winMode == 'blockOpponent';
-  const isWin = _len >= 4 && !isBlock;
+  const isWin = _len >= sizeForWin && !isBlock;
   return { isWin, arr: side1.cells.concat(side2.cells) };
 }
 
 export function checkWin(params: ParamsType, winConfigMode: CaroWinModeType): WinStateType {
-  const leftDiagonal = _analyticStep('leftDiagonal', params, winConfigMode);
-  const rightDiagonal = _analyticStep('rightDiagonal', params, winConfigMode);
-  const vertical = _analyticStep('vertical', params, winConfigMode);
-  const horizontal = _analyticStep('horizontal', params, winConfigMode);
+  const _sizeForWin = params.size > 3 ? 4 : 2;
+  const leftDiagonal = _analyticStep('leftDiagonal', params, winConfigMode, _sizeForWin);
+  const rightDiagonal = _analyticStep('rightDiagonal', params, winConfigMode, _sizeForWin);
+  const vertical = _analyticStep('vertical', params, winConfigMode, _sizeForWin);
+  const horizontal = _analyticStep('horizontal', params, winConfigMode, _sizeForWin);
   const { currentStep } = params;
   const locations: WinStateType['locations'] = {};
 

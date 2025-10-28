@@ -18,8 +18,9 @@ type Connect4Type = {
   steps: { [column: number]: Array<TurnType> };
   stepsOrder: Array<number>;
   winState?: Connect4WinStateType;
-  events: {
-    move: (location: number) => void;
+  fn: {
+    move: (column: number) => void;
+    undo: () => void;
     reset: (turn?: TurnType) => void;
     setCaroMetadata: (metadata: Partial<Connect4MetadataType>) => void;
   };
@@ -41,7 +42,7 @@ export const useConnect4Store = create<
         turn: 0,
         steps: {},
         stepsOrder: [],
-        events: {
+        fn: {
           move: (column: number) => {
             set((state) => {
               if (!state.steps[column]) state.steps[column] = [];
@@ -60,6 +61,20 @@ export const useConnect4Store = create<
                   state.winState = _winState;
                   state.metadata.status = 'win';
                 } else state.turn = (1 - state.turn) as TurnType;
+              }
+            });
+          },
+          undo: () => {
+            set((state) => {
+              const len = state.stepsOrder.length;
+              if (len > 1) {
+                let currentStep = state.stepsOrder[len - 1];
+                delete state.steps[currentStep];
+                state.stepsOrder.pop();
+
+                currentStep = state.stepsOrder[len - 2];
+                delete state.steps[currentStep];
+                state.stepsOrder.pop();
               }
             });
           },
@@ -88,7 +103,7 @@ export const useConnect4Store = create<
         return persistedState;
       },
       partialize: (state) => {
-        const { events, ...rest } = state;
+        const { fn, ...rest } = state;
         return rest;
       },
     }

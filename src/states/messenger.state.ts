@@ -7,7 +7,7 @@ export type GameChatType = 'caro' | 'connect4';
 type MessegerStateType = {
   caroChats: Array<{ type: ChatType; message: string }>;
   connect4Chats: Array<{ type: ChatType; message: string }>;
-  events: {
+  fn: {
     addChats: (type: ChatType, gameType: GameChatType, message: string) => void;
   };
 };
@@ -17,7 +17,7 @@ export const useMessengerStore = create<MessegerStateType, [['zustand/immer', un
     return {
       caroChats: [],
       connect4Chats: [],
-      events: {
+      fn: {
         addChats: (type: ChatType, gameType: GameChatType, message: string) => {
           set((state) => {
             if (gameType == 'caro') state.caroChats = [...state.caroChats, { type, message }];
@@ -31,23 +31,23 @@ export const useMessengerStore = create<MessegerStateType, [['zustand/immer', un
 );
 
 export function useGameMessengerChat(game: GameChatType) {
-  const { caroChats, connect4Chats, events } = useMessengerStore();
+  const { caroChats, connect4Chats, fn } = useMessengerStore();
 
   if (game == 'caro')
     return {
       chats: caroChats,
-      events: {
+      fn: {
         addChats: (type: ChatType, message: string) => {
-          events.addChats(type, 'caro', message);
+          fn.addChats(type, 'caro', message);
         },
       },
     };
   else
     return {
       chats: connect4Chats,
-      events: {
+      fn: {
         addChats: (type: ChatType, message: string) => {
-          events.addChats(type, 'connect4', message);
+          fn.addChats(type, 'connect4', message);
         },
       },
     };

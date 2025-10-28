@@ -4,7 +4,7 @@ import { useCaroConfigContext } from './caroConfig.context';
 export default function WinTypeConfig() {
   const {
     winMode,
-    events: { setWinMode },
+    fn: { setWinMode },
   } = useCaroConfigContext();
 
   return (

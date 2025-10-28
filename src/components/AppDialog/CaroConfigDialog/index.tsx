@@ -22,7 +22,7 @@ function CaroConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
   const {
     metadata,
-    events: { reset, setCaroMetadata },
+    fn: { reset, setCaroMetadata },
   } = useCaroStore();
   const {
     size,
@@ -30,7 +30,7 @@ function CaroConfigDialogLayout() {
     gameType,
     isOverride,
     winMode,
-    events: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode },
+    fn: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode },
   } = useCaroConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {

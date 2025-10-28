@@ -7,7 +7,7 @@ import { useCaroConfigContext } from './caroConfig.context';
 export default function PlayModeConfig() {
   const {
     playMode,
-    events: { setPlayMode },
+    fn: { setPlayMode },
   } = useCaroConfigContext();
   const { peer } = useCaroConnectionContext();
 

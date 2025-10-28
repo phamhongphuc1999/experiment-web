@@ -16,7 +16,7 @@ export default function PairView({ pairs }: Props) {
     currentRound,
     result,
     init,
-    events: { changeEn },
+    fn: { changeEn },
     status: gameStatus,
   } = useWordPairsStore();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);

@@ -1,6 +1,7 @@
 'use client';
 
 import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CONNECT4_BOARD_SIZE } from 'src/configs/constance';
 import { cn } from 'src/lib/utils';
 import { useConnect4Store } from 'src/states/connect4.state';
@@ -12,7 +13,8 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
   const {
     metadata: { numberOfRows, numberOfColumns },
     steps,
-    events: { move },
+    winState,
+    fn: { move },
   } = useConnect4Store();
 
   const { itemSize } = useMemo(() => {
@@ -59,28 +61,30 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
                 >
                   {Array.from({ length: numberOfRows }).map((_, row) => {
                     const _turn = steps[column]?.[row];
+                    const _winTypes = winState?.locations[`${row}_${column}`];
 
                     return (
                       <div
-                        key={`${column}_${row}`}
+                        key={`${row}_${column}`}
                         className={cn(
-                          'bg-background flex cursor-pointer items-center justify-center',
+                          'bg-background relative flex cursor-pointer items-center justify-center',
                           _turn == undefined && 'connect4-item-turn-undefined'
                         )}
                         style={{ width: size, height: size, fontSize: size * 0.7 }}
                       >
                         {_turn == 0 && (
                           <div
-                            className="bg-chart-1 rounded-full"
+                            className="border-chart-1 rounded-full border-4"
                             style={{ width: itemSize, height: itemSize }}
                           />
                         )}
                         {_turn == 1 && (
                           <div
-                            className="bg-chart-2 rounded-full"
+                            className="border-chart-2 rounded-full border-4"
                             style={{ width: itemSize, height: itemSize }}
                           />
                         )}
+                        <GameWinLines turn={_turn} winTypes={_winTypes} />
                       </div>
                     );
                   })}
