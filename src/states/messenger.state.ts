@@ -1,14 +1,12 @@
+import { ChatType, MyGameType } from 'src/global';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-
-type ChatType = 'yourChat' | 'friendChat';
-export type GameChatType = 'caro' | 'connect4';
 
 type MessegerStateType = {
   caroChats: Array<{ type: ChatType; message: string }>;
   connect4Chats: Array<{ type: ChatType; message: string }>;
   fn: {
-    addChats: (type: ChatType, gameType: GameChatType, message: string) => void;
+    addChats: (type: ChatType, gameType: MyGameType, message: string) => void;
   };
 };
 
@@ -18,7 +16,7 @@ export const useMessengerStore = create<MessegerStateType, [['zustand/immer', un
       caroChats: [],
       connect4Chats: [],
       fn: {
-        addChats: (type: ChatType, gameType: GameChatType, message: string) => {
+        addChats: (type: ChatType, gameType: MyGameType, message: string) => {
           set((state) => {
             if (gameType == 'caro') state.caroChats = [...state.caroChats, { type, message }];
             else if (gameType == 'connect4')
@@ -30,7 +28,7 @@ export const useMessengerStore = create<MessegerStateType, [['zustand/immer', un
   })
 );
 
-export function useGameMessengerChat(game: GameChatType) {
+export function useGameMessengerChat(game: MyGameType) {
   const { caroChats, connect4Chats, fn } = useMessengerStore();
 
   if (game == 'caro')

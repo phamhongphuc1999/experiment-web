@@ -2,9 +2,10 @@ import { Messenger, Send } from 'iconsax-reactjs';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { beVietnamPro } from 'src/configs/font-family';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
+import { MyGameType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { createCaroMessage } from 'src/services/caro.utils';
-import { GameChatType, useGameMessengerChat } from 'src/states/messenger.state';
+import { useGameMessengerChat } from 'src/states/messenger.state';
 import AppTooltip from '../AppTooltip';
 import {
   Dialog,
@@ -16,7 +17,7 @@ import {
 import { Textarea } from '../shadcn-ui/textarea';
 
 interface Props {
-  gameType: GameChatType;
+  gameType: MyGameType;
 }
 
 export default function CaroMessengerDialog({ gameType }: Props) {

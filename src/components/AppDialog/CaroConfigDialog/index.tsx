@@ -14,9 +14,9 @@ import {
 } from '../../shadcn-ui/dialog';
 import BoardSizeConfig from './BoardSizeConfig';
 import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
-import GameTypeConfig from './GameTypeConfig';
-import PlayModeConfig from './PlayModeConfig';
-import SoundtrackConfig from './SoundtrackConfig';
+import GameTypeConfig from '../components/GameTypeConfig';
+import PlayModeConfig from '../components/PlayModeConfig';
+import SoundtrackConfig from '../components/SoundtrackConfig';
 import WinTypeConfig from './WinTypeConfig';
 
 function CaroConfigDialogLayout() {
@@ -72,12 +72,12 @@ function CaroConfigDialogLayout() {
         <DialogHeader>
           <DialogTitle>Caro config</DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSaveConfig}>
-          <PlayModeConfig />
+        <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
+          <PlayModeConfig game="caro" />
           <GameTypeConfig />
           <WinTypeConfig />
           <BoardSizeConfig />
-          <SoundtrackConfig />
+          <SoundtrackConfig game="caro" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>
             <div>

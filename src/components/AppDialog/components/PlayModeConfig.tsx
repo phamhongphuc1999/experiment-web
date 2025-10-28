@@ -1,15 +1,19 @@
 import { Bluetooth, Setting2 } from 'iconsax-reactjs';
 import { Button } from 'src/components/shadcn-ui/button';
-import { useCaroConnectionContext } from 'src/context/caro-connection.context';
-import { PlayModeType } from 'src/global';
-import { useCaroConfigContext } from './caroConfig.context';
+import { MyGameType, PlayModeType } from 'src/global';
+import useBoardGameConnectionContext from 'src/hooks/useBoardGameConnection';
+import useBoardGameConfigContext from './useBoardGameConfigContext';
 
-export default function PlayModeConfig() {
+interface Props {
+  game: MyGameType;
+}
+
+export default function PlayModeConfig({ game }: Props) {
   const {
     playMode,
     fn: { setPlayMode },
-  } = useCaroConfigContext();
-  const { peer } = useCaroConnectionContext();
+  } = useBoardGameConfigContext(game);
+  const { peer } = useBoardGameConnectionContext(game);
 
   function onChangePlayMode(playMode: PlayModeType) {
     setPlayMode(playMode);

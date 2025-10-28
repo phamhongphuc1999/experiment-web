@@ -1,7 +1,10 @@
 import { Routing } from 'iconsax-reactjs';
+import Link from 'next/link';
 import { DIALOG_KEY } from 'src/configs/constance';
+import { MyGameType } from 'src/global';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
+import { Button } from '../shadcn-ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,11 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../shadcn-ui/dialog';
-import Link from 'next/link';
-import { Button } from '../shadcn-ui/button';
 
 interface Props {
-  game: 'caro' | 'connect4';
+  game: MyGameType;
 }
 
 export default function RoutingGameDialog({ game }: Props) {

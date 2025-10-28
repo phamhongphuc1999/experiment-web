@@ -1,4 +1,5 @@
 import { Setting2 } from 'iconsax-reactjs';
+import { MouseEvent } from 'react';
 import { Button } from 'src/components/shadcn-ui/button';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useConnect4Store } from 'src/states/connect4.state';
@@ -11,6 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../../shadcn-ui/dialog';
+import GameTypeConfig from '../components/GameTypeConfig';
+import PlayModeConfig from '../components/PlayModeConfig';
+import SoundtrackConfig from '../components/SoundtrackConfig';
 import Connect4ConfigProvider from './connect4Config.context';
 
 function Connect4ConfigDialogLayout() {
@@ -18,6 +22,13 @@ function Connect4ConfigDialogLayout() {
   const {
     fn: { reset },
   } = useConnect4Store();
+
+  function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
+    event.preventDefault();
+    // setCaroMetadata({ size, playMode, gameType, isOverride, winMode, isMute });
+    // if (size != metadata.size) reset();
+    setDialog(DIALOG_KEY.connect4ConfigDialog, false);
+  }
 
   function onNewGame() {
     reset();
@@ -43,7 +54,10 @@ function Connect4ConfigDialogLayout() {
         <DialogHeader>
           <DialogTitle>Connect4 config</DialogTitle>
         </DialogHeader>
-        <form>
+        <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
+          <PlayModeConfig game="connect4" />
+          <GameTypeConfig />
+          <SoundtrackConfig game="connect4" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>
             <div>
