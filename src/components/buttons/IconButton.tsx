@@ -6,7 +6,7 @@ export default function IconButton(props: ComponentProps<'div'>) {
     <div
       {...props}
       className={cn(
-        'flex cursor-pointer items-center justify-center rounded-[50%] p-1.5 hover:bg-[#0000000f] dark:hover:bg-[#ffffff0f]',
+        'inline-flex aspect-square cursor-pointer items-center justify-center rounded-[50%] p-1.5 hover:bg-[#0000000f] dark:hover:bg-[#ffffff0f]',
         props.className
       )}
     >

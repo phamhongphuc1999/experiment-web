@@ -4,6 +4,7 @@ import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState }
 import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
 import { useCaroStateContext } from 'src/context/caro-state.context';
+import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
 import HeaderConfig from './HeaderConfig';
@@ -13,7 +14,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { size: boardSize, isOverride, gameType },
+    metadata: { size: boardSize, isOverride, gameType, isMute },
     numberOfBlindError,
     isBlindForceOver,
     steps,
@@ -22,6 +23,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     turn: storageTurn,
     fn: { countNumberOfBlindError },
   } = useCaroStore();
+  const { playMove, playError } = useSoundtrack();
   const {
     shouldDisableBoard,
     fn: { move },
@@ -58,8 +60,14 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     }
 
     if (isOverride) {
-      if (!isWin && !shouldDisableBoard && steps[location] != storageTurn) move(location);
-    } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) move(location);
+      if (!isWin && !shouldDisableBoard && steps[location] != storageTurn) {
+        playMove(isMute);
+        move(location);
+      } else playError(isMute);
+    } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
+      playMove(isMute);
+      move(location);
+    } else playError(isMute);
   }
 
   useEffect(() => {

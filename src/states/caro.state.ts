@@ -20,6 +20,7 @@ type CaroMetadataType = {
   size: CaroSizeBoardType;
   maxNumberOfBlindError: number;
   preWinner: number;
+  isMute: boolean;
 };
 
 type CaroStateType = {
@@ -55,6 +56,7 @@ export const useCaroStore = create<
           size: 10,
           maxNumberOfBlindError: 5,
           preWinner: 0,
+          isMute: true,
         },
         numberOfBlindError: { 0: 0, 1: 0 },
         isBlindForceOver: false,
