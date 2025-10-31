@@ -33,7 +33,7 @@ export default function CaroInstructionDialog() {
         <DialogHeader>
           <DialogTitle>Caro instruction</DialogTitle>
         </DialogHeader>
-        <div className="scroll-hidden h-[75vh] overflow-auto">
+        <div className="scroll-hidden h-fit max-h-[75vh] overflow-auto">
           <p className="text-lg">1. How to play?</p>
           <p className="text-justify text-sm">
             {

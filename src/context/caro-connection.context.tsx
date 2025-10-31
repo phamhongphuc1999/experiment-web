@@ -59,7 +59,7 @@ export default function CaroConnectionProvider({ children }: Props) {
   } = useGameMessengerChat('caro');
   const {
     metadata: { size, gameType, isOverride },
-    fn: { setCaroMetadata, move, undo, reset },
+    fn: { setMetadata, move, undo, reset },
   } = useCaroStore();
 
   const initConnection = useCallback((type: RoleType) => {
@@ -108,7 +108,7 @@ export default function CaroConnectionProvider({ children }: Props) {
               toast.info('New message!!');
             } else if (type == 'sync') {
               const { size, gameType, isOverride } = message as SyncReturnType;
-              setCaroMetadata({ size, gameType, isOverride });
+              setMetadata({ size, gameType, isOverride });
               toast.info(`Set board size to ${size}x${size}`);
               toast.info(
                 `Set game type to ${gameType} ${isOverride ? 'with' : 'without'} override`
@@ -139,7 +139,7 @@ export default function CaroConnectionProvider({ children }: Props) {
 
       return () => peer.destroy();
     }
-  }, [addChats, move, peer, setCaroMetadata, reset, undo]);
+  }, [addChats, move, peer, setMetadata, reset, undo]);
 
   const contextData = useMemo<CaroConnectionContextType>(() => {
     return {

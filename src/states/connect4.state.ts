@@ -1,5 +1,4 @@
-import { toast } from 'sonner';
-import { Connect4WinStateType, PlayModeType, TurnType } from 'src/global';
+import { CaroGameType, Connect4WinStateType, PlayModeType, TurnType } from 'src/global';
 import { checkWin } from 'src/services/connect4.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -9,11 +8,16 @@ type Connect4MetadataType = {
   numberOfRows: number;
   numberOfColumns: number;
   playMode: PlayModeType;
+  gameType: CaroGameType;
   status: 'playing' | 'win';
+  maxNumberOfBlindError: number;
+  isMute: boolean;
 };
 
 type Connect4Type = {
   metadata: Connect4MetadataType;
+  numberOfBlindError: { 0: number; 1: number };
+  isBlindForceOver: boolean;
   turn: TurnType;
   steps: { [column: number]: Array<TurnType> };
   stepsOrder: Array<number>;
@@ -22,7 +26,8 @@ type Connect4Type = {
     move: (column: number) => void;
     undo: () => void;
     reset: (turn?: TurnType) => void;
-    setCaroMetadata: (metadata: Partial<Connect4MetadataType>) => void;
+    countNumberOfBlindError: (turn: TurnType) => void;
+    setMetadata: (metadata: Partial<Connect4MetadataType>) => void;
   };
 };
 
@@ -37,8 +42,13 @@ export const useConnect4Store = create<
           numberOfRows: 6,
           numberOfColumns: 7,
           playMode: 'offline',
+          gameType: 'normal',
           status: 'playing',
+          maxNumberOfBlindError: 3,
+          isMute: true,
         },
+        numberOfBlindError: { 0: 0, 1: 0 },
+        isBlindForceOver: false,
         turn: 0,
         steps: {},
         stepsOrder: [],
@@ -46,34 +56,31 @@ export const useConnect4Store = create<
           move: (column: number) => {
             set((state) => {
               if (!state.steps[column]) state.steps[column] = [];
-              if (state.steps[column].length >= state.metadata.numberOfRows)
-                toast.warning('Invalid move');
-              else {
-                state.steps[column].push(state.turn);
-                const _winState = checkWin({
-                  steps: state.steps,
-                  currentColumn: column,
-                  currentPlayer: state.turn,
-                  numberOfRows: state.metadata.numberOfRows,
-                  numberOfColumns: state.metadata.numberOfColumns,
-                });
-                if (_winState.winMode.length > 0) {
-                  state.winState = _winState;
-                  state.metadata.status = 'win';
-                } else state.turn = (1 - state.turn) as TurnType;
-              }
+              state.steps[column].push(state.turn);
+              state.stepsOrder.push(column);
+              const _winState = checkWin({
+                steps: state.steps,
+                currentColumn: column,
+                currentPlayer: state.turn,
+                numberOfRows: state.metadata.numberOfRows,
+                numberOfColumns: state.metadata.numberOfColumns,
+              });
+              if (_winState.winMode.length > 0) {
+                state.winState = _winState;
+                state.metadata.status = 'win';
+              } else state.turn = (1 - state.turn) as TurnType;
             });
           },
           undo: () => {
             set((state) => {
               const len = state.stepsOrder.length;
               if (len > 1) {
-                let currentStep = state.stepsOrder[len - 1];
-                delete state.steps[currentStep];
+                let currentColumn = state.stepsOrder[len - 1];
+                state.steps[currentColumn].pop();
                 state.stepsOrder.pop();
 
-                currentStep = state.stepsOrder[len - 2];
-                delete state.steps[currentStep];
+                currentColumn = state.stepsOrder[len - 2];
+                state.steps[currentColumn].pop();
                 state.stepsOrder.pop();
               }
             });
@@ -87,7 +94,19 @@ export const useConnect4Store = create<
               state.winState = undefined;
             });
           },
-          setCaroMetadata: (metadata: Partial<Connect4MetadataType>) => {
+          countNumberOfBlindError: (turn: TurnType) => {
+            set((state) => {
+              const currentErrors = state.numberOfBlindError[turn];
+              state.numberOfBlindError[turn] = currentErrors + 1;
+              if (state.numberOfBlindError[turn] > state.metadata.maxNumberOfBlindError) {
+                state.isBlindForceOver = true;
+                state.turn = (1 - state.turn) as TurnType;
+              }
+            });
+          },
+          setMetadata: (
+            metadata: Partial<Omit<Connect4MetadataType, 'numberOfRows' | 'numberOfColumns'>>
+          ) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
             });

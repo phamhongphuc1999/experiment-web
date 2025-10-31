@@ -15,18 +15,18 @@ import {
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
 import SoundtrackConfig from '../components/SoundtrackConfig';
-import Connect4ConfigProvider from './connect4Config.context';
+import Connect4ConfigProvider, { useConnect4ConfigContext } from './connect4Config.context';
 
 function Connect4ConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
   const {
-    fn: { reset },
+    fn: { reset, setMetadata },
   } = useConnect4Store();
+  const { playMode, gameType, isMute } = useConnect4ConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    // setCaroMetadata({ size, playMode, gameType, isOverride, winMode, isMute });
-    // if (size != metadata.size) reset();
+    setMetadata({ playMode, gameType, isMute });
     setDialog(DIALOG_KEY.connect4ConfigDialog, false);
   }
 
@@ -56,7 +56,7 @@ function Connect4ConfigDialogLayout() {
         </DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <PlayModeConfig game="connect4" />
-          <GameTypeConfig />
+          <GameTypeConfig game="connect4" />
           <SoundtrackConfig game="connect4" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>

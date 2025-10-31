@@ -36,7 +36,7 @@ type CaroStateType = {
     undo: () => void;
     reset: (turn?: TurnType) => void;
     countNumberOfBlindError: (turn: TurnType) => void;
-    setCaroMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
+    setMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
   };
 };
 
@@ -116,7 +116,7 @@ export const useCaroStore = create<
               }
             });
           },
-          setCaroMetadata: (metadata: Partial<CaroMetadataType>) => {
+          setMetadata: (metadata: Partial<CaroMetadataType>) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
             });

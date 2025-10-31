@@ -23,7 +23,7 @@ function CaroConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
   const {
     metadata,
-    fn: { reset, setCaroMetadata },
+    fn: { reset, setMetadata },
   } = useCaroStore();
   const {
     size,
@@ -37,7 +37,7 @@ function CaroConfigDialogLayout() {
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setCaroMetadata({ size, playMode, gameType, isOverride, winMode, isMute });
+    setMetadata({ size, playMode, gameType, isOverride, winMode, isMute });
     if (size != metadata.size) reset();
     setDialog(DIALOG_KEY.caroConfigDialog, false);
   }
@@ -74,7 +74,7 @@ function CaroConfigDialogLayout() {
         </DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <PlayModeConfig game="caro" />
-          <GameTypeConfig />
+          <GameTypeConfig game="caro" />
           <WinTypeConfig />
           <BoardSizeConfig />
           <SoundtrackConfig game="caro" />

@@ -255,7 +255,7 @@ input[type='number'] {
 }
 
 .connect4-column:hover {
-  .connect4-item-turn-undefined {
-    @apply bg-background/40;
+  .connect4-item {
+    @apply bg-background/40!;
   }
 }

@@ -20,7 +20,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     steps,
     stepsOrder,
     winState,
-    turn: storageTurn,
+    turn,
     fn: { countNumberOfBlindError },
   } = useCaroStore();
   const { playMove, playError } = useSoundtrack();
@@ -55,12 +55,13 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   function onMove(location: number) {
     const isWin = winState != undefined || isBlindForceOver == true;
 
-    if (gameType == 'blind') {
-      if (steps[location] != undefined) countNumberOfBlindError(storageTurn);
+    if (gameType == 'blind' && steps[location] != undefined) {
+      countNumberOfBlindError(turn);
+      playError(isMute);
     }
 
     if (isOverride) {
-      if (!isWin && !shouldDisableBoard && steps[location] != storageTurn) {
+      if (!isWin && !shouldDisableBoard && steps[location] != turn) {
         playMove(isMute);
         move(location);
       } else playError(isMute);
@@ -85,6 +86,10 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     }
   }, [errorCount, gameType]);
 
+  const isWin = useMemo(() => {
+    return winState != undefined || isBlindForceOver == true;
+  }, [isBlindForceOver, winState]);
+
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <HeaderConfig />
@@ -102,7 +107,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               const _turn = steps[location];
               const _winTypes = winState?.locations?.[location];
               let _icon = '';
-              const isWin = winState != undefined || isBlindForceOver == true;
+
               if (
                 gameType != 'blind' ||
                 (gameType == 'blind' && (isWin || stepsOrder.at(-1) == location))

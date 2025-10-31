@@ -4,15 +4,24 @@ import AppTooltip from 'src/components/AppTooltip';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
+import { MyGameType } from 'src/global';
 import { useCaroStore } from 'src/states/caro.state';
 import { useCaroConfigContext } from '../CaroConfigDialog/caroConfig.context';
+import useBoardGameConfigContext from './useBoardGameConfigContext';
 
-export default function GameTypeConfig() {
+interface Props {
+  game: MyGameType;
+}
+
+export default function GameTypeConfig({ game }: Props) {
   const {
     gameType,
-    isOverride,
     maxError,
-    fn: { setGameType, setIsOverride, setMaxError },
+    fn: { setGameType, setMaxError },
+  } = useBoardGameConfigContext(game);
+  const {
+    isOverride,
+    fn: { setIsOverride },
   } = useCaroConfigContext();
   const { role, connectionType } = useCaroConnectionContext();
   const {
@@ -45,13 +54,15 @@ export default function GameTypeConfig() {
         >
           Blind
         </Button>
-        <Button
-          disabled={canNotConfig}
-          variant={isOverride ? 'default' : 'outline'}
-          onClick={() => setIsOverride((preValue) => !preValue)}
-        >
-          Override
-        </Button>
+        {game == 'caro' && (
+          <Button
+            disabled={canNotConfig}
+            variant={isOverride ? 'default' : 'outline'}
+            onClick={() => setIsOverride((preValue) => !preValue)}
+          >
+            Override
+          </Button>
+        )}
       </div>
       {gameType == 'blind' && (
         <div className="mt-6">
