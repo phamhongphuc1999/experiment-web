@@ -1,6 +1,14 @@
 'use client';
 
-import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  ComponentProps,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { toast } from 'sonner';
 import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CONNECT4_BOARD_SIZE } from 'src/configs/constance';
@@ -9,6 +17,11 @@ import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { useConnect4Store } from 'src/states/connect4.state';
 import HeaderConfig from './HeaderConfig';
+import { ConnectFour } from 'src/services/models/ConnectFour';
+import { MCTS } from 'src/services/models/MCTS';
+import Connect4Model from 'src/services/models/connect4-model';
+import { drawMatrix } from 'src/services';
+import { BOT_MCTS_BATCH_SIZE, BOT_MCTS_SEARCHES } from 'src/configs/model.config';
 
 export default function Connect4Board(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -26,6 +39,26 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
   const {
     fn: { move },
   } = useConnect4StateContext();
+
+  const _abc = useCallback(async () => {
+    const game = new ConnectFour();
+    const mcts_store = new MCTS(game);
+    let state = game.initialState;
+    let won = false;
+    const model = new Connect4Model();
+    await model.loadConnect4Model();
+
+    [state, won] = game.move(state, 0, 0);
+    drawMatrix(game.decodeBinary(state));
+    const valid_moves = game.possibleMoves(state);
+
+    await mcts_store.searchBatch(BOT_MCTS_SEARCHES, BOT_MCTS_BATCH_SIZE, state, 1, model);
+    const [probs, values] = mcts_store.getPolicyValue(state, 0);
+  }, []);
+
+  useEffect(() => {
+    _abc();
+  }, [_abc]);
 
   const { itemSize } = useMemo(() => {
     return { itemSize: size * 0.7 };

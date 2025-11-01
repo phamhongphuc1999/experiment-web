@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import moment from 'moment';
 import { toast } from 'sonner';
 import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
@@ -97,4 +98,22 @@ export function zodError<T>(error?: ZodError<T>) {
     const issue = error.issues[0];
     toast.error(`${String(issue.path[0])}: ${issue.message}`);
   }
+}
+
+export function drawMatrix(matrix: number[][]): void {
+  console.log('--------------------------------');
+  for (const row of matrix) {
+    let line = '';
+    for (const cell of row) {
+      if (cell === 1) {
+        line += `\x1b[92m${cell}\x1b[0m `; // green
+      } else if (cell === 0) {
+        line += `\x1b[91m${cell}\x1b[0m `; // red
+      } else {
+        line += `${cell} `;
+      }
+    }
+    console.log(line);
+  }
+  console.log('--------------------------------');
 }

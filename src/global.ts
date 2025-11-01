@@ -3,6 +3,7 @@ import { UseQueryOptions } from '@tanstack/react-query';
 import { ComponentProps } from 'react';
 
 export type ThemeType = 'light' | 'dark';
+export type Matrix = number[][];
 
 export interface AnimationComponentProps {
   size?: number | string;
