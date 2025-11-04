@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { toast } from 'sonner';
 import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
-import { PaginationType } from 'src/global';
+import { PaginationType, PositionType } from 'src/global';
 import { ZodError } from 'zod';
 
 type SBase = {
@@ -54,7 +54,7 @@ export function hexToUint8Array(hex: string): Uint8Array {
   }
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    bytes[i / 2] = parseInt(hex.substring(i, 2), 16);
   }
   return bytes;
 }
@@ -97,4 +97,8 @@ export function zodError<T>(error?: ZodError<T>) {
     const issue = error.issues[0];
     toast.error(`${String(issue.path[0])}: ${issue.message}`);
   }
+}
+
+export function isPositionEqual(position1: PositionType, position2: PositionType) {
+  return position1[0] == position2[0] && position1[1] == position2[1];
 }

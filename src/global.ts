@@ -290,10 +290,7 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 
 // start caro
 export type TurnType = 0 | 1;
-export type PositionType = {
-  row: number;
-  column: number;
-};
+export type PositionType = [number, number]; //expect [row, column]
 export type RoleType = 'host' | 'guest';
 export type ConnectionType = 'init' | 'connecting' | 'connected';
 export type PlayModeType = 'offline' | 'online' | 'machine';
