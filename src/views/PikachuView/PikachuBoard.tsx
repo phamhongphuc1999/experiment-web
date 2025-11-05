@@ -9,22 +9,20 @@ import {
 } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import { cn } from 'src/lib/utils';
-import { findPossibleMove, performPikachuMove } from 'src/services/pikachu.utils';
+import { performPikachuMove } from 'src/services/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { useDebounceCallback } from 'usehooks-ts';
 
 export default function PikachuBoard() {
   const {
     board,
-    fn: { move, updateSuggestions, changeBoard },
+    fn: { move, checkPossibleMove },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
 
-  const checkPossibleMove = useDebounceCallback(() => {
-    const path = findPossibleMove(board);
-    if (path) updateSuggestions([path]);
-    else changeBoard();
-  }, 5000);
+  const _checkPossibleMove = useDebounceCallback(() => {
+    checkPossibleMove();
+  }, 1000);
 
   function onPieceClick(position: PositionType) {
     if (firstPiece == undefined) setFirstPiece(position);
@@ -37,7 +35,7 @@ export default function PikachuBoard() {
       });
       if (path) {
         move(firstPiece, position);
-        checkPossibleMove();
+        _checkPossibleMove();
       }
       setFirstPiece(undefined);
     }
@@ -79,6 +77,7 @@ export default function PikachuBoard() {
                       className={cn(isSelected && 'opacity-50', 'cursor-pointer')}
                     />
                   )}
+                  {isPiece == 0 && <p>{`${row},${column}`}</p>}
                 </div>
               );
             })}
