@@ -1,6 +1,5 @@
-import { PIKACHU_NUMBER_OF_COLUMNS, PIKACHU_NUMBER_OF_ROWS } from 'src/configs/constance';
-import { PositionType } from 'src/global';
-import { isPositionEqual, randomSubGroup } from '.';
+import { FindPossibleMoveParamsType, PikachuMoveParamsType, PositionType } from 'src/global';
+import { isPositionEqual, isPositionIncludes, randomSubGroup } from '.';
 import Queue from './Queue';
 
 function _createRawBoard(totalCells: number, numTypes: number) {
@@ -65,12 +64,6 @@ function reconstructPath(
   return path;
 }
 
-type PikachuMoveParams = {
-  board: Array<Array<number>>;
-  sourcePiece: PositionType;
-  targetPiece: PositionType;
-};
-
 const directions = [
   [-1, 0],
   [1, 0],
@@ -78,17 +71,17 @@ const directions = [
   [0, 1],
 ];
 
-export function performPikachuMove(params: PikachuMoveParams): Array<PositionType> | undefined {
-  const { board, sourcePiece, targetPiece } = params;
+export function performPikachuMove(params: PikachuMoveParamsType): Array<PositionType> | undefined {
+  const { numberOfRows, numberOfColumns, board, sourcePiece, targetPiece } = params;
   const [ax, ay] = sourcePiece;
   const [bx, by] = targetPiece;
   if (isPositionEqual(sourcePiece, targetPiece) || board[ax][ay] != board[bx][by]) return undefined;
 
-  const parent: (number[] | null)[][][] = Array.from({ length: PIKACHU_NUMBER_OF_ROWS + 2 }, () =>
-    Array.from({ length: PIKACHU_NUMBER_OF_COLUMNS + 2 }, () => Array(4).fill(null))
+  const parent: (number[] | null)[][][] = Array.from({ length: numberOfRows + 2 }, () =>
+    Array.from({ length: numberOfColumns + 2 }, () => Array(4).fill(null))
   );
-  const visited: boolean[][][] = Array.from({ length: PIKACHU_NUMBER_OF_ROWS + 2 }, () =>
-    Array.from({ length: PIKACHU_NUMBER_OF_COLUMNS + 2 }, () => Array(4).fill(false))
+  const visited: boolean[][][] = Array.from({ length: numberOfRows + 2 }, () =>
+    Array.from({ length: numberOfColumns + 2 }, () => Array(4).fill(false))
   );
   const queue = new Queue<[number, number, number, number]>(); // [row, column, direction, turn]
   for (let d = 0; d < 4; d++) {
@@ -104,9 +97,9 @@ export function performPikachuMove(params: PikachuMoveParams): Array<PositionTyp
     // Continue moving in the same direction
     while (
       nx >= 0 &&
-      nx <= PIKACHU_NUMBER_OF_ROWS + 1 &&
+      nx <= numberOfRows + 1 &&
       ny >= 0 &&
-      ny <= PIKACHU_NUMBER_OF_COLUMNS + 1 &&
+      ny <= numberOfColumns + 1 &&
       (board[nx][ny] === 0 || (nx === bx && ny === by))
     ) {
       // Reached target B
@@ -132,15 +125,15 @@ export function performPikachuMove(params: PikachuMoveParams): Array<PositionTyp
 }
 
 export function findPikachuPath(
-  params: Omit<PikachuMoveParams, 'targetPiece'>
+  params: Omit<PikachuMoveParamsType, 'targetPiece'>
 ): Array<PositionType> | undefined {
-  const { board, sourcePiece } = params;
+  const { numberOfRows, numberOfColumns, board, sourcePiece } = params;
   const [ax, ay] = sourcePiece;
-  const parent: (number[] | null)[][][] = Array.from({ length: PIKACHU_NUMBER_OF_ROWS + 2 }, () =>
-    Array.from({ length: PIKACHU_NUMBER_OF_COLUMNS + 2 }, () => Array(4).fill(null))
+  const parent: (number[] | null)[][][] = Array.from({ length: numberOfRows + 2 }, () =>
+    Array.from({ length: numberOfColumns + 2 }, () => Array(4).fill(null))
   );
-  const visited: boolean[][][] = Array.from({ length: PIKACHU_NUMBER_OF_ROWS + 2 }, () =>
-    Array.from({ length: PIKACHU_NUMBER_OF_COLUMNS + 2 }, () => Array(4).fill(false))
+  const visited: boolean[][][] = Array.from({ length: numberOfRows + 2 }, () =>
+    Array.from({ length: numberOfColumns + 2 }, () => Array(4).fill(false))
   );
   const queue = new Queue<[number, number, number, number]>(); // [row, column, direction, turn]
   for (let d = 0; d < 4; d++) {
@@ -156,9 +149,9 @@ export function findPikachuPath(
     // Continue moving in the same direction
     while (
       nx >= 0 &&
-      nx <= PIKACHU_NUMBER_OF_ROWS + 1 &&
+      nx <= numberOfRows + 1 &&
       ny >= 0 &&
-      ny <= PIKACHU_NUMBER_OF_COLUMNS + 1 &&
+      ny <= numberOfColumns + 1 &&
       (board[nx][ny] === 0 || (board[nx][ny] == board[ax][ay] && (nx != ax || ny != ay)))
     ) {
       if (board[nx][ny] == board[ax][ay] && (nx != ax || ny != ay)) {
@@ -184,70 +177,91 @@ export function findPikachuPath(
   return undefined;
 }
 
-export function findPossibleMove(board: Array<Array<number>>) {
-  for (let i = 1; i <= PIKACHU_NUMBER_OF_ROWS; i++) {
-    for (let j = 1; j < PIKACHU_NUMBER_OF_COLUMNS; j++) {
+export function findPossibleMove(params: Omit<FindPossibleMoveParamsType, 'ignoreMoves'>) {
+  const { numberOfRows, numberOfColumns, board } = params;
+  for (let i = 1; i <= numberOfRows; i++) {
+    for (let j = 1; j < numberOfColumns; j++) {
       if (board[i][j] > 0) {
-        const path = findPikachuPath({ board, sourcePiece: [i, j] });
+        const path = findPikachuPath({ numberOfRows, numberOfColumns, board, sourcePiece: [i, j] });
         if (path) return path;
       }
     }
   }
 }
 
-function _createNewPikachuBoard() {
-  const rawBoard = createBoard(PIKACHU_NUMBER_OF_ROWS, PIKACHU_NUMBER_OF_COLUMNS, 36);
+export function findPossibleMoveWithoutIgnore(params: FindPossibleMoveParamsType) {
+  const { numberOfRows, numberOfColumns, board, ignoreMoves } = params;
+  for (let i = 1; i <= numberOfRows; i++) {
+    for (let j = 1; j < numberOfColumns; j++) {
+      if (board[i][j] > 0 && !isPositionIncludes([i, j], ignoreMoves)) {
+        const path = findPikachuPath({ numberOfRows, numberOfColumns, board, sourcePiece: [i, j] });
+        if (path) return path;
+      }
+    }
+  }
+}
+
+function _createNewPikachuBoard(numberOfRows: number, numberOfColumns: number) {
+  const rawBoard = createBoard(numberOfRows, numberOfColumns, 36);
   const board: Array<Array<number>> = [];
-  board.push(Array(PIKACHU_NUMBER_OF_COLUMNS + 2).fill(0));
+  board.push(Array(numberOfColumns + 2).fill(0));
   rawBoard.forEach((row) => {
     board.push([0, ...row, 0]);
   });
-  board.push(Array(PIKACHU_NUMBER_OF_COLUMNS + 2).fill(0));
+  board.push(Array(numberOfColumns + 2).fill(0));
   return board;
 }
 
-export function createNewPikachuBoard() {
-  let board = _createNewPikachuBoard();
-  let path = findPossibleMove(board);
+export function createNewPikachuBoard(numberOfRows: number, numberOfColumns: number) {
+  let board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+  let path = findPossibleMove({ numberOfRows, numberOfColumns, board });
   while (!path) {
-    board = _createNewPikachuBoard();
-    path = findPossibleMove(board);
+    board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+    path = findPossibleMove({ numberOfRows, numberOfColumns, board });
   }
   return { board, path };
 }
 
-function _changePikachuBoard(currentBoard: Array<Array<number>>) {
+function _changePikachuBoard(
+  currentBoard: Array<Array<number>>,
+  numberOfRows: number,
+  numberOfColumns: number
+) {
   let totalCells = 0;
-  for (let i = 1; i <= PIKACHU_NUMBER_OF_ROWS; i++) {
-    for (let j = 1; j <= PIKACHU_NUMBER_OF_COLUMNS; j++) {
+  for (let i = 1; i <= numberOfRows; i++) {
+    for (let j = 1; j <= numberOfColumns; j++) {
       if (currentBoard[i][j] > 0) totalCells++;
     }
   }
   const pairedTiles = _createRawBoard(totalCells, 36);
   const rawBoard: Array<Array<number>> = [];
   let index = 0;
-  for (let i = 0; i < PIKACHU_NUMBER_OF_ROWS; i++) {
+  for (let i = 0; i < numberOfRows; i++) {
     rawBoard.push([]);
-    for (let j = 0; j < PIKACHU_NUMBER_OF_COLUMNS; j++) {
+    for (let j = 0; j < numberOfColumns; j++) {
       if (currentBoard[i + 1][j + 1] > 0) rawBoard[i].push(pairedTiles[index++]);
       else rawBoard[i].push(0);
     }
   }
   const board: Array<Array<number>> = [];
-  board.push(Array(PIKACHU_NUMBER_OF_COLUMNS + 2).fill(0));
+  board.push(Array(numberOfColumns + 2).fill(0));
   rawBoard.forEach((row) => {
     board.push([0, ...row, 0]);
   });
-  board.push(Array(PIKACHU_NUMBER_OF_COLUMNS + 2).fill(0));
+  board.push(Array(numberOfColumns + 2).fill(0));
   return board;
 }
 
-export function changePikachuBoard(currentBoard: Array<Array<number>>) {
-  let board = _changePikachuBoard(currentBoard);
-  let path = findPossibleMove(board);
+export function changePikachuBoard(
+  currentBoard: Array<Array<number>>,
+  numberOfRows: number,
+  numberOfColumns: number
+) {
+  let board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns);
+  let path = findPossibleMove({ numberOfRows, numberOfColumns, board });
   while (!path) {
-    board = _createNewPikachuBoard();
-    path = findPossibleMove(board);
+    board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+    path = findPossibleMove({ numberOfRows, numberOfColumns, board });
   }
   return { board, path };
 }

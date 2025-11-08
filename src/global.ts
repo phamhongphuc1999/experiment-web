@@ -320,3 +320,20 @@ export type Connect4WinStateType = {
 
 export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 // end caro
+
+// start pikachu
+export type PikachuMoveParamsType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+  board: Array<Array<number>>;
+  sourcePiece: PositionType;
+  targetPiece: PositionType;
+};
+
+export type FindPossibleMoveParamsType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+  board: Array<Array<number>>;
+  ignoreMoves: Array<PositionType>;
+};
+// end pikachu

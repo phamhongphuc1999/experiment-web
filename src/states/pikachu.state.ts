@@ -1,14 +1,13 @@
+import { PIKACHU_NUMBER_OF_COLUMNS, PIKACHU_NUMBER_OF_ROWS } from 'src/configs/constance';
 import { PositionType } from 'src/global';
-import {
-  changePikachuBoard,
-  createNewPikachuBoard,
-  findPossibleMove,
-} from 'src/services/pikachu.utils';
+import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 type PikachuMetadataType = {
+  numberOfRows: number;
+  numberOfColumns: number;
   remainingChanges: number;
   round: number;
   status: 'init' | 'playing' | 'end';
@@ -22,7 +21,7 @@ type PikachuStateType = {
     createBoard: () => void;
     changeBoard: () => void;
     move: (sourcePiece: PositionType, targetPiece: PositionType) => void;
-    checkPossibleMove: () => void;
+    updateSuggestion: (path: Array<PositionType>) => void;
     setMetadata: (metadata: Partial<PikachuMetadataType>) => void;
   };
 };
@@ -35,6 +34,8 @@ export const usePikachuStore = create<
     immer((set) => {
       return {
         metadata: {
+          numberOfRows: PIKACHU_NUMBER_OF_ROWS,
+          numberOfColumns: PIKACHU_NUMBER_OF_COLUMNS,
           remainingChanges: 10,
           round: 1,
           status: 'init',
@@ -44,7 +45,8 @@ export const usePikachuStore = create<
         fn: {
           createBoard: () => {
             set((state) => {
-              const { board, path } = createNewPikachuBoard();
+              const { numberOfRows, numberOfColumns } = state.metadata;
+              const { board, path } = createNewPikachuBoard(numberOfRows, numberOfColumns);
               state.board = board;
               state.suggestion = path;
               state.metadata.status = 'playing';
@@ -54,7 +56,12 @@ export const usePikachuStore = create<
           },
           changeBoard: () => {
             set((state) => {
-              const { board, path } = changePikachuBoard(state.board);
+              const { numberOfRows, numberOfColumns } = state.metadata;
+              const { board, path } = changePikachuBoard(
+                state.board,
+                numberOfRows,
+                numberOfColumns
+              );
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingChanges = state.metadata.remainingChanges - 1;
@@ -66,11 +73,9 @@ export const usePikachuStore = create<
               state.board[targetPiece[0]][targetPiece[1]] = 0;
             });
           },
-          checkPossibleMove: () => {
+          updateSuggestion: (path: Array<PositionType>) => {
             set((state) => {
-              const path = findPossibleMove(state.board);
-              if (path) state.suggestion = path;
-              else state.fn.changeBoard();
+              state.suggestion = path;
             });
           },
           setMetadata: (metadata: Partial<PikachuMetadataType>) => {

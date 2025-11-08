@@ -102,3 +102,10 @@ export function zodError<T>(error?: ZodError<T>) {
 export function isPositionEqual(position1: PositionType, position2: PositionType) {
   return position1[0] == position2[0] && position1[1] == position2[1];
 }
+
+export function isPositionIncludes(position: PositionType, positions: Array<PositionType>) {
+  const _p = positions.filter((p) => {
+    return p[0] == position[0] && p[1] == position[1];
+  });
+  return _p.length > 0;
+}

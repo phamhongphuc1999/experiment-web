@@ -1,28 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  PIKACHU_NUMBER_OF_COLUMNS,
-  PIKACHU_NUMBER_OF_ROWS,
-  PIKACHU_PIECE_HEIGHT,
-  PIKACHU_PIECE_WIDTH,
-} from 'src/configs/constance';
+import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import { cn } from 'src/lib/utils';
-import { performPikachuMove } from 'src/services/pikachu.utils';
+import { isPositionEqual } from 'src/services';
+import { findPossibleMoveWithoutIgnore, performPikachuMove } from 'src/services/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import { useDebounceCallback } from 'usehooks-ts';
 
 export default function PikachuBoard() {
   const {
     board,
-    fn: { move, checkPossibleMove },
+    suggestion,
+    fn: { move, updateSuggestion },
+    metadata: { numberOfRows, numberOfColumns },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
-
-  const _checkPossibleMove = useDebounceCallback(() => {
-    checkPossibleMove();
-  }, 1000);
 
   function onPieceClick(position: PositionType) {
     if (firstPiece == undefined) setFirstPiece(position);
@@ -32,10 +25,27 @@ export default function PikachuBoard() {
         board,
         sourcePiece: firstPiece,
         targetPiece: position,
+        numberOfRows,
+        numberOfColumns,
       });
       if (path) {
         move(firstPiece, position);
-        _checkPossibleMove();
+        const _len = suggestion.length;
+        if (
+          isPositionEqual(suggestion[0], firstPiece) ||
+          isPositionEqual(suggestion[0], position) ||
+          isPositionEqual(suggestion[_len - 1], firstPiece) ||
+          isPositionEqual(suggestion[_len - 1], position)
+        ) {
+          const path = findPossibleMoveWithoutIgnore({
+            board,
+            ignoreMoves: [firstPiece, position],
+            numberOfRows,
+            numberOfColumns,
+          });
+          if (path) updateSuggestion(path);
+          // else changeBoard();
+        }
       }
       setFirstPiece(undefined);
     }
@@ -50,11 +60,11 @@ export default function PikachuBoard() {
         marginRight: `${PIKACHU_PIECE_WIDTH}px`,
       }}
     >
-      {Array.from({ length: PIKACHU_NUMBER_OF_ROWS }).map((_, _row) => {
+      {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;
         return (
           <div key={row} className="flex items-center">
-            {Array.from({ length: PIKACHU_NUMBER_OF_COLUMNS }).map((_, _column) => {
+            {Array.from({ length: numberOfColumns }).map((_, _column) => {
               const column = _column + 1;
               const _index = board[row][column];
               const isSelected = firstPiece?.[1] == column && firstPiece?.[0] == row;
