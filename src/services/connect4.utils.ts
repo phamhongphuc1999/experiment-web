@@ -24,7 +24,7 @@ function connect4Check(
   while (moveCheckFn(params, _currentRow, _currentColumn)) {
     [_currentRow, _currentColumn] = moveFn(_currentRow, _currentColumn);
     const _turn = steps?.[_currentColumn]?.[_currentRow];
-    if (_turn == currentPlayer) result.push({ row: _currentRow, column: _currentColumn });
+    if (_turn == currentPlayer) result.push([_currentRow, _currentColumn]);
     else break;
   }
   return result;
@@ -129,32 +129,32 @@ export function checkWin(params: ParamsType): Connect4WinStateType {
   const winMode: Array<Connect4WinType> = [];
   if (leftDiagonal.isWin) {
     winMode.push('leftDiagonal');
-    for (const _location of leftDiagonal.arr.concat({ row: currentRow, column: currentColumn })) {
-      const _key = `${_location.row}_${_location.column}`;
+    for (const [row, column] of leftDiagonal.arr.concat([currentRow, currentColumn])) {
+      const _key = `${row}_${column}`;
       if (!locations[_key]) locations[_key] = {};
       locations[_key]['leftDiagonal'] = true;
     }
   }
   if (rightDiagonal.isWin) {
     winMode.push('rightDiagonal');
-    for (const _location of rightDiagonal.arr.concat({ row: currentRow, column: currentColumn })) {
-      const _key = `${_location.row}_${_location.column}`;
+    for (const [row, column] of rightDiagonal.arr.concat([currentRow, currentColumn])) {
+      const _key = `${row}_${column}`;
       if (!locations[_key]) locations[_key] = {};
       locations[_key]['rightDiagonal'] = true;
     }
   }
   if (vertical.isWin) {
     winMode.push('vertical');
-    for (const _location of vertical.arr.concat({ row: currentRow, column: currentColumn })) {
-      const _key = `${_location.row}_${_location.column}`;
+    for (const [row, column] of vertical.arr.concat([currentRow, currentColumn])) {
+      const _key = `${row}_${column}`;
       if (!locations[_key]) locations[_key] = {};
       locations[_key]['vertical'] = true;
     }
   }
   if (horizontal.isWin) {
     winMode.push('horizontal');
-    for (const _location of horizontal.arr.concat({ row: currentRow, column: currentColumn })) {
-      const _key = `${_location.row}_${_location.column}`;
+    for (const [row, column] of horizontal.arr.concat([currentRow, currentColumn])) {
+      const _key = `${row}_${column}`;
       if (!locations[_key]) locations[_key] = {};
       locations[_key]['horizontal'] = true;
     }

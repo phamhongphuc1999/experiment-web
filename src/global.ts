@@ -290,10 +290,7 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 
 // start caro
 export type TurnType = 0 | 1;
-export type PositionType = {
-  row: number;
-  column: number;
-};
+export type PositionType = [number, number]; //expect [row, column]
 export type RoleType = 'host' | 'guest';
 export type ConnectionType = 'init' | 'connecting' | 'connected';
 export type PlayModeType = 'offline' | 'online' | 'machine';
@@ -302,6 +299,7 @@ export type CaroWinModeType = 'blockOpponent' | 'non-blockOpponent';
 export type CaroSizeBoardType = 3 | 10 | 15;
 export type ChatType = 'yourChat' | 'friendChat';
 export type MyGameType = 'caro' | 'connect4';
+export type MyAllGameType = MyGameType | 'pikachu';
 
 export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
@@ -323,3 +321,20 @@ export type Connect4WinStateType = {
 
 export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 // end caro
+
+// start pikachu
+export type PikachuMoveParamsType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+  board: Array<Array<number>>;
+  sourcePiece: PositionType;
+  targetPiece: PositionType;
+};
+
+export type FindPossibleMoveParamsType = {
+  numberOfRows: number;
+  numberOfColumns: number;
+  board: Array<Array<number>>;
+  ignoreMoves: Array<PositionType>;
+};
+// end pikachu
