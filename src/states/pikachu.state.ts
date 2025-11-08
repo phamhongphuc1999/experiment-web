@@ -18,7 +18,7 @@ type PikachuStateType = {
   board: Array<Array<number>>;
   suggestion: Array<PositionType>;
   fn: {
-    createBoard: () => void;
+    createBoard: (mode: 'newGame' | 'nextRound') => void;
     changeBoard: () => void;
     move: (sourcePiece: PositionType, targetPiece: PositionType) => void;
     updateSuggestion: (path: Array<PositionType>) => void;
@@ -43,15 +43,22 @@ export const usePikachuStore = create<
         board: [],
         suggestion: [],
         fn: {
-          createBoard: () => {
+          createBoard: (mode: 'newGame' | 'nextRound') => {
             set((state) => {
               const { numberOfRows, numberOfColumns } = state.metadata;
               const { board, path } = createNewPikachuBoard(numberOfRows, numberOfColumns);
               state.board = board;
               state.suggestion = path;
-              state.metadata.status = 'playing';
-              state.metadata.remainingChanges = 10;
-              state.metadata.round = 1;
+              if (mode == 'newGame' || state.metadata.round == 8) {
+                state.metadata.status = 'playing';
+                state.metadata.remainingChanges = 10;
+                state.metadata.round = 1;
+              } else {
+                const remainingChanges = state.metadata.remainingChanges;
+                const round = state.metadata.round;
+                state.metadata.remainingChanges = remainingChanges + 1;
+                state.metadata.round = round + 1;
+              }
             });
           },
           changeBoard: () => {

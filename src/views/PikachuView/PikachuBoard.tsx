@@ -1,21 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { isPositionEqual } from 'src/services';
 import { findPossibleMoveWithoutIgnore, performPikachuMove } from 'src/services/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import PathDraw from './PathDraw';
 
 export default function PikachuBoard() {
+  const [selectedPath, setSelectedPath] = useState<Array<PositionType>>([]);
   const {
     board,
     suggestion,
-    fn: { move, updateSuggestion },
+    fn: { move, updateSuggestion, changeBoard, createBoard },
     metadata: { numberOfRows, numberOfColumns },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
+
+  useEffect(() => {
+    if (selectedPath.length === 0) return;
+
+    const timer = setTimeout(() => {
+      setSelectedPath([]);
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [selectedPath]);
 
   function onPieceClick(position: PositionType) {
     if (firstPiece == undefined) setFirstPiece(position);
@@ -29,6 +41,7 @@ export default function PikachuBoard() {
         numberOfColumns,
       });
       if (path) {
+        setSelectedPath(path);
         move(firstPiece, position);
         const _len = suggestion.length;
         if (
@@ -44,7 +57,15 @@ export default function PikachuBoard() {
             numberOfColumns,
           });
           if (path) updateSuggestion(path);
-          // else changeBoard();
+          else if (path === null) {
+            new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
+              changeBoard();
+            });
+          } else {
+            new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
+              createBoard('nextRound');
+            });
+          }
         }
       }
       setFirstPiece(undefined);
@@ -53,6 +74,7 @@ export default function PikachuBoard() {
 
   return (
     <div
+      className="relative"
       style={{
         marginTop: `${PIKACHU_PIECE_HEIGHT}px`,
         marginBottom: `${PIKACHU_PIECE_HEIGHT}px`,
@@ -87,13 +109,13 @@ export default function PikachuBoard() {
                       className={cn(isSelected && 'opacity-50', 'cursor-pointer')}
                     />
                   )}
-                  {isPiece == 0 && <p>{`${row},${column}`}</p>}
                 </div>
               );
             })}
           </div>
         );
       })}
+      {selectedPath.length > 0 && <PathDraw selectedPath={selectedPath} />}
     </div>
   );
 }

@@ -299,6 +299,7 @@ export type CaroWinModeType = 'blockOpponent' | 'non-blockOpponent';
 export type CaroSizeBoardType = 3 | 10 | 15;
 export type ChatType = 'yourChat' | 'friendChat';
 export type MyGameType = 'caro' | 'connect4';
+export type MyAllGameType = MyGameType | 'pikachu';
 
 export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
