@@ -109,3 +109,7 @@ export function isPositionIncludes(position: PositionType, positions: Array<Posi
   });
   return _p.length > 0;
 }
+
+export async function sleep(miniSecond: number) {
+  await new Promise((resolve) => setTimeout(resolve, miniSecond));
+}

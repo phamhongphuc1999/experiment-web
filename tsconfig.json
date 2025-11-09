@@ -34,5 +34,5 @@
     "tailwind.config.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "out", "dist", "nodejs-test"]
+  "exclude": ["node_modules", "out", "dist", "nodejs-test", "coverage"]
 }

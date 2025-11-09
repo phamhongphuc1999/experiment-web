@@ -1,11 +1,14 @@
 'use client';
 
+import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
 import { PositionType } from 'src/global';
+import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
-import { isPositionEqual } from 'src/services';
-import { findPossibleMoveWithoutIgnore, performPikachuMove } from 'src/services/pikachu.utils';
+import { sleep } from 'src/services';
+import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
+import { pikachuBoardTransformByRound } from 'src/services/pikachu/pikachuBoardTransform.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import PathDraw from './PathDraw';
 
@@ -13,11 +16,11 @@ export default function PikachuBoard() {
   const [selectedPath, setSelectedPath] = useState<Array<PositionType>>([]);
   const {
     board,
-    suggestion,
-    fn: { move, updateSuggestion, changeBoard, createBoard },
-    metadata: { numberOfRows, numberOfColumns },
+    fn: { movePath, moveChangeBoard, createBoard },
+    metadata: { numberOfRows, numberOfColumns, isSound, isChangeBoard, round },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
+  const { playMove } = useSoundtrack();
 
   useEffect(() => {
     if (selectedPath.length === 0) return;
@@ -33,39 +36,40 @@ export default function PikachuBoard() {
     if (firstPiece == undefined) setFirstPiece(position);
     else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) setFirstPiece(undefined);
     else {
+      const cloneBoard = cloneDeep(board);
       const path = performPikachuMove({
-        board,
+        board: cloneBoard,
         sourcePiece: firstPiece,
         targetPiece: position,
         numberOfRows,
         numberOfColumns,
       });
       if (path) {
-        setSelectedPath(path);
-        move(firstPiece, position);
-        const _len = suggestion.length;
-        if (
-          isPositionEqual(suggestion[0], firstPiece) ||
-          isPositionEqual(suggestion[0], position) ||
-          isPositionEqual(suggestion[_len - 1], firstPiece) ||
-          isPositionEqual(suggestion[_len - 1], position)
-        ) {
-          const path = findPossibleMoveWithoutIgnore({
-            board,
-            ignoreMoves: [firstPiece, position],
+        const _board = pikachuBoardTransformByRound(
+          {
+            board: cloneBoard,
+            sourcePiece: firstPiece,
+            targetPiece: position,
             numberOfRows,
             numberOfColumns,
+          },
+          round
+        );
+        playMove(isSound);
+        const possiblePath = findPossibleMove({ board: _board, numberOfRows, numberOfColumns });
+        setSelectedPath(path);
+        if (possiblePath)
+          sleep(150).then(() => {
+            movePath(_board, possiblePath);
           });
-          if (path) updateSuggestion(path);
-          else if (path === null) {
-            new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
-              changeBoard();
-            });
-          } else {
-            new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
-              createBoard('nextRound');
-            });
-          }
+        else if (possiblePath === null)
+          sleep(150).then(() => {
+            moveChangeBoard(_board);
+          });
+        else {
+          sleep(200).then(() => {
+            createBoard('nextRound');
+          });
         }
       }
       setFirstPiece(undefined);
@@ -82,6 +86,7 @@ export default function PikachuBoard() {
         marginRight: `${PIKACHU_PIECE_WIDTH}px`,
       }}
     >
+      {isChangeBoard && <div className="absolute inset-0 bg-[#ffffff90]" />}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;
         return (

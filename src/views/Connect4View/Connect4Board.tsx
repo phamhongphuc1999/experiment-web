@@ -14,7 +14,7 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { numberOfRows, numberOfColumns, gameType, isMute },
+    metadata: { numberOfRows, numberOfColumns, gameType, isSound },
     isBlindForceOver,
     steps,
     stepsOrder,
@@ -55,12 +55,12 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
 
     if (steps?.[column] && steps[column].length >= numberOfRows) {
       toast.warning('Invalid move');
-      playError(isMute);
+      playError(isSound);
       if (gameType == 'blind') countNumberOfBlindError(turn);
     } else if (!isWin) {
       move(column);
-      playMove(isMute);
-    } else playError(isMute);
+      playMove(isSound);
+    } else playError(isSound);
   }
 
   const isWin = useMemo(() => {

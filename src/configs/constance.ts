@@ -1,4 +1,9 @@
-import { WeatherDailyVariableType, WeatherHourlyVariableType } from 'src/global';
+import {
+  MyAllGameType,
+  PikachuBoardTransformType,
+  WeatherDailyVariableType,
+  WeatherHourlyVariableType,
+} from 'src/global';
 
 export const ITEM_PER_PAGE = 10;
 export const MAX_CARO_BOARD_SIZE = 50;
@@ -39,8 +44,27 @@ export enum DIALOG_KEY {
   caroInstructionDialog = 'caroInstructionDialog',
   connect4ConfigDialog = 'connect4ConfigDialog',
   connect4InstructionDialog = 'connect4InstructionDialog',
+  pikachuConfigDialog = 'pikachuConfigDialog',
   routingGameDialog = 'routingGameDialog',
+  changeBoardConfirmDialog = 'changeBoardConfirmDialog',
 }
+
+export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {
+  caro: { title: 'Caro' },
+  connect4: { title: 'Connect4' },
+  pikachu: { title: 'Pikachu' },
+};
+
+export const pikachuGameTransformRound: { [round: number]: PikachuBoardTransformType } = {
+  2: 'collapseToBottom',
+  3: 'collapseToTop',
+  4: 'collapseToLeft',
+  5: 'collapseToRight',
+  6: 'divideByHorizontalCenter',
+  7: 'collapseToHorizontalCenter',
+  8: 'divideByVerticalCenter',
+  9: 'collapseToVerticalCenter',
+};
 
 export const WeatherHourlyConfig: {
   [id in WeatherHourlyVariableType]: { id: WeatherHourlyVariableType; title: string };

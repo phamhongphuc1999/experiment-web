@@ -22,11 +22,11 @@ function Connect4ConfigDialogLayout() {
   const {
     fn: { reset, setMetadata },
   } = useConnect4Store();
-  const { playMode, gameType, isMute } = useConnect4ConfigContext();
+  const { playMode, gameType, isSound } = useConnect4ConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMetadata({ playMode, gameType, isMute });
+    setMetadata({ playMode, gameType, isSound });
     setDialog(DIALOG_KEY.connect4ConfigDialog, false);
   }
 

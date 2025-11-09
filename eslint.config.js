@@ -8,10 +8,10 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config([
-  globalIgnores(['dist', '.next']),
+  globalIgnores(['dist', '.next', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
-    ignores: ['/out/**', '/resources/**', '/coverage/**', '/.next/**', 'next-env.d.ts'],
+    ignores: ['/out/**', '/resources/**', '/.next/**', 'next-env.d.ts', 'coverage/**'],
     plugins: {
       import: eslintPluginImport,
       prettier: prettierPlugin,

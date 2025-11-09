@@ -20,7 +20,7 @@ type CaroConfigContextType = {
   winMode: CaroWinModeType;
   isOverride: boolean;
   maxError: number;
-  isMute: boolean;
+  isSound: boolean;
   fn: {
     setSize: Dispatch<SetStateAction<CaroSizeBoardType>>;
     setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
@@ -28,7 +28,7 @@ type CaroConfigContextType = {
     setIsOverride: Dispatch<SetStateAction<boolean>>;
     setMaxError: Dispatch<SetStateAction<number>>;
     setWinMode: Dispatch<SetStateAction<CaroWinModeType>>;
-    setIsMute: Dispatch<SetStateAction<boolean>>;
+    setIsSound: Dispatch<SetStateAction<boolean>>;
   };
 };
 
@@ -39,7 +39,7 @@ const caroConfigContextDefault: CaroConfigContextType = {
   winMode: 'blockOpponent',
   isOverride: false,
   maxError: 5,
-  isMute: true,
+  isSound: true,
   fn: {
     setSize: () => {},
     setPlayMode: () => {},
@@ -47,7 +47,7 @@ const caroConfigContextDefault: CaroConfigContextType = {
     setIsOverride: () => {},
     setMaxError: () => {},
     setWinMode: () => {},
-    setIsMute: () => {},
+    setIsSound: () => {},
   },
 };
 
@@ -66,7 +66,7 @@ export default function CaroConfigProvider({ children }: Props) {
   const [winMode, setWinMode] = useState(metadata.winMode);
   const [isOverride, setIsOverride] = useState(metadata.isOverride);
   const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
-  const [isMute, setIsMute] = useState(metadata.isMute);
+  const [isSound, setIsSound] = useState(metadata.isSound);
 
   useEffect(() => {
     setWinMode(metadata.winMode);
@@ -93,8 +93,8 @@ export default function CaroConfigProvider({ children }: Props) {
   }, [metadata.maxNumberOfBlindError]);
 
   useEffect(() => {
-    setIsMute(metadata.isMute);
-  }, [metadata.isMute]);
+    setIsSound(metadata.isSound);
+  }, [metadata.isSound]);
 
   const contextData = useMemo<CaroConfigContextType>(() => {
     return {
@@ -104,10 +104,10 @@ export default function CaroConfigProvider({ children }: Props) {
       winMode,
       isOverride,
       maxError,
-      isMute,
-      fn: { setSize, setPlayMode, setGameType, setWinMode, setIsOverride, setMaxError, setIsMute },
+      isSound,
+      fn: { setSize, setPlayMode, setGameType, setWinMode, setIsOverride, setMaxError, setIsSound },
     };
-  }, [size, playMode, winMode, gameType, isOverride, maxError, isMute]);
+  }, [size, playMode, winMode, gameType, isOverride, maxError, isSound]);
 
   return <CaroConfigContext.Provider value={contextData}>{children}</CaroConfigContext.Provider>;
 }

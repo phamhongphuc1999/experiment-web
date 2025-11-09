@@ -14,7 +14,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { size: boardSize, isOverride, gameType, isMute },
+    metadata: { size: boardSize, isOverride, gameType, isSound },
     numberOfBlindError,
     isBlindForceOver,
     steps,
@@ -57,18 +57,18 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     if (gameType == 'blind' && steps[location] != undefined) {
       countNumberOfBlindError(turn);
-      playError(isMute);
+      playError(isSound);
     }
 
     if (isOverride) {
       if (!isWin && !shouldDisableBoard && steps[location] != turn) {
-        playMove(isMute);
+        playMove(isSound);
         move(location);
-      } else playError(isMute);
+      } else playError(isSound);
     } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      playMove(isMute);
+      playMove(isSound);
       move(location);
-    } else playError(isMute);
+    } else playError(isSound);
   }
 
   useEffect(() => {

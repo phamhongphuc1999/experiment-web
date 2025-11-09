@@ -12,11 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../../shadcn-ui/dialog';
-import BoardSizeConfig from './BoardSizeConfig';
-import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
 import SoundtrackConfig from '../components/SoundtrackConfig';
+import BoardSizeConfig from './BoardSizeConfig';
+import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
 import WinTypeConfig from './WinTypeConfig';
 
 function CaroConfigDialogLayout() {
@@ -31,13 +31,13 @@ function CaroConfigDialogLayout() {
     gameType,
     isOverride,
     winMode,
-    isMute,
-    fn: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode, setIsMute },
+    isSound,
+    fn: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode, setIsSound },
   } = useCaroConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMetadata({ size, playMode, gameType, isOverride, winMode, isMute });
+    setMetadata({ size, playMode, gameType, isOverride, winMode, isSound });
     if (size != metadata.size) reset();
     setDialog(DIALOG_KEY.caroConfigDialog, false);
   }
@@ -53,7 +53,7 @@ function CaroConfigDialogLayout() {
     setGameType(metadata.gameType);
     setIsOverride(metadata.isOverride);
     setWinMode(metadata.winMode);
-    setIsMute(metadata.isMute);
+    setIsSound(metadata.isSound);
     setDialog(DIALOG_KEY.caroConfigDialog, open);
   }
 

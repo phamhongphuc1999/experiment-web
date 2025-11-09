@@ -1,6 +1,6 @@
 import { PIKACHU_NUMBER_OF_COLUMNS, PIKACHU_NUMBER_OF_ROWS } from 'src/configs/constance';
 import { PositionType } from 'src/global';
-import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu.utils';
+import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -11,6 +11,8 @@ type PikachuMetadataType = {
   remainingChanges: number;
   round: number;
   status: 'init' | 'playing' | 'end';
+  isSound: boolean;
+  isChangeBoard: boolean;
 };
 
 type PikachuStateType = {
@@ -20,8 +22,9 @@ type PikachuStateType = {
   fn: {
     createBoard: (mode: 'newGame' | 'nextRound') => void;
     changeBoard: () => void;
-    move: (sourcePiece: PositionType, targetPiece: PositionType) => void;
-    updateSuggestion: (path: Array<PositionType>) => void;
+    move: (board: Array<Array<number>>) => void;
+    movePath: (board: Array<Array<number>>, path: Array<PositionType>) => void;
+    moveChangeBoard: (board: Array<Array<number>>) => void;
     setMetadata: (metadata: Partial<PikachuMetadataType>) => void;
   };
 };
@@ -39,6 +42,8 @@ export const usePikachuStore = create<
           remainingChanges: 10,
           round: 1,
           status: 'init',
+          isSound: true,
+          isChangeBoard: false,
         },
         board: [],
         suggestion: [],
@@ -53,6 +58,7 @@ export const usePikachuStore = create<
                 state.metadata.status = 'playing';
                 state.metadata.remainingChanges = 10;
                 state.metadata.round = 1;
+                state.metadata.isChangeBoard = false;
               } else {
                 const remainingChanges = state.metadata.remainingChanges;
                 const round = state.metadata.round;
@@ -74,15 +80,21 @@ export const usePikachuStore = create<
               state.metadata.remainingChanges = state.metadata.remainingChanges - 1;
             });
           },
-          move: (sourcePiece: PositionType, targetPiece: PositionType) => {
+          move: (board: Array<Array<number>>) => {
             set((state) => {
-              state.board[sourcePiece[0]][sourcePiece[1]] = 0;
-              state.board[targetPiece[0]][targetPiece[1]] = 0;
+              state.board = board;
             });
           },
-          updateSuggestion: (path: Array<PositionType>) => {
+          movePath: (board: Array<Array<number>>, path: Array<PositionType>) => {
             set((state) => {
+              state.board = board;
               state.suggestion = path;
+            });
+          },
+          moveChangeBoard: (board: Array<Array<number>>) => {
+            set((state) => {
+              state.board = board;
+              state.metadata.isChangeBoard = true;
             });
           },
           setMetadata: (metadata: Partial<PikachuMetadataType>) => {

@@ -11,7 +11,7 @@ type Connect4MetadataType = {
   gameType: CaroGameType;
   status: 'playing' | 'win';
   maxNumberOfBlindError: number;
-  isMute: boolean;
+  isSound: boolean;
 };
 
 type Connect4Type = {
@@ -45,7 +45,7 @@ export const useConnect4Store = create<
           gameType: 'normal',
           status: 'playing',
           maxNumberOfBlindError: 3,
-          isMute: true,
+          isSound: true,
         },
         numberOfBlindError: { 0: 0, 1: 0 },
         isBlindForceOver: false,
