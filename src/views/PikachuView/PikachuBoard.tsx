@@ -54,7 +54,7 @@ export default function PikachuBoard() {
             numberOfRows,
             numberOfColumns,
           },
-          6
+          round
         );
         playMove(isSound);
         const possiblePath = findPossibleMove({ board: _board, numberOfRows, numberOfColumns });

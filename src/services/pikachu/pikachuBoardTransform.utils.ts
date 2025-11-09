@@ -35,7 +35,6 @@ function _toBottom({ board, piece, milestone }: DirectionType) {
   while (counter >= milestone) {
     board[counter][piece[1]] = board[--counter][piece[1]];
   }
-  board[piece[0]][piece[1]] = 0;
 }
 
 function _toTop({ board, piece, milestone }: DirectionType) {
@@ -43,7 +42,6 @@ function _toTop({ board, piece, milestone }: DirectionType) {
   while (counter <= milestone) {
     board[counter][piece[1]] = board[++counter][piece[1]];
   }
-  board[piece[0]][piece[1]] = 0;
 }
 
 function _toLeft({ board, piece, milestone }: DirectionType) {
@@ -51,7 +49,6 @@ function _toLeft({ board, piece, milestone }: DirectionType) {
   while (counter <= milestone) {
     board[piece[0]][counter] = board[piece[0]][++counter];
   }
-  board[piece[0]][piece[1]] = 0;
 }
 
 function _toRight({ board, piece, milestone }: DirectionType) {
@@ -59,7 +56,6 @@ function _toRight({ board, piece, milestone }: DirectionType) {
   while (counter >= milestone) {
     board[piece[0]][counter] = board[piece[0]][--counter];
   }
-  board[piece[0]][piece[1]] = 0;
 }
 
 function collapseToBottom(params: PikachuMoveParamsType, milestone: number) {
@@ -98,11 +94,18 @@ function divideByHorizontalCenter(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece, numberOfRows } = params;
   const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
   const _center = numberOfRows / 2;
-  if (_center >= maxPiece[0]) collapseToTop(params, 1);
-  else if (maxPiece[0] > _center && _center > minPiece[0]) {
-    _toTop({ board, piece: minPiece, milestone: 1 });
-    _toBottom({ board, piece: maxPiece, milestone: numberOfRows });
-  } else collapseToBottom(params, numberOfRows);
+  if (_center >= maxPiece[0]) {
+    collapseToBottom(params, _center);
+    board[maxPiece[0]][maxPiece[1]] = 0;
+    board[minPiece[0]][minPiece[1]] = 0;
+  } else if (_center <= minPiece[0]) {
+    collapseToTop(params, _center);
+    board[maxPiece[0]][maxPiece[1]] = 0;
+    board[minPiece[0]][minPiece[1]] = 0;
+  } else {
+    _toTop({ board, piece: minPiece, milestone: _center });
+    _toBottom({ board, piece: maxPiece, milestone: _center });
+  }
   return board;
 }
 
@@ -111,7 +114,7 @@ function collapseToHorizontalCenter(params: PikachuMoveParamsType) {
   const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
   const _center = numberOfRows / 2;
   if (_center >= maxPiece[0]) collapseToBottom(params, _center);
-  else if (maxPiece[0] > _center && _center > minPiece[0]) {
+  else if (maxPiece[0] > _center && _center >= minPiece[0]) {
     _toBottom({ board, piece: minPiece, milestone: _center });
     _toTop({ board, piece: maxPiece, milestone: _center + 1 });
   } else collapseToTop(params, _center + 1);
