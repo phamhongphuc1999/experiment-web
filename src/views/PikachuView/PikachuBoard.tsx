@@ -2,6 +2,7 @@
 
 import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
@@ -53,7 +54,7 @@ export default function PikachuBoard() {
             numberOfRows,
             numberOfColumns,
           },
-          round
+          6
         );
         playMove(isSound);
         const possiblePath = findPossibleMove({ board: _board, numberOfRows, numberOfColumns });
@@ -62,11 +63,12 @@ export default function PikachuBoard() {
           sleep(150).then(() => {
             movePath(_board, possiblePath);
           });
-        else if (possiblePath === null)
+        else if (possiblePath === null) {
+          toast.warning('Out of move, please change board');
           sleep(150).then(() => {
             moveChangeBoard(_board);
           });
-        else {
+        } else {
           sleep(200).then(() => {
             createBoard('nextRound');
           });
@@ -78,7 +80,7 @@ export default function PikachuBoard() {
 
   return (
     <div
-      className="relative"
+      className="border-ring relative border"
       style={{
         marginTop: `${PIKACHU_PIECE_HEIGHT}px`,
         marginBottom: `${PIKACHU_PIECE_HEIGHT}px`,

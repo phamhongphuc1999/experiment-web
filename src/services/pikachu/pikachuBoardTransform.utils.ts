@@ -1,5 +1,5 @@
 import { pikachuGameTransformRound } from 'src/configs/constance';
-import { PikachuBoardTransformType, PikachuMoveParamsType } from 'src/global';
+import { PikachuBoardTransformType, PikachuMoveParamsType, PositionType } from 'src/global';
 
 function normalBoard(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece } = params;
@@ -8,183 +8,137 @@ function normalBoard(params: PikachuMoveParamsType) {
   return board;
 }
 
-function collapseToBottom(params: PikachuMoveParamsType) {
+function _minMaxByRow(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[0] > piece2[0]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}
+
+function _minMaxByColumn(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[1] > piece2[1]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}
+
+type DirectionType = { board: Array<Array<number>>; piece: PositionType; milestone: number };
+
+function _toBottom({ board, piece, milestone }: DirectionType) {
+  let counter = piece[0];
+  while (counter >= milestone) {
+    board[counter][piece[1]] = board[--counter][piece[1]];
+  }
+  board[piece[0]][piece[1]] = 0;
+}
+
+function _toTop({ board, piece, milestone }: DirectionType) {
+  let counter = piece[0];
+  while (counter <= milestone) {
+    board[counter][piece[1]] = board[++counter][piece[1]];
+  }
+  board[piece[0]][piece[1]] = 0;
+}
+
+function _toLeft({ board, piece, milestone }: DirectionType) {
+  let counter = piece[1];
+  while (counter <= milestone) {
+    board[piece[0]][counter] = board[piece[0]][++counter];
+  }
+  board[piece[0]][piece[1]] = 0;
+}
+
+function _toRight({ board, piece, milestone }: DirectionType) {
+  let counter = piece[1];
+  while (counter >= milestone) {
+    board[piece[0]][counter] = board[piece[0]][--counter];
+  }
+  board[piece[0]][piece[1]] = 0;
+}
+
+function collapseToBottom(params: PikachuMoveParamsType, milestone: number) {
   const { board, sourcePiece, targetPiece } = params;
-
-  let minPiece = sourcePiece;
-  let maxPiece = targetPiece;
-  if (sourcePiece[0] > targetPiece[0]) {
-    minPiece = targetPiece;
-    maxPiece = sourcePiece;
-  }
-  let counter = minPiece[0];
-  while (counter >= 1) {
-    board[counter][minPiece[1]] = board[--counter][minPiece[1]];
-  }
-  counter = maxPiece[0];
-  while (counter >= 1) {
-    board[counter][maxPiece[1]] = board[--counter][maxPiece[1]];
-  }
+  const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
+  _toBottom({ board, piece: minPiece, milestone });
+  _toBottom({ board, piece: maxPiece, milestone });
   return board;
 }
 
-function collapseToTop(params: PikachuMoveParamsType) {
-  const { board, sourcePiece, targetPiece, numberOfRows } = params;
-
-  let minPiece = sourcePiece;
-  let maxPiece = targetPiece;
-  if (sourcePiece[0] > targetPiece[0]) {
-    minPiece = targetPiece;
-    maxPiece = sourcePiece;
-  }
-  let counter = maxPiece[0];
-  while (counter <= numberOfRows) {
-    board[counter][maxPiece[1]] = board[++counter][maxPiece[1]];
-  }
-  counter = minPiece[0];
-  while (counter <= numberOfRows) {
-    board[counter][minPiece[1]] = board[++counter][minPiece[1]];
-  }
-  return board;
-}
-
-function collapseToLeft(params: PikachuMoveParamsType) {
-  const { board, sourcePiece, targetPiece, numberOfColumns } = params;
-
-  let minPiece = sourcePiece;
-  let maxPiece = targetPiece;
-  if (sourcePiece[1] > targetPiece[1]) {
-    minPiece = targetPiece;
-    maxPiece = sourcePiece;
-  }
-  let counter = maxPiece[1];
-  while (counter <= numberOfColumns) {
-    board[maxPiece[0]][counter] = board[maxPiece[0]][++counter];
-  }
-  counter = minPiece[1];
-  while (counter <= numberOfColumns) {
-    board[minPiece[0]][counter] = board[minPiece[0]][++counter];
-  }
-  return board;
-}
-
-function collapseToRight(params: PikachuMoveParamsType) {
+function collapseToTop(params: PikachuMoveParamsType, milestone: number) {
   const { board, sourcePiece, targetPiece } = params;
+  const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
+  _toTop({ board, piece: maxPiece, milestone: milestone });
+  _toTop({ board, piece: minPiece, milestone: milestone });
+  return board;
+}
 
-  let minPiece = sourcePiece;
-  let maxPiece = targetPiece;
-  if (sourcePiece[1] > targetPiece[1]) {
-    minPiece = targetPiece;
-    maxPiece = sourcePiece;
-  }
-  let counter = minPiece[1];
-  while (counter >= 1) {
-    board[minPiece[0]][counter] = board[minPiece[0]][--counter];
-  }
-  counter = maxPiece[1];
-  while (counter >= 1) {
-    board[maxPiece[0]][counter] = board[maxPiece[0]][--counter];
-  }
+function collapseToLeft(params: PikachuMoveParamsType, milestone: number) {
+  const { board, sourcePiece, targetPiece } = params;
+  const { minPiece, maxPiece } = _minMaxByColumn(sourcePiece, targetPiece);
+  _toLeft({ board, piece: maxPiece, milestone: milestone });
+  _toLeft({ board, piece: minPiece, milestone: milestone });
+  return board;
+}
+
+function collapseToRight(params: PikachuMoveParamsType, milestone: number) {
+  const { board, sourcePiece, targetPiece } = params;
+  const { minPiece, maxPiece } = _minMaxByColumn(sourcePiece, targetPiece);
+  _toRight({ board, piece: minPiece, milestone: milestone });
+  _toRight({ board, piece: maxPiece, milestone: milestone });
   return board;
 }
 
 function divideByHorizontalCenter(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece, numberOfRows } = params;
-  let counter = sourcePiece[0];
-  if (sourcePiece[0] <= numberOfRows / 2) {
-    while (counter <= numberOfRows / 2) {
-      board[counter][sourcePiece[1]] = board[++counter][sourcePiece[1]];
-    }
-  } else {
-    while (counter >= numberOfRows / 2) {
-      board[counter][sourcePiece[1]] = board[--counter][sourcePiece[1]];
-    }
-  }
-  counter = targetPiece[0];
-  if (targetPiece[0] <= numberOfRows / 2) {
-    while (counter <= numberOfRows / 2) {
-      board[counter][targetPiece[1]] = board[++counter][targetPiece[1]];
-    }
-  } else {
-    while (counter >= numberOfRows / 2) {
-      board[counter][targetPiece[1]] = board[--counter][targetPiece[1]];
-    }
-  }
+  const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
+  const _center = numberOfRows / 2;
+  if (_center >= maxPiece[0]) collapseToTop(params, 1);
+  else if (maxPiece[0] > _center && _center > minPiece[0]) {
+    _toTop({ board, piece: minPiece, milestone: 1 });
+    _toBottom({ board, piece: maxPiece, milestone: numberOfRows });
+  } else collapseToBottom(params, numberOfRows);
   return board;
 }
 
 function collapseToHorizontalCenter(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece, numberOfRows } = params;
-  let counter = sourcePiece[0];
-  if (sourcePiece[0] <= numberOfRows / 2) {
-    while (counter >= 1) {
-      board[counter][sourcePiece[1]] = board[--counter][sourcePiece[1]];
-    }
-  } else {
-    while (counter <= numberOfRows) {
-      board[counter][sourcePiece[1]] = board[++counter][sourcePiece[1]];
-    }
-  }
-  counter = targetPiece[0];
-  if (targetPiece[0] <= numberOfRows / 2) {
-    while (counter >= 1) {
-      board[counter][targetPiece[1]] = board[--counter][targetPiece[1]];
-    }
-  } else {
-    while (counter <= numberOfRows) {
-      board[counter][targetPiece[1]] = board[++counter][targetPiece[1]];
-    }
-  }
+  const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
+  const _center = numberOfRows / 2;
+  if (_center >= maxPiece[0]) collapseToBottom(params, _center);
+  else if (maxPiece[0] > _center && _center > minPiece[0]) {
+    _toBottom({ board, piece: minPiece, milestone: _center });
+    _toTop({ board, piece: maxPiece, milestone: _center + 1 });
+  } else collapseToTop(params, _center + 1);
   return board;
 }
 
 function divideByVerticalCenter(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece, numberOfColumns } = params;
-  let counter = sourcePiece[1];
-  if (sourcePiece[1] <= numberOfColumns / 2) {
-    while (counter <= numberOfColumns / 2) {
-      board[sourcePiece[0]][counter] = board[sourcePiece[0]][++counter];
-    }
-  } else {
-    while (counter >= numberOfColumns / 2) {
-      board[sourcePiece[0]][counter] = board[sourcePiece[0]][--counter];
-    }
-  }
-  counter = targetPiece[0];
-  if (targetPiece[1] <= numberOfColumns / 2) {
-    while (counter <= numberOfColumns / 2) {
-      board[targetPiece[0]][counter] = board[targetPiece[0]][++counter];
-    }
-  } else {
-    while (counter >= numberOfColumns / 2) {
-      board[targetPiece[0]][counter] = board[targetPiece[0]][--counter];
-    }
-  }
+  const { minPiece, maxPiece } = _minMaxByColumn(sourcePiece, targetPiece);
+  const _center = numberOfColumns / 2;
+  if (_center >= maxPiece[1]) collapseToLeft(params, params.numberOfColumns);
+  else if (maxPiece[1] > _center && _center > minPiece[1]) {
+    _toLeft({ board, piece: minPiece, milestone: _center });
+    _toRight({ board, piece: maxPiece, milestone: _center + 1 });
+  } else collapseToRight(params, 1);
   return board;
 }
 
 function collapseToVerticalCenter(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece, numberOfColumns } = params;
-  let counter = sourcePiece[0];
-  if (sourcePiece[1] <= numberOfColumns / 2) {
-    while (counter >= 1) {
-      board[sourcePiece[0]][counter] = board[sourcePiece[0]][--counter];
-    }
-  } else {
-    while (counter <= numberOfColumns) {
-      board[sourcePiece[0]][counter] = board[sourcePiece[0]][++counter];
-    }
-  }
-  counter = targetPiece[0];
-  if (targetPiece[1] <= numberOfColumns / 2) {
-    while (counter >= 1) {
-      board[targetPiece[0]][counter] = board[targetPiece[0]][--counter];
-    }
-  } else {
-    while (counter <= numberOfColumns) {
-      board[targetPiece[0]][counter] = board[targetPiece[0]][++counter];
-    }
-  }
+  const { minPiece, maxPiece } = _minMaxByColumn(sourcePiece, targetPiece);
+  const _center = numberOfColumns / 2;
+  if (_center >= maxPiece[1]) collapseToRight(params, 1);
+  else if (maxPiece[1] > _center && _center > minPiece[1]) {
+    _toRight({ board, piece: minPiece, milestone: 1 });
+    _toLeft({ board, piece: maxPiece, milestone: numberOfColumns });
+  } else collapseToLeft(params, numberOfColumns);
   return board;
 }
 
@@ -192,10 +146,10 @@ const configs: {
   [mode in PikachuBoardTransformType]: (params: PikachuMoveParamsType) => Array<Array<number>>;
 } = {
   normal: normalBoard,
-  collapseToBottom,
-  collapseToTop,
-  collapseToLeft,
-  collapseToRight,
+  collapseToBottom: (params) => collapseToBottom(params, 1),
+  collapseToTop: (params) => collapseToTop(params, params.numberOfRows),
+  collapseToLeft: (params) => collapseToLeft(params, params.numberOfColumns),
+  collapseToRight: (params) => collapseToRight(params, 1),
   divideByHorizontalCenter,
   collapseToHorizontalCenter,
   divideByVerticalCenter,
