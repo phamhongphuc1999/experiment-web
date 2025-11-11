@@ -9,7 +9,7 @@ import { usePikachuStore } from 'src/states/pikachu.state';
 
 export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
-    metadata: { remainingChanges, round, isChangeBoard, isSound },
+    metadata: { remainingChanges, round, isSound },
     fn: { createBoard, changeBoard, setMetadata },
   } = usePikachuStore();
 
@@ -41,11 +41,9 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
       </div>
       <div className="flex items-center gap-2">
         <Button onClick={onNewGame}>New game</Button>
-        {isChangeBoard && (
-          <Button variant="outline" onClick={onChangeBoard}>
-            Change board
-          </Button>
-        )}
+        <Button variant="outline" onClick={onChangeBoard}>
+          Change board
+        </Button>
       </div>
     </div>
   );

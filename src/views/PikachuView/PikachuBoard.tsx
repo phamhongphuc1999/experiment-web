@@ -2,6 +2,7 @@
 
 import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
@@ -20,7 +21,7 @@ export default function PikachuBoard() {
     metadata: { numberOfRows, numberOfColumns, isSound, isChangeBoard, round },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
-  const { playMove } = useSoundtrack();
+  const { playMove, playError } = useSoundtrack();
 
   useEffect(() => {
     if (selectedPath.length === 0) return;
@@ -34,8 +35,10 @@ export default function PikachuBoard() {
 
   function onPieceClick(position: PositionType) {
     if (firstPiece == undefined) setFirstPiece(position);
-    else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) setFirstPiece(undefined);
-    else {
+    else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) {
+      setFirstPiece(undefined);
+      playError(isSound);
+    } else {
       const cloneBoard = cloneDeep(board);
       const path = performPikachuMove({
         board: cloneBoard,
@@ -62,23 +65,24 @@ export default function PikachuBoard() {
           sleep(150).then(() => {
             movePath(_board, possiblePath);
           });
-        else if (possiblePath === null)
+        else if (possiblePath === null) {
+          toast.warning('Out of move, please change board');
           sleep(150).then(() => {
             moveChangeBoard(_board);
           });
-        else {
+        } else {
           sleep(200).then(() => {
             createBoard('nextRound');
           });
         }
-      }
+      } else playError(isSound);
       setFirstPiece(undefined);
     }
   }
 
   return (
     <div
-      className="relative"
+      className="border-ring relative border"
       style={{
         marginTop: `${PIKACHU_PIECE_HEIGHT}px`,
         marginBottom: `${PIKACHU_PIECE_HEIGHT}px`,

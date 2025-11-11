@@ -13,6 +13,7 @@ import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import SoundtrackConfig from '../components/SoundtrackConfig';
+import BoardSizeConfig from './BoardSizeConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
 
 function PikachuConfigDialogLayout() {
@@ -23,17 +24,26 @@ function PikachuConfigDialogLayout() {
   } = usePikachuStore();
   const {
     isSound,
-    fn: { setIsSound },
+    size,
+    fn: { setIsSound, setSize },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMetadata({ isSound });
+    let status: 'init' | 'playing' | 'end' | undefined = undefined;
+    if (size.numberOfRows != metadata.numberOfRows) status = 'init';
+    setMetadata({
+      isSound,
+      numberOfRows: size.numberOfRows,
+      numberOfColumns: size.numberOfColumns,
+      status,
+    });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
 
   function onOpenChange(open: boolean) {
     setIsSound(metadata.isSound);
+    setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setDialog(DIALOG_KEY.caroConfigDialog, open);
   }
 
@@ -53,6 +63,7 @@ function PikachuConfigDialogLayout() {
           <DialogTitle>Pikachu config</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
+          <BoardSizeConfig />
           <SoundtrackConfig game="pikachu" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
