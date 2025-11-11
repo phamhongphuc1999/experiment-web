@@ -1,4 +1,3 @@
-import { PIKACHU_NUMBER_OF_COLUMNS, PIKACHU_NUMBER_OF_ROWS } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
@@ -8,6 +7,7 @@ import { immer } from 'zustand/middleware/immer';
 type PikachuMetadataType = {
   numberOfRows: number;
   numberOfColumns: number;
+  numberOfLines: number;
   remainingChanges: number;
   round: number;
   status: 'init' | 'playing' | 'end';
@@ -37,8 +37,9 @@ export const usePikachuStore = create<
     immer((set) => {
       return {
         metadata: {
-          numberOfRows: PIKACHU_NUMBER_OF_ROWS,
-          numberOfColumns: PIKACHU_NUMBER_OF_COLUMNS,
+          numberOfRows: 9,
+          numberOfColumns: 16,
+          numberOfLines: 2,
           remainingChanges: 20,
           round: 1,
           status: 'init',
@@ -50,8 +51,12 @@ export const usePikachuStore = create<
         fn: {
           createBoard: (mode: 'newGame' | 'nextRound') => {
             set((state) => {
-              const { numberOfRows, numberOfColumns } = state.metadata;
-              const { board, path } = createNewPikachuBoard(numberOfRows, numberOfColumns);
+              const { numberOfRows, numberOfColumns, numberOfLines } = state.metadata;
+              const { board, path } = createNewPikachuBoard(
+                numberOfRows,
+                numberOfColumns,
+                numberOfLines
+              );
               state.board = board;
               state.suggestion = path;
               if (mode == 'newGame' || state.metadata.round == 9) {
@@ -69,11 +74,12 @@ export const usePikachuStore = create<
           },
           changeBoard: () => {
             set((state) => {
-              const { numberOfRows, numberOfColumns } = state.metadata;
+              const { numberOfRows, numberOfColumns, numberOfLines } = state.metadata;
               const { board, path } = changePikachuBoard(
                 state.board,
                 numberOfRows,
-                numberOfColumns
+                numberOfColumns,
+                numberOfLines
               );
               state.board = board;
               state.suggestion = path;

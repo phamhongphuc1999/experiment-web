@@ -25,7 +25,8 @@ function PikachuConfigDialogLayout() {
   const {
     isSound,
     size,
-    fn: { setIsSound, setSize },
+    numberOfLines,
+    fn: { setIsSound, setSize, setNumberOfLines },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
@@ -36,18 +37,21 @@ function PikachuConfigDialogLayout() {
       isSound,
       numberOfRows: size.numberOfRows,
       numberOfColumns: size.numberOfColumns,
+      numberOfLines,
+      remainingChanges: numberOfLines == 2 ? 20 : 10,
       status,
     });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
 
   function onOpenChange(open: boolean) {
-    setIsSound(metadata.isSound);
-    setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setDialog(DIALOG_KEY.pikachuConfigDialog, open);
   }
 
   function onCancel() {
+    setIsSound(metadata.isSound);
+    setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
+    setNumberOfLines(metadata.numberOfLines);
     onOpenChange(false);
   }
 
@@ -65,6 +69,23 @@ function PikachuConfigDialogLayout() {
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <BoardSizeConfig />
           <SoundtrackConfig game="pikachu" />
+          <div className="mt-2 rounded-sm border p-2">
+            <p className="text-sm font-bold">Number of lines</p>
+            <div className="mt-2 flex items-center gap-2">
+              <Button
+                variant={numberOfLines == 2 ? 'default' : 'outline'}
+                onClick={() => setNumberOfLines(2)}
+              >
+                2
+              </Button>
+              <Button
+                variant={numberOfLines == 3 ? 'default' : 'outline'}
+                onClick={() => setNumberOfLines(3)}
+              >
+                3
+              </Button>
+            </div>
+          </div>
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel

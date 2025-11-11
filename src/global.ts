@@ -329,13 +329,14 @@ export type PikachuMoveParamsType = {
   numberOfColumns: number;
   sourcePiece: PositionType;
   targetPiece: PositionType;
+  numberOfLines: number;
 };
 
 export type FindPossibleMoveParamsType = {
   numberOfRows: number;
   numberOfColumns: number;
   board: Array<Array<number>>;
-  ignoreMoves: Array<PositionType>;
+  numberOfLines: number;
 };
 
 export type PikachuBoardTransformType =

@@ -18,7 +18,7 @@ export default function PikachuBoard() {
   const {
     board,
     fn: { movePath, moveChangeBoard, createBoard },
-    metadata: { numberOfRows, numberOfColumns, isSound, isChangeBoard, round },
+    metadata: { numberOfRows, numberOfColumns, numberOfLines, isSound, isChangeBoard, round },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
   const { playMove, playError } = useSoundtrack();
@@ -34,6 +34,7 @@ export default function PikachuBoard() {
   }, [selectedPath]);
 
   function onPieceClick(position: PositionType) {
+    if (board[position[0]][position[1]] == 0) return;
     if (firstPiece == undefined) setFirstPiece(position);
     else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) {
       setFirstPiece(undefined);
@@ -46,6 +47,7 @@ export default function PikachuBoard() {
         targetPiece: position,
         numberOfRows,
         numberOfColumns,
+        numberOfLines,
       });
       if (path) {
         const _board = pikachuBoardTransformByRound(
@@ -55,11 +57,17 @@ export default function PikachuBoard() {
             targetPiece: position,
             numberOfRows,
             numberOfColumns,
+            numberOfLines,
           },
           round
         );
         playMove(isSound);
-        const possiblePath = findPossibleMove({ board: _board, numberOfRows, numberOfColumns });
+        const possiblePath = findPossibleMove({
+          board: _board,
+          numberOfRows,
+          numberOfColumns,
+          numberOfLines,
+        });
         setSelectedPath(path);
         if (possiblePath)
           sleep(150).then(() => {
