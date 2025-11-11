@@ -44,7 +44,7 @@ function PikachuConfigDialogLayout() {
   function onOpenChange(open: boolean) {
     setIsSound(metadata.isSound);
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
-    setDialog(DIALOG_KEY.caroConfigDialog, open);
+    setDialog(DIALOG_KEY.pikachuConfigDialog, open);
   }
 
   function onCancel() {
@@ -52,7 +52,7 @@ function PikachuConfigDialogLayout() {
   }
 
   return (
-    <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
+    <Dialog open={dialog[DIALOG_KEY.pikachuConfigDialog]} onOpenChange={onOpenChange}>
       <DialogTrigger>
         <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
           <Setting2 size={16} />

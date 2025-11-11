@@ -39,7 +39,7 @@ export const usePikachuStore = create<
         metadata: {
           numberOfRows: PIKACHU_NUMBER_OF_ROWS,
           numberOfColumns: PIKACHU_NUMBER_OF_COLUMNS,
-          remainingChanges: 10,
+          remainingChanges: 20,
           round: 1,
           status: 'init',
           isSound: true,
@@ -54,9 +54,9 @@ export const usePikachuStore = create<
               const { board, path } = createNewPikachuBoard(numberOfRows, numberOfColumns);
               state.board = board;
               state.suggestion = path;
-              if (mode == 'newGame' || state.metadata.round == 8) {
+              if (mode == 'newGame' || state.metadata.round == 9) {
                 state.metadata.status = 'playing';
-                state.metadata.remainingChanges = 10;
+                state.metadata.remainingChanges = 20;
                 state.metadata.round = 1;
                 state.metadata.isChangeBoard = false;
               } else {

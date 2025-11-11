@@ -11,10 +11,8 @@ export const MAX_CONNECT4_BOARD_SIZE = 80;
 
 export const PIKACHU_NUMBER_OF_ROWS = 9;
 export const PIKACHU_NUMBER_OF_COLUMNS = 16;
-// export const PIKACHU_NUMBER_OF_ROWS = 4;
-// export const PIKACHU_NUMBER_OF_COLUMNS = 3;
-export const PIKACHU_PIECE_WIDTH = 36;
-export const PIKACHU_PIECE_HEIGHT = 46;
+export const PIKACHU_PIECE_WIDTH = 40;
+export const PIKACHU_PIECE_HEIGHT = 50;
 
 export const LS = {
   playMode: 'playMode',

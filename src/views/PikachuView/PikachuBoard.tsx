@@ -116,6 +116,7 @@ export default function PikachuBoard() {
                       src={`/pikachu/pieces${_index}.png`}
                       alt={`${row}_${column}`}
                       className={cn(isSelected && 'opacity-50', 'cursor-pointer')}
+                      style={{ width: PIKACHU_PIECE_WIDTH - 2, height: PIKACHU_PIECE_HEIGHT - 2 }}
                     />
                   )}
                 </div>

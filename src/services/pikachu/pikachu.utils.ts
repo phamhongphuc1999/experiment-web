@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash.clonedeep';
 import { FindPossibleMoveParamsType, PikachuMoveParamsType, PositionType } from 'src/global';
 import { isPositionEqual, randomSubGroup } from '..';
 import Queue from '../Queue';
@@ -186,31 +185,6 @@ export function findPossibleMove(params: Omit<FindPossibleMoveParamsType, 'ignor
       if (board[i][j] > 0) {
         counter++;
         const path = findPikachuPath({ numberOfRows, numberOfColumns, board, sourcePiece: [i, j] });
-        if (path) return path;
-      }
-    }
-  }
-  if (counter > 0) return null;
-  return undefined;
-}
-
-export function findPossibleMoveWithoutIgnore(params: FindPossibleMoveParamsType) {
-  const { numberOfRows, numberOfColumns, board, ignoreMoves } = params;
-  const _board = cloneDeep(board);
-  for (const ignoreMove of ignoreMoves) {
-    _board[ignoreMove[0]][ignoreMove[1]] = 0;
-  }
-  let counter = 0;
-  for (let i = 1; i <= numberOfRows; i++) {
-    for (let j = 1; j <= numberOfColumns; j++) {
-      if (_board[i][j] > 0) {
-        counter++;
-        const path = findPikachuPath({
-          numberOfRows,
-          numberOfColumns,
-          board: _board,
-          sourcePiece: [i, j],
-        });
         if (path) return path;
       }
     }
