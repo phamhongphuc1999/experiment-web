@@ -21,7 +21,7 @@ export default function PikachuBoard() {
     metadata: { numberOfRows, numberOfColumns, isSound, isChangeBoard, round },
   } = usePikachuStore();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
-  const { playMove } = useSoundtrack();
+  const { playMove, playError } = useSoundtrack();
 
   useEffect(() => {
     if (selectedPath.length === 0) return;
@@ -35,8 +35,10 @@ export default function PikachuBoard() {
 
   function onPieceClick(position: PositionType) {
     if (firstPiece == undefined) setFirstPiece(position);
-    else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) setFirstPiece(undefined);
-    else {
+    else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) {
+      setFirstPiece(undefined);
+      playError(isSound);
+    } else {
       const cloneBoard = cloneDeep(board);
       const path = performPikachuMove({
         board: cloneBoard,
@@ -73,7 +75,7 @@ export default function PikachuBoard() {
             createBoard('nextRound');
           });
         }
-      }
+      } else playError(isSound);
       setFirstPiece(undefined);
     }
   }

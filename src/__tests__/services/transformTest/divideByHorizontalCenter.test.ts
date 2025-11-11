@@ -2,7 +2,7 @@ import { pikachuBoardTransformByRound } from 'src/services/pikachu/pikachuBoardT
 import { describe, expect, it } from 'vitest';
 
 describe('Test pikachu transform', () => {
-  it('divideByHorizontalCenter', () => {
+  it('divideByHorizontalCenter1', () => {
     const board = pikachuBoardTransformByRound(
       {
         board: [
@@ -28,6 +28,60 @@ describe('Test pikachu transform', () => {
       [0, 4, 2, 4, 0],
       [0, 5, 5, 6, 0],
       [0, 6, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+  });
+  it('divideByHorizontalCenter2', () => {
+    const board = pikachuBoardTransformByRound(
+      {
+        board: [
+          [0, 0, 0, 0, 0],
+          [0, 3, 1, 0, 0],
+          [0, 5, 1, 3, 0],
+          [0, 4, 2, 0, 0],
+          [0, 5, 2, 4, 0],
+          [0, 0, 0, 0, 0],
+        ],
+        sourcePiece: [3, 2],
+        targetPiece: [4, 2],
+        numberOfRows: 4,
+        numberOfColumns: 3,
+      },
+      6
+    );
+    expect(board).toEqual([
+      [0, 0, 0, 0, 0],
+      [0, 3, 1, 0, 0],
+      [0, 5, 1, 3, 0],
+      [0, 4, 0, 0, 0],
+      [0, 5, 0, 4, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+  });
+  it('divideByHorizontalCenter3', () => {
+    const board = pikachuBoardTransformByRound(
+      {
+        board: [
+          [0, 0, 0, 0, 0],
+          [0, 3, 1, 0, 0],
+          [0, 5, 1, 3, 0],
+          [0, 4, 2, 0, 0],
+          [0, 5, 2, 4, 0],
+          [0, 0, 0, 0, 0],
+        ],
+        sourcePiece: [1, 2],
+        targetPiece: [2, 2],
+        numberOfRows: 4,
+        numberOfColumns: 3,
+      },
+      6
+    );
+    expect(board).toEqual([
+      [0, 0, 0, 0, 0],
+      [0, 3, 0, 0, 0],
+      [0, 5, 0, 3, 0],
+      [0, 4, 2, 0, 0],
+      [0, 5, 2, 4, 0],
       [0, 0, 0, 0, 0],
     ]);
   });

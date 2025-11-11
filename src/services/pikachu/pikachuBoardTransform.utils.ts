@@ -99,7 +99,7 @@ function divideByHorizontalCenter(params: PikachuMoveParamsType) {
   const { minPiece, maxPiece } = _minMaxByRow(sourcePiece, targetPiece);
   const _center = Math.floor(numberOfRows / 2);
   if (_center >= maxPiece[0]) collapseToTop(params, _center);
-  else if (_center < minPiece[0]) collapseToBottom(params, _center);
+  else if (_center < minPiece[0]) collapseToBottom(params, _center + 1);
   else {
     _toTop({ board, piece: minPiece, milestone: _center });
     _toBottom({ board, piece: maxPiece, milestone: _center + 1 });
@@ -125,7 +125,7 @@ function divideByVerticalCenter(params: PikachuMoveParamsType) {
   const { minPiece, maxPiece } = _minMaxByColumn(sourcePiece, targetPiece);
   const _center = Math.floor(numberOfColumns / 2);
   if (_center >= maxPiece[1]) collapseToLeft(params, _center);
-  else if (_center < minPiece[1]) collapseToRight(params, _center);
+  else if (_center < minPiece[1]) collapseToRight(params, _center + 1);
   else {
     _toLeft({ board, piece: minPiece, milestone: _center });
     _toRight({ board, piece: maxPiece, milestone: _center + 1 });
