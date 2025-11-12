@@ -2,6 +2,7 @@
 
 import { ComponentProps, useCallback } from 'react';
 import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
+import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
@@ -47,6 +48,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
       <div className="flex items-center gap-2">
         <RoutingGameDialog game="pikachu" />
         <PikachuConfigDialog />
+        <PikachuInstructionDialog />
         <p className="font-semibold">{`Round: ${round}`}</p>
         <p className="font-semibold">{`Changes: ${remainingChanges}`}</p>
         <p className="font-semibold">{`Time: ${remainingTime}s`}</p>

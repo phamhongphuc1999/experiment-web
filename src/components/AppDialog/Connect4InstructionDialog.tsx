@@ -26,7 +26,7 @@ export default function Connect4InstructionDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">
         <DialogHeader>
-          <DialogTitle>Connect 4 instruction</DialogTitle>
+          <DialogTitle>Connect4 instruction</DialogTitle>
         </DialogHeader>
         <div className="scroll-hidden h-fit max-h-[75vh] overflow-auto">
           <p className="text-lg">1. How to play?</p>

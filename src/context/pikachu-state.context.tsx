@@ -16,17 +16,21 @@ const configs: { [key: number]: number } = { 9: 3, 6: 2, 4: 2 };
 
 export type PikachuStateContextType = {
   remainingTime: number;
+  isPaused: boolean;
   fn: {
-    setRemainingTime: Dispatch<SetStateAction<number>>;
     move: () => void;
+    setRemainingTime: Dispatch<SetStateAction<number>>;
+    setIsPaused: Dispatch<SetStateAction<boolean>>;
   };
 };
 
 const pikachuStateContextDefault: PikachuStateContextType = {
   remainingTime: 300,
+  isPaused: false,
   fn: {
-    setRemainingTime: () => {},
     move: () => {},
+    setRemainingTime: () => {},
+    setIsPaused: () => {},
   },
 };
 
@@ -38,6 +42,7 @@ interface Props {
 
 export default function PikachuStateProvider({ children }: Props) {
   const [remainingTime, setRemainingTime] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const { metadata, fn } = usePikachuStore();
 
   useEffect(() => {
@@ -45,12 +50,12 @@ export default function PikachuStateProvider({ children }: Props) {
   }, [metadata.remainingTime]);
 
   useEffect(() => {
-    if (remainingTime == 0 || metadata.status != 'playing') return;
+    if (remainingTime == 0 || metadata.status != 'playing' || isPaused) return;
     const timer = setInterval(() => {
       setRemainingTime((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [remainingTime, metadata.status]);
+  }, [remainingTime, metadata.status, isPaused]);
 
   const _callback = useCallback(() => {
     fn.setMetadata({ remainingTime });
@@ -63,13 +68,25 @@ export default function PikachuStateProvider({ children }: Props) {
     };
   }, [_callback]);
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) setIsPaused(true);
+      else setIsPaused(false);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
   const _move = useCallback(() => {
     if (metadata.timeConfigType == 'cumulative')
       setRemainingTime((prev) => prev + configs[metadata.numberOfRows]);
   }, [metadata.timeConfigType, metadata.numberOfRows]);
 
   return (
-    <PikachuContext.Provider value={{ remainingTime, fn: { setRemainingTime, move: _move } }}>
+    <PikachuContext.Provider
+      value={{ remainingTime, isPaused, fn: { move: _move, setRemainingTime, setIsPaused } }}
+    >
       {children}
     </PikachuContext.Provider>
   );
