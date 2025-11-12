@@ -1,4 +1,4 @@
-import { PositionType } from 'src/global';
+import { PikachuTimeType, PositionType } from 'src/global';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -9,10 +9,13 @@ type PikachuMetadataType = {
   numberOfColumns: number;
   numberOfLines: number;
   remainingChanges: number;
+  remainingTime: number;
+  maxRemainingTime: number;
   round: number;
-  status: 'init' | 'playing' | 'end';
+  status: 'init' | 'playing' | 'end' | 'paused';
   isSound: boolean;
   isChangeBoard: boolean;
+  timeConfigType: PikachuTimeType;
 };
 
 type PikachuStateType = {
@@ -41,10 +44,13 @@ export const usePikachuStore = create<
           numberOfColumns: 16,
           numberOfLines: 2,
           remainingChanges: 20,
+          remainingTime: 720,
+          maxRemainingTime: 720,
           round: 1,
           status: 'init',
           isSound: true,
           isChangeBoard: false,
+          timeConfigType: 'normal',
         },
         board: [],
         suggestion: [],
@@ -59,9 +65,11 @@ export const usePikachuStore = create<
               );
               state.board = board;
               state.suggestion = path;
+              state.metadata.remainingTime = state.metadata.maxRemainingTime;
               if (mode == 'newGame' || state.metadata.round == 9) {
                 state.metadata.status = 'playing';
-                state.metadata.remainingChanges = 20;
+                if (state.metadata.numberOfLines == 2) state.metadata.remainingChanges = 20;
+                else state.metadata.remainingChanges = 10;
                 state.metadata.round = 1;
                 state.metadata.isChangeBoard = false;
               } else {
@@ -112,7 +120,7 @@ export const usePikachuStore = create<
       };
     }),
     {
-      name: 'experiment.pikachu',
+      name: 'experiment.pikachu.v1',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) return { ...(persistedState as PikachuStateType) };

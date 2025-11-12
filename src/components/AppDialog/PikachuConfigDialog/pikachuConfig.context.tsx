@@ -10,16 +10,19 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { PikachuTimeType } from 'src/global';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
 type PikachuConfigContextType = {
   isSound: boolean;
   size: { numberOfRows: number; numberOfColumns: number };
   numberOfLines: number;
+  timeConfigType: PikachuTimeType;
   fn: {
     setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
+    setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
   };
 };
 
@@ -27,7 +30,13 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   isSound: true,
   size: { numberOfRows: 16, numberOfColumns: 9 },
   numberOfLines: 2,
-  fn: { setIsSound: () => {}, setSize: () => {}, setNumberOfLines: () => {} },
+  timeConfigType: 'normal',
+  fn: {
+    setIsSound: () => {},
+    setSize: () => {},
+    setNumberOfLines: () => {},
+    setTimeConfigType: () => {},
+  },
 };
 
 const PikachuConfigContext = createContext<PikachuConfigContextType>(pikachuConfigContextDefault);
@@ -39,6 +48,7 @@ interface Props {
 export default function PikachuConfigProvider({ children }: Props) {
   const { metadata } = usePikachuStore();
   const [isSound, setIsSound] = useState(metadata.isSound);
+  const [timeConfigType, setTimeConfigType] = useState<PikachuTimeType>('normal');
   const [size, setSize] = useState<{ numberOfRows: number; numberOfColumns: number }>({
     numberOfRows: 16,
     numberOfColumns: 9,
@@ -57,9 +67,19 @@ export default function PikachuConfigProvider({ children }: Props) {
     setNumberOfLines(metadata.numberOfLines);
   }, [metadata.numberOfLines]);
 
+  useEffect(() => {
+    setTimeConfigType(metadata.timeConfigType);
+  }, [metadata.timeConfigType]);
+
   const contextData = useMemo<PikachuConfigContextType>(() => {
-    return { isSound, size, numberOfLines, fn: { setIsSound, setSize, setNumberOfLines } };
-  }, [isSound, size, numberOfLines]);
+    return {
+      isSound,
+      size,
+      numberOfLines,
+      timeConfigType,
+      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType },
+    };
+  }, [isSound, size, numberOfLines, timeConfigType]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

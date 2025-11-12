@@ -323,6 +323,8 @@ export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 // end caro
 
 // start pikachu
+export type PikachuTimeType = 'normal' | 'cumulative';
+
 export type PikachuMoveParamsType = {
   board: Array<Array<number>>;
   numberOfRows: number;

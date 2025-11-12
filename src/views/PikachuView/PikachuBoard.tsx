@@ -4,6 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
+import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
@@ -18,8 +19,20 @@ export default function PikachuBoard() {
   const {
     board,
     fn: { movePath, moveChangeBoard, createBoard },
-    metadata: { numberOfRows, numberOfColumns, numberOfLines, isSound, isChangeBoard, round },
+    metadata: {
+      numberOfRows,
+      numberOfColumns,
+      numberOfLines,
+      isSound,
+      isChangeBoard,
+      round,
+      status,
+      maxRemainingTime,
+    },
   } = usePikachuStore();
+  const {
+    fn: { move, setRemainingTime },
+  } = usePikachuStateContext();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
   const { playMove, playError } = useSoundtrack();
 
@@ -71,15 +84,18 @@ export default function PikachuBoard() {
         setSelectedPath(path);
         if (possiblePath)
           sleep(150).then(() => {
+            move();
             movePath(_board, possiblePath);
           });
         else if (possiblePath === null) {
           toast.warning('Out of move, please change board');
           sleep(150).then(() => {
+            move();
             moveChangeBoard(_board);
           });
         } else {
           sleep(200).then(() => {
+            setRemainingTime((_) => maxRemainingTime);
             createBoard('nextRound');
           });
         }
@@ -98,7 +114,7 @@ export default function PikachuBoard() {
         marginRight: `${PIKACHU_PIECE_WIDTH}px`,
       }}
     >
-      {isChangeBoard && <div className="absolute inset-0 bg-[#ffffff90]" />}
+      {isChangeBoard && <div className="absolute inset-0 bg-black/50" />}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;
         return (
@@ -133,6 +149,7 @@ export default function PikachuBoard() {
           </div>
         );
       })}
+      {status == 'paused' && <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-md" />}
       {selectedPath.length > 0 && <PathDraw selectedPath={selectedPath} />}
     </div>
   );

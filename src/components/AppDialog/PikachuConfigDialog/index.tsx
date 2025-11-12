@@ -14,7 +14,9 @@ import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
+import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
+import TimeTypeConfig from './TimeTypeConfig';
 
 function PikachuConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
@@ -26,20 +28,27 @@ function PikachuConfigDialogLayout() {
     isSound,
     size,
     numberOfLines,
-    fn: { setIsSound, setSize, setNumberOfLines },
+    timeConfigType,
+    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    let status: 'init' | 'playing' | 'end' | undefined = undefined;
-    if (size.numberOfRows != metadata.numberOfRows) status = 'init';
+    const _figure = size.numberOfRows == 9 ? 5 : size.numberOfRows == 6 ? 2 : 1;
+    const maxRemainingTime = Math.floor(
+      timeConfigType == 'normal'
+        ? size.numberOfRows * size.numberOfColumns * _figure
+        : (size.numberOfRows * size.numberOfColumns * _figure) / 2
+    );
     setMetadata({
       isSound,
       numberOfRows: size.numberOfRows,
       numberOfColumns: size.numberOfColumns,
       numberOfLines,
       remainingChanges: numberOfLines == 2 ? 20 : 10,
-      status,
+      status: 'init',
+      timeConfigType,
+      maxRemainingTime,
     });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
@@ -52,6 +61,7 @@ function PikachuConfigDialogLayout() {
     setIsSound(metadata.isSound);
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setNumberOfLines(metadata.numberOfLines);
+    setTimeConfigType(metadata.timeConfigType);
     onOpenChange(false);
   }
 
@@ -69,23 +79,8 @@ function PikachuConfigDialogLayout() {
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <BoardSizeConfig />
           <SoundtrackConfig game="pikachu" />
-          <div className="mt-2 rounded-sm border p-2">
-            <p className="text-sm font-bold">Number of lines</p>
-            <div className="mt-2 flex items-center gap-2">
-              <Button
-                variant={numberOfLines == 2 ? 'default' : 'outline'}
-                onClick={() => setNumberOfLines(2)}
-              >
-                2
-              </Button>
-              <Button
-                variant={numberOfLines == 3 ? 'default' : 'outline'}
-                onClick={() => setNumberOfLines(3)}
-              >
-                3
-              </Button>
-            </div>
-          </div>
+          <LineConfig />
+          <TimeTypeConfig />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel
