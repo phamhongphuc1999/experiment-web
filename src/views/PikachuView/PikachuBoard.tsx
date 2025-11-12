@@ -106,7 +106,7 @@ export default function PikachuBoard() {
 
   return (
     <div
-      className="border-ring relative border"
+      className="border-ring relative flex flex-col gap-y-px border"
       style={{
         marginTop: `${PIKACHU_PIECE_HEIGHT}px`,
         marginBottom: `${PIKACHU_PIECE_HEIGHT}px`,
@@ -118,7 +118,7 @@ export default function PikachuBoard() {
       {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;
         return (
-          <div key={row} className="flex items-center">
+          <div key={row} className="flex items-center gap-x-px">
             {Array.from({ length: numberOfColumns }).map((_, _column) => {
               const column = _column + 1;
               const _index = board[row][column];
@@ -132,15 +132,20 @@ export default function PikachuBoard() {
                     width: `${PIKACHU_PIECE_WIDTH}px`,
                     height: `${PIKACHU_PIECE_HEIGHT}px`,
                   }}
-                  className={cn('border border-transparent', isPiece && 'hover:border-[red]')}
+                  className={cn(
+                    isPiece
+                      ? 'hover:bg-ring/50 bg-secondary flex items-center justify-center hover:rounded-md'
+                      : 'bg-background',
+                    isSelected && 'bg-ring rounded-md'
+                  )}
                   onClick={() => onPieceClick([row, column])}
                 >
                   {isPiece > 0 && (
                     <img
-                      src={`/pikachu/pieces${_index}.png`}
+                      src={`/pikachu/piece${_index}.png`}
                       alt={`${row}_${column}`}
-                      className={cn(isSelected && 'opacity-50', 'cursor-pointer')}
-                      style={{ width: PIKACHU_PIECE_WIDTH - 2, height: PIKACHU_PIECE_HEIGHT - 2 }}
+                      className="cursor-pointer"
+                      style={{ width: PIKACHU_PIECE_WIDTH - 10, height: PIKACHU_PIECE_HEIGHT - 10 }}
                     />
                   )}
                 </div>

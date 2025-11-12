@@ -23,7 +23,7 @@ export function _createRawBoard(totalCells: number, numTypes: number) {
   const halfCells = totalCells / 2;
   const refinedNumTypes = _refineNumTypes(halfCells, numTypes);
 
-  const _arr = randomSubGroup(numTypes);
+  const _arr = randomSubGroup(72);
   for (let i = 0; i < halfCells; i++) {
     const id = i % refinedNumTypes;
     tileIds.push(_arr[id] + 1);
