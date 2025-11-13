@@ -53,6 +53,7 @@ export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {
 };
 
 export const pikachuGameTransformRound: { [round: number]: PikachuBoardTransformType } = {
+  1: 'normal',
   2: 'collapseToBottom',
   3: 'collapseToTop',
   4: 'collapseToLeft',
@@ -63,6 +64,22 @@ export const pikachuGameTransformRound: { [round: number]: PikachuBoardTransform
   9: 'collapseToVerticalCenter',
   10: 'collapseToTopLeft',
   11: 'collapseToBottomLeft',
+  12: 'goAwayFromCenter',
+};
+
+export const pikachuTransformConfig: { [id in PikachuBoardTransformType]: { title: string } } = {
+  normal: { title: 'Normal' },
+  collapseToBottom: { title: 'Collapse to bottom' },
+  collapseToTop: { title: 'Collapse to top' },
+  collapseToLeft: { title: 'Collapse to left' },
+  collapseToRight: { title: 'Collapse to right' },
+  divideByHorizontalCenter: { title: 'Divide from horizontal center' },
+  collapseToHorizontalCenter: { title: 'Collapse to horizontal center' },
+  divideByVerticalCenter: { title: 'Divide from vertical center' },
+  collapseToVerticalCenter: { title: 'Collapse to vertical center' },
+  collapseToTopLeft: { title: 'Collapse to top left diagonal' },
+  collapseToBottomLeft: { title: 'Collapse to bottom left diagonal' },
+  goAwayFromCenter: { title: 'Go away from center' },
 };
 
 export const PIKACHU_URL =

@@ -1,66 +1,22 @@
 import { pikachuGameTransformRound } from 'src/configs/constance';
-import { PikachuBoardTransformType, PikachuMoveParamsType, PositionType } from 'src/global';
-import { minMaxByColumn, minMaxByLeftDiagonal, minMaxByRightDiagonal, minMaxByRow } from '..';
-
-type DirectionType = { board: Array<Array<number>>; piece: PositionType; milestone: number };
-type DiagonalDirectionType = {
-  board: Array<Array<number>>;
-  piece: PositionType;
-  rowMilestone: number;
-  columnMilestone: number;
-};
-
-function _toBottom({ board, piece, milestone }: DirectionType) {
-  let counter = piece[0];
-  while (counter > milestone) {
-    board[counter][piece[1]] = board[--counter][piece[1]];
-  }
-  board[counter][piece[1]] = 0;
-}
-
-function _toTop({ board, piece, milestone }: DirectionType) {
-  let counter = piece[0];
-  while (counter < milestone) {
-    board[counter][piece[1]] = board[++counter][piece[1]];
-  }
-  board[counter][piece[1]] = 0;
-}
-
-function _toLeft({ board, piece, milestone }: DirectionType) {
-  let counter = piece[1];
-  while (counter < milestone) {
-    board[piece[0]][counter] = board[piece[0]][++counter];
-  }
-  board[piece[0]][counter] = 0;
-}
-
-function _toRight({ board, piece, milestone }: DirectionType) {
-  let counter = piece[1];
-  while (counter > milestone) {
-    board[piece[0]][counter] = board[piece[0]][--counter];
-  }
-  board[piece[0]][counter] = 0;
-}
-
-function _toTopLeft(params: DiagonalDirectionType) {
-  const { board, piece, rowMilestone, columnMilestone } = params;
-  let rowCounter = piece[0];
-  let columnCounter = piece[1];
-  while (rowCounter < rowMilestone && columnCounter < columnMilestone) {
-    board[rowCounter][columnCounter] = board[++rowCounter][++columnCounter];
-  }
-  board[rowCounter][columnCounter] = 0;
-}
-
-function _toBottomLeft(params: DiagonalDirectionType) {
-  const { board, piece, rowMilestone, columnMilestone } = params;
-  let rowCounter = piece[0];
-  let columnCounter = piece[1];
-  while (rowCounter < rowMilestone && columnCounter > columnMilestone) {
-    board[rowCounter][columnCounter] = board[++rowCounter][--columnCounter];
-  }
-  board[rowCounter][columnCounter] = 0;
-}
+import { PikachuBoardTransformType, PikachuMoveParamsType } from 'src/global';
+import {
+  getPositionRegion,
+  minMaxByColumn,
+  minMaxByLeftDiagonal,
+  minMaxByRightDiagonal,
+  minMaxByRow,
+} from '..';
+import {
+  _toBottom,
+  _toBottomLeft,
+  _toLeft,
+  _topBottomRight,
+  _toRight,
+  _toTop,
+  _toTopLeft,
+  _toTopRight,
+} from './pikachuDirection.utils';
 
 function normalBoard(params: PikachuMoveParamsType) {
   const { board, sourcePiece, targetPiece } = params;
@@ -153,29 +109,98 @@ function collapseToVerticalCenter(params: PikachuMoveParamsType) {
   return board;
 }
 
-function collapseToTopLeft(params: PikachuMoveParamsType) {
-  const { board, sourcePiece, targetPiece, numberOfRows, numberOfColumns } = params;
+function collapseToTopLeft(
+  params: PikachuMoveParamsType,
+  rowMilestone: number,
+  columnMilestone: number
+) {
+  const { board, sourcePiece, targetPiece } = params;
   const { minPiece, maxPiece } = minMaxByLeftDiagonal(sourcePiece, targetPiece);
-  _toTopLeft({
-    board,
-    piece: maxPiece,
-    rowMilestone: numberOfRows,
-    columnMilestone: numberOfColumns,
-  });
-  _toTopLeft({
-    board,
-    piece: minPiece,
-    rowMilestone: numberOfRows,
-    columnMilestone: numberOfColumns,
-  });
+  _toTopLeft({ board, piece: maxPiece, rowMilestone, columnMilestone });
+  _toTopLeft({ board, piece: minPiece, rowMilestone, columnMilestone });
   return board;
 }
 
-function collapseToBottomLeft(params: PikachuMoveParamsType) {
-  const { board, sourcePiece, targetPiece, numberOfRows } = params;
+function collapseToBottomLeft(
+  params: PikachuMoveParamsType,
+  rowMilestone: number,
+  columnMilestone: number
+) {
+  const { board, sourcePiece, targetPiece } = params;
   const { minPiece, maxPiece } = minMaxByRightDiagonal(sourcePiece, targetPiece);
-  _toBottomLeft({ board, piece: maxPiece, rowMilestone: numberOfRows, columnMilestone: 0 });
-  _toBottomLeft({ board, piece: minPiece, rowMilestone: numberOfRows, columnMilestone: 0 });
+  _toBottomLeft({ board, piece: minPiece, rowMilestone, columnMilestone });
+  _toBottomLeft({ board, piece: maxPiece, rowMilestone, columnMilestone });
+  return board;
+}
+
+function collapseToTopRight(
+  params: PikachuMoveParamsType,
+  rowMilestone: number,
+  columnMilestone: number
+) {
+  const { board, sourcePiece, targetPiece } = params;
+  const { minPiece, maxPiece } = minMaxByRightDiagonal(sourcePiece, targetPiece);
+  _toTopRight({ board, piece: maxPiece, rowMilestone, columnMilestone });
+  _toTopRight({ board, piece: minPiece, rowMilestone, columnMilestone });
+  return board;
+}
+
+function collapseTopBottomRight(
+  params: PikachuMoveParamsType,
+  rowMilestone: number,
+  columnMilestone: number
+) {
+  const { board, sourcePiece, targetPiece } = params;
+  const { minPiece, maxPiece } = minMaxByLeftDiagonal(sourcePiece, targetPiece);
+  _topBottomRight({ board, piece: minPiece, rowMilestone, columnMilestone });
+  _topBottomRight({ board, piece: maxPiece, rowMilestone, columnMilestone });
+  return board;
+}
+
+function goAwayFromCenter(params: PikachuMoveParamsType) {
+  const { board, sourcePiece, targetPiece, numberOfRows, numberOfColumns } = params;
+  const rowCenter = Math.floor(numberOfRows / 2);
+  const columnCenter = Math.floor(numberOfColumns / 2);
+  const sourceRegion = getPositionRegion(sourcePiece, rowCenter, columnCenter);
+  const targetRegion = getPositionRegion(targetPiece, rowCenter, columnCenter);
+  if (sourceRegion == targetRegion) {
+    if (sourceRegion == 'tl') collapseToTopLeft(params, rowCenter, columnCenter);
+    else if (sourceRegion == 'bl') collapseToBottomLeft(params, rowCenter + 1, columnCenter);
+    else if (sourceRegion == 'tr') collapseToTopRight(params, rowCenter, columnCenter + 1);
+    else collapseTopBottomRight(params, rowCenter + 1, columnCenter + 1);
+  } else {
+    const tlPiece =
+      sourceRegion == 'tl' ? sourcePiece : targetRegion == 'tl' ? targetPiece : undefined;
+    const trPiece =
+      sourceRegion == 'tr' ? sourcePiece : targetRegion == 'tr' ? targetPiece : undefined;
+    const blPiece =
+      sourceRegion == 'bl' ? sourcePiece : targetRegion == 'bl' ? targetPiece : undefined;
+    const brPiece =
+      sourceRegion == 'br' ? sourcePiece : targetRegion == 'br' ? targetPiece : undefined;
+    if (tlPiece)
+      _toTopLeft({ board, piece: tlPiece, rowMilestone: rowCenter, columnMilestone: columnCenter });
+    if (trPiece)
+      _toTopRight({
+        board,
+        piece: trPiece,
+        rowMilestone: rowCenter,
+        columnMilestone: columnCenter + 1,
+      });
+    if (blPiece)
+      _toBottomLeft({
+        board,
+        piece: blPiece,
+        rowMilestone: rowCenter + 1,
+        columnMilestone: columnCenter,
+      });
+    if (brPiece)
+      _topBottomRight({
+        board,
+        piece: brPiece,
+        rowMilestone: rowCenter + 1,
+        columnMilestone: columnCenter + 1,
+      });
+  }
   return board;
 }
 
@@ -191,8 +216,10 @@ const configs: {
   collapseToHorizontalCenter,
   divideByVerticalCenter,
   collapseToVerticalCenter,
-  collapseToTopLeft,
-  collapseToBottomLeft,
+  collapseToTopLeft: (params) =>
+    collapseToTopLeft(params, params.numberOfRows, params.numberOfColumns),
+  collapseToBottomLeft: (params) => collapseToBottomLeft(params, 0, params.numberOfColumns),
+  goAwayFromCenter,
 };
 
 export function pikachuBoardTransform(

@@ -69,7 +69,7 @@ export const usePikachuStore = create<
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingTime = state.metadata.maxRemainingTime;
-              if (mode == 'newGame' || state.metadata.round == 11) {
+              if (mode == 'newGame' || state.metadata.round == 12) {
                 state.metadata.status = 'playing';
                 if (state.metadata.numberOfLines == 2) state.metadata.remainingChanges = 20;
                 else state.metadata.remainingChanges = 10;

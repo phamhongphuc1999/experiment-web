@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { toast } from 'sonner';
 import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
-import { PaginationType, PositionType } from 'src/global';
+import { PaginationType, PikachuBoardRegionType, PositionType } from 'src/global';
 import { ZodError } from 'zod';
 
 type SBase = {
@@ -147,9 +147,20 @@ export function minMaxByLeftDiagonal(piece1: PositionType, piece2: PositionType)
 export function minMaxByRightDiagonal(piece1: PositionType, piece2: PositionType) {
   let minPiece = piece1;
   let maxPiece = piece2;
-  if (piece1[0] < piece2[0] || piece1[1] > piece2[1]) {
+  if (piece1[0] > piece2[0] || piece1[1] < piece2[1]) {
     minPiece = piece2;
     maxPiece = piece1;
   }
   return { minPiece, maxPiece };
+}
+
+export function getPositionRegion(
+  position: PositionType,
+  rowCenter: number,
+  columnCenter: number
+): PikachuBoardRegionType {
+  if (position[0] <= rowCenter && position[1] <= columnCenter) return 'tl';
+  else if (position[0] <= rowCenter && position[1] > columnCenter) return 'tr';
+  else if (position[0] > rowCenter && position[1] <= columnCenter) return 'bl';
+  else return 'br';
 }

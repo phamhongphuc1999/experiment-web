@@ -1,10 +1,13 @@
 'use client';
 
+import { InfoCircle } from 'iconsax-reactjs';
 import { ComponentProps, useCallback } from 'react';
 import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
+import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
+import { pikachuGameTransformRound, pikachuTransformConfig } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { cn } from 'src/lib/utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -49,7 +52,15 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
         <RoutingGameDialog game="pikachu" />
         <PikachuConfigDialog />
         <PikachuInstructionDialog />
-        <p className="font-semibold">{`Round: ${round}`}</p>
+        <span className="flex items-center gap-0.5 font-semibold">
+          Round(
+          <AppTooltip
+            tooltipContent={pikachuTransformConfig[pikachuGameTransformRound[round]].title}
+          >
+            <InfoCircle size={12} />
+          </AppTooltip>
+          ): {round}
+        </span>
         <p className="font-semibold">{`Changes: ${remainingChanges}`}</p>
         <p className="font-semibold">{`Time: ${remainingTime}s`}</p>
       </div>

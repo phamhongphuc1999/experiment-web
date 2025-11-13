@@ -353,5 +353,8 @@ export type PikachuBoardTransformType =
   | 'divideByVerticalCenter'
   | 'collapseToVerticalCenter'
   | 'collapseToTopLeft'
-  | 'collapseToBottomLeft';
+  | 'collapseToBottomLeft'
+  | 'goAwayFromCenter';
+
+export type PikachuBoardRegionType = 'tl' | 'tr' | 'bl' | 'br';
 // end pikachu
