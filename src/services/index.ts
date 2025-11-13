@@ -113,3 +113,43 @@ export function isPositionIncludes(position: PositionType, positions: Array<Posi
 export async function sleep(miniSecond: number) {
   await new Promise((resolve) => setTimeout(resolve, miniSecond));
 }
+
+export function minMaxByRow(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[0] > piece2[0]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}
+
+export function minMaxByColumn(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[1] > piece2[1]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}
+
+export function minMaxByLeftDiagonal(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[0] > piece2[0] || piece1[1] > piece2[1]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}
+
+export function minMaxByRightDiagonal(piece1: PositionType, piece2: PositionType) {
+  let minPiece = piece1;
+  let maxPiece = piece2;
+  if (piece1[0] < piece2[0] || piece1[1] > piece2[1]) {
+    minPiece = piece2;
+    maxPiece = piece1;
+  }
+  return { minPiece, maxPiece };
+}

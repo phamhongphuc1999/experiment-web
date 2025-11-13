@@ -61,6 +61,8 @@ export const pikachuGameTransformRound: { [round: number]: PikachuBoardTransform
   7: 'collapseToHorizontalCenter',
   8: 'divideByVerticalCenter',
   9: 'collapseToVerticalCenter',
+  10: 'collapseToTopLeft',
+  11: 'collapseToBottomLeft',
 };
 
 export const PIKACHU_URL =
