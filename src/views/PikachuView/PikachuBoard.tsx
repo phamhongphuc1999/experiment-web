@@ -3,7 +3,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
+import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH, PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
@@ -28,6 +28,7 @@ export default function PikachuBoard() {
       round,
       status,
       maxRemainingTime,
+      imgType,
     },
   } = usePikachuStore();
   const {
@@ -142,7 +143,11 @@ export default function PikachuBoard() {
                 >
                   {isPiece > 0 && (
                     <img
-                      src={`/pikachu/piece${_index}.png`}
+                      src={
+                        imgType == 'external'
+                          ? `${PIKACHU_URL}/${_index}.png`
+                          : `/pikachu/piece${_index}.png`
+                      }
                       alt={`${row}_${column}`}
                       className="cursor-pointer"
                       style={{ width: PIKACHU_PIECE_WIDTH - 10, height: PIKACHU_PIECE_HEIGHT - 10 }}

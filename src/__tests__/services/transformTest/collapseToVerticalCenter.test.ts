@@ -18,6 +18,7 @@ describe('Test pikachu transform', () => {
         targetPiece: [5, 2],
         numberOfRows: 5,
         numberOfColumns: 4,
+        numberOfLines: 2,
       },
       9
     );

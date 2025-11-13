@@ -17,6 +17,7 @@ describe('Test pikachu transform', () => {
         targetPiece: [4, 3],
         numberOfRows: 4,
         numberOfColumns: 3,
+        numberOfLines: 2,
       },
       2
     );
@@ -44,6 +45,7 @@ describe('Test pikachu transform', () => {
         targetPiece: [4, 3],
         numberOfRows: 4,
         numberOfColumns: 3,
+        numberOfLines: 2,
       },
       2
     );

@@ -22,7 +22,7 @@ export default function PikachuInstructionDialog() {
         <div className="scroll-hidden h-fit max-h-[75vh] overflow-auto">
           <p className="text-lg">1. Images</p>
           <div className="mt-2 flex flex-wrap gap-1">
-            {Array.from({ length: 72 }).map((_, index) => {
+            {Array.from({ length: 90 }).map((_, index) => {
               const _index = index + 1;
 
               return (

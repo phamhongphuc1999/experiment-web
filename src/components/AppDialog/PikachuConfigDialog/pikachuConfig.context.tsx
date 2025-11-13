@@ -10,7 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { PikachuTimeType } from 'src/global';
+import { PikachuImgType, PikachuTimeType } from 'src/global';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
 type PikachuConfigContextType = {
@@ -18,11 +18,13 @@ type PikachuConfigContextType = {
   size: { numberOfRows: number; numberOfColumns: number };
   numberOfLines: number;
   timeConfigType: PikachuTimeType;
+  imgType: PikachuImgType;
   fn: {
     setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
     setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
+    setImgType: Dispatch<SetStateAction<PikachuImgType>>;
   };
 };
 
@@ -31,11 +33,13 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   size: { numberOfRows: 16, numberOfColumns: 9 },
   numberOfLines: 2,
   timeConfigType: 'normal',
+  imgType: 'internal',
   fn: {
     setIsSound: () => {},
     setSize: () => {},
     setNumberOfLines: () => {},
     setTimeConfigType: () => {},
+    setImgType: () => {},
   },
 };
 
@@ -54,6 +58,7 @@ export default function PikachuConfigProvider({ children }: Props) {
     numberOfColumns: 9,
   });
   const [numberOfLines, setNumberOfLines] = useState(2);
+  const [imgType, setImgType] = useState<PikachuImgType>('internal');
 
   useEffect(() => {
     setIsSound(metadata.isSound);
@@ -71,15 +76,20 @@ export default function PikachuConfigProvider({ children }: Props) {
     setTimeConfigType(metadata.timeConfigType);
   }, [metadata.timeConfigType]);
 
+  useEffect(() => {
+    setImgType(metadata.imgType);
+  }, [metadata.imgType]);
+
   const contextData = useMemo<PikachuConfigContextType>(() => {
     return {
       isSound,
       size,
       numberOfLines,
       timeConfigType,
-      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType },
+      imgType,
+      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType },
     };
-  }, [isSound, size, numberOfLines, timeConfigType]);
+  }, [isSound, size, numberOfLines, timeConfigType, imgType]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

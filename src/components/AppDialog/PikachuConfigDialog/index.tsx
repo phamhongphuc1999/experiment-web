@@ -14,6 +14,7 @@ import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
+import ImgTypeConfig from './ImgTypeConfig';
 import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
 import TimeTypeConfig from './TimeTypeConfig';
@@ -29,7 +30,8 @@ function PikachuConfigDialogLayout() {
     size,
     numberOfLines,
     timeConfigType,
-    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType },
+    imgType,
+    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
@@ -49,6 +51,7 @@ function PikachuConfigDialogLayout() {
       status: 'init',
       timeConfigType,
       maxRemainingTime,
+      imgType,
     });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
@@ -62,6 +65,7 @@ function PikachuConfigDialogLayout() {
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setNumberOfLines(metadata.numberOfLines);
     setTimeConfigType(metadata.timeConfigType);
+    setImgType(metadata.imgType);
     onOpenChange(false);
   }
 
@@ -79,6 +83,7 @@ function PikachuConfigDialogLayout() {
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <BoardSizeConfig />
           <SoundtrackConfig game="pikachu" />
+          <ImgTypeConfig />
           <LineConfig />
           <TimeTypeConfig />
           <div className="mt-4 flex items-center justify-between">

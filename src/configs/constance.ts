@@ -63,6 +63,9 @@ export const pikachuGameTransformRound: { [round: number]: PikachuBoardTransform
   9: 'collapseToVerticalCenter',
 };
 
+export const PIKACHU_URL =
+  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+
 export const WeatherHourlyConfig: {
   [id in WeatherHourlyVariableType]: { id: WeatherHourlyVariableType; title: string };
 } = {

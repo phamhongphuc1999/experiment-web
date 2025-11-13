@@ -23,7 +23,7 @@ export function _createRawBoard(totalCells: number, numTypes: number) {
   const halfCells = totalCells / 2;
   const refinedNumTypes = _refineNumTypes(halfCells, numTypes);
 
-  const _arr = randomSubGroup(72);
+  const _arr = randomSubGroup(numTypes);
   for (let i = 0; i < halfCells; i++) {
     const id = i % refinedNumTypes;
     tileIds.push(_arr[id] + 1);
@@ -208,8 +208,12 @@ export function findPossibleMove(params: FindPossibleMoveParamsType) {
   return undefined;
 }
 
-export function _createNewPikachuBoard(numberOfRows: number, numberOfColumns: number) {
-  const rawBoard = createBoard(numberOfRows, numberOfColumns, 36);
+export function _createNewPikachuBoard(
+  numberOfRows: number,
+  numberOfColumns: number,
+  numTypes: number
+) {
+  const rawBoard = createBoard(numberOfRows, numberOfColumns, numTypes);
   const board: Array<Array<number>> = [];
   board.push(Array(numberOfColumns + 2).fill(0));
   rawBoard.forEach((row) => {
@@ -222,12 +226,13 @@ export function _createNewPikachuBoard(numberOfRows: number, numberOfColumns: nu
 export function createNewPikachuBoard(
   numberOfRows: number,
   numberOfColumns: number,
-  numberOfLines: number
+  numberOfLines: number,
+  numTypes: number
 ) {
-  let board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+  let board = _createNewPikachuBoard(numberOfRows, numberOfColumns, numTypes);
   let path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   while (!path) {
-    board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+    board = _createNewPikachuBoard(numberOfRows, numberOfColumns, numTypes);
     path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   }
   return { board, path };
@@ -236,7 +241,8 @@ export function createNewPikachuBoard(
 function _changePikachuBoard(
   currentBoard: Array<Array<number>>,
   numberOfRows: number,
-  numberOfColumns: number
+  numberOfColumns: number,
+  numTypes: number
 ) {
   let totalCells = 0;
   for (let i = 1; i <= numberOfRows; i++) {
@@ -244,7 +250,7 @@ function _changePikachuBoard(
       if (currentBoard[i][j] > 0) totalCells++;
     }
   }
-  const pairedTiles = _createRawBoard(totalCells, 36);
+  const pairedTiles = _createRawBoard(totalCells, numTypes);
   const rawBoard: Array<Array<number>> = [];
   let index = 0;
   for (let i = 0; i < numberOfRows; i++) {
@@ -267,12 +273,13 @@ export function changePikachuBoard(
   currentBoard: Array<Array<number>>,
   numberOfRows: number,
   numberOfColumns: number,
-  numberOfLines: number
+  numberOfLines: number,
+  numTypes: number
 ) {
-  let board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns);
+  let board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns, numTypes);
   let path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   while (!path) {
-    board = _createNewPikachuBoard(numberOfRows, numberOfColumns);
+    board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns, numTypes);
     path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   }
   return { board, path };

@@ -12,8 +12,6 @@ import {
 } from 'react';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
-const configs: { [key: number]: number } = { 9: 3, 6: 2, 4: 2 };
-
 export type PikachuStateContextType = {
   remainingTime: number;
   isPaused: boolean;
@@ -79,9 +77,8 @@ export default function PikachuStateProvider({ children }: Props) {
   }, []);
 
   const _move = useCallback(() => {
-    if (metadata.timeConfigType == 'cumulative')
-      setRemainingTime((prev) => prev + configs[metadata.numberOfRows]);
-  }, [metadata.timeConfigType, metadata.numberOfRows]);
+    if (metadata.timeConfigType == 'cumulative') setRemainingTime((prev) => prev + 4);
+  }, [metadata.timeConfigType]);
 
   return (
     <PikachuContext.Provider

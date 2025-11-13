@@ -44,7 +44,7 @@ describe('Test pikachu utils', () => {
       [0, 4, 3, 2, 0],
       [0, 0, 0, 0, 0],
     ];
-    const { board } = changePikachuBoard(currentBoard, 4, 3, 2);
+    const { board } = changePikachuBoard(currentBoard, 4, 3, 2, 90);
     let isOk = true;
     for (let i = 1; i <= 3; i++) {
       for (let j = 1; j <= 4; j++) {

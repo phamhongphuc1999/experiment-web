@@ -1,4 +1,4 @@
-import { PikachuTimeType, PositionType } from 'src/global';
+import { PikachuImgType, PikachuTimeType, PositionType } from 'src/global';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -16,6 +16,7 @@ type PikachuMetadataType = {
   isSound: boolean;
   isChangeBoard: boolean;
   timeConfigType: PikachuTimeType;
+  imgType: PikachuImgType;
 };
 
 type PikachuStateType = {
@@ -51,17 +52,19 @@ export const usePikachuStore = create<
           isSound: true,
           isChangeBoard: false,
           timeConfigType: 'normal',
+          imgType: 'internal',
         },
         board: [],
         suggestion: [],
         fn: {
           createBoard: (mode: 'newGame' | 'nextRound') => {
             set((state) => {
-              const { numberOfRows, numberOfColumns, numberOfLines } = state.metadata;
+              const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
               const { board, path } = createNewPikachuBoard(
                 numberOfRows,
                 numberOfColumns,
-                numberOfLines
+                numberOfLines,
+                imgType == 'internal' ? 90 : 1025
               );
               state.board = board;
               state.suggestion = path;
@@ -82,12 +85,13 @@ export const usePikachuStore = create<
           },
           changeBoard: () => {
             set((state) => {
-              const { numberOfRows, numberOfColumns, numberOfLines } = state.metadata;
+              const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
               const { board, path } = changePikachuBoard(
                 state.board,
                 numberOfRows,
                 numberOfColumns,
-                numberOfLines
+                numberOfLines,
+                imgType == 'internal' ? 90 : 1025
               );
               state.board = board;
               state.suggestion = path;
@@ -120,7 +124,7 @@ export const usePikachuStore = create<
       };
     }),
     {
-      name: 'experiment.pikachu.v1',
+      name: 'experiment.pikachu.v1.1',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) return { ...(persistedState as PikachuStateType) };

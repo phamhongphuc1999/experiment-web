@@ -324,6 +324,7 @@ export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 
 // start pikachu
 export type PikachuTimeType = 'normal' | 'cumulative';
+export type PikachuImgType = 'internal' | 'external';
 
 export type PikachuMoveParamsType = {
   board: Array<Array<number>>;
