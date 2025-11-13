@@ -9,7 +9,7 @@ export default function ImgTypeConfig() {
 
   return (
     <div className="mt-2 rounded-sm border p-2">
-      <p className="text-sm font-bold">Number of lines</p>
+      <p className="text-sm font-bold">Image type</p>
       <div className="mt-2 flex items-center gap-2">
         <Button
           variant={imgType == 'internal' ? 'default' : 'outline'}
