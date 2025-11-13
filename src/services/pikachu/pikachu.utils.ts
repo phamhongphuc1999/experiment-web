@@ -3,14 +3,17 @@ import { isPositionEqual, randomSubGroup } from '..';
 import Queue from '../Queue';
 
 export function _refineNumTypes(halfCells: number, numTypes: number) {
-  if (halfCells >= 72) return numTypes;
+  if (halfCells >= 2 * numTypes) return numTypes;
   if (halfCells <= 25) {
     const random = Math.random();
     if (random < 0.2) return halfCells - 1;
     else return halfCells;
-  } else {
-    const random = 0.9 + 0.1 * Math.random();
+  } else if (halfCells <= 50) {
+    const random = 0.85 + 0.15 * Math.random();
     const newNumTypes = Math.min(numTypes, Math.floor(halfCells * random));
+    return newNumTypes;
+  } else {
+    const newNumTypes = Math.min(numTypes, Math.floor(halfCells / 2));
     return newNumTypes;
   }
 }
