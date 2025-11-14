@@ -3,14 +3,19 @@
 import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH, PIKACHU_URL } from 'src/configs/constance';
+import {
+  PIKACHU_PIECE_HEIGHT,
+  PIKACHU_PIECE_WIDTH,
+  PIKACHU_URL,
+  pikachuRoundTransformations,
+} from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { sleep } from 'src/services';
+import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
 import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
-import { pikachuBoardTransformByRound } from 'src/services/pikachu/pikachuBoardTransform.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import PathDraw from './PathDraw';
 
@@ -64,20 +69,13 @@ export default function PikachuBoard() {
         numberOfLines,
       });
       if (path) {
-        const _board = pikachuBoardTransformByRound(
-          {
-            board: cloneBoard,
-            sourcePiece: firstPiece,
-            targetPiece: position,
-            numberOfRows,
-            numberOfColumns,
-            numberOfLines,
-          },
-          round
+        pikachuBoardTransformation(
+          { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
+          pikachuRoundTransformations[round - 1]
         );
         playMove(isSound);
         const possiblePath = findPossibleMove({
-          board: _board,
+          board: cloneBoard,
           numberOfRows,
           numberOfColumns,
           numberOfLines,
@@ -86,13 +84,13 @@ export default function PikachuBoard() {
         if (possiblePath)
           sleep(150).then(() => {
             move();
-            movePath(_board, possiblePath);
+            movePath(cloneBoard, possiblePath);
           });
         else if (possiblePath === null) {
           toast.warning('Out of move, please change board');
           sleep(150).then(() => {
             move();
-            moveChangeBoard(_board);
+            moveChangeBoard(cloneBoard);
           });
         } else {
           sleep(200).then(() => {

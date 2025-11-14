@@ -1,3 +1,4 @@
+import { pikachuRoundTransformations } from 'src/configs/constance';
 import { PikachuImgType, PikachuTimeType, PositionType } from 'src/global';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
@@ -69,7 +70,7 @@ export const usePikachuStore = create<
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingTime = state.metadata.maxRemainingTime;
-              if (mode == 'newGame' || state.metadata.round == 12) {
+              if (mode == 'newGame' || state.metadata.round == pikachuRoundTransformations.length) {
                 state.metadata.status = 'playing';
                 if (state.metadata.numberOfLines == 2) state.metadata.remainingChanges = 20;
                 else state.metadata.remainingChanges = 10;

@@ -36,7 +36,7 @@ function PikachuConfigDialogLayout() {
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    const _figure = size.numberOfRows == 9 ? 5 : size.numberOfRows == 6 ? 2 : 1;
+    const _figure = size.numberOfRows == 9 ? 5 : 2;
     const maxRemainingTime = Math.floor(
       timeConfigType == 'normal'
         ? size.numberOfRows * size.numberOfColumns * _figure

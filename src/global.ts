@@ -3,6 +3,8 @@ import { UseQueryOptions } from '@tanstack/react-query';
 import { ComponentProps } from 'react';
 
 export type ThemeType = 'light' | 'dark';
+export type PositionType = [number, number]; // expect [row, column]
+export type VectorType = PositionType; // expect [x, y]
 
 export interface AnimationComponentProps {
   size?: number | string;
@@ -290,7 +292,6 @@ export type SupbaseSingleResponseType<T> = BaseSupbaseResponseType & { data: T }
 
 // start caro
 export type TurnType = 0 | 1;
-export type PositionType = [number, number]; //expect [row, column]
 export type RoleType = 'host' | 'guest';
 export type ConnectionType = 'init' | 'connecting' | 'connected';
 export type PlayModeType = 'offline' | 'online' | 'machine';
@@ -344,17 +345,18 @@ export type FindPossibleMoveParamsType = {
 
 export type PikachuBoardTransformType =
   | 'normal'
-  | 'collapseToBottom'
-  | 'collapseToTop'
-  | 'collapseToLeft'
-  | 'collapseToRight'
-  | 'divideByHorizontalCenter'
-  | 'collapseToHorizontalCenter'
-  | 'divideByVerticalCenter'
-  | 'collapseToVerticalCenter'
-  | 'collapseToTopLeft'
-  | 'collapseToBottomLeft'
-  | 'goAwayFromCenter';
-
-export type PikachuBoardRegionType = 'tl' | 'tr' | 'bl' | 'br';
+  | 'fallDown'
+  | 'fallUp'
+  | 'shiftLeft'
+  | 'shiftRight'
+  | 'splitHorizontally'
+  | 'mergeHorizontally'
+  | 'splitVertically'
+  | 'mergeVertically'
+  | 'shiftUpLeft'
+  | 'shiftDownLeft'
+  | 'shiftUpRight'
+  | 'shiftDownRight'
+  | 'spreadOut'
+  | 'collapseToCenter';
 // end pikachu
