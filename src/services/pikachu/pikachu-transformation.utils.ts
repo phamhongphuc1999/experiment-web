@@ -184,7 +184,7 @@ function spreadOut(params: MoveParamsType) {
     moves,
     vector: [-1, 1],
     space: [
-      [rowCenter, 1],
+      [rowCenter + 1, 1],
       [numberOfRows, columnCenter],
     ],
   });
@@ -194,13 +194,55 @@ function spreadOut(params: MoveParamsType) {
     vector: [1, -1],
     space: [
       [1, columnCenter + 1],
-      [rowCenter, columnCenter],
+      [rowCenter, numberOfColumns],
     ],
   });
   performTransformation({
     board,
     moves,
     vector: [-1, -1],
+    space: [
+      [rowCenter + 1, columnCenter + 1],
+      [numberOfRows, numberOfColumns],
+    ],
+  });
+}
+
+function collapseToCenter(params: MoveParamsType) {
+  const { board, moves, numberOfRows, numberOfColumns } = params;
+  const rowCenter = Math.floor(numberOfRows / 2);
+  const columnCenter = Math.floor(numberOfColumns / 2);
+  performTransformation({
+    board,
+    moves,
+    vector: [-1, -1],
+    space: [
+      [1, 1],
+      [rowCenter, columnCenter],
+    ],
+  });
+  performTransformation({
+    board,
+    moves,
+    vector: [1, -1],
+    space: [
+      [rowCenter + 1, 1],
+      [numberOfRows, columnCenter],
+    ],
+  });
+  performTransformation({
+    board,
+    moves,
+    vector: [-1, 1],
+    space: [
+      [1, columnCenter + 1],
+      [rowCenter, numberOfColumns],
+    ],
+  });
+  performTransformation({
+    board,
+    moves,
+    vector: [1, 1],
     space: [
       [rowCenter + 1, columnCenter + 1],
       [numberOfRows, numberOfColumns],
@@ -223,6 +265,7 @@ const configs: { [id in PikachuBoardTransformType]: (params: MoveParamsType) => 
   splitVertically,
   mergeVertically,
   spreadOut,
+  collapseToCenter,
 };
 
 export function pikachuBoardTransformation(

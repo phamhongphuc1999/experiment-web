@@ -84,6 +84,7 @@ export const pikachuTransformConfig: { [id in PikachuBoardTransformType]: { titl
   shiftDownLeft: { title: 'Shift down left' },
   shiftDownRight: { title: 'Shift down right' },
   spreadOut: { title: 'Spread out' },
+  collapseToCenter: { title: 'Collapse to center' },
 };
 
 export const PIKACHU_URL =

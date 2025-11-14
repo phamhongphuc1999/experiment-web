@@ -357,5 +357,6 @@ export type PikachuBoardTransformType =
   | 'shiftDownLeft'
   | 'shiftUpRight'
   | 'shiftDownRight'
-  | 'spreadOut';
+  | 'spreadOut'
+  | 'collapseToCenter';
 // end pikachu
