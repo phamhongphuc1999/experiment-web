@@ -7,7 +7,7 @@ import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructio
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
-import { pikachuGameTransformRound, pikachuTransformConfig } from 'src/configs/constance';
+import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { cn } from 'src/lib/utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -55,7 +55,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
         <span className="flex items-center gap-0.5 font-semibold">
           Round(
           <AppTooltip
-            tooltipContent={pikachuTransformConfig[pikachuGameTransformRound[round]].title}
+            tooltipContent={pikachuTransformConfig[pikachuRoundTransformations[round - 1]].title}
           >
             <InfoCircle size={12} />
           </AppTooltip>
