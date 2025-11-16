@@ -5,14 +5,14 @@ import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
-import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/constance';
+import { pikachuTransformConfig } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { cn } from 'src/lib/utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
 export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
-    metadata: { remainingChanges, round, isSound, status, maxRemainingTime },
+    metadata: { remainingChanges, round, isSound, status, maxRemainingTime, roundList },
     fn: { createBoard, changeBoard, setMetadata },
   } = usePikachuStore();
   const {
@@ -48,7 +48,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <div className="flex items-center gap-2">
         <span>
-          Round: {round} ({pikachuTransformConfig[pikachuRoundTransformations[round - 1]].title})
+          Round: {round} ({pikachuTransformConfig[roundList[round - 1]].title})
         </span>
       </div>
       <div className="flex items-center gap-2">
