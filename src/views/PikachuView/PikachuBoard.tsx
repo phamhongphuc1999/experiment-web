@@ -3,11 +3,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import {
-  PIKACHU_PIECE_SIZE,
-  PIKACHU_URL,
-  pikachuRoundTransformations,
-} from 'src/configs/constance';
+import { PIKACHU_PIECE_SIZE, PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
@@ -33,6 +29,7 @@ export default function PikachuBoard() {
       status,
       maxRemainingTime,
       imgType,
+      roundList,
     },
   } = usePikachuStore();
   const {
@@ -70,7 +67,7 @@ export default function PikachuBoard() {
       if (path) {
         pikachuBoardTransformation(
           { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
-          pikachuRoundTransformations[round - 1]
+          roundList[round - 1]
         );
         playMove(isSound);
         const possiblePath = findPossibleMove({
