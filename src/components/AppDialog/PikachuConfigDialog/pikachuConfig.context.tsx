@@ -10,7 +10,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { PikachuImgType, PikachuTimeType } from 'src/global';
+import { pikachuRoundTransformations } from 'src/configs/constance';
+import { PikachuBoardTransformType, PikachuImgType, PikachuTimeType } from 'src/global';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
 type PikachuConfigContextType = {
@@ -19,12 +20,14 @@ type PikachuConfigContextType = {
   numberOfLines: number;
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
+  rounds: Array<PikachuBoardTransformType>;
   fn: {
     setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
     setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
     setImgType: Dispatch<SetStateAction<PikachuImgType>>;
+    setRounds: Dispatch<SetStateAction<PikachuBoardTransformType[]>>;
   };
 };
 
@@ -34,12 +37,14 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   numberOfLines: 2,
   timeConfigType: 'normal',
   imgType: 'internal',
+  rounds: [],
   fn: {
     setIsSound: () => {},
     setSize: () => {},
     setNumberOfLines: () => {},
     setTimeConfigType: () => {},
     setImgType: () => {},
+    setRounds: () => {},
   },
 };
 
@@ -59,6 +64,9 @@ export default function PikachuConfigProvider({ children }: Props) {
   });
   const [numberOfLines, setNumberOfLines] = useState(2);
   const [imgType, setImgType] = useState<PikachuImgType>('internal');
+  const [rounds, setRounds] = useState<Array<PikachuBoardTransformType>>(
+    pikachuRoundTransformations
+  );
 
   useEffect(() => {
     setIsSound(metadata.isSound);
@@ -80,6 +88,10 @@ export default function PikachuConfigProvider({ children }: Props) {
     setImgType(metadata.imgType);
   }, [metadata.imgType]);
 
+  useEffect(() => {
+    setRounds(metadata.roundList);
+  }, [metadata.roundList]);
+
   const contextData = useMemo<PikachuConfigContextType>(() => {
     return {
       isSound,
@@ -87,9 +99,10 @@ export default function PikachuConfigProvider({ children }: Props) {
       numberOfLines,
       timeConfigType,
       imgType,
-      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType },
+      rounds,
+      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType, setRounds },
     };
-  }, [isSound, size, numberOfLines, timeConfigType, imgType]);
+  }, [isSound, size, numberOfLines, timeConfigType, imgType, rounds]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

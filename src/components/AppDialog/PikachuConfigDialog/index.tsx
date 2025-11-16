@@ -1,3 +1,12 @@
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { Setting2 } from 'iconsax-reactjs';
 import { MouseEvent } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
@@ -10,6 +19,7 @@ import {
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
+import { PikachuBoardTransformType } from 'src/global';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import SoundtrackConfig from '../components/SoundtrackConfig';
@@ -17,6 +27,7 @@ import BoardSizeConfig from './BoardSizeConfig';
 import ImgTypeConfig from './ImgTypeConfig';
 import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
+import RoundConfig from './RoundConfig';
 import TimeTypeConfig from './TimeTypeConfig';
 
 function PikachuConfigDialogLayout() {
@@ -31,12 +42,13 @@ function PikachuConfigDialogLayout() {
     numberOfLines,
     timeConfigType,
     imgType,
-    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType },
+    rounds,
+    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType, setRounds },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    const _figure = size.numberOfRows == 9 ? 5 : 2;
+    const _figure = size.numberOfRows == 9 ? 4 : 2;
     const maxRemainingTime = Math.floor(
       timeConfigType == 'normal'
         ? size.numberOfRows * size.numberOfColumns * _figure
@@ -52,6 +64,7 @@ function PikachuConfigDialogLayout() {
       timeConfigType,
       maxRemainingTime,
       imgType,
+      roundList: rounds,
     });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
@@ -66,6 +79,7 @@ function PikachuConfigDialogLayout() {
     setNumberOfLines(metadata.numberOfLines);
     setTimeConfigType(metadata.timeConfigType);
     setImgType(metadata.imgType);
+    setRounds(metadata.roundList);
     onOpenChange(false);
   }
 
@@ -86,6 +100,7 @@ function PikachuConfigDialogLayout() {
           <ImgTypeConfig />
           <LineConfig />
           <TimeTypeConfig />
+          <RoundConfig />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel
@@ -98,10 +113,52 @@ function PikachuConfigDialogLayout() {
   );
 }
 
+function PikachuConfigDialogDndLayout() {
+  const {
+    rounds,
+    fn: { setRounds },
+  } = usePikachuConfigContext();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
+    })
+  );
+
+  function onDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    if (over.id == 'pikachu-config-droppable') {
+      setRounds((rounds) => {
+        return [active.id as PikachuBoardTransformType, ...rounds];
+      });
+    } else {
+      setRounds((rounds) => {
+        const oldIndex = rounds.indexOf(active.id as PikachuBoardTransformType);
+        const newIndex = rounds.indexOf(over.id as PikachuBoardTransformType);
+
+        return arrayMove(rounds, oldIndex, newIndex);
+      });
+    }
+  }
+
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <SortableContext items={rounds} strategy={horizontalListSortingStrategy}>
+        <PikachuConfigDialogLayout />
+      </SortableContext>
+    </DndContext>
+  );
+}
+
 export default function PikachuConfigDialog() {
   return (
     <PikachuConfigProvider>
-      <PikachuConfigDialogLayout />
+      <PikachuConfigDialogDndLayout />
     </PikachuConfigProvider>
   );
 }

@@ -4,8 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import {
-  PIKACHU_PIECE_HEIGHT,
-  PIKACHU_PIECE_WIDTH,
+  PIKACHU_PIECE_SIZE,
   PIKACHU_URL,
   pikachuRoundTransformations,
 } from 'src/configs/constance';
@@ -107,10 +106,10 @@ export default function PikachuBoard() {
     <div
       className="border-ring relative flex flex-col gap-y-px border"
       style={{
-        marginTop: `${PIKACHU_PIECE_HEIGHT}px`,
-        marginBottom: `${PIKACHU_PIECE_HEIGHT}px`,
-        marginLeft: `${PIKACHU_PIECE_WIDTH}px`,
-        marginRight: `${PIKACHU_PIECE_WIDTH}px`,
+        marginTop: `${PIKACHU_PIECE_SIZE}px`,
+        marginBottom: `${PIKACHU_PIECE_SIZE}px`,
+        marginLeft: `${PIKACHU_PIECE_SIZE}px`,
+        marginRight: `${PIKACHU_PIECE_SIZE}px`,
       }}
     >
       {isChangeBoard && <div className="absolute inset-0 bg-black/50" />}
@@ -127,10 +126,7 @@ export default function PikachuBoard() {
               return (
                 <div
                   key={`${row}_${column}`}
-                  style={{
-                    width: `${PIKACHU_PIECE_WIDTH}px`,
-                    height: `${PIKACHU_PIECE_HEIGHT}px`,
-                  }}
+                  style={{ width: `${PIKACHU_PIECE_SIZE}px`, height: `${PIKACHU_PIECE_SIZE}px` }}
                   className={cn(
                     isPiece
                       ? 'hover:bg-ring/50 bg-secondary flex items-center justify-center hover:rounded-md'
@@ -148,7 +144,7 @@ export default function PikachuBoard() {
                       }
                       alt={`${row}_${column}`}
                       className="cursor-pointer"
-                      style={{ width: PIKACHU_PIECE_WIDTH - 10, height: PIKACHU_PIECE_HEIGHT - 10 }}
+                      style={{ width: PIKACHU_PIECE_SIZE - 10, height: PIKACHU_PIECE_SIZE - 10 }}
                     />
                   )}
                 </div>

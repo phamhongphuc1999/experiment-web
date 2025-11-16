@@ -1,5 +1,11 @@
 import { pikachuRoundTransformations } from 'src/configs/constance';
-import { PikachuImgType, PikachuTimeType, PositionType } from 'src/global';
+import {
+  PikachuBoardTransformType,
+  PikachuGameType,
+  PikachuImgType,
+  PikachuTimeType,
+  PositionType,
+} from 'src/global';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -18,6 +24,8 @@ type PikachuMetadataType = {
   isChangeBoard: boolean;
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
+  roundList: Array<PikachuBoardTransformType>;
+  gameType: PikachuGameType;
 };
 
 type PikachuStateType = {
@@ -46,21 +54,24 @@ export const usePikachuStore = create<
           numberOfColumns: 16,
           numberOfLines: 2,
           remainingChanges: 20,
-          remainingTime: 720,
-          maxRemainingTime: 720,
+          remainingTime: 300,
+          maxRemainingTime: 300,
           round: 1,
           status: 'init',
           isSound: true,
           isChangeBoard: false,
           timeConfigType: 'normal',
           imgType: 'internal',
+          roundList: pikachuRoundTransformations,
+          gameType: 'normal',
         },
         board: [],
         suggestion: [],
         fn: {
           createBoard: (mode: 'newGame' | 'nextRound') => {
             set((state) => {
-              const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
+              const { numberOfRows, numberOfColumns, numberOfLines, imgType, roundList } =
+                state.metadata;
               const { board, path } = createNewPikachuBoard(
                 numberOfRows,
                 numberOfColumns,
@@ -70,7 +81,7 @@ export const usePikachuStore = create<
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingTime = state.metadata.maxRemainingTime;
-              if (mode == 'newGame' || state.metadata.round == pikachuRoundTransformations.length) {
+              if (mode == 'newGame' || state.metadata.round == roundList.length) {
                 state.metadata.status = 'playing';
                 if (state.metadata.numberOfLines == 2) state.metadata.remainingChanges = 20;
                 else state.metadata.remainingChanges = 10;
@@ -125,7 +136,7 @@ export const usePikachuStore = create<
       };
     }),
     {
-      name: 'experiment.pikachu.v1.1',
+      name: 'experiment.pikachu.v1.11',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) return { ...(persistedState as PikachuStateType) };

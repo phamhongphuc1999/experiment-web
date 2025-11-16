@@ -9,7 +9,7 @@ export default function BoardSizeConfig() {
 
   return (
     <div className="mt-2 rounded-sm border p-2">
-      <p className="text-sm font-bold">Pikachu board</p>
+      <p className="text-sm font-bold">Board config</p>
       <div className="mt-2 flex items-center gap-2">
         <Button
           variant={size.numberOfColumns == 6 ? 'default' : 'outline'}

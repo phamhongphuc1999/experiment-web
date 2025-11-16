@@ -1,11 +1,6 @@
 import { InfoCircle } from 'iconsax-reactjs';
 import { useState } from 'react';
-import {
-  DIALOG_KEY,
-  PIKACHU_PIECE_HEIGHT,
-  PIKACHU_PIECE_WIDTH,
-  PIKACHU_URL,
-} from 'src/configs/constance';
+import { DIALOG_KEY, PIKACHU_PIECE_SIZE, PIKACHU_URL } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppPagination from '../AppPagination';
 import AppTooltip from '../AppTooltip';
@@ -40,17 +35,14 @@ export default function PikachuInstructionDialog() {
                       <img
                         src={`/pikachu/piece${_index}.png`}
                         alt={_index.toString()}
-                        style={{
-                          width: PIKACHU_PIECE_WIDTH + 20,
-                          height: PIKACHU_PIECE_HEIGHT + 20,
-                        }}
+                        style={{ width: PIKACHU_PIECE_SIZE + 20, height: PIKACHU_PIECE_SIZE + 20 }}
                       />
                     }
                   >
                     <img
                       src={`/pikachu/piece${_index}.png`}
                       alt={_index.toString()}
-                      style={{ width: PIKACHU_PIECE_WIDTH, height: PIKACHU_PIECE_HEIGHT }}
+                      style={{ width: PIKACHU_PIECE_SIZE, height: PIKACHU_PIECE_SIZE }}
                     />
                   </AppTooltip>
                 </div>
@@ -71,8 +63,8 @@ export default function PikachuInstructionDialog() {
                           src={`${PIKACHU_URL}/${_index}.png`}
                           alt={_index.toString()}
                           style={{
-                            width: PIKACHU_PIECE_WIDTH + 20,
-                            height: PIKACHU_PIECE_HEIGHT + 20,
+                            width: PIKACHU_PIECE_SIZE + 20,
+                            height: PIKACHU_PIECE_SIZE + 20,
                           }}
                         />
                       }
@@ -80,7 +72,7 @@ export default function PikachuInstructionDialog() {
                       <img
                         src={`${PIKACHU_URL}/${_index}.png`}
                         alt={_index.toString()}
-                        style={{ width: PIKACHU_PIECE_WIDTH, height: PIKACHU_PIECE_HEIGHT }}
+                        style={{ width: PIKACHU_PIECE_SIZE, height: PIKACHU_PIECE_SIZE }}
                       />
                     </AppTooltip>
                   </div>

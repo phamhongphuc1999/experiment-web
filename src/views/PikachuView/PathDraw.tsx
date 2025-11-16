@@ -1,4 +1,4 @@
-import { PIKACHU_PIECE_HEIGHT, PIKACHU_PIECE_WIDTH } from 'src/configs/constance';
+import { PIKACHU_PIECE_SIZE } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 
 function getMetadata(fromPosition: PositionType, toPosition: PositionType) {
@@ -8,18 +8,18 @@ function getMetadata(fromPosition: PositionType, toPosition: PositionType) {
   if (mode == 'width') {
     const _left = Math.min(fromPosition[1], toPosition[1]);
     return {
-      left: _left * (PIKACHU_PIECE_WIDTH + 1) - PIKACHU_PIECE_WIDTH / 2,
-      top: fromPosition[0] * (PIKACHU_PIECE_HEIGHT + 1) - PIKACHU_PIECE_HEIGHT / 2,
-      width: Math.abs(xDistance) * (PIKACHU_PIECE_WIDTH + 1),
+      left: _left * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
+      top: fromPosition[0] * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
+      width: Math.abs(xDistance) * (PIKACHU_PIECE_SIZE + 1),
       height: '2px',
     };
   } else {
     const _top = Math.min(fromPosition[0], toPosition[0]);
     return {
-      left: fromPosition[1] * (PIKACHU_PIECE_WIDTH + 1) - PIKACHU_PIECE_WIDTH / 2,
-      top: _top * (PIKACHU_PIECE_HEIGHT + 1) - PIKACHU_PIECE_HEIGHT / 2,
+      left: fromPosition[1] * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
+      top: _top * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
       width: '2px',
-      height: Math.abs(yDistance) * (PIKACHU_PIECE_HEIGHT + 1),
+      height: Math.abs(yDistance) * (PIKACHU_PIECE_SIZE + 1),
     };
   }
 }

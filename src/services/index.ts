@@ -113,3 +113,7 @@ export function isPositionIncludes(position: PositionType, positions: Array<Posi
 export async function sleep(miniSecond: number) {
   await new Promise((resolve) => setTimeout(resolve, miniSecond));
 }
+
+export function removeAtIndex<T>(arr: T[], index: number): T[] {
+  return [...arr.slice(0, index), ...arr.slice(index + 1)];
+}
