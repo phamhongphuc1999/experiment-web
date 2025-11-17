@@ -1,4 +1,9 @@
-import { FindPossibleMoveParamsType, PikachuMoveParamsType, PositionType } from 'src/global';
+import {
+  FindPossibleMoveParamsType,
+  PikachuMoveParamsType,
+  PikachuNewBoardType,
+  PositionType,
+} from 'src/global';
 import { isPositionEqual, randomSubGroup } from '..';
 import Queue from '../Queue';
 
@@ -211,11 +216,8 @@ export function findPossibleMove(params: FindPossibleMoveParamsType) {
   return undefined;
 }
 
-export function _createNewPikachuBoard(
-  numberOfRows: number,
-  numberOfColumns: number,
-  numTypes: number
-) {
+export function _createNewPikachuBoard(params: PikachuNewBoardType) {
+  const { numberOfRows, numberOfColumns, numTypes } = params;
   const rawBoard = createBoard(numberOfRows, numberOfColumns, numTypes);
   const board: Array<Array<number>> = [];
   board.push(Array(numberOfColumns + 2).fill(0));
@@ -226,27 +228,19 @@ export function _createNewPikachuBoard(
   return board;
 }
 
-export function createNewPikachuBoard(
-  numberOfRows: number,
-  numberOfColumns: number,
-  numberOfLines: number,
-  numTypes: number
-) {
-  let board = _createNewPikachuBoard(numberOfRows, numberOfColumns, numTypes);
+export function createNewPikachuBoard(params: PikachuNewBoardType & { numberOfLines: number }) {
+  const { numberOfRows, numberOfColumns, numTypes, numberOfLines } = params;
+  let board = _createNewPikachuBoard({ numberOfRows, numberOfColumns, numTypes });
   let path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   while (!path) {
-    board = _createNewPikachuBoard(numberOfRows, numberOfColumns, numTypes);
+    board = _createNewPikachuBoard({ numberOfRows, numberOfColumns, numTypes });
     path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   }
   return { board, path };
 }
 
-function _changePikachuBoard(
-  currentBoard: Array<Array<number>>,
-  numberOfRows: number,
-  numberOfColumns: number,
-  numTypes: number
-) {
+function _changePikachuBoard(params: PikachuNewBoardType & { currentBoard: Array<Array<number>> }) {
+  const { numberOfRows, numberOfColumns, numTypes, currentBoard } = params;
   let totalCells = 0;
   for (let i = 1; i <= numberOfRows; i++) {
     for (let j = 1; j <= numberOfColumns; j++) {
@@ -273,16 +267,13 @@ function _changePikachuBoard(
 }
 
 export function changePikachuBoard(
-  currentBoard: Array<Array<number>>,
-  numberOfRows: number,
-  numberOfColumns: number,
-  numberOfLines: number,
-  numTypes: number
+  params: PikachuNewBoardType & { currentBoard: Array<Array<number>>; numberOfLines: number }
 ) {
-  let board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns, numTypes);
+  const { currentBoard, numberOfRows, numberOfColumns, numTypes, numberOfLines } = params;
+  let board = _changePikachuBoard({ currentBoard, numberOfRows, numberOfColumns, numTypes });
   let path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   while (!path) {
-    board = _changePikachuBoard(currentBoard, numberOfRows, numberOfColumns, numTypes);
+    board = _changePikachuBoard({ currentBoard, numberOfRows, numberOfColumns, numTypes });
     path = findPossibleMove({ numberOfRows, numberOfColumns, board, numberOfLines });
   }
   return { board, path };

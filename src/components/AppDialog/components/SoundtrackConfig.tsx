@@ -15,7 +15,7 @@ export default function SoundtrackConfig({ game }: Props) {
     isSound,
     fn: { setIsSound },
   } = useAllGameConfigContext(game);
-  const { playMove, playError } = useSoundtrack();
+  const { playMove, playError, playSuccess } = useSoundtrack();
 
   return (
     <div className="mt-2 rounded-sm border p-2">
@@ -27,11 +27,12 @@ export default function SoundtrackConfig({ game }: Props) {
         <IconButton>{isSound ? <VolumeHigh size={16} /> : <VolumeSlash size={16} />}</IconButton>
         <p>{isSound ? 'Mute' : 'Unmute'}</p>
       </div>
-      <div className="mt-2 flex items-center gap-2">
-        <Button onClick={() => playMove()} variant="outline">
-          Move soundtrack
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <Button onClick={() => playSuccess()}>Success</Button>
+        <Button onClick={() => playMove()} variant="destructive">
+          Move
         </Button>
-        <Button onClick={() => playError()}>Error soundtrack</Button>
+        <Button onClick={() => playError()}>Error</Button>
       </div>
     </div>
   );

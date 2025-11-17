@@ -15,5 +15,12 @@ export default function useSoundtrack() {
     }
   }, []);
 
-  return { playMove, playError };
+  const playSuccess = useCallback((isMute = true) => {
+    if (isMute) {
+      const move = new Audio('/sounds/success.wav');
+      move.play();
+    }
+  }, []);
+
+  return { playMove, playError, playSuccess };
 }

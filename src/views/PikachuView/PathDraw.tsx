@@ -1,39 +1,39 @@
-import { PIKACHU_PIECE_SIZE } from 'src/configs/constance';
 import { PositionType } from 'src/global';
 
-function getMetadata(fromPosition: PositionType, toPosition: PositionType) {
+function getMetadata(fromPosition: PositionType, toPosition: PositionType, size: number) {
   const xDistance = fromPosition[1] - toPosition[1];
   const yDistance = fromPosition[0] - toPosition[0];
   const mode = xDistance != 0 ? 'width' : 'height';
   if (mode == 'width') {
     const _left = Math.min(fromPosition[1], toPosition[1]);
     return {
-      left: _left * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
-      top: fromPosition[0] * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
-      width: Math.abs(xDistance) * (PIKACHU_PIECE_SIZE + 1),
+      left: _left * size + size / 2 - 1,
+      top: fromPosition[0] * size + size / 2 - 1,
+      width: Math.abs(xDistance) * size + 2,
       height: '2px',
     };
   } else {
     const _top = Math.min(fromPosition[0], toPosition[0]);
     return {
-      left: fromPosition[1] * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
-      top: _top * (PIKACHU_PIECE_SIZE + 1) - PIKACHU_PIECE_SIZE / 2,
+      left: fromPosition[1] * size + size / 2 - 1,
+      top: _top * size + size / 2 - 1,
       width: '2px',
-      height: Math.abs(yDistance) * (PIKACHU_PIECE_SIZE + 1),
+      height: Math.abs(yDistance) * size + 2,
     };
   }
 }
 
 interface Props {
+  size: number;
   selectedPath: Array<PositionType>;
 }
 
-export default function PathDraw({ selectedPath }: Props) {
+export default function PathDraw({ size, selectedPath }: Props) {
   return (
     <>
       {selectedPath.slice(1).map((toPosition, index) => {
         const fromPosition = selectedPath[index];
-        const { left, top, width, height } = getMetadata(fromPosition, toPosition);
+        const { left, top, width, height } = getMetadata(fromPosition, toPosition, size);
 
         return (
           <div

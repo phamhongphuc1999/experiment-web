@@ -1,9 +1,9 @@
 'use client';
 
 import cloneDeep from 'lodash.clonedeep';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { PIKACHU_PIECE_SIZE, PIKACHU_URL } from 'src/configs/constance';
+import { PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
@@ -14,7 +14,12 @@ import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikac
 import { usePikachuStore } from 'src/states/pikachu.state';
 import PathDraw from './PathDraw';
 
-export default function PikachuBoard() {
+interface Props {
+  size: number;
+}
+
+export default function PikachuBoard({ size }: Props) {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [selectedPath, setSelectedPath] = useState<Array<PositionType>>([]);
   const {
     board,
@@ -101,13 +106,9 @@ export default function PikachuBoard() {
 
   return (
     <div
-      className="border-ring relative flex flex-col gap-y-px border"
-      style={{
-        marginTop: `${PIKACHU_PIECE_SIZE}px`,
-        marginBottom: `${PIKACHU_PIECE_SIZE}px`,
-        marginLeft: `${PIKACHU_PIECE_SIZE}px`,
-        marginRight: `${PIKACHU_PIECE_SIZE}px`,
-      }}
+      ref={ref}
+      className="relative flex h-fit w-fit flex-col items-center gap-y-px"
+      style={{ padding: `${size}px` }}
     >
       {isChangeBoard && <div className="absolute inset-0 bg-black/50" />}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
@@ -123,7 +124,7 @@ export default function PikachuBoard() {
               return (
                 <div
                   key={`${row}_${column}`}
-                  style={{ width: `${PIKACHU_PIECE_SIZE}px`, height: `${PIKACHU_PIECE_SIZE}px` }}
+                  style={{ width: `${size - 1}px`, height: `${size - 1}px` }}
                   className={cn(
                     isPiece
                       ? 'hover:bg-ring/50 bg-secondary flex items-center justify-center hover:rounded-md'
@@ -140,8 +141,7 @@ export default function PikachuBoard() {
                           : `/pikachu/piece${_index}.png`
                       }
                       alt={`${row}_${column}`}
-                      className="cursor-pointer"
-                      style={{ width: PIKACHU_PIECE_SIZE - 10, height: PIKACHU_PIECE_SIZE - 10 }}
+                      className="h-full w-full cursor-pointer"
                     />
                   )}
                 </div>
@@ -151,7 +151,7 @@ export default function PikachuBoard() {
         );
       })}
       {status == 'paused' && <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-md" />}
-      {selectedPath.length > 0 && <PathDraw selectedPath={selectedPath} />}
+      {selectedPath.length > 0 && <PathDraw size={size} selectedPath={selectedPath} />}
     </div>
   );
 }

@@ -72,12 +72,12 @@ export const usePikachuStore = create<
             set((state) => {
               const { numberOfRows, numberOfColumns, numberOfLines, imgType, roundList } =
                 state.metadata;
-              const { board, path } = createNewPikachuBoard(
+              const { board, path } = createNewPikachuBoard({
                 numberOfRows,
                 numberOfColumns,
                 numberOfLines,
-                imgType == 'internal' ? 90 : 1025
-              );
+                numTypes: imgType == 'internal' ? 90 : 1025,
+              });
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingTime = state.metadata.maxRemainingTime;
@@ -98,13 +98,13 @@ export const usePikachuStore = create<
           changeBoard: () => {
             set((state) => {
               const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
-              const { board, path } = changePikachuBoard(
-                state.board,
+              const { board, path } = changePikachuBoard({
+                currentBoard: state.board,
                 numberOfRows,
                 numberOfColumns,
                 numberOfLines,
-                imgType == 'internal' ? 90 : 1025
-              );
+                numTypes: imgType == 'internal' ? 90 : 1025,
+              });
               state.board = board;
               state.suggestion = path;
               state.metadata.remainingChanges = state.metadata.remainingChanges - 1;

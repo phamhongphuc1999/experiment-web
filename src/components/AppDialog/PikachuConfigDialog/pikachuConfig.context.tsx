@@ -11,7 +11,12 @@ import {
   useState,
 } from 'react';
 import { pikachuRoundTransformations } from 'src/configs/constance';
-import { PikachuBoardTransformType, PikachuImgType, PikachuTimeType } from 'src/global';
+import {
+  PikachuBoardTransformType,
+  PikachuGameType,
+  PikachuImgType,
+  PikachuTimeType,
+} from 'src/global';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
 type PikachuConfigContextType = {
@@ -21,6 +26,7 @@ type PikachuConfigContextType = {
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
   rounds: Array<PikachuBoardTransformType>;
+  gameType: PikachuGameType;
   fn: {
     setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
@@ -28,6 +34,7 @@ type PikachuConfigContextType = {
     setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
     setImgType: Dispatch<SetStateAction<PikachuImgType>>;
     setRounds: Dispatch<SetStateAction<PikachuBoardTransformType[]>>;
+    setGameType: Dispatch<SetStateAction<PikachuGameType>>;
   };
 };
 
@@ -38,6 +45,7 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   timeConfigType: 'normal',
   imgType: 'internal',
   rounds: [],
+  gameType: 'normal',
   fn: {
     setIsSound: () => {},
     setSize: () => {},
@@ -45,6 +53,7 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
     setTimeConfigType: () => {},
     setImgType: () => {},
     setRounds: () => {},
+    setGameType: () => {},
   },
 };
 
@@ -67,6 +76,7 @@ export default function PikachuConfigProvider({ children }: Props) {
   const [rounds, setRounds] = useState<Array<PikachuBoardTransformType>>(
     pikachuRoundTransformations
   );
+  const [gameType, setGameType] = useState<PikachuGameType>('normal');
 
   useEffect(() => {
     setIsSound(metadata.isSound);
@@ -92,6 +102,10 @@ export default function PikachuConfigProvider({ children }: Props) {
     setRounds(metadata.roundList);
   }, [metadata.roundList]);
 
+  useEffect(() => {
+    setGameType(metadata.gameType);
+  }, [metadata.gameType]);
+
   const contextData = useMemo<PikachuConfigContextType>(() => {
     return {
       isSound,
@@ -100,9 +114,18 @@ export default function PikachuConfigProvider({ children }: Props) {
       timeConfigType,
       imgType,
       rounds,
-      fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType, setRounds },
+      gameType,
+      fn: {
+        setIsSound,
+        setSize,
+        setNumberOfLines,
+        setTimeConfigType,
+        setImgType,
+        setRounds,
+        setGameType,
+      },
     };
-  }, [isSound, size, numberOfLines, timeConfigType, imgType, rounds]);
+  }, [isSound, size, numberOfLines, timeConfigType, imgType, rounds, gameType]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

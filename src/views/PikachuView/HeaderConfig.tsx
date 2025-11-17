@@ -1,12 +1,13 @@
 'use client';
 
-import { ComponentProps, useCallback } from 'react';
+import { ComponentProps } from 'react';
 import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
 import { pikachuTransformConfig } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
+import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
@@ -19,13 +20,7 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
     remainingTime,
     fn: { setRemainingTime },
   } = usePikachuStateContext();
-
-  const playSuccess = useCallback((isMute = true) => {
-    if (isMute) {
-      const move = new Audio('/sounds/success.wav');
-      move.play();
-    }
-  }, []);
+  const { playSuccess } = useSoundtrack();
 
   function onNewGame() {
     createBoard('newGame');
@@ -51,14 +46,14 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
           Round: {round} ({pikachuTransformConfig[roundList[round - 1]].title})
         </span>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         <RoutingGameDialog game="pikachu" />
         <PikachuConfigDialog />
         <PikachuInstructionDialog />
         <p className="font-semibold">{`Changes: ${remainingChanges}`}</p>
         <p className="font-semibold">{`Time: ${remainingTime}s`}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         <Button onClick={onNewGame}>New game</Button>
         <Button variant="outline" onClick={onChangeBoard}>
           Change board
