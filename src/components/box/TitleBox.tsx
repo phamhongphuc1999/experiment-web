@@ -33,7 +33,7 @@ export function TitleContainer({ title, contentProps, ...props }: TitleContainer
       <p className="text-sm font-bold">{title}</p>
       <div
         {...contentProps}
-        className={cn('mt-2 flex items-center gap-2', contentProps?.className)}
+        className={cn('mt-2 flex flex-wrap items-center gap-2', contentProps?.className)}
       >
         {props.children}
       </div>

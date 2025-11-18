@@ -6,7 +6,6 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -54,18 +53,6 @@ export default function Connect4ConfigProvider({ children }: Props) {
   const [gameType, setGameType] = useState(metadata.gameType);
   const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
   const [isSound, setIsSound] = useState(metadata.isSound);
-
-  useEffect(() => {
-    setPlayMode(metadata.playMode);
-  }, [metadata.playMode]);
-
-  useEffect(() => {
-    setGameType(metadata.gameType);
-  }, [metadata.gameType]);
-
-  useEffect(() => {
-    setMaxError(metadata.maxNumberOfBlindError);
-  }, [metadata.maxNumberOfBlindError]);
 
   const contextData = useMemo<Connect4ConfigContextType>(() => {
     return {
