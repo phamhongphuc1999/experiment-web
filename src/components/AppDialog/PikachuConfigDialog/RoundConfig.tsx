@@ -4,6 +4,7 @@ import IconButton from 'src/components/buttons/IconButton';
 import Draggable from 'src/components/dnd/Draggable';
 import Droppable from 'src/components/dnd/Droppable';
 import SortableItem from 'src/components/dnd/SortableItem';
+import { Button } from 'src/components/shadcn-ui/button';
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,7 +17,7 @@ import { removeAtIndex } from 'src/services';
 import { usePikachuConfigContext } from './pikachuConfig.context';
 
 export default function RoundConfig() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const {
     rounds,
     fn: { setRounds },
@@ -35,7 +36,7 @@ export default function RoundConfig() {
 
   return (
     <div className="mt-2 rounded-sm border p-2">
-      <Collapsible onOpenChange={onCollapseClose}>
+      <Collapsible open={isOpen} onOpenChange={onCollapseClose}>
         <CollapsibleTrigger className="flex w-full items-center justify-between">
           <p className="text-sm font-bold">Round config</p>
           <ArrowDown2
@@ -43,6 +44,7 @@ export default function RoundConfig() {
           />
         </CollapsibleTrigger>
         <CollapsibleContent>
+          <Button onClick={() => setRounds(pikachuRoundTransformations)}>Reset</Button>
           <div className="border-ring mt-2 flex flex-wrap items-center gap-2 rounded-sm border p-1">
             {pikachuRoundTransformations
               .filter((id) => !rounds.includes(id))

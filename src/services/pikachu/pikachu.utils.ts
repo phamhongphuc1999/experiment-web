@@ -260,7 +260,7 @@ function _changePikachuBoard(params: PikachuNewBoardType & { currentBoard: Array
   for (const value of Object.values(values)) {
     if (value == 4) totalFourCells++;
   }
-  const pairedTiles = _createRawBoard(totalCells, numTypes, (4 * totalFourCells) / totalCells);
+  const pairedTiles = _createRawBoard(totalCells, numTypes, 1 - (2 * totalFourCells) / totalCells);
   const rawBoard: Array<Array<number>> = [];
   let index = 0;
   for (let i = 0; i < numberOfRows; i++) {

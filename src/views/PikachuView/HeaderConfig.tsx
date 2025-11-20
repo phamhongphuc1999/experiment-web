@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps } from 'react';
+import { ComponentProps, Dispatch, SetStateAction } from 'react';
 import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
@@ -11,7 +11,18 @@ import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 
-export default function HeaderConfig(props: ComponentProps<'div'>) {
+interface Props extends ComponentProps<'div'> {
+  hintCountdown: number;
+  setHintCountdown: Dispatch<SetStateAction<number>>;
+  setShowHint: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function HeaderConfig({
+  hintCountdown,
+  setHintCountdown,
+  setShowHint,
+  ...props
+}: Props) {
   const {
     metadata: { remainingChanges, round, isSound, status, maxRemainingTime, roundList },
     fn: { createBoard, changeBoard, setMetadata },
@@ -57,6 +68,16 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
         <Button onClick={onNewGame}>New game</Button>
         <Button variant="outline" onClick={onChangeBoard}>
           Change board
+        </Button>
+        <Button
+          className="w-16.5"
+          disabled={hintCountdown > 0}
+          onClick={() => {
+            setShowHint(true);
+            setHintCountdown(20);
+          }}
+        >
+          {hintCountdown > 0 ? hintCountdown : 'Hint'}
         </Button>
         <Button variant="secondary" onClick={onPauseGame}>
           {status == 'paused' ? 'Resume' : 'Pause'}

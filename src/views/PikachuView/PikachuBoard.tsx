@@ -1,28 +1,33 @@
 'use client';
 
 import cloneDeep from 'lodash.clonedeep';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
-import { sleep } from 'src/services';
+import { isPositionEqual, sleep } from 'src/services';
 import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
 import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import PathDraw from './PathDraw';
+import SuggestionDraw from './SuggesstionDraw';
 
 interface Props {
   size: number;
+  hintCountdown: number;
+  showHint: boolean;
+  setShowHint: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function PikachuBoard({ size }: Props) {
+export default function PikachuBoard({ size, hintCountdown, showHint, setShowHint }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [selectedPath, setSelectedPath] = useState<Array<PositionType>>([]);
   const {
     board,
+    suggestion,
     fn: { movePath, moveChangeBoard, createBoard },
     metadata: {
       numberOfRows,
@@ -60,6 +65,16 @@ export default function PikachuBoard({ size }: Props) {
       setFirstPiece(undefined);
       playError(isSound);
     } else {
+      if (showHint && hintCountdown > 0) {
+        const latestIndex = suggestion.length - 1;
+        const firstCheck =
+          isPositionEqual(firstPiece, suggestion[0]) ||
+          isPositionEqual(firstPiece, suggestion[latestIndex]);
+        const secondCheck =
+          isPositionEqual(position, suggestion[0]) ||
+          isPositionEqual(position, suggestion[latestIndex]);
+        if (firstCheck && secondCheck) setShowHint(false);
+      }
       const cloneBoard = cloneDeep(board);
       const path = performPikachuMove({
         board: cloneBoard,
@@ -152,6 +167,7 @@ export default function PikachuBoard({ size }: Props) {
       })}
       {status == 'paused' && <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-md" />}
       {selectedPath.length > 0 && <PathDraw size={size} selectedPath={selectedPath} />}
+      {hintCountdown > 0 && showHint && <SuggestionDraw size={size} />}
     </div>
   );
 }
