@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { PIKACHU_PIECE_SIZE } from 'src/configs/constance';
 import PikachuStateProvider from 'src/context/pikachu-state.context';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -13,6 +13,16 @@ export default function PikachuView() {
   const {
     metadata: { numberOfColumns, numberOfRows, status },
   } = usePikachuStore();
+  const [hintCountdown, setHintCountdown] = useState(0);
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (hintCountdown == 0) return;
+    const timeout = setInterval(() => {
+      setHintCountdown((preValue) => preValue - 1);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [hintCountdown]);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -40,9 +50,20 @@ export default function PikachuView() {
           ref={ref}
           className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden"
         >
-          <HeaderConfig />
+          <HeaderConfig
+            hintCountdown={hintCountdown}
+            setHintCountdown={setHintCountdown}
+            setShowHint={setShowHint}
+          />
           <div className="flex min-h-0 w-full flex-1 justify-center">
-            {status != 'init' && <PikachuBoard size={size} />}
+            {status != 'init' && (
+              <PikachuBoard
+                hintCountdown={hintCountdown}
+                size={size}
+                showHint={showHint}
+                setShowHint={setShowHint}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -6,7 +6,6 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -67,34 +66,6 @@ export default function CaroConfigProvider({ children }: Props) {
   const [isOverride, setIsOverride] = useState(metadata.isOverride);
   const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
   const [isSound, setIsSound] = useState(metadata.isSound);
-
-  useEffect(() => {
-    setWinMode(metadata.winMode);
-  }, [metadata.winMode]);
-
-  useEffect(() => {
-    setSize(metadata.size);
-  }, [metadata.size]);
-
-  useEffect(() => {
-    setPlayMode(metadata.playMode);
-  }, [metadata.playMode]);
-
-  useEffect(() => {
-    setGameType(metadata.gameType);
-  }, [metadata.gameType]);
-
-  useEffect(() => {
-    setIsOverride(metadata.isOverride);
-  }, [metadata.isOverride]);
-
-  useEffect(() => {
-    setMaxError(metadata.maxNumberOfBlindError);
-  }, [metadata.maxNumberOfBlindError]);
-
-  useEffect(() => {
-    setIsSound(metadata.isSound);
-  }, [metadata.isSound]);
 
   const contextData = useMemo<CaroConfigContextType>(() => {
     return {

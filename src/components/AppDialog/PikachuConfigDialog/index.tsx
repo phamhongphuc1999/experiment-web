@@ -24,6 +24,7 @@ import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
+import GameTypeConfig from './GameTypeConfig';
 import ImgTypeConfig from './ImgTypeConfig';
 import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
@@ -43,7 +44,16 @@ function PikachuConfigDialogLayout() {
     timeConfigType,
     imgType,
     rounds,
-    fn: { setIsSound, setSize, setNumberOfLines, setTimeConfigType, setImgType, setRounds },
+    gameType,
+    fn: {
+      setIsSound,
+      setSize,
+      setNumberOfLines,
+      setTimeConfigType,
+      setImgType,
+      setRounds,
+      setGameType,
+    },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
@@ -65,6 +75,7 @@ function PikachuConfigDialogLayout() {
       maxRemainingTime,
       imgType,
       roundList: rounds,
+      gameType,
     });
     setDialog(DIALOG_KEY.pikachuConfigDialog, false);
   }
@@ -80,6 +91,7 @@ function PikachuConfigDialogLayout() {
     setTimeConfigType(metadata.timeConfigType);
     setImgType(metadata.imgType);
     setRounds(metadata.roundList);
+    setGameType(metadata.gameType);
     onOpenChange(false);
   }
 
@@ -101,6 +113,7 @@ function PikachuConfigDialogLayout() {
           <LineConfig />
           <TimeTypeConfig />
           <RoundConfig />
+          <GameTypeConfig />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel

@@ -7,6 +7,11 @@ import {
 import { isPositionEqual, randomSubGroup } from '..';
 import Queue from '../Queue';
 
+export function __refineNumTypes(halfCells: number, maxNumTypes: number, percent: number) {
+  const newNumTypes = Math.min(maxNumTypes, Math.floor(halfCells * percent));
+  return newNumTypes;
+}
+
 export function _refineNumTypes(halfCells: number, numTypes: number) {
   if (halfCells >= 2 * numTypes) return numTypes;
   if (halfCells <= 25) {
@@ -15,21 +20,19 @@ export function _refineNumTypes(halfCells: number, numTypes: number) {
     else return halfCells;
   } else if (halfCells <= 50) {
     const random = 0.85 + 0.15 * Math.random();
-    const newNumTypes = Math.min(numTypes, Math.floor(halfCells * random));
-    return newNumTypes;
-  } else {
-    const newNumTypes = Math.min(numTypes, Math.floor(halfCells / 2));
-    return newNumTypes;
-  }
+    return __refineNumTypes(halfCells, numTypes, random);
+  } else return __refineNumTypes(halfCells, numTypes, 0.5);
 }
 
-export function _createRawBoard(totalCells: number, numTypes: number) {
+export function _createRawBoard(totalCells: number, numTypes: number, percent?: number) {
   if (totalCells % 2 !== 0)
     throw new Error('Total number of cells must be even for matching pairs.');
 
   const tileIds: Array<number> = [];
   const halfCells = totalCells / 2;
-  const refinedNumTypes = _refineNumTypes(halfCells, numTypes);
+  const refinedNumTypes = percent
+    ? __refineNumTypes(halfCells, numTypes, percent)
+    : _refineNumTypes(halfCells, numTypes);
 
   const _arr = randomSubGroup(numTypes);
   for (let i = 0; i < halfCells; i++) {
@@ -242,12 +245,22 @@ export function createNewPikachuBoard(params: PikachuNewBoardType & { numberOfLi
 function _changePikachuBoard(params: PikachuNewBoardType & { currentBoard: Array<Array<number>> }) {
   const { numberOfRows, numberOfColumns, numTypes, currentBoard } = params;
   let totalCells = 0;
+  const values: { [key: number]: number } = {};
   for (let i = 1; i <= numberOfRows; i++) {
     for (let j = 1; j <= numberOfColumns; j++) {
-      if (currentBoard[i][j] > 0) totalCells++;
+      const _value = currentBoard[i][j];
+      if (_value > 0) {
+        totalCells++;
+        if (values[_value]) values[_value] = values[_value] + 1;
+        else values[_value] = 1;
+      }
     }
   }
-  const pairedTiles = _createRawBoard(totalCells, numTypes);
+  let totalFourCells = 0;
+  for (const value of Object.values(values)) {
+    if (value == 4) totalFourCells++;
+  }
+  const pairedTiles = _createRawBoard(totalCells, numTypes, 1 - (2 * totalFourCells) / totalCells);
   const rawBoard: Array<Array<number>> = [];
   let index = 0;
   for (let i = 0; i < numberOfRows; i++) {
