@@ -63,7 +63,7 @@ export default function HeaderConfig({
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <div className="flex items-center gap-2">
-        {gameType == 'normal' || gameType == 'customBoard' ? (
+        {gameType != 'randomBoard' ? (
           <span>
             Round: {round} ({pikachuTransformConfig[roundList[round - 1]].title})
           </span>

@@ -8,7 +8,8 @@ import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import { PositionType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
-import { isPositionEqual, sleep } from 'src/services';
+import { getRandom, isPositionEqual, sleep } from 'src/services';
+import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.utils';
 import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
 import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -28,7 +29,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
   const {
     board,
     suggestion,
-    fn: { movePath, moveChangeBoard, createBoard, setRandomMetadata },
+    fn: { movePath, moveChangeBoard, createBoard, setMetadata },
     metadata: {
       numberOfRows,
       numberOfColumns,
@@ -49,7 +50,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
   } = usePikachuStateContext();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
   const { playMove, playError } = useSoundtrack();
-  const [randomCounter, setRandomCounter] = useState(0);
+  const [randomCounter, setRandomCounter] = useState(1);
 
   useEffect(() => {
     if (selectedPath.length === 0) return;
@@ -89,21 +90,30 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
       });
       if (path) {
         const transformType =
-          gameType == 'normal' || gameType == 'customBoard'
-            ? roundList[round - 1]
-            : roundList[randomRoundListIndex];
+          gameType != 'randomBoard' ? roundList[round - 1] : roundList[randomRoundListIndex];
         pikachuBoardTransformation(
           { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
           transformType
         );
         playMove(isSound);
+        setSelectedPath(path);
+        if (gameType == 'randomBoard') {
+          if (randomCounter >= 5) {
+            const randomRoundListIndex = getRandom(roundList.length);
+            setMetadata({ randomRoundListIndex });
+            setRandomCounter(1);
+            pikachuBoardFormatting(
+              { board: cloneBoard, numberOfRows, numberOfColumns },
+              roundList[randomRoundListIndex]
+            );
+          } else setRandomCounter((preValue) => preValue + 1);
+        }
         const possiblePath = findPossibleMove({
           board: cloneBoard,
           numberOfRows,
           numberOfColumns,
           numberOfLines,
         });
-        setSelectedPath(path);
         if (possiblePath)
           sleep(150).then(() => {
             move();
@@ -119,19 +129,9 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
           sleep(200).then(() => {
             setRemainingTime((_) => maxRemainingTime);
             if (gameType != 'randomBoard') createBoard('nextRound');
-            else {
-              createBoard('newGame');
-              setRandomMetadata();
-            }
+            else createBoard('newGame');
           });
         }
-        sleep(200).then(() => {
-          const _random = Math.random();
-          if (_random < 0.2 || randomCounter >= 7) {
-            setRandomMetadata();
-            setRandomCounter(1);
-          } else setRandomCounter((preValue) => preValue + 1);
-        });
       } else playError(isSound);
       setFirstPiece(undefined);
     }
@@ -143,6 +143,10 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
       className="relative flex h-fit w-fit flex-col items-center gap-y-px"
       style={{ padding: `${size}px` }}
     >
+      <div
+        className="border-ring pointer-events-none absolute border-[0.5px]"
+        style={{ top: size - 2, bottom: size - 2, left: size - 2, right: size - 2 }}
+      />
       {isChangeBoard && <div className="absolute inset-0 bg-black/50" />}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;

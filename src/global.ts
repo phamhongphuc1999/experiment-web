@@ -326,21 +326,21 @@ export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
 // start pikachu
 export type PikachuTimeType = 'normal' | 'cumulative' | 'off';
 export type PikachuImgType = 'internal' | 'external';
-export type PikachuGameType = 'normal' | 'customBoard' | 'randomBoard';
+export type PikachuGameType = 'normal' | 'customBoard' | 'randomBoard' | 'blind';
 
-export type PikachuMoveParamsType = {
-  board: Array<Array<number>>;
+export type BasePikachuParamsType = {
   numberOfRows: number;
   numberOfColumns: number;
+  board: Array<Array<number>>;
+};
+
+export type PikachuMoveParamsType = BasePikachuParamsType & {
   sourcePiece: PositionType;
   targetPiece: PositionType;
   numberOfLines: number;
 };
 
-export type FindPossibleMoveParamsType = {
-  numberOfRows: number;
-  numberOfColumns: number;
-  board: Array<Array<number>>;
+export type FindPossibleMoveParamsType = BasePikachuParamsType & {
   numberOfLines: number;
 };
 
@@ -377,10 +377,7 @@ export type PerformTransformationParamsType = PerformFormattingParamsType & {
   moves: Array<PositionType>;
 };
 
-export type MoveParamsType = {
-  board: Array<Array<number>>;
+export type MoveParamsType = BasePikachuParamsType & {
   moves: Array<PositionType>;
-  numberOfRows: number;
-  numberOfColumns: number;
 };
 // end pikachu

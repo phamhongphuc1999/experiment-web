@@ -41,7 +41,6 @@ type PikachuStateType = {
     movePath: (board: Array<Array<number>>, path: Array<PositionType>) => void;
     moveChangeBoard: (board: Array<Array<number>>) => void;
     setMetadata: (metadata: Partial<PikachuMetadataType>) => void;
-    setRandomMetadata: () => void;
   };
 };
 
@@ -134,13 +133,8 @@ export const usePikachuStore = create<
           setMetadata: (metadata: Partial<PikachuMetadataType>) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
-              if (state.metadata.gameType == 'randomBoard')
+              if (metadata.gameType == 'randomBoard')
                 state.metadata.randomRoundListIndex = getRandom(state.metadata.roundList.length);
-            });
-          },
-          setRandomMetadata: () => {
-            set((state) => {
-              state.metadata.randomRoundListIndex = getRandom(state.metadata.roundList.length);
             });
           },
         },

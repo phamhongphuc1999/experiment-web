@@ -19,7 +19,7 @@ export function isInSpace(move: PositionType, space: [PositionType, PositionType
   );
 }
 
-export function performTransformation(params: PerformTransformationParamsType) {
+function performTransformation(params: PerformTransformationParamsType) {
   const { board, moves, vector, space } = params;
   const inSpaceMoves = moves.filter((move) => isInSpace(move, space));
   for (const move of inSpaceMoves) {
@@ -55,15 +55,11 @@ function normal(params: MoveParamsType) {
 
 function _straight(params: MoveParamsType, vector: VectorType) {
   const { board, moves, numberOfRows, numberOfColumns } = params;
-  performTransformation({
-    board,
-    moves,
-    vector,
-    space: [
-      [1, 1],
-      [numberOfRows, numberOfColumns],
-    ],
-  });
+  const space: [PositionType, PositionType] = [
+    [1, 1],
+    [numberOfRows, numberOfColumns],
+  ];
+  performTransformation({ board, moves, vector, space });
 }
 
 function splitHorizontally(params: MoveParamsType) {

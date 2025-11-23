@@ -28,6 +28,12 @@ export default function GameTypeConfig() {
       >
         Random board
       </Button>
+      <Button
+        variant={gameType == 'blind' ? 'default' : 'outline'}
+        onClick={() => setGameType('blind')}
+      >
+        Blind
+      </Button>
     </TitleContainer>
   );
 }
