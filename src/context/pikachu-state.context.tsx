@@ -48,12 +48,18 @@ export default function PikachuStateProvider({ children }: Props) {
   }, [metadata.remainingTime]);
 
   useEffect(() => {
-    if (remainingTime == 0 || metadata.status != 'playing' || isPaused) return;
+    if (
+      remainingTime == 0 ||
+      metadata.status != 'playing' ||
+      isPaused ||
+      metadata.timeConfigType == 'off'
+    )
+      return;
     const timer = setInterval(() => {
       setRemainingTime((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [remainingTime, metadata.status, isPaused]);
+  }, [remainingTime, metadata.status, isPaused, metadata.timeConfigType]);
 
   const _callback = useCallback(() => {
     fn.setMetadata({ remainingTime });

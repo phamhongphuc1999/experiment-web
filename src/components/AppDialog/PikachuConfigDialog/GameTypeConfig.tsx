@@ -14,19 +14,19 @@ export default function GameTypeConfig() {
         variant={gameType == 'normal' ? 'default' : 'outline'}
         onClick={() => setGameType('normal')}
       >
-        Internal
+        Normal
       </Button>
       <Button
         variant={gameType == 'customBoard' ? 'default' : 'outline'}
         onClick={() => setGameType('customBoard')}
       >
-        External
+        Custom board
       </Button>
       <Button
         variant={gameType == 'randomBoard' ? 'default' : 'outline'}
         onClick={() => setGameType('randomBoard')}
       >
-        External
+        Random board
       </Button>
     </TitleContainer>
   );

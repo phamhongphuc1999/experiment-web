@@ -24,7 +24,17 @@ export default function HeaderConfig({
   ...props
 }: Props) {
   const {
-    metadata: { remainingChanges, round, isSound, status, maxRemainingTime, roundList },
+    metadata: {
+      remainingChanges,
+      round,
+      isSound,
+      status,
+      maxRemainingTime,
+      roundList,
+      timeConfigType,
+      randomRoundListIndex,
+      gameType,
+    },
     fn: { createBoard, changeBoard, setMetadata },
   } = usePikachuStore();
   const {
@@ -53,16 +63,22 @@ export default function HeaderConfig({
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <div className="flex items-center gap-2">
-        <span>
-          Round: {round} ({pikachuTransformConfig[roundList[round - 1]].title})
-        </span>
+        {gameType == 'normal' || gameType == 'customBoard' ? (
+          <span>
+            Round: {round} ({pikachuTransformConfig[roundList[round - 1]].title})
+          </span>
+        ) : (
+          <span>
+            Type: {pikachuTransformConfig[roundList[randomRoundListIndex]]?.title || '--'}
+          </span>
+        )}
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <RoutingGameDialog game="pikachu" />
         <PikachuConfigDialog />
         <PikachuInstructionDialog />
         <p className="font-semibold">{`Changes: ${remainingChanges}`}</p>
-        <p className="font-semibold">{`Time: ${remainingTime}s`}</p>
+        {timeConfigType != 'off' && <p className="font-semibold">{`Time: ${remainingTime}s`}</p>}
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <Button onClick={onNewGame}>New game</Button>
@@ -79,9 +95,11 @@ export default function HeaderConfig({
         >
           {hintCountdown > 0 ? hintCountdown : 'Hint'}
         </Button>
-        <Button variant="secondary" onClick={onPauseGame}>
-          {status == 'paused' ? 'Resume' : 'Pause'}
-        </Button>
+        {timeConfigType != 'off' && (
+          <Button variant="secondary" onClick={onPauseGame}>
+            {status == 'paused' ? 'Resume' : 'Pause'}
+          </Button>
+        )}
       </div>
     </div>
   );

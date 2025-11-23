@@ -6,6 +6,7 @@ import {
   PikachuTimeType,
   PositionType,
 } from 'src/global';
+import { getRandom } from 'src/services';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -25,6 +26,7 @@ type PikachuMetadataType = {
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
   roundList: Array<PikachuBoardTransformType>;
+  randomRoundListIndex: number;
   gameType: PikachuGameType;
 };
 
@@ -39,6 +41,7 @@ type PikachuStateType = {
     movePath: (board: Array<Array<number>>, path: Array<PositionType>) => void;
     moveChangeBoard: (board: Array<Array<number>>) => void;
     setMetadata: (metadata: Partial<PikachuMetadataType>) => void;
+    setRandomMetadata: () => void;
   };
 };
 
@@ -63,6 +66,7 @@ export const usePikachuStore = create<
           timeConfigType: 'normal',
           imgType: 'internal',
           roundList: pikachuRoundTransformations,
+          randomRoundListIndex: -1,
           gameType: 'normal',
         },
         board: [],
@@ -130,6 +134,13 @@ export const usePikachuStore = create<
           setMetadata: (metadata: Partial<PikachuMetadataType>) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
+              if (state.metadata.gameType == 'randomBoard')
+                state.metadata.randomRoundListIndex = getRandom(state.metadata.roundList.length);
+            });
+          },
+          setRandomMetadata: () => {
+            set((state) => {
+              state.metadata.randomRoundListIndex = getRandom(state.metadata.roundList.length);
             });
           },
         },

@@ -28,7 +28,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
   const {
     board,
     suggestion,
-    fn: { movePath, moveChangeBoard, createBoard },
+    fn: { movePath, moveChangeBoard, createBoard, setRandomMetadata },
     metadata: {
       numberOfRows,
       numberOfColumns,
@@ -40,6 +40,8 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
       maxRemainingTime,
       imgType,
       roundList,
+      gameType,
+      randomRoundListIndex,
     },
   } = usePikachuStore();
   const {
@@ -47,6 +49,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
   } = usePikachuStateContext();
   const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
   const { playMove, playError } = useSoundtrack();
+  const [randomCounter, setRandomCounter] = useState(0);
 
   useEffect(() => {
     if (selectedPath.length === 0) return;
@@ -85,9 +88,13 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
         numberOfLines,
       });
       if (path) {
+        const transformType =
+          gameType == 'normal' || gameType == 'customBoard'
+            ? roundList[round - 1]
+            : roundList[randomRoundListIndex];
         pikachuBoardTransformation(
           { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
-          roundList[round - 1]
+          transformType
         );
         playMove(isSound);
         const possiblePath = findPossibleMove({
@@ -111,9 +118,20 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
         } else {
           sleep(200).then(() => {
             setRemainingTime((_) => maxRemainingTime);
-            createBoard('nextRound');
+            if (gameType != 'randomBoard') createBoard('nextRound');
+            else {
+              createBoard('newGame');
+              setRandomMetadata();
+            }
           });
         }
+        sleep(200).then(() => {
+          const _random = Math.random();
+          if (_random < 0.2 || randomCounter >= 7) {
+            setRandomMetadata();
+            setRandomCounter(1);
+          } else setRandomCounter((preValue) => preValue + 1);
+        });
       } else playError(isSound);
       setFirstPiece(undefined);
     }

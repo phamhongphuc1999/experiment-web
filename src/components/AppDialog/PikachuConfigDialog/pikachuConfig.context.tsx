@@ -6,6 +6,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -76,6 +77,34 @@ export default function PikachuConfigProvider({ children }: Props) {
     pikachuRoundTransformations
   );
   const [gameType, setGameType] = useState<PikachuGameType>('normal');
+
+  useEffect(() => {
+    setIsSound(metadata.isSound);
+  }, [metadata.isSound]);
+
+  useEffect(() => {
+    setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
+  }, [metadata.numberOfRows, metadata.numberOfColumns]);
+
+  useEffect(() => {
+    setNumberOfLines(metadata.numberOfLines);
+  }, [metadata.numberOfLines]);
+
+  useEffect(() => {
+    setTimeConfigType(metadata.timeConfigType);
+  }, [metadata.timeConfigType]);
+
+  useEffect(() => {
+    setImgType(metadata.imgType);
+  }, [metadata.imgType]);
+
+  useEffect(() => {
+    setRounds(metadata.roundList);
+  }, [metadata.roundList]);
+
+  useEffect(() => {
+    setGameType(metadata.gameType);
+  }, [metadata.gameType]);
 
   const contextData = useMemo<PikachuConfigContextType>(() => {
     return {

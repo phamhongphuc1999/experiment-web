@@ -23,6 +23,12 @@ export default function TimeTypeConfig() {
         >
           Cumulative
         </Button>
+        <Button
+          variant={timeConfigType == 'off' ? 'default' : 'outline'}
+          onClick={() => setTimeConfigType('off')}
+        >
+          Turn off
+        </Button>
       </div>
     </div>
   );
