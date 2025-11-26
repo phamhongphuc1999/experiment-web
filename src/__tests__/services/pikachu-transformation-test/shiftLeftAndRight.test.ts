@@ -2,7 +2,7 @@ import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transfo
 import { describe, expect, it } from 'vitest';
 
 describe('shiftLeftAndRight', () => {
-  it('testcase 1: collapse to left', () => {
+  it('testcase 1: shiftLeft', () => {
     const board = [
       [0, 0, 0, 0, 0],
       [0, 1, 2, 3, 4, 5, 0],
@@ -36,7 +36,7 @@ describe('shiftLeftAndRight', () => {
       [0, 0, 0, 0, 0],
     ]);
   });
-  it('testcase 1: collapse to right', () => {
+  it('testcase 1: shiftRight', () => {
     const board = [
       [0, 0, 0, 0, 0],
       [0, 1, 2, 3, 4, 5, 0],
