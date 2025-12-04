@@ -11,8 +11,9 @@ export interface AnimationComponentProps {
   color?: string;
 }
 
-export interface AnimationComponentDivProps<T = AnimationComponentProps>
-  extends ComponentProps<'div'> {
+export interface AnimationComponentDivProps<
+  T = AnimationComponentProps,
+> extends ComponentProps<'div'> {
   iconProps?: T;
 }
 
