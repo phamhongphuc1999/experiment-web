@@ -141,6 +141,26 @@ function _analyticStep(
   return { isWin, arr: side1.cells.concat(side2.cells) };
 }
 
+/**
+ * Checks if the current move results in a win condition.
+ *
+ * This function analyzes all four possible win directions (left diagonal, right diagonal,
+ * vertical, and horizontal) from the current step position. It counts consecutive pieces
+ * in each direction and determines if they meet the win condition (4 in a row for boards > 3x3,
+ * 2 in a row for 3x3 boards).
+ *
+ * @param params - Object containing the game state:
+ *   - steps: Map of board positions to player turns
+ *   - currentStep: The location of the most recent move
+ *   - currentPlayer: The player who made the current move
+ *   - size: The board size (3, 10, or 15)
+ * @param winConfigMode - Win mode configuration:
+ *   - 'blockOpponent': Win is blocked if opponent pieces are on both ends
+ *   - 'non-blockOpponent': Win is not blocked by opponent pieces
+ * @returns WinStateType object containing:
+ *   - winMode: Array of win types achieved (e.g., ['horizontal', 'vertical'])
+ *   - locations: Map of winning cell locations to their win types
+ */
 export function checkWin(params: ParamsType, winConfigMode: CaroWinModeType): WinStateType {
   const _sizeForWin = params.size > 3 ? 4 : 2;
   const leftDiagonal = _analyticStep('leftDiagonal', params, winConfigMode, _sizeForWin);

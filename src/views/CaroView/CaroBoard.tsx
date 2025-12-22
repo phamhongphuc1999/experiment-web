@@ -1,12 +1,12 @@
 'use client';
 
 import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
 import { useCaroStateContext } from 'src/context/caro-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';
+import CaroCell from './CaroCell';
 import HeaderConfig from './HeaderConfig';
 
 export default function CaroBoard(props: ComponentProps<'div'>) {
@@ -106,50 +106,23 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
             {Array.from({ length: boardSize * boardSize }).map((_, location) => {
               const _turn = steps[location];
               const _winTypes = winState?.locations?.[location];
-              let _icon = '';
-
-              if (
-                gameType != 'blind' ||
-                (gameType == 'blind' && (isWin || stepsOrder.at(-1) == location))
-              ) {
-                if (_turn == 0) _icon = 'x';
-                else if (_turn == 1) _icon = 'o';
-              }
-              const isCurrent = stepsOrder.at(-1) == location;
+              const isCurrent = stepsOrder.at(-1) === location;
 
               return (
-                <div
+                <CaroCell
                   key={location}
-                  className={cn(
-                    'flex items-center justify-center',
-                    _turn == 0 &&
-                      cn(
-                        'text-chart-1',
-                        _winTypes && 'border-chart-1 relative border',
-                        gameType == 'normal' ? 'hover:bg-chart-1/30!' : 'hover:bg-background/60',
-                        isCurrent && 'bg-chart-1/20!'
-                      ),
-                    _turn == 1 &&
-                      cn(
-                        'text-chart-2',
-                        _winTypes && 'border-chart-2 relative border',
-                        gameType == 'normal' ? 'hover:bg-chart-2/30!' : 'hover:bg-background/60',
-                        isCurrent && 'bg-chart-2/20!'
-                      ),
-                    _turn == undefined && 'hover:bg-background/60',
-                    winState || isBlindForceOver
-                      ? 'bg-background/80'
-                      : cn(
-                          'bg-background',
-                          shouldDisableBoard ? 'cursor-default' : 'cursor-pointer'
-                        )
-                  )}
-                  style={{ width: size, height: size, fontSize: size * 0.7 }}
-                  onClick={() => onMove(location)}
-                >
-                  {_icon}
-                  <GameWinLines turn={_turn} winTypes={_winTypes} />
-                </div>
+                  location={location}
+                  size={size}
+                  cellSize={size}
+                  turn={_turn}
+                  winTypes={_winTypes}
+                  gameType={gameType}
+                  isCurrent={isCurrent}
+                  isWin={isWin}
+                  isBlindForceOver={isBlindForceOver}
+                  shouldDisableBoard={shouldDisableBoard}
+                  onMove={onMove}
+                />
               );
             })}
           </div>

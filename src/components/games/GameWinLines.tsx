@@ -2,7 +2,7 @@ import { CaroWinType, TurnType } from 'src/global';
 import { cn } from 'src/lib/utils';
 
 interface Props {
-  turn: TurnType;
+  turn?: TurnType;
   winTypes?: Partial<{ [type in CaroWinType]: boolean }>;
 }
 

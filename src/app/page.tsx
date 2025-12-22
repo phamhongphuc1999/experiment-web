@@ -2,40 +2,119 @@ import Link from 'next/link';
 import CommonContainer from 'src/components/box/CommonContainer';
 
 export default function Home() {
+  const features = [
+    {
+      title: 'Caro (Tic-Tac-Toe)',
+      description:
+        'Classic strategy game with multiple modes: offline, online multiplayer, and blind mode',
+      href: '/caro',
+      icon: '⭕',
+      gradient: 'from-orange-500 to-red-500',
+    },
+    {
+      title: 'Connect 4',
+      description: 'Drop discs and connect four in a row to win',
+      href: '/connect4',
+      icon: '🔴',
+      gradient: 'from-blue-500 to-purple-500',
+    },
+    {
+      title: 'Pikachu',
+      description: 'Match pairs of tiles with various board transformations',
+      href: '/pikachu',
+      icon: '⚡',
+      gradient: 'from-yellow-500 to-orange-500',
+    },
+    {
+      title: 'Weather',
+      description: 'Get detailed weather forecasts with customizable parameters',
+      href: '/weather',
+      icon: '🌤️',
+      gradient: 'from-cyan-500 to-blue-500',
+    },
+    {
+      title: 'Word Learning',
+      description: 'Build your vocabulary with interactive flashcards',
+      href: '/word',
+      icon: '📚',
+      gradient: 'from-green-500 to-teal-500',
+    },
+    {
+      title: 'Encryption',
+      description: 'Secure text encryption and decryption tools',
+      href: '/encrypt',
+      icon: '🔐',
+      gradient: 'from-purple-500 to-pink-500',
+    },
+  ];
+
   return (
     <CommonContainer>
-      <p>
-        Hello, what do you want to do? Let's play{' '}
-        <Link href="/caro" className="text-orange-400 underline">
-          caro
-        </Link>{' '}
-        or{' '}
-        <Link href="/connect4" className="text-orange-400 underline">
-          connect4
-        </Link>
-        .
-      </p>
-      <p>
-        You can learn about me in{' '}
-        <Link
-          href="https://peter-present.xyz/"
-          target="_blank"
-          className="text-orange-400 underline"
-        >
-          my portfolio
-        </Link>
-        .
-      </p>
-      <p className="mt-2">More routes in my app</p>
-      <ul className="list-inside list-disc">
-        <Link href="/weather" className="inline-block hover:text-orange-400 hover:underline">
-          <li>weather</li>
-        </Link>
-        <br />
-        <Link href="/encrypt" className="inline-block hover:text-orange-400 hover:underline">
-          <li>encrypt</li>
-        </Link>
-      </ul>
+      <div className="mx-auto max-w-6xl">
+        {/* Hero Section */}
+        <div className="mb-12 text-center">
+          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+            Welcome to{' '}
+            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+              Experiment Web
+            </span>
+          </h1>
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+            A collection of interactive games, utilities, and experiments built with Next.js and
+            TypeScript
+          </p>
+          <div className="mt-6">
+            <Link
+              href="https://peter-present.xyz/"
+              target="_blank"
+              className="text-orange-400 underline transition-colors hover:text-orange-500"
+            >
+              View my portfolio →
+            </Link>
+          </div>
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => (
+            <Link
+              key={feature.href}
+              href={feature.href}
+              className="bg-card hover:border-primary group relative overflow-hidden rounded-lg border p-6 transition-all duration-300 hover:shadow-lg"
+            >
+              {/* Gradient Background on Hover */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-10`}
+              />
+
+              {/* Content */}
+              <div className="relative">
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="text-4xl">{feature.icon}</span>
+                  <h2 className="text-xl font-semibold">{feature.title}</h2>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-orange-400 transition-transform group-hover:translate-x-1">
+                  Explore <span>→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Additional Info */}
+        <div className="bg-card mt-12 rounded-lg border p-6">
+          <h3 className="mb-3 text-lg font-semibold">About This Project</h3>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            This is a personal experimental project showcasing various web technologies and
+            interactive features. Built with Next.js 16, React 19, TypeScript, Tailwind CSS, and
+            Zustand for state management. All games support both offline and online multiplayer
+            modes.
+          </p>
+        </div>
+      </div>
     </CommonContainer>
   );
 }
