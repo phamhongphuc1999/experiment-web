@@ -1,12 +1,18 @@
+import Link from 'next/link';
 import CommonContainer from '../box/CommonContainer';
 import ThemeButton from '../buttons/ThemeButton';
 
 export default function AppHeader() {
   return (
-    <div className="border-b-border bg-secondary fixed z-1205 h-[55px] w-full shadow-xl">
+    <header className="border-b-border bg-background/60 fixed top-0 z-1205 h-[60px] w-full border-b backdrop-blur-md transition-all duration-300">
       <CommonContainer className="flex h-full items-center justify-between">
-        <ThemeButton />
+        <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+          <span className="hidden text-xl font-bold tracking-tight sm:block">Experiment Web</span>
+        </Link>
+        <div className="flex items-center gap-4">
+          <ThemeButton />
+        </div>
       </CommonContainer>
-    </div>
+    </header>
   );
 }

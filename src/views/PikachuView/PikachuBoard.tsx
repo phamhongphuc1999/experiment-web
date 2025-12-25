@@ -1,6 +1,7 @@
 'use client';
 
 import cloneDeep from 'lodash.clonedeep';
+import { motion, AnimatePresence } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { PIKACHU_URL } from 'src/configs/constance';
@@ -159,29 +160,37 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
               const isPiece = board[row][column];
 
               return (
-                <div
+                <motion.div
                   key={`${row}_${column}`}
+                  whileHover={isPiece ? { scale: 1.05 } : {}}
+                  whileTap={isPiece ? { scale: 0.95 } : {}}
                   style={{ width: `${size - 1}px`, height: `${size - 1}px` }}
                   className={cn(
+                    'transition-all duration-200',
                     isPiece
-                      ? 'hover:bg-ring/50 bg-secondary flex items-center justify-center hover:rounded-md'
+                      ? 'bg-secondary/80 hover:bg-secondary flex items-center justify-center overflow-hidden shadow-sm'
                       : 'bg-background',
-                    isSelected && 'bg-ring rounded-md'
+                    isSelected && 'z-10 bg-orange-400/20 ring-2 ring-orange-400'
                   )}
                   onClick={() => onPieceClick([row, column])}
                 >
-                  {isPiece > 0 && (
-                    <img
-                      src={
-                        imgType == 'external'
-                          ? `${PIKACHU_URL}/${_index}.png`
-                          : `/pikachu/piece${_index}.png`
-                      }
-                      alt={`${row}_${column}`}
-                      className="h-full w-full cursor-pointer"
-                    />
-                  )}
-                </div>
+                  <AnimatePresence>
+                    {isPiece > 0 && (
+                      <motion.img
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        src={
+                          imgType == 'external'
+                            ? `${PIKACHU_URL}/${_index}.png`
+                            : `/pikachu/piece${_index}.png`
+                        }
+                        alt={`${row}_${column}`}
+                        className="h-full w-full cursor-pointer object-contain p-1"
+                      />
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>

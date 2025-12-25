@@ -1,5 +1,6 @@
 'use client';
 
+import { motion, AnimatePresence } from 'motion/react';
 import { ComponentProps, useMemo } from 'react';
 import GameWinLines from 'src/components/games/GameWinLines';
 import { CaroGameType, TurnType, WinStateType } from 'src/global';
@@ -48,16 +49,16 @@ export default function CaroCell({
   }, [gameType, isWin, isCurrent, turn]);
 
   const cellClassName = useMemo(() => {
-    const baseClasses = 'flex items-center justify-center';
+    const baseClasses = 'flex items-center justify-center transition-colors duration-200';
 
     // Player 0 (X) styling
     if (turn === 0) {
       return cn(
         baseClasses,
-        'text-chart-1',
-        winTypes && 'border-chart-1 relative border',
-        gameType === 'normal' ? 'hover:bg-chart-1/30!' : 'hover:bg-background/60',
-        isCurrent && 'bg-chart-1/20!'
+        'text-orange-400 font-bold',
+        winTypes && 'bg-orange-400/10 relative',
+        gameType === 'normal' ? 'hover:bg-orange-400/20!' : 'hover:bg-background/60',
+        isCurrent && 'bg-orange-400/20!'
       );
     }
 
@@ -65,17 +66,17 @@ export default function CaroCell({
     if (turn === 1) {
       return cn(
         baseClasses,
-        'text-chart-2',
-        winTypes && 'border-chart-2 relative border',
-        gameType === 'normal' ? 'hover:bg-chart-2/30!' : 'hover:bg-background/60',
-        isCurrent && 'bg-chart-2/20!'
+        'text-blue-400 font-bold',
+        winTypes && 'bg-blue-400/10 relative',
+        gameType === 'normal' ? 'hover:bg-blue-400/20!' : 'hover:bg-background/60',
+        isCurrent && 'bg-blue-400/20!'
       );
     }
 
     // Empty cell styling
     return cn(
       baseClasses,
-      'hover:bg-background/60',
+      'hover:bg-secondary/40',
       isWin || isBlindForceOver
         ? 'bg-background/80'
         : cn('bg-background', shouldDisableBoard ? 'cursor-default' : 'cursor-pointer')
@@ -86,10 +87,31 @@ export default function CaroCell({
     <div
       {...props}
       className={cellClassName}
-      style={{ width: cellSize, height: cellSize, fontSize: cellSize * 0.7 }}
+      style={{
+        width: cellSize,
+        height: cellSize,
+        fontSize: cellSize * 0.7,
+        border: '0.5px solid var(--border)',
+      }}
       onClick={() => onMove(location)}
     >
-      {icon}
+      <AnimatePresence mode="wait">
+        {icon && (
+          <motion.span
+            key={icon}
+            initial={{ scale: 0, rotate: -45, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            transition={{
+              type: 'spring',
+              stiffness: 260,
+              damping: 20,
+            }}
+            className="flex h-full w-full items-center justify-center"
+          >
+            {icon}
+          </motion.span>
+        )}
+      </AnimatePresence>
       <GameWinLines turn={turn} winTypes={winTypes} />
     </div>
   );

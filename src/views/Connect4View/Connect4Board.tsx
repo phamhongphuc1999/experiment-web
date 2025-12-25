@@ -1,5 +1,6 @@
 'use client';
 
+import { motion, AnimatePresence } from 'motion/react';
 import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import GameWinLines from 'src/components/games/GameWinLines';
@@ -28,7 +29,7 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
   } = useConnect4StateContext();
 
   const { itemSize } = useMemo(() => {
-    return { itemSize: size * 0.7 };
+    return { itemSize: size * 0.75 };
   }, [size]);
 
   useLayoutEffect(() => {
@@ -86,13 +87,13 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
               width: numberOfColumns * size + numberOfColumns + 1,
               height: numberOfRows * size + numberOfRows + 1,
             }}
-            className="bg-border border-px border-ring flex flex-wrap gap-px border"
+            className="bg-accent/20 border-accent/30 flex flex-wrap gap-px overflow-hidden rounded-xl border"
           >
             {Array.from({ length: numberOfColumns }).map((_, column) => {
               return (
                 <div
                   key={column}
-                  className="connect4-column flex flex-col-reverse justify-between"
+                  className="group relative flex flex-col-reverse justify-between bg-transparent transition-colors hover:bg-white/5"
                   onClick={() => onMove(column)}
                 >
                   {Array.from({ length: numberOfRows }).map((_, row) => {
@@ -106,23 +107,38 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
                       <div
                         key={`${row}_${column}`}
                         className={cn(
-                          'connect4-item bg-background relative flex cursor-pointer items-center justify-center',
-                          _turn == undefined && 'connect4-item-turn-undefined'
+                          'relative flex items-center justify-center border-[0.5px] border-white/5',
+                          _turn == undefined && 'cursor-pointer'
                         )}
-                        style={{ width: size, height: size, fontSize: size * 0.7 }}
+                        style={{ width: size, height: size }}
                       >
-                        {_turn == 0 && isShouldShowMove && (
-                          <div
-                            className="border-chart-1 rounded-full border-4"
-                            style={{ width: itemSize, height: itemSize }}
-                          />
-                        )}
-                        {_turn == 1 && isShouldShowMove && (
-                          <div
-                            className="border-chart-2 rounded-full border-4"
-                            style={{ width: itemSize, height: itemSize }}
-                          />
-                        )}
+                        {/* Empty hole shadow */}
+                        <div
+                          className="absolute rounded-full bg-black/20 shadow-inner"
+                          style={{ width: itemSize, height: itemSize }}
+                        />
+
+                        <AnimatePresence>
+                          {_turn != undefined && isShouldShowMove && (
+                            <motion.div
+                              initial={{ y: -size * (numberOfRows - row), opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{
+                                type: 'spring',
+                                stiffness: 300,
+                                damping: 20,
+                                mass: 0.8,
+                              }}
+                              className={cn(
+                                'z-10 rounded-full shadow-lg',
+                                _turn == 0
+                                  ? 'bg-linear-to-br from-orange-400 to-red-600'
+                                  : 'bg-linear-to-br from-blue-400 to-indigo-600'
+                              )}
+                              style={{ width: itemSize, height: itemSize }}
+                            />
+                          )}
+                        </AnimatePresence>
                         <GameWinLines turn={_turn} winTypes={_winTypes} />
                       </div>
                     );

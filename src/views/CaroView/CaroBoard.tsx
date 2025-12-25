@@ -93,7 +93,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <HeaderConfig />
-      <div ref={ref} className="flex h-full w-full justify-center overflow-hidden">
+      <div ref={ref} className="flex h-full w-full justify-center overflow-hidden p-4">
         {size > 0 && (
           <div
             ref={caroRef}
@@ -101,7 +101,10 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               width: boardSize * size + boardSize + 1,
               height: boardSize * size + boardSize + 1,
             }}
-            className="bg-border border-px border-ring flex flex-wrap gap-px border"
+            className={cn(
+              'bg-border flex flex-wrap gap-px border shadow-2xl transition-shadow duration-500',
+              turn === 0 ? 'shadow-orange-400/20' : 'shadow-blue-400/20'
+            )}
           >
             {Array.from({ length: boardSize * boardSize }).map((_, location) => {
               const _turn = steps[location];

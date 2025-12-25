@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import CommonContainer from 'src/components/box/CommonContainer';
 
@@ -50,15 +53,22 @@ export default function Home() {
 
   return (
     <CommonContainer>
-      <div className="mx-auto max-w-6xl">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto max-w-6xl"
+      >
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-            Welcome to{' '}
-            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-              Experiment Web
-            </span>
-          </h1>
+          <motion.h1
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, type: 'spring' }}
+            className="mb-4 text-4xl font-bold md:text-5xl"
+          >
+            Welcome to Experiment Web
+          </motion.h1>
           <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
             A collection of interactive games, utilities, and experiments built with Next.js and
             TypeScript
@@ -76,45 +86,59 @@ export default function Home() {
 
         {/* Features Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <Link
+          {features.map((feature, index) => (
+            <motion.div
               key={feature.href}
-              href={feature.href}
-              className="bg-card hover:border-primary group relative overflow-hidden rounded-lg border p-6 transition-all duration-300 hover:shadow-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
             >
-              {/* Gradient Background on Hover */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-10`}
-              />
+              <Link
+                href={feature.href}
+                className="group bg-card/40 hover:border-primary/50 relative block overflow-hidden rounded-xl border p-6 backdrop-blur-md transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10"
+              >
+                {/* Gradient Background on Hover */}
+                <div
+                  className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
+                />
 
-              {/* Content */}
-              <div className="relative">
-                <div className="mb-3 flex items-center gap-3">
-                  <span className="text-4xl">{feature.icon}</span>
-                  <h2 className="text-xl font-semibold">{feature.title}</h2>
+                {/* Content */}
+                <div className="relative z-10">
+                  <div className="mb-4 flex items-center gap-4">
+                    <span className="bg-secondary/50 flex h-14 w-14 items-center justify-center rounded-lg text-4xl shadow-inner transition-transform duration-300 group-hover:scale-110">
+                      {feature.icon}
+                    </span>
+                    <h2 className="text-xl font-bold tracking-tight">{feature.title}</h2>
+                  </div>
+                  <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                  <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-orange-400">
+                    <span className="transition-transform group-hover:translate-x-1">Explore</span>
+                    <span className="transition-transform group-hover:translate-x-2">→</span>
+                  </div>
                 </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {feature.description}
-                </p>
-                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-orange-400 transition-transform group-hover:translate-x-1">
-                  Explore <span>→</span>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
         </div>
 
         {/* Additional Info */}
-        <div className="bg-card mt-12 rounded-lg border p-6">
-          <h3 className="mb-3 text-lg font-semibold">About This Project</h3>
-          <p className="text-muted-foreground text-sm leading-relaxed">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="bg-card/30 mt-12 mb-8 rounded-xl border p-8 backdrop-blur-sm"
+        >
+          <h3 className="mb-4 text-xl font-bold">About This Project</h3>
+          <p className="text-muted-foreground text-base leading-relaxed">
             This is a personal experimental project showcasing various web technologies and
             interactive features. Built with Next.js 16, React 19, TypeScript, Tailwind CSS, and
             Zustand for state management. All games support both offline and online multiplayer
             modes.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </CommonContainer>
   );
 }
