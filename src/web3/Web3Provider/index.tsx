@@ -3,12 +3,12 @@
 import { AppKitNetwork, solana } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { lazy, ReactNode } from 'react';
-import { ChainId } from 'src/global';
-import { useWeb3Store } from 'src/services/web3/states/web3.state';
+import { useWeb3Store } from 'src/web3/states/web3.state';
 import { solanaAdapter } from '../Adapter/AppSolanaAdapter';
 import { evmNetworks, wagmiAdapter } from '../Adapter/AppWagmiAdapter';
 import { REOWN_PROJECT_ID } from '../configs/constance';
 import Web3WalletProvider from '../context/web3-wallet.context';
+import { ChainId } from '../types';
 
 const AppKitProvider = lazy(() => import('./AppKitProvider'));
 
@@ -41,7 +41,7 @@ interface Props {
 
 function Web3ProviderLayout({ chainId, children }: Props) {
   if (chainId === ChainId.SOL || chainId === ChainId.BSC || chainId === ChainId.BASE) {
-    return <AppKitProvider chainId={chainId}>{children}</AppKitProvider>;
+    return <AppKitProvider>{children}</AppKitProvider>;
   }
 
   return <>{children}</>;

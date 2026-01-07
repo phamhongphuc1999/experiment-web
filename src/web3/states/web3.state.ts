@@ -1,7 +1,7 @@
-import { ChainId } from 'src/global';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { ChainId } from '../types';
 
 interface Web3StateType {
   chainId: ChainId;

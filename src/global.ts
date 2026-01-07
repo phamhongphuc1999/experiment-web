@@ -382,13 +382,3 @@ export type MoveParamsType = BasePikachuParamsType & {
   moves: Array<PositionType>;
 };
 // end pikachu
-
-// start web3
-export enum ChainId {
-  SOL = 'solana',
-  APT = 'aptos',
-  BSC = 'bsc',
-  SUI = 'sui',
-  BASE = 'base',
-}
-//end web3

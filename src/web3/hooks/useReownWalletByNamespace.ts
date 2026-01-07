@@ -1,6 +1,6 @@
 import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
-import { ChainId } from 'src/global';
 import { namespaceByChainId } from '../configs/constance';
+import { ChainId } from '../types';
 
 type Props = {
   chainId: ChainId;

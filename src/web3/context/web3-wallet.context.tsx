@@ -1,6 +1,8 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { useAppKitNetwork } from '@reown/appkit/react';
+import { createContext, ReactNode, useContext, useEffect, useMemo } from 'react';
+import { appKitNetworkByChainId } from '../configs/constance';
 import useReownWalletByNamespace from '../hooks/useReownWalletByNamespace';
 import { useWeb3Store } from '../states/web3.state';
 
@@ -30,9 +32,20 @@ export default function Web3WalletProvider({ children }: Props) {
   const { address, isConnected, connectWallet, disconnectWallet } = useReownWalletByNamespace({
     chainId,
   });
+  const { switchNetwork } = useAppKitNetwork();
+
+  useEffect(() => {
+    if (appKitNetworkByChainId[chainId]) {
+      switchNetwork(appKitNetworkByChainId[chainId]);
+    }
+  }, [chainId, switchNetwork]);
 
   const contextData = useMemo(() => {
-    return { address, isConnected, fn: { connectWallet, disconnectWallet } };
+    return {
+      address,
+      isConnected,
+      fn: { connectWallet, disconnectWallet },
+    };
   }, [address, connectWallet, disconnectWallet, isConnected]);
 
   return <Web3WalletContext.Provider value={contextData}>{children}</Web3WalletContext.Provider>;
