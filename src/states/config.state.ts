@@ -70,9 +70,7 @@ export const useConfigStore = create<
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {
-          return {
-            ...(persistedState as ConfigStateType),
-          };
+          return { ...(persistedState as ConfigStateType) };
         }
         return persistedState;
       },

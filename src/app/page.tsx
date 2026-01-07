@@ -11,43 +11,31 @@ export default function Home() {
       description:
         'Classic strategy game with multiple modes: offline, online multiplayer, and blind mode',
       href: '/caro',
-      icon: '⭕',
       gradient: 'from-orange-500 to-red-500',
     },
     {
-      title: 'Connect 4',
+      title: 'Connect4',
       description: 'Drop discs and connect four in a row to win',
       href: '/connect4',
-      icon: '🔴',
       gradient: 'from-blue-500 to-purple-500',
     },
     {
       title: 'Pikachu',
       description: 'Match pairs of tiles with various board transformations',
       href: '/pikachu',
-      icon: '⚡',
       gradient: 'from-yellow-500 to-orange-500',
+    },
+    {
+      title: 'Bingo',
+      description: 'Modern bingo',
+      href: '/bingo',
+      gradient: 'from-green-500 to-teal-500',
     },
     {
       title: 'Weather',
       description: 'Get detailed weather forecasts with customizable parameters',
       href: '/weather',
-      icon: '🌤️',
       gradient: 'from-cyan-500 to-blue-500',
-    },
-    {
-      title: 'Word Learning',
-      description: 'Build your vocabulary with interactive flashcards',
-      href: '/word',
-      icon: '📚',
-      gradient: 'from-green-500 to-teal-500',
-    },
-    {
-      title: 'Encryption',
-      description: 'Secure text encryption and decryption tools',
-      href: '/encrypt',
-      icon: '🔐',
-      gradient: 'from-purple-500 to-pink-500',
     },
   ];
 
@@ -59,7 +47,6 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="mx-auto max-w-6xl"
       >
-        {/* Hero Section */}
         <div className="mb-12 text-center">
           <motion.h1
             initial={{ scale: 0.9 }}
@@ -83,8 +70,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
-        {/* Features Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <motion.div
@@ -95,21 +80,13 @@ export default function Home() {
             >
               <Link
                 href={feature.href}
-                className="group bg-card/40 hover:border-primary/50 relative block overflow-hidden rounded-xl border p-6 backdrop-blur-md transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10"
+                className="group bg-card/40 hover:border-primary/50 relative block h-full overflow-hidden rounded-xl border p-6 backdrop-blur-md transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10"
               >
-                {/* Gradient Background on Hover */}
                 <div
                   className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
                 />
-
-                {/* Content */}
                 <div className="relative z-10">
-                  <div className="mb-4 flex items-center gap-4">
-                    <span className="bg-secondary/50 flex h-14 w-14 items-center justify-center rounded-lg text-4xl shadow-inner transition-transform duration-300 group-hover:scale-110">
-                      {feature.icon}
-                    </span>
-                    <h2 className="text-xl font-bold tracking-tight">{feature.title}</h2>
-                  </div>
+                  <h2 className="text-xl font-bold tracking-tight">{feature.title}</h2>
                   <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
                     {feature.description}
                   </p>
@@ -122,8 +99,6 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
-
-        {/* Additional Info */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -132,10 +107,9 @@ export default function Home() {
         >
           <h3 className="mb-4 text-xl font-bold">About This Project</h3>
           <p className="text-muted-foreground text-base leading-relaxed">
-            This is a personal experimental project showcasing various web technologies and
-            interactive features. Built with Next.js 16, React 19, TypeScript, Tailwind CSS, and
-            Zustand for state management. All games support both offline and online multiplayer
-            modes.
+            {
+              'This is a personal experimental project showcasing various web technologies and interactive features. Built with Next.js 16, React 19, TypeScript, Tailwind CSS, and Zustand for state management. All games support both offline and online multiplayer modes.'
+            }
           </p>
         </motion.div>
       </motion.div>
