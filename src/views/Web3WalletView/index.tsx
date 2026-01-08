@@ -11,9 +11,9 @@ import Information from './Information';
 function Web3WalletViewLayout() {
   const {
     isConnected,
-    fn: { connectWallet, disconnectWallet },
+    fn: { connectWallet, disconnectWallet, switchNetwork },
   } = useWeb3WalletContext();
-  const { chainId, fn } = useWeb3Store();
+  const { chainId } = useWeb3Store();
 
   return (
     <>
@@ -39,7 +39,7 @@ function Web3WalletViewLayout() {
           return (
             <Button
               variant={chainId == network ? 'secondary' : 'outline'}
-              onClick={() => fn.setChainId(network)}
+              onClick={() => switchNetwork(network)}
             >
               {network}
             </Button>
