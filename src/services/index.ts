@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { toast } from 'sonner';
-import { APP_NAME, ITEM_PER_PAGE } from 'src/configs/constance';
-import { PaginationType, PositionType } from 'src/global';
+import { APP_NAME } from 'src/configs/constance';
+import { PositionType } from 'src/global';
 import { ZodError } from 'zod';
 
 type SBase = {
@@ -94,19 +94,6 @@ export function randomSubGroup(range: number): number[] {
     [_array[i], _array[j]] = [_array[j], _array[i]];
   }
   return _array;
-}
-
-/**
- * Calculates the range indices for pagination.
- * @param pagination - Optional pagination parameters (page and pageSize)
- * @returns An object with 'from' and 'to' indices for the current page
- */
-export function getPaginationRange(pagination?: PaginationType): { from: number; to: number } {
-  const page = pagination?.page ?? 0;
-  const pageSize = pagination?.pageSize ?? ITEM_PER_PAGE;
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize - 1;
-  return { from, to };
 }
 
 /**

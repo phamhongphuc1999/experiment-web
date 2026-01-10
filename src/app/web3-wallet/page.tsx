@@ -1,4 +1,3 @@
-import CommonContainer from 'src/components/box/CommonContainer';
 import { generateAppMetadata } from 'src/services';
 import Web3WalletView from 'src/views/Web3WalletView';
 
@@ -8,8 +7,8 @@ export async function generateMetadata() {
 
 export default function Web3Wallet() {
   return (
-    <CommonContainer>
+    <div className="container">
       <Web3WalletView />
-    </CommonContainer>
+    </div>
   );
 }

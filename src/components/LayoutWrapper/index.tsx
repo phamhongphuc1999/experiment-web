@@ -20,7 +20,7 @@ export default function LayoutWrapper({ children }: Props) {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="h-screen pt-[60px]"
+          className="h-screen pt-15"
         >
           {children}
         </motion.div>

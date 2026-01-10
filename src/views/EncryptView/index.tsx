@@ -51,7 +51,7 @@ export default function EncryptView() {
   }
 
   return (
-    <>
+    <div className="container">
       <Button onClick={onReset}>Reset</Button>
       <div className="border-sidebar-border mt-4 rounded-xl border p-4">
         <Button onClick={onHello}>Hello</Button>
@@ -69,6 +69,6 @@ export default function EncryptView() {
         {axiosError && <p className="text-destructive">{error}</p>}
       </div>
       <DomainInfo data={data} setData={setData} />
-    </>
+    </div>
   );
 }
