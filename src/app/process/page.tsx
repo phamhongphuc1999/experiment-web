@@ -1,0 +1,14 @@
+import { generateAppMetadata } from 'src/services';
+import ProcessView from 'src/views/ProcessView';
+
+export async function generateMetadata() {
+  return generateAppMetadata('Process');
+}
+
+export default function Web3Wallet() {
+  return (
+    <div className="container">
+      <ProcessView />
+    </div>
+  );
+}

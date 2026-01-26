@@ -41,7 +41,8 @@ type Props = React.ComponentProps<'button'> &
     isLoading?: boolean;
   };
 
-function Button({ className, variant, size, asChild = false, isLoading = false, ...props }: Props) {
+function Button(params: Props) {
+  const { className, variant, size, asChild = false, isLoading = false, ...props } = params;
   const Comp = asChild ? Slot : 'button';
 
   return (
