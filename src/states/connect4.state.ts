@@ -1,5 +1,5 @@
-import { CaroGameType, Connect4WinStateType, PlayModeType, TurnType } from 'src/global';
 import { checkWin } from 'src/services/connect4.utils';
+import { CaroGameType, Connect4WinStateType, PlayModeType, TurnType } from 'src/types/caro.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

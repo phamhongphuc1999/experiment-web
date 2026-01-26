@@ -19,9 +19,9 @@ import {
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { PikachuBoardTransformType } from 'src/global';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import { PikachuBoardTransformType } from 'src/types/pikachu.type';
 import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
 import GameTypeConfig from './GameTypeConfig';

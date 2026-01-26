@@ -1,10 +1,10 @@
 'use client';
 
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ComponentProps, useMemo } from 'react';
 import GameWinLines from 'src/components/games/GameWinLines';
-import { CaroGameType, TurnType, WinStateType } from 'src/global';
 import { cn } from 'src/lib/utils';
+import { CaroGameType, TurnType, WinStateType } from 'src/types/caro.type';
 
 interface CaroCellProps extends ComponentProps<'div'> {
   location: number;

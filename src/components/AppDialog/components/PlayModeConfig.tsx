@@ -1,7 +1,7 @@
 import { Bluetooth, Setting2 } from 'iconsax-reactjs';
 import { Button } from 'src/components/shadcn-ui/button';
-import { MyGameType, PlayModeType } from 'src/global';
 import useBoardGameConnectionContext from 'src/hooks/useBoardGameConnection';
+import { MyGameType, PlayModeType } from 'src/types/caro.type';
 import useBoardGameConfigContext from './useBoardGameConfigContext';
 
 interface Props {

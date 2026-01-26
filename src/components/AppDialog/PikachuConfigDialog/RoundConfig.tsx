@@ -11,9 +11,9 @@ import {
   CollapsibleTrigger,
 } from 'src/components/shadcn-ui/collapsible';
 import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/constance';
-import { PikachuBoardTransformType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { removeAtIndex } from 'src/services';
+import { PikachuBoardTransformType } from 'src/types/pikachu.type';
 import { usePikachuConfigContext } from './pikachuConfig.context';
 
 export default function RoundConfig() {

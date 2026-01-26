@@ -4,8 +4,8 @@ import AppTooltip from 'src/components/AppTooltip';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
-import { MyGameType } from 'src/global';
 import { useCaroStore } from 'src/states/caro.state';
+import { MyGameType } from 'src/types/caro.type';
 import { useCaroConfigContext } from '../CaroConfigDialog/caroConfig.context';
 import useBoardGameConfigContext from './useBoardGameConfigContext';
 

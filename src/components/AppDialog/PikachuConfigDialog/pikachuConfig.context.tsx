@@ -11,13 +11,13 @@ import {
   useState,
 } from 'react';
 import { pikachuRoundTransformations } from 'src/configs/constance';
+import { usePikachuStore } from 'src/states/pikachu.state';
 import {
   PikachuBoardTransformType,
   PikachuGameType,
   PikachuImgType,
   PikachuTimeType,
-} from 'src/global';
-import { usePikachuStore } from 'src/states/pikachu.state';
+} from 'src/types/pikachu.type';
 
 type PikachuConfigContextType = {
   isSound: boolean;

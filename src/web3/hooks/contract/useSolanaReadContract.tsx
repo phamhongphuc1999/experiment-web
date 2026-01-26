@@ -5,7 +5,7 @@ import { AnchorProvider, Program } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { OptionalQueryType } from 'src/global';
+import { OptionalQueryType } from 'src/types/global';
 import { getSolanaRpc } from 'src/web3/services/utils';
 import { ContractActionParams } from 'src/web3/types';
 

@@ -1,5 +1,5 @@
-import { CaroWinType, TurnType } from 'src/global';
 import { cn } from 'src/lib/utils';
+import { CaroWinType, TurnType } from 'src/types/caro.type';
 
 interface Props {
   turn?: TurnType;

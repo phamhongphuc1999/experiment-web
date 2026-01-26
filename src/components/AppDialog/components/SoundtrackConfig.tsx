@@ -2,8 +2,8 @@ import { VolumeHigh, VolumeSlash } from 'iconsax-reactjs';
 import IconButton from 'src/components/buttons/IconButton';
 import { Button } from 'src/components/shadcn-ui/button';
 import { gameConfigs } from 'src/configs/constance';
-import { MyAllGameType } from 'src/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
+import { MyAllGameType } from 'src/types/caro.type';
 import { useAllGameConfigContext } from './useBoardGameConfigContext';
 
 interface Props {

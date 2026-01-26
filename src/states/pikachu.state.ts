@@ -1,13 +1,13 @@
 import { pikachuRoundTransformations } from 'src/configs/constance';
+import { getRandom } from 'src/services';
+import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
+import { PositionType } from 'src/types/global';
 import {
   PikachuBoardTransformType,
   PikachuGameType,
   PikachuImgType,
   PikachuTimeType,
-  PositionType,
-} from 'src/global';
-import { getRandom } from 'src/services';
-import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
+} from 'src/types/pikachu.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

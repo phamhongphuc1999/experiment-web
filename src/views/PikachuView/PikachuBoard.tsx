@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
-import { PositionType } from 'src/global';
+import { PositionType } from 'src/types/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { getRandom, isPositionEqual, sleep } from 'src/services';

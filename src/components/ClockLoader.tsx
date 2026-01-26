@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { AnimationComponentDivProps, AnimationComponentProps } from 'src/global';
+import { AnimationComponentDivProps, AnimationComponentProps } from 'src/types/global';
 import { cn } from 'src/lib/utils';
 
 interface ClockLoaderProps extends AnimationComponentProps {

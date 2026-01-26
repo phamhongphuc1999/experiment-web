@@ -6,7 +6,7 @@ import {
   CaroWinType,
   TurnType,
   WinStateType,
-} from 'src/global';
+} from 'src/types/caro.type';
 
 type BlockMode = 'opposite' | 'wall' | undefined;
 

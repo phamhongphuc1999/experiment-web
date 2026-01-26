@@ -10,8 +10,13 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CaroGameType, CaroSizeBoardType, CaroWinModeType, PlayModeType } from 'src/global';
 import { useCaroStore } from 'src/states/caro.state';
+import {
+  CaroGameType,
+  CaroSizeBoardType,
+  CaroWinModeType,
+  PlayModeType,
+} from 'src/types/caro.type';
 
 type CaroConfigContextType = {
   size: CaroSizeBoardType;

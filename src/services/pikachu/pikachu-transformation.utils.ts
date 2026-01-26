@@ -1,10 +1,9 @@
+import { PositionType, VectorType } from 'src/types/global';
 import {
   MoveParamsType,
   PerformTransformationParamsType,
   PikachuBoardTransformType,
-  PositionType,
-  VectorType,
-} from 'src/global';
+} from 'src/types/pikachu.type';
 
 export function moveAnUnit(move: PositionType, vector: VectorType): PositionType {
   return [move[0] + vector[0], move[1] + vector[1]];

@@ -2,10 +2,10 @@ import { Messenger, Send } from 'iconsax-reactjs';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { beVietnamPro } from 'src/configs/font-family';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
-import { MyGameType } from 'src/global';
 import { cn } from 'src/lib/utils';
 import { createCaroMessage } from 'src/services/caro.utils';
 import { useGameMessengerChat } from 'src/states/messenger.state';
+import { MyGameType } from 'src/types/caro.type';
 import AppTooltip from '../AppTooltip';
 import {
   Dialog,

@@ -1,4 +1,4 @@
-import { MyAllGameType, MyGameType } from 'src/global';
+import { MyAllGameType, MyGameType } from 'src/types/caro.type';
 import { useCaroConfigContext } from '../CaroConfigDialog/caroConfig.context';
 import { useConnect4ConfigContext } from '../Connect4ConfigDialog/connect4Config.context';
 import { usePikachuConfigContext } from '../PikachuConfigDialog/pikachuConfig.context';

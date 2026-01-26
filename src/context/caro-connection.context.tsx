@@ -11,10 +11,10 @@ import {
 } from 'react';
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
-import { ConnectionType, RoleType } from 'src/global';
 import { createCaroMessage, decodeCaroMessage, SyncReturnType } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import { useGameMessengerChat } from 'src/states/messenger.state';
+import { ConnectionType, RoleType } from 'src/types/caro.type';
 
 export type CaroConnectionContextType = {
   peer: Instance | null;

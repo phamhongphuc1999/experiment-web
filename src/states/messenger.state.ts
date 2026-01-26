@@ -1,4 +1,4 @@
-import { ChatType, MyGameType } from 'src/global';
+import { ChatType, MyGameType } from 'src/types/caro.type';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 

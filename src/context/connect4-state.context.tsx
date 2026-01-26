@@ -2,8 +2,8 @@
 'use client';
 
 import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { TurnType } from 'src/global';
 import { useConnect4Store } from 'src/states/connect4.state';
+import { TurnType } from 'src/types/caro.type';
 
 export type Connect4StateContextType = {
   playerText: string;

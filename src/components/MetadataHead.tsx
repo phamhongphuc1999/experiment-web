@@ -1,7 +1,7 @@
 import Script from 'next/script';
 import { APP_NAME } from 'src/configs/constance';
 import { siteMetadata } from 'src/configs/siteMetadata';
-import { PageMetadataType } from 'src/global';
+import { PageMetadataType } from 'src/types/global';
 
 export function MetadataHead(props: Pick<PageMetadataType, 'title' | 'description'>) {
   const { title, description, url, siteName, icon, image, twitterHandle, keywords } = siteMetadata;

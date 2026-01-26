@@ -1,4 +1,5 @@
-import { Connect4WinStateType, Connect4WinType, PositionType, TurnType } from 'src/global';
+import { Connect4WinStateType, Connect4WinType, TurnType } from 'src/types/caro.type';
+import { PositionType } from 'src/types/global';
 
 type ParamsType = {
   steps: { [column: number]: Array<TurnType> };

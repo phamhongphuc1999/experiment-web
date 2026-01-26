@@ -1,4 +1,5 @@
-import { MyAllGameType, PikachuBoardTransformType } from 'src/global';
+import { MyAllGameType } from 'src/types/caro.type';
+import { PikachuBoardTransformType } from 'src/types/pikachu.type';
 
 export const MAX_CARO_BOARD_SIZE = 50;
 export const MAX_CONNECT4_BOARD_SIZE = 80;

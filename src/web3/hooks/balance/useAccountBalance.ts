@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { OptionalQueryType } from 'src/global';
+import { OptionalQueryType } from 'src/types/global';
 import { useWeb3WalletContext } from '../../context/web3-wallet.context';
 import BalanceService, { BalanceOptionType } from '../../services/BalanceService';
 import { useWeb3Store } from '../../states/web3.state';

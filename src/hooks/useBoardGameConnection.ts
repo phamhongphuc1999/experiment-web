@@ -1,6 +1,6 @@
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { useConnect4ConnectionContext } from 'src/context/connect4-connection.context';
-import { MyGameType } from 'src/global';
+import { MyGameType } from 'src/types/caro.type';
 
 export default function useBoardGameConnectionContext(game: MyGameType) {
   const caro = useCaroConnectionContext();

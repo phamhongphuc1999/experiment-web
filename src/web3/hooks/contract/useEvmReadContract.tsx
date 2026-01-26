@@ -3,7 +3,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { OptionalQueryType } from 'src/global';
+import { OptionalQueryType } from 'src/types/global';
 import { ChainId, ContractActionParams } from 'src/web3/types';
 import { createPublicClient, fallback, http, HttpTransport } from 'viem';
 import { base, bsc } from 'viem/chains';

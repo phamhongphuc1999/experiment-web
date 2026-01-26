@@ -1,6 +1,6 @@
 import IconImg from 'public/star.svg';
 import ThumbImg from 'public/thumbnail.webp';
-import { PageMetadataType } from 'src/global';
+import { PageMetadataType } from 'src/types/global';
 import { APP_NAME } from './constance';
 
 export const siteMetadata: PageMetadataType = {

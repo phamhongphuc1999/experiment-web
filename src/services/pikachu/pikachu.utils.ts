@@ -1,9 +1,9 @@
+import { PositionType } from 'src/types/global';
 import {
   FindPossibleMoveParamsType,
   PikachuMoveParamsType,
   PikachuNewBoardType,
-  PositionType,
-} from 'src/global';
+} from 'src/types/pikachu.type';
 import { isPositionEqual, randomSubGroup } from '..';
 import Queue from '../Queue';
 

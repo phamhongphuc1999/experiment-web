@@ -1,3 +1,4 @@
+import { checkWin } from 'src/services/caro.utils';
 import {
   CaroGameType,
   CaroSizeBoardType,
@@ -5,8 +6,7 @@ import {
   PlayModeType,
   TurnType,
   WinStateType,
-} from 'src/global';
-import { checkWin } from 'src/services/caro.utils';
+} from 'src/types/caro.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

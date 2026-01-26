@@ -2,7 +2,7 @@
 'use client';
 
 import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { TurnType } from 'src/global';
+import { TurnType } from 'src/types/caro.type';
 import { createCaroMessage } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import { useCaroConnectionContext } from './caro-connection.context';

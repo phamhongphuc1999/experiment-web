@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { toast } from 'sonner';
 import { APP_NAME } from 'src/configs/constance';
-import { PositionType } from 'src/global';
+import { PositionType } from 'src/types/global';
 import { ZodError } from 'zod';
 
 type SBase = {

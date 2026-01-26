@@ -1,10 +1,9 @@
+import { PositionType, VectorType } from 'src/types/global';
 import {
   BasePikachuParamsType,
   PerformFormattingParamsType,
   PikachuBoardTransformType,
-  PositionType,
-  VectorType,
-} from 'src/global';
+} from 'src/types/pikachu.type';
 import { isInSpace, moveAnUnit } from './pikachu-transformation.utils';
 
 function performFormatting(params: PerformFormattingParamsType) {

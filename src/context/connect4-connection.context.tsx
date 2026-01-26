@@ -4,8 +4,8 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
-import { ConnectionType, RoleType } from 'src/global';
 import { useGameMessengerChat } from 'src/states/messenger.state';
+import { ConnectionType, RoleType } from 'src/types/caro.type';
 import { CaroConnectionContextType } from './caro-connection.context';
 
 type Connect4ConnectionContextType = CaroConnectionContextType;

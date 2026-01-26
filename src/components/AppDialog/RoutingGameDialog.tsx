@@ -1,7 +1,7 @@
 import { Routing } from 'iconsax-reactjs';
 import Link from 'next/link';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { MyAllGameType } from 'src/global';
+import { MyAllGameType } from 'src/types/caro.type';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
 import { Button } from '../shadcn-ui/button';

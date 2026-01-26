@@ -10,8 +10,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CaroGameType, PlayModeType } from 'src/global';
 import { useConnect4Store } from 'src/states/connect4.state';
+import { CaroGameType, PlayModeType } from 'src/types/caro.type';
 
 type Connect4ConfigContextType = {
   playMode: PlayModeType;

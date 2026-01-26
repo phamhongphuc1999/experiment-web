@@ -1,4 +1,4 @@
-import { PositionType } from 'src/global';
+import { PositionType } from 'src/types/global';
 
 function getMetadata(fromPosition: PositionType, toPosition: PositionType, size: number) {
   const xDistance = fromPosition[1] - toPosition[1];
