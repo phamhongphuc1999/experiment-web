@@ -11,9 +11,10 @@ export type ProcessStatusType = 'new' | 'ready' | 'running' | 'waiting' | 'finis
 
 export type ProcessType = {
   pid: string;
+  arrivalTime: number;
   executionTime: number;
   remainingTime: number;
   state: ProcessStatusType;
 };
 
-export type SchedulerModeType = 'fifo' | 'str' | 'round-robin';
+export type SchedulerModeType = 'fifo' | 'sjf' | 'round-robin';

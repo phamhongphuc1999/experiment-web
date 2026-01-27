@@ -32,24 +32,3 @@ export default function BaseInput({ name, error, rootprops, icon, ...props }: Pr
     </div>
   );
 }
-
-export function TitleBaseInput({
-  titleInput,
-  name,
-  rootprops,
-  inputprops,
-  titleProps,
-  icon,
-  ...props
-}: Props & {
-  titleInput: string;
-  inputprops?: ComponentProps<'div'>;
-  titleProps?: ComponentProps<'p'>;
-}) {
-  return (
-    <div {...rootprops} className={cn('flex items-center gap-2', rootprops)}>
-      <p {...titleProps}>{titleInput}</p>
-      <BaseInput {...props} name={name} rootprops={inputprops} icon={icon} />
-    </div>
-  );
-}

@@ -1,5 +1,6 @@
 import { MyAllGameType } from 'src/types/caro.type';
 import { PikachuBoardTransformType } from 'src/types/pikachu.type';
+import { SchedulerModeType } from 'src/types/process-demo.type';
 
 export const MAX_CARO_BOARD_SIZE = 50;
 export const MAX_CONNECT4_BOARD_SIZE = 80;
@@ -74,3 +75,11 @@ export const pikachuTransformConfig: {
 
 export const PIKACHU_URL =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+
+export const ProcessSchedulerConfigs: {
+  [id in SchedulerModeType]: { id: SchedulerModeType; name: string };
+} = {
+  fifo: { id: 'fifo', name: 'First In, First Out' },
+  sjf: { id: 'sjf', name: 'Shortest Job First' },
+  'round-robin': { id: 'round-robin', name: 'Round Robin' },
+};
