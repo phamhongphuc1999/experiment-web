@@ -3,41 +3,47 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 
-export default function Home() {
-  const features = [
-    {
-      title: 'Caro (Tic-Tac-Toe)',
-      description:
-        'Classic strategy game with multiple modes: offline, online multiplayer, and blind mode',
-      href: '/caro',
-      gradient: 'from-orange-500 to-red-500',
-    },
-    {
-      title: 'Connect4',
-      description: 'Drop discs and connect four in a row to win',
-      href: '/connect4',
-      gradient: 'from-blue-500 to-purple-500',
-    },
-    {
-      title: 'Pikachu',
-      description: 'Match pairs of tiles with various board transformations',
-      href: '/pikachu',
-      gradient: 'from-yellow-500 to-orange-500',
-    },
-    {
-      title: 'Web3 wallet',
-      description: 'Web3 wallet interaction',
-      href: '/web3-wallet',
-      gradient: 'from-green-500 to-teal-500',
-    },
-    {
-      title: 'Crypt',
-      description: 'Secure encryption and decryption utility',
-      href: '/encrypt',
-      gradient: 'from-purple-500 to-pink-500',
-    },
-  ];
+const features: Array<{ title: string; description: string; href: string; gradient: string }> = [
+  {
+    title: 'Caro (Tic-Tac-Toe)',
+    description:
+      'Classic strategy game with multiple modes: offline, online multiplayer, and blind mode',
+    href: '/caro',
+    gradient: 'from-orange-500 to-red-500',
+  },
+  {
+    title: 'Connect4',
+    description: 'Drop discs and connect four in a row to win',
+    href: '/connect4',
+    gradient: 'from-blue-500 to-purple-500',
+  },
+  {
+    title: 'Pikachu',
+    description: 'Match pairs of tiles with various board transformations',
+    href: '/pikachu',
+    gradient: 'from-yellow-500 to-orange-500',
+  },
+  {
+    title: 'Process Demo',
+    description: 'Process Scheduler',
+    href: '/process',
+    gradient: 'from-orange-500 to-red-500',
+  },
+  {
+    title: 'Web3 wallet',
+    description: 'Web3 wallet interaction',
+    href: '/web3-wallet',
+    gradient: 'from-green-500 to-teal-500',
+  },
+  {
+    title: 'Crypt',
+    description: 'Secure encryption and decryption utility',
+    href: '/encrypt',
+    gradient: 'from-purple-500 to-pink-500',
+  },
+];
 
+export default function Home() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
