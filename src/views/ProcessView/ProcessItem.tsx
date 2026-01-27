@@ -2,11 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'iconsax-reactjs';
-import { ComponentProps } from 'react';
+import { ComponentProps, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
 import BaseInput from 'src/components/input/BaseInput';
+import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { Form, FormField, FormItemContent } from 'src/components/shadcn-ui/form';
 import { formatText } from 'src/services';
 import { ProcessType } from 'src/types/process-demo.type';
@@ -23,7 +24,8 @@ interface Props {
   data: ProcessType;
   type?: 'read' | 'write';
   events?: {
-    onDataChange?: (executionTime: number) => void;
+    onArrivalTimeChange?: (arrivalTime: number) => void;
+    onExecutionTimeChange?: (executionTime: number) => void;
     onDelete?: (pid: string) => void;
   };
   props?: ComponentProps<'div'>;
@@ -35,6 +37,14 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
     defaultValues: { arrivalTime: data.arrivalTime, executionTime: data.executionTime },
   });
 
+  useEffect(() => {
+    form.reset({
+      arrivalTime: data.arrivalTime,
+      executionTime: data.executionTime,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.arrivalTime, data.executionTime]);
+
   function onDelete(pid: string) {
     events?.onDelete?.(pid);
   }
@@ -44,12 +54,12 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <AppTooltip tooltipContent={data.pid}>
-            <span className="text-sm font-medium">PID: {formatText(data.pid, 4)}</span>
+            <span className="text-sm font-medium">PID: {formatText(data.pid, 3)}</span>
           </AppTooltip>
           <CopyClipboard copyText={data.pid} iconprops={{ size: 16 }} />
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-muted-foreground text-sm uppercase">{data.state}</span>
+          <ProcessStatus state={data.state} />
           {type == 'write' && (
             <Trash size={14} className="cursor-pointer" onClick={() => onDelete(data.pid)} />
           )}
@@ -63,7 +73,7 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
             render={({ field }) => (
               <FormItemContent
                 itemprops={{ className: 'flex items-center gap-4 space-y-0' }}
-                labelprops={{ className: 'shrink-0', children: 'Arrival Time (s)' }}
+                labelprops={{ className: 'shrink-0', children: 'Arrival Time' }}
               >
                 <BaseInput
                   type="number"
@@ -72,7 +82,7 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
                     const val = e.target.value === '' ? '' : Number(e.target.value);
                     field.onChange(val);
                     if (typeof val === 'number' && !isNaN(val)) {
-                      events?.onDataChange?.(val);
+                      events?.onArrivalTimeChange?.(val);
                     }
                   }}
                   disabled={type === 'read'}
@@ -86,7 +96,7 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
             render={({ field }) => (
               <FormItemContent
                 itemprops={{ className: 'flex items-center gap-4 space-y-0 mt-2' }}
-                labelprops={{ className: 'shrink-0', children: 'Execution Time (s)' }}
+                labelprops={{ className: 'shrink-0', children: 'Execution Time' }}
               >
                 <BaseInput
                   type="number"
@@ -95,7 +105,7 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
                     const val = e.target.value === '' ? '' : Number(e.target.value);
                     field.onChange(val);
                     if (typeof val === 'number' && !isNaN(val)) {
-                      events?.onDataChange?.(val);
+                      events?.onExecutionTimeChange?.(val);
                     }
                   }}
                   disabled={type === 'read'}
@@ -103,6 +113,19 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
               </FormItemContent>
             )}
           />
+          {type == 'read' && (
+            <FormItemContent
+              itemprops={{ className: 'flex items-center gap-4 space-y-0 mt-2' }}
+              labelprops={{ className: 'shrink-0', children: 'Remaining Time' }}
+            >
+              <BaseInput
+                type="number"
+                name="remainingTime"
+                value={data.remainingTime}
+                disabled={true}
+              />
+            </FormItemContent>
+          )}
         </form>
       </Form>
     </div>

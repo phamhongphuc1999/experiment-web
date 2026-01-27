@@ -7,7 +7,13 @@ export enum ProcessMachineStateType {
   ENDED = 'ended',
 }
 
-export type ProcessStatusType = 'new' | 'ready' | 'running' | 'waiting' | 'finished';
+export enum ProcessStatusType {
+  NEW = 'new',
+  READY = 'ready',
+  RUNNING = 'running',
+  WAITING = 'waiting',
+  TERMINATED = 'terminated',
+}
 
 export type ProcessType = {
   pid: string;
@@ -17,4 +23,8 @@ export type ProcessType = {
   state: ProcessStatusType;
 };
 
-export type SchedulerModeType = 'fifo' | 'sjf' | 'round-robin';
+export enum SchedulerModeType {
+  FIFO = 'fifo',
+  SJF = 'sjf',
+  ROUND_ROBIN = 'round-robin',
+}

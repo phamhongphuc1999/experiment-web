@@ -79,7 +79,7 @@ export const PIKACHU_URL =
 export const ProcessSchedulerConfigs: {
   [id in SchedulerModeType]: { id: SchedulerModeType; name: string };
 } = {
-  fifo: { id: 'fifo', name: 'First In, First Out' },
-  sjf: { id: 'sjf', name: 'Shortest Job First' },
-  'round-robin': { id: 'round-robin', name: 'Round Robin' },
+  [SchedulerModeType.FIFO]: { id: SchedulerModeType.FIFO, name: 'First In, First Out' },
+  [SchedulerModeType.SJF]: { id: SchedulerModeType.SJF, name: 'Shortest Job First' },
+  [SchedulerModeType.ROUND_ROBIN]: { id: SchedulerModeType.ROUND_ROBIN, name: 'Round Robin' },
 };

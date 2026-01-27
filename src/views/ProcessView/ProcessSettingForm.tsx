@@ -1,11 +1,10 @@
 import { DialogProps } from '@radix-ui/react-dialog';
-import cloneDeep from 'lodash.clonedeep';
 import { useEffect, useState } from 'react';
 import { Button } from 'src/components/shadcn-ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from 'src/components/shadcn-ui/dialog';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
 import { ProcessDataObjectType, useProcessStore } from 'src/states/process.state';
-import { ProcessType } from 'src/types/process-demo.type';
+import { ProcessStatusType, ProcessType } from 'src/types/process-demo.type';
 import { v4 as uuidv4 } from 'uuid';
 import ProcessItem from './ProcessItem';
 
@@ -18,7 +17,7 @@ export default function ProcessSettingForm(props: DialogProps) {
   const [data, setData] = useState<ProcessDataObjectType>({});
 
   useEffect(() => {
-    if (props.open) setData(cloneDeep(processes));
+    if (props.open) setData(processes);
   }, [props.open, processes]);
 
   function onCreateProcess() {
@@ -29,7 +28,7 @@ export default function ProcessSettingForm(props: DialogProps) {
         arrivalTime: 0,
         executionTime: 10,
         remainingTime: 10,
-        state: 'new',
+        state: ProcessStatusType.NEW,
       };
       return { ...state, [pid]: newProcess };
     });
@@ -73,7 +72,6 @@ export default function ProcessSettingForm(props: DialogProps) {
                 + Add Process
               </Button>
             </div>
-
             <div className="mt-4 max-h-100 overflow-y-auto pr-2">
               {Object.values(data).length === 0 ? (
                 <div className="text-muted-foreground flex h-20 items-center justify-center rounded-lg border border-dashed">
@@ -86,13 +84,23 @@ export default function ProcessSettingForm(props: DialogProps) {
                       key={item.pid}
                       data={item}
                       events={{
-                        onDataChange: (executionTime) => {
+                        onExecutionTimeChange: (executionTime) => {
                           setData((state) => {
                             const newState = { ...state };
                             newState[item.pid] = {
                               ...newState[item.pid],
                               executionTime,
                               remainingTime: executionTime,
+                            };
+                            return newState;
+                          });
+                        },
+                        onArrivalTimeChange: (arrivalTime) => {
+                          setData((state) => {
+                            const newState = { ...state };
+                            newState[item.pid] = {
+                              ...newState[item.pid],
+                              arrivalTime,
                             };
                             return newState;
                           });

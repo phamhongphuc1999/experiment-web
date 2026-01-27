@@ -8,7 +8,7 @@ export type ProcessDataObjectType = {
   [id: string]: ProcessType;
 };
 
-export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'end';
+export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
 
 interface ProcessStateType {
   mode: SchedulerModeType;
@@ -17,8 +17,9 @@ interface ProcessStateType {
   fn: {
     setMode: (mode: SchedulerModeType) => void;
     setProcesses: (processes: ProcessDataObjectType) => void;
-    updateProcess: (pid: string, data: Omit<ProcessType, 'pid' | 'state'>) => void;
+    updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => void;
     setStatus: (status: ProcessStoreStatusType) => void;
+    clear: () => void;
   };
 }
 
@@ -29,7 +30,7 @@ export const useProcessStore = create<
   persist(
     immer((set) => {
       return {
-        mode: 'fifo',
+        mode: SchedulerModeType.FIFO,
         processes: {},
         status: 'initial',
         fn: {
@@ -43,7 +44,7 @@ export const useProcessStore = create<
               state.processes = processes;
             });
           },
-          updateProcess: (pid: string, data: Omit<ProcessType, 'pid' | 'state'>) => {
+          updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => {
             set((state) => {
               if (state.processes[pid]) {
                 merge(state.processes[pid], data);
@@ -53,6 +54,13 @@ export const useProcessStore = create<
           setStatus: (status: ProcessStoreStatusType) => {
             set((state) => {
               state.status = status;
+            });
+          },
+          clear: () => {
+            set((state) => {
+              state.mode = SchedulerModeType.FIFO;
+              state.processes = {};
+              state.status = 'initial';
             });
           },
         },
