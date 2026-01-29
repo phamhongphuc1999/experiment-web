@@ -12,18 +12,20 @@ const nextConfig = {
     ],
   },
   async headers() {
-    return [
-      {
-        source:
-          '/:all*.(jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc|glb|gltf|css|js|woff)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000',
-          },
-        ],
-      },
-    ];
+    if (process.env.NEXT_PUBLIC_ENV === 'development') {
+      return [
+        {
+          source: '/_next/static/:path*',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-store, max-age=0, must-revalidate',
+            },
+          ],
+        },
+      ];
+    }
+    return [];
   },
 };
 

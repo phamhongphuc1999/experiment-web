@@ -1,35 +1,38 @@
 'use client';
 
 import { useMachine } from '@xstate/react';
-import { assign, createMachine } from 'xstate';
-import { ProcessDataObjectType, useProcessStore } from '../states/process.state';
+import { assign, setup } from 'xstate';
+import { useProcessStore } from '../states/process.state';
 import { PriorityQueue } from '../structure/PriorityQueue';
+import { ProcessMachineStateType, ProcessType } from '../types/process-demo.type';
 import {
-  ProcessMachineStateType,
-  ProcessStatusType,
-  ProcessType,
-} from '../types/process-demo.type';
+  loadProcessAction,
+  ProcessContextType,
+  ProcessEventType,
+  ProcessMachineEvent,
+  clearAction,
+  runProcessAction,
+  runProcessEntry,
+  scheduleEntry,
+  resetAction,
+} from './process.utils';
 
-export enum ProcessMachineEvent {
-  LOAD_PROCESS = 'load-process',
-  RESET = 'reset',
-}
-
-export const processMachine = createMachine({
+export const processMachine = setup({
+  types: {
+    events: {} as ProcessEventType,
+    context: {} as ProcessContextType,
+  },
+  delays: {
+    INTERVAL: ({ context }) => context.interval,
+  },
+}).createMachine({
   id: 'process-machine',
   initial: ProcessMachineStateType.INITIAL,
   context: {
+    interval: 1000,
+    counter: 0,
     priorityQueue: null as PriorityQueue<ProcessType> | null,
     currentProcess: null as ProcessType | null,
-  },
-  types: {
-    events: {} as
-      | { type: ProcessMachineEvent.LOAD_PROCESS; processes: ProcessDataObjectType }
-      | { type: ProcessMachineEvent.RESET },
-    context: {} as {
-      priorityQueue: PriorityQueue<ProcessType> | null;
-      currentProcess: ProcessType | null;
-    },
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {
@@ -38,32 +41,29 @@ export const processMachine = createMachine({
         [ProcessMachineEvent.LOAD_PROCESS]: {
           target: ProcessMachineStateType.SCHEDULE,
           actions: assign(({ event }) => {
-            const processes = Object.values(event.processes);
-            const queue = new PriorityQueue<ProcessType>((a, b) => {
-              const mode = useProcessStore.getState().mode;
-              if (mode === 'fifo') {
-                return a.arrivalTime - b.arrivalTime;
-              }
-              if (mode === 'sjf') {
-                return a.executionTime - b.executionTime;
-              }
-              return 0;
-            });
-            processes.forEach((p) => queue.push(p));
-            return { priorityQueue: queue };
+            return loadProcessAction(event);
+          }),
+        },
+        [ProcessMachineEvent.SET_METADATA]: {
+          actions: assign(({ event }) => {
+            return { interval: event.interval };
+          }),
+        },
+        [ProcessMachineEvent.RESET]: {
+          actions: assign(() => {
+            return resetAction();
+          }),
+        },
+        [ProcessMachineEvent.CLEAR]: {
+          actions: assign(() => {
+            return clearAction();
           }),
         },
       },
     },
     [ProcessMachineStateType.SCHEDULE]: {
       entry: assign(({ context }) => {
-        const fn = useProcessStore.getState().fn;
-        fn.setStatus('running');
-        if (context.priorityQueue && !context.priorityQueue.isEmpty()) {
-          const next = context.priorityQueue.pop();
-          return { currentProcess: next };
-        }
-        return { currentProcess: null };
+        return scheduleEntry(context);
       }),
       always: [
         {
@@ -78,34 +78,13 @@ export const processMachine = createMachine({
     },
     [ProcessMachineStateType.RUN_PROCESS]: {
       entry: ({ context }) => {
-        if (context.currentProcess) {
-          console.debug(`Running process ${context.currentProcess.pid}`);
-          useProcessStore
-            .getState()
-            .fn.updateProcess(context.currentProcess.pid, { state: ProcessStatusType.RUNNING });
-        }
+        runProcessEntry(context);
       },
       after: {
-        1000: {
+        INTERVAL: {
           target: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,
           actions: assign(({ context }) => {
-            if (context.currentProcess) {
-              const updated = {
-                ...context.currentProcess,
-                remainingTime: Math.max(0, context.currentProcess.remainingTime - 1),
-              };
-              updated.state =
-                updated.remainingTime === 0
-                  ? ProcessStatusType.TERMINATED
-                  : ProcessStatusType.READY;
-
-              useProcessStore.getState().fn.updateProcess(updated.pid, {
-                remainingTime: updated.remainingTime,
-                state: updated.state,
-              });
-              return { currentProcess: updated };
-            }
-            return {};
+            return runProcessAction(context);
           }),
         },
       },
@@ -120,17 +99,21 @@ export const processMachine = createMachine({
     },
     [ProcessMachineStateType.ENDED]: {
       entry: () => {
-        const fn = useProcessStore.getState().fn;
-        fn.setStatus('ended');
         console.debug('entry ENDED');
+        const fn = useProcessStore.getState().fn;
+        fn.setMetadata({ status: 'ended' });
       },
       on: {
         [ProcessMachineEvent.RESET]: {
           target: ProcessMachineStateType.INITIAL,
           actions: assign(() => {
-            const fn = useProcessStore.getState().fn;
-            fn.clear();
-            return { priorityQueue: null, currentProcess: null };
+            return resetAction();
+          }),
+        },
+        [ProcessMachineEvent.CLEAR]: {
+          target: ProcessMachineStateType.INITIAL,
+          actions: assign(() => {
+            return clearAction();
           }),
         },
       },

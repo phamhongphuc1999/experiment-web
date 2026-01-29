@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { Button } from 'src/components/shadcn-ui/button';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
-import {
-  ProcessMachineEvent,
-  useProcessStateMachine,
-} from 'src/state-machine/process.state-machine';
+import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
+import { ProcessMachineEvent } from 'src/state-machine/process.utils';
 import { useProcessStore } from 'src/states/process.state';
 import ProcessSettingForm from './ProcessSettingForm';
 
@@ -23,16 +21,28 @@ export default function ProcessHeader() {
     send({ type: ProcessMachineEvent.RESET });
   }
 
+  function onClear() {
+    send({ type: ProcessMachineEvent.CLEAR });
+  }
+
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex items-center gap-2">
         <Button onClick={() => setOpen(true)} disabled={status != 'initial' && status != 'ready'}>
           {status == 'ready' ? 'Update' : 'Create'}
         </Button>
-        <Button disabled={status != 'ready'} onClick={onRun} variant="outline">
-          Run
+        {status == 'ready' && (
+          <Button onClick={onRun} variant="outline">
+            Run
+          </Button>
+        )}
+        <Button variant="outline" disabled={status == 'running'} onClick={onReset}>
+          Reset
         </Button>
-        {status == 'ended' && <Button onClick={onReset}>Reset</Button>}
+        {status == 'ended' && <Button onClick={onClear}>Clear</Button>}
+      </div>
+      <div>
+        <p>Runtime: {state.context.counter}</p>
       </div>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground text-sm font-semibold">

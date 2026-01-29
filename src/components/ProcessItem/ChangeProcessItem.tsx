@@ -22,7 +22,6 @@ type FormValues = z.infer<typeof schema>;
 
 interface Props {
   data: ProcessType;
-  type?: 'read' | 'write';
   events?: {
     onArrivalTimeChange?: (arrivalTime: number) => void;
     onExecutionTimeChange?: (executionTime: number) => void;
@@ -31,7 +30,7 @@ interface Props {
   props?: ComponentProps<'div'>;
 }
 
-export default function ProcessItem({ data, type = 'write', events, props }: Props) {
+export default function ChangeProcessItem({ data, events, props }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { arrivalTime: data.arrivalTime, executionTime: data.executionTime },
@@ -54,15 +53,13 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <AppTooltip tooltipContent={data.pid}>
-            <span className="text-sm font-medium">PID: {formatText(data.pid, 3)}</span>
+            <span className="text-xs font-medium">PID: {formatText(data.pid, 3)}</span>
           </AppTooltip>
           <CopyClipboard copyText={data.pid} iconprops={{ size: 16 }} />
         </div>
         <div className="flex items-center gap-1">
           <ProcessStatus state={data.state} />
-          {type == 'write' && (
-            <Trash size={14} className="cursor-pointer" onClick={() => onDelete(data.pid)} />
-          )}
+          <Trash size={14} className="cursor-pointer" onClick={() => onDelete(data.pid)} />
         </div>
       </div>
       <Form {...form}>
@@ -85,7 +82,6 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
                       events?.onArrivalTimeChange?.(val);
                     }
                   }}
-                  disabled={type === 'read'}
                 />
               </FormItemContent>
             )}
@@ -108,24 +104,10 @@ export default function ProcessItem({ data, type = 'write', events, props }: Pro
                       events?.onExecutionTimeChange?.(val);
                     }
                   }}
-                  disabled={type === 'read'}
                 />
               </FormItemContent>
             )}
           />
-          {type == 'read' && (
-            <FormItemContent
-              itemprops={{ className: 'flex items-center gap-4 space-y-0 mt-2' }}
-              labelprops={{ className: 'shrink-0', children: 'Remaining Time' }}
-            >
-              <BaseInput
-                type="number"
-                name="remainingTime"
-                value={data.remainingTime}
-                disabled={true}
-              />
-            </FormItemContent>
-          )}
         </form>
       </Form>
     </div>

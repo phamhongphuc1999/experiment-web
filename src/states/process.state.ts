@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import { ProcessType, SchedulerModeType } from 'src/types/process-demo.type';
 import { create } from 'zustand';
@@ -10,15 +11,19 @@ export type ProcessDataObjectType = {
 
 export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
 
-interface ProcessStateType {
+interface ProcessMetadataType {
   mode: SchedulerModeType;
-  processes: ProcessDataObjectType;
   status: ProcessStoreStatusType;
+  interval: number;
+}
+
+interface ProcessStateType extends ProcessMetadataType {
+  processes: ProcessDataObjectType;
   fn: {
-    setMode: (mode: SchedulerModeType) => void;
+    setMetadata: (metadata?: Partial<ProcessMetadataType>) => void;
     setProcesses: (processes: ProcessDataObjectType) => void;
     updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => void;
-    setStatus: (status: ProcessStoreStatusType) => void;
+    resetProcesses: () => void;
     clear: () => void;
   };
 }
@@ -33,10 +38,12 @@ export const useProcessStore = create<
         mode: SchedulerModeType.FIFO,
         processes: {},
         status: 'initial',
+        interval: 1000,
         fn: {
-          setMode: (mode: SchedulerModeType) => {
+          setMetadata: (metadata?: Partial<ProcessMetadataType>) => {
             set((state) => {
-              state.mode = mode;
+              if (metadata?.mode) state.mode = metadata.mode;
+              if (metadata?.status) state.status = metadata.status;
             });
           },
           setProcesses: (processes: ProcessDataObjectType) => {
@@ -51,9 +58,14 @@ export const useProcessStore = create<
               }
             });
           },
-          setStatus: (status: ProcessStoreStatusType) => {
+          resetProcesses: () => {
             set((state) => {
-              state.status = status;
+              const newProcesses = cloneDeep(state.processes);
+              for (const item of Object.values(newProcesses)) {
+                newProcesses[item.pid].remainingTime = item.executionTime;
+              }
+              state.processes = newProcesses;
+              state.status = 'ready';
             });
           },
           clear: () => {

@@ -1,4 +1,5 @@
 import { MyAllGameType } from 'src/types/caro.type';
+import { ENV_TYPE } from 'src/types/global';
 import { PikachuBoardTransformType } from 'src/types/pikachu.type';
 import { SchedulerModeType } from 'src/types/process-demo.type';
 
@@ -13,7 +14,7 @@ export const LS = {
 
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
-export const ENV = process.env.NEXT_PUBLIC_ENV || 'production';
+export const ENV = (process.env.NEXT_PUBLIC_ENV || 'production') as ENV_TYPE;
 
 export const APP_NAME = 'Experiment App';
 

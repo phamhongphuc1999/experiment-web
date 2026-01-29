@@ -1,18 +1,19 @@
 import { DialogProps } from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
+import { ListEmpty } from 'src/components/Empty';
+import ChangeProcessItem from 'src/components/ProcessItem/ChangeProcessItem';
 import { Button } from 'src/components/shadcn-ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from 'src/components/shadcn-ui/dialog';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
 import { ProcessDataObjectType, useProcessStore } from 'src/states/process.state';
 import { ProcessStatusType, ProcessType } from 'src/types/process-demo.type';
 import { v4 as uuidv4 } from 'uuid';
-import ProcessItem from './ProcessItem';
 
 export default function ProcessSettingForm(props: DialogProps) {
   const {
     mode,
     processes,
-    fn: { setMode, setProcesses, setStatus },
+    fn: { setProcesses, setMetadata },
   } = useProcessStore();
   const [data, setData] = useState<ProcessDataObjectType>({});
 
@@ -36,8 +37,8 @@ export default function ProcessSettingForm(props: DialogProps) {
 
   function onSave() {
     setProcesses(data);
-    if (Object.keys(data).length > 0) setStatus('ready');
-    else setStatus('initial');
+    if (Object.keys(data).length > 0) setMetadata({ status: 'ready' });
+    else setMetadata({ status: 'initial' });
     if (props.onOpenChange) props.onOpenChange(false);
   }
 
@@ -56,7 +57,7 @@ export default function ProcessSettingForm(props: DialogProps) {
                   <Button
                     key={item.id}
                     variant={mode == item.id ? 'default' : 'outline'}
-                    onClick={() => setMode(item.id)}
+                    onClick={() => setMetadata({ mode: item.id })}
                   >
                     {item.name}
                   </Button>
@@ -74,13 +75,11 @@ export default function ProcessSettingForm(props: DialogProps) {
             </div>
             <div className="mt-4 max-h-100 overflow-y-auto pr-2">
               {Object.values(data).length === 0 ? (
-                <div className="text-muted-foreground flex h-20 items-center justify-center rounded-lg border border-dashed">
-                  No processes created yet.
-                </div>
+                <ListEmpty title="No processes created yet." />
               ) : (
                 Object.values(data).map((item) => {
                   return (
-                    <ProcessItem
+                    <ChangeProcessItem
                       key={item.pid}
                       data={item}
                       events={{
