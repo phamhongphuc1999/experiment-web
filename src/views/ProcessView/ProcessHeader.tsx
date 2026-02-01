@@ -14,7 +14,7 @@ export default function ProcessHeader() {
   const [state, send] = useProcessStateMachine();
 
   function onRun() {
-    send({ type: ProcessMachineEvent.LOAD_PROCESS, processes });
+    send({ type: ProcessMachineEvent.INITIALIZE_PROCESS, processes });
   }
 
   function onReset() {

@@ -1,5 +1,5 @@
 import { cn } from 'src/lib/utils';
-import { ProcessStatusType } from 'src/types/process-demo.type';
+import { ProcessStatusType } from 'src/types/process.type';
 
 interface Props {
   state: ProcessStatusType;

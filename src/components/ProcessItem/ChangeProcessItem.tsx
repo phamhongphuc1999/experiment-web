@@ -10,7 +10,7 @@ import BaseInput from 'src/components/input/BaseInput';
 import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { Form, FormField, FormItemContent } from 'src/components/shadcn-ui/form';
 import { formatText } from 'src/services';
-import { ProcessType } from 'src/types/process-demo.type';
+import { ProcessType } from 'src/types/process.type';
 import z from 'zod';
 
 const schema = z.object({

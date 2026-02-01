@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
-import { ProcessType, SchedulerModeType } from 'src/types/process-demo.type';
+import { ProcessStatusType, ProcessType, SchedulerModeType } from 'src/types/process.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -63,6 +63,7 @@ export const useProcessStore = create<
               const newProcesses = cloneDeep(state.processes);
               for (const item of Object.values(newProcesses)) {
                 newProcesses[item.pid].remainingTime = item.executionTime;
+                newProcesses[item.pid].state = ProcessStatusType.NEW;
               }
               state.processes = newProcesses;
               state.status = 'ready';
