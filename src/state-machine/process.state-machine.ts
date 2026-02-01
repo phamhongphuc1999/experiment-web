@@ -1,20 +1,19 @@
-'use client';
-
 import { useMachine } from '@xstate/react';
+import { useProcessStore } from 'src/states/process.state';
+import { ProcessMachineStateType } from 'src/types/process.type';
 import { assign, setup } from 'xstate';
-import { useProcessStore } from '../states/process.state';
-import { PriorityQueue } from '../structure/PriorityQueue';
-import { ProcessMachineStateType, ProcessType } from '../types/process-demo.type';
 import {
-  loadProcessAction,
+  clearAction,
+  initializeProcessesAction,
+  loadProcessContextEntry,
   ProcessContextType,
   ProcessEventType,
   ProcessMachineEvent,
-  clearAction,
+  resetAction,
   runProcessAction,
   runProcessEntry,
-  scheduleEntry,
-  resetAction,
+  saveProcessContextEntry,
+  scheduleProcessesEntry,
 } from './process.utils';
 
 export const processMachine = setup({
@@ -31,17 +30,20 @@ export const processMachine = setup({
   context: {
     interval: 1000,
     counter: 0,
-    priorityQueue: null as PriorityQueue<ProcessType> | null,
-    currentProcess: null as ProcessType | null,
+    incomingQueue: null,
+    fifoQueue: null,
+    currentProcess: null,
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {
-      entry: () => console.debug('entry INITIAL'),
+      entry: () => {
+        console.debug(`Entry: ${ProcessMachineStateType.INITIAL}`);
+      },
       on: {
-        [ProcessMachineEvent.LOAD_PROCESS]: {
+        [ProcessMachineEvent.INITIALIZE_PROCESS]: {
           target: ProcessMachineStateType.SCHEDULE,
           actions: assign(({ event }) => {
-            return loadProcessAction(event);
+            return initializeProcessesAction(event);
           }),
         },
         [ProcessMachineEvent.SET_METADATA]: {
@@ -63,12 +65,26 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.SCHEDULE]: {
       entry: assign(({ context }) => {
-        return scheduleEntry(context);
+        console.debug(`Entry: ${ProcessMachineStateType.SCHEDULE}`);
+        return scheduleProcessesEntry(context);
+      }),
+      always: [
+        {
+          target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+          guard: ({ context }) => !context.currentProcess,
+        },
+        { target: ProcessMachineStateType.RUN_PROCESS },
+      ],
+    },
+    [ProcessMachineStateType.LOAD_PROCESS_CONTEXT]: {
+      entry: assign(({ context }) => {
+        console.debug(`Entry: ${ProcessMachineStateType.LOAD_PROCESS_CONTEXT}`);
+        return loadProcessContextEntry(context);
       }),
       always: [
         {
           target: ProcessMachineStateType.RUN_PROCESS,
-          guard: ({ context }) => !!context.currentProcess,
+          guard: ({ context }) => !!context.currentProcess || !context.incomingQueue?.isEmpty(),
         },
         {
           target: ProcessMachineStateType.ENDED,
@@ -78,6 +94,7 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.RUN_PROCESS]: {
       entry: ({ context }) => {
+        console.debug(`Entry: ${ProcessMachineStateType.RUN_PROCESS}`);
         runProcessEntry(context);
       },
       after: {
@@ -90,16 +107,15 @@ export const processMachine = setup({
       },
     },
     [ProcessMachineStateType.SAVE_PROCESS_CONTEXT]: {
-      entry: ({ context }) => {
-        if (context.currentProcess && context.currentProcess.state !== 'terminated') {
-          context.priorityQueue?.push(context.currentProcess);
-        }
-      },
+      entry: assign(({ context }) => {
+        console.debug(`Entry: ${ProcessMachineStateType.SAVE_PROCESS_CONTEXT}`);
+        return saveProcessContextEntry(context);
+      }),
       always: { target: ProcessMachineStateType.SCHEDULE },
     },
     [ProcessMachineStateType.ENDED]: {
       entry: () => {
-        console.debug('entry ENDED');
+        console.debug(`Entry: ${ProcessMachineStateType.ENDED}`);
         const fn = useProcessStore.getState().fn;
         fn.setMetadata({ status: 'ended' });
       },

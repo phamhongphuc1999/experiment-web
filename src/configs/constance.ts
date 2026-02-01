@@ -1,7 +1,7 @@
 import { MyAllGameType } from 'src/types/caro.type';
 import { ENV_TYPE } from 'src/types/global';
 import { PikachuBoardTransformType } from 'src/types/pikachu.type';
-import { SchedulerModeType } from 'src/types/process-demo.type';
+import { SchedulerModeType } from 'src/types/process.type';
 
 export const MAX_CARO_BOARD_SIZE = 50;
 export const MAX_CONNECT4_BOARD_SIZE = 80;

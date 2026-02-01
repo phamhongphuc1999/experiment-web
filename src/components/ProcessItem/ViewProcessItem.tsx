@@ -6,7 +6,7 @@ import CopyClipboard from 'src/components/CopyClipboard';
 import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
-import { ProcessStatusType, ProcessType } from 'src/types/process-demo.type';
+import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 
 interface Props {
   data: ProcessType;

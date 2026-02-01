@@ -6,7 +6,7 @@ import { Button } from 'src/components/shadcn-ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from 'src/components/shadcn-ui/dialog';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
 import { ProcessDataObjectType, useProcessStore } from 'src/states/process.state';
-import { ProcessStatusType, ProcessType } from 'src/types/process-demo.type';
+import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function ProcessSettingForm(props: DialogProps) {
