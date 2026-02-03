@@ -131,7 +131,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-error text-[13px] leading-[150%]', className)}
+      className={cn('text-destructive text-xs', className)}
       {...props}
     >
       {body}
@@ -149,7 +149,10 @@ function FormItemContent({ children, itemprops, labelprops }: FormItemContentPro
   return (
     <FormItem {...itemprops}>
       <FormLabel {...labelprops} />
-      <FormControl>{children}</FormControl>
+      <div>
+        <FormControl>{children}</FormControl>
+        <FormMessage />
+      </div>
     </FormItem>
   );
 }

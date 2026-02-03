@@ -1,7 +1,7 @@
-import { ProcessDataObjectType, useProcessStore } from 'src/states/process.state';
+import { useProcessStore } from 'src/states/process.state';
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessDataObjectType, ProcessStatusType, ProcessType } from 'src/types/process.type';
 
 export interface ProcessContextType {
   interval: number;

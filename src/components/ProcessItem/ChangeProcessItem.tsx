@@ -12,10 +12,18 @@ import { Form, FormField, FormItemContent } from 'src/components/shadcn-ui/form'
 import { formatText } from 'src/services';
 import { ProcessType } from 'src/types/process.type';
 import z from 'zod';
+import { Button } from '../shadcn-ui/button';
 
-const schema = z.object({
-  arrivalTime: z.number().min(1, 'Must be at least 1'),
-  executionTime: z.number().min(1, 'Must be at least 1').max(60, 'Must be at most 60'),
+const processTimeSchema = z.object({
+  arrivalTime: z.number().min(0, 'arrivalTime must be >= 0'),
+  executionTime: z
+    .number()
+    .min(1, 'executionTime must be >= 1')
+    .max(120, 'executionTime must be <= 120'),
+});
+
+const schema = processTimeSchema.extend({
+  blockTasks: z.array(processTimeSchema).optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -23,30 +31,28 @@ type FormValues = z.infer<typeof schema>;
 interface Props {
   data: ProcessType;
   events?: {
+    onAddBlockTask?: () => void;
     onArrivalTimeChange?: (arrivalTime: number) => void;
     onExecutionTimeChange?: (executionTime: number) => void;
-    onDelete?: (pid: string) => void;
+    onDelete?: () => void;
+    onBlockTaskArrivalTimeChange?: (index: number, arrivalTime: number) => void;
+    onBlockTaskExecutionTimeChange?: (index: number, executionTime: number) => void;
+    onBlockTaskDelete?: (index: number) => void;
   };
   props?: ComponentProps<'div'>;
 }
 
 export default function ChangeProcessItem({ data, events, props }: Props) {
   const form = useForm<FormValues>({
+    mode: 'onChange',
     resolver: zodResolver(schema),
     defaultValues: { arrivalTime: data.arrivalTime, executionTime: data.executionTime },
   });
 
   useEffect(() => {
-    form.reset({
-      arrivalTime: data.arrivalTime,
-      executionTime: data.executionTime,
-    });
+    form.reset({ arrivalTime: data.arrivalTime, executionTime: data.executionTime });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.arrivalTime, data.executionTime]);
-
-  function onDelete(pid: string) {
-    events?.onDelete?.(pid);
-  }
 
   return (
     <div {...props} className="mt-2 rounded-lg border p-3">
@@ -59,7 +65,7 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
         </div>
         <div className="flex items-center gap-1">
           <ProcessStatus state={data.state} />
-          <Trash size={14} className="cursor-pointer" onClick={() => onDelete(data.pid)} />
+          <Trash size={14} className="cursor-pointer" onClick={events?.onDelete} />
         </div>
       </div>
       <Form {...form}>
@@ -78,9 +84,9 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
                   onChange={(e) => {
                     const val = e.target.value === '' ? '' : Number(e.target.value);
                     field.onChange(val);
-                    if (typeof val === 'number' && !isNaN(val)) {
-                      events?.onArrivalTimeChange?.(val);
-                    }
+
+                    const result = schema.shape.arrivalTime.safeParse(val);
+                    if (result.success) events?.onArrivalTimeChange?.(val as number);
                   }}
                 />
               </FormItemContent>
@@ -100,14 +106,48 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
                   onChange={(e) => {
                     const val = e.target.value === '' ? '' : Number(e.target.value);
                     field.onChange(val);
-                    if (typeof val === 'number' && !isNaN(val)) {
-                      events?.onExecutionTimeChange?.(val);
-                    }
+
+                    const result = schema.shape.executionTime.safeParse(val);
+                    if (result.success) events?.onExecutionTimeChange?.(val as number);
                   }}
                 />
               </FormItemContent>
             )}
           />
+          <Button className="mt-2" onClick={events?.onAddBlockTask} type="button">
+            + add block tasks
+          </Button>
+          {(data?.blockTasks || []).length > 0 && (
+            <div className="mt-2 space-y-2">
+              {data.blockTasks!.map((item, index) => {
+                return (
+                  <div key={index} className="flex items-center gap-2">
+                    <BaseInput
+                      type="number"
+                      name={`blockTask-${index}-start`}
+                      placeholder="Start"
+                      value={item.arrivalTime}
+                      onChange={(event) => {
+                        const val = event.target.value === '' ? '' : Number(event.target.value);
+                        events?.onBlockTaskArrivalTimeChange?.(index, val as number);
+                      }}
+                    />
+                    <BaseInput
+                      name={`blockTask-${index}-duration`}
+                      type="number"
+                      placeholder="Duration"
+                      value={item.executionTime}
+                      onChange={(event) => {
+                        const val = event.target.value === '' ? '' : Number(event.target.value);
+                        events?.onBlockTaskExecutionTimeChange?.(index, val as number);
+                      }}
+                    />
+                    <Trash size={14} onClick={() => events?.onBlockTaskDelete?.(index)} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </form>
       </Form>
     </div>

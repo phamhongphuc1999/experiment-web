@@ -5,8 +5,13 @@ import ChangeProcessItem from 'src/components/ProcessItem/ChangeProcessItem';
 import { Button } from 'src/components/shadcn-ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from 'src/components/shadcn-ui/dialog';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
-import { ProcessDataObjectType, useProcessStore } from 'src/states/process.state';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { useProcessStore } from 'src/states/process.state';
+import {
+  ProcessDataObjectType,
+  ProcessStatusType,
+  ProcessTimeType,
+  ProcessType,
+} from 'src/types/process.type';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function ProcessSettingForm(props: DialogProps) {
@@ -31,13 +36,32 @@ export default function ProcessSettingForm(props: DialogProps) {
         remainingTime: 10,
         state: ProcessStatusType.NEW,
       };
-      return { ...state, [pid]: newProcess };
+      return { [pid]: newProcess, ...state };
     });
   }
 
   function onSave() {
-    setProcesses(data);
-    if (Object.keys(data).length > 0) setMetadata({ status: 'ready' });
+    const cleanData: ProcessDataObjectType = {};
+    Object.values(data).forEach((process) => {
+      const cleanBlockTasks: Array<ProcessTimeType> = [];
+      (process.blockTasks || []).forEach((task) => {
+        const isIntersects = cleanBlockTasks.some((t) => {
+          const start1 = task.arrivalTime;
+          const end1 = task.arrivalTime + task.executionTime;
+          const start2 = t.arrivalTime;
+          const end2 = t.arrivalTime + t.executionTime;
+          return start1 < end2 && start2 < end1;
+        });
+
+        if (!isIntersects) {
+          cleanBlockTasks.push(task);
+        }
+      });
+      cleanData[process.pid] = { ...process, blockTasks: cleanBlockTasks };
+    });
+
+    setProcesses(cleanData);
+    if (Object.keys(cleanData).length > 0) setMetadata({ status: 'ready' });
     else setMetadata({ status: 'initial' });
     if (props.onOpenChange) props.onOpenChange(false);
   }
@@ -83,31 +107,98 @@ export default function ProcessSettingForm(props: DialogProps) {
                       key={item.pid}
                       data={item}
                       events={{
-                        onExecutionTimeChange: (executionTime) => {
+                        onAddBlockTask: () => {
                           setData((state) => {
-                            const newState = { ...state };
-                            newState[item.pid] = {
-                              ...newState[item.pid],
+                            const currentTasks = state[item.pid].blockTasks || [];
+                            return {
+                              ...state,
+                              [item.pid]: {
+                                ...state[item.pid],
+                                blockTasks: [
+                                  {
+                                    arrivalTime: 0,
+                                    executionTime: 1,
+                                    remainingTime: 1,
+                                  },
+                                  ...currentTasks,
+                                ],
+                              },
+                            };
+                          });
+                        },
+                        onBlockTaskArrivalTimeChange: (index, arrivalTime) => {
+                          setData((state) => {
+                            const currentProcess = state[item.pid];
+                            const currentTasks = [...(currentProcess.blockTasks || [])];
+                            if (!currentTasks[index]) return state;
+
+                            currentTasks[index] = { ...currentTasks[index], arrivalTime };
+                            return {
+                              ...state,
+                              [item.pid]: {
+                                ...currentProcess,
+                                blockTasks: currentTasks,
+                              },
+                            };
+                          });
+                        },
+                        onBlockTaskExecutionTimeChange: (index, executionTime) => {
+                          setData((state) => {
+                            const currentProcess = state[item.pid];
+                            const currentTasks = [...(currentProcess.blockTasks || [])];
+                            if (!currentTasks[index]) return state;
+
+                            currentTasks[index] = {
+                              ...currentTasks[index],
                               executionTime,
                               remainingTime: executionTime,
                             };
-                            return newState;
+                            return {
+                              ...state,
+                              [item.pid]: {
+                                ...currentProcess,
+                                blockTasks: currentTasks,
+                              },
+                            };
                           });
+                        },
+                        onBlockTaskDelete: (index) => {
+                          setData((state) => {
+                            const currentProcess = state[item.pid];
+                            const currentTasks = (currentProcess.blockTasks || []).filter(
+                              (_, i) => i !== index
+                            );
+                            return {
+                              ...state,
+                              [item.pid]: {
+                                ...currentProcess,
+                                blockTasks: currentTasks,
+                              },
+                            };
+                          });
+                        },
+                        onExecutionTimeChange: (executionTime) => {
+                          setData((state) => ({
+                            ...state,
+                            [item.pid]: {
+                              ...state[item.pid],
+                              executionTime,
+                              remainingTime: executionTime,
+                            },
+                          }));
                         },
                         onArrivalTimeChange: (arrivalTime) => {
-                          setData((state) => {
-                            const newState = { ...state };
-                            newState[item.pid] = {
-                              ...newState[item.pid],
+                          setData((state) => ({
+                            ...state,
+                            [item.pid]: {
+                              ...state[item.pid],
                               arrivalTime,
-                            };
-                            return newState;
-                          });
+                            },
+                          }));
                         },
-                        onDelete: (pid) => {
+                        onDelete: () => {
                           setData((state) => {
-                            const newState = { ...state };
-                            delete newState[pid];
+                            const { [item.pid]: _, ...newState } = state;
                             return newState;
                           });
                         },
@@ -118,7 +209,6 @@ export default function ProcessSettingForm(props: DialogProps) {
               )}
             </div>
           </div>
-
           <div className="flex items-center justify-end gap-2 border-t p-4">
             <Button variant="outline" onClick={() => props.onOpenChange?.(false)} type="button">
               Cancel

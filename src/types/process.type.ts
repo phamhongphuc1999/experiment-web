@@ -15,14 +15,23 @@ export enum ProcessStatusType {
   TERMINATED = 'terminated',
 }
 
-export type ProcessType = {
-  pid: string;
+export type ProcessTimeType = {
   arrivalTime: number;
   executionTime: number;
   remainingTime: number;
-  blockTasks?: Array<[number, number]>; // simulate the waiting state (example: I/O)
+};
+
+export type ProcessType = ProcessTimeType & {
+  pid: string;
+  blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
   state: ProcessStatusType;
 };
+
+export type ProcessDataObjectType = {
+  [id: string]: ProcessType;
+};
+
+export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
 
 export enum SchedulerModeType {
   FIFO = 'fifo',

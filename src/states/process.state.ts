@@ -1,15 +1,15 @@
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
-import { ProcessStatusType, ProcessType, SchedulerModeType } from 'src/types/process.type';
+import {
+  ProcessDataObjectType,
+  ProcessStatusType,
+  ProcessStoreStatusType,
+  ProcessType,
+  SchedulerModeType,
+} from 'src/types/process.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-
-export type ProcessDataObjectType = {
-  [id: string]: ProcessType;
-};
-
-export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
 
 interface ProcessMetadataType {
   mode: SchedulerModeType;
