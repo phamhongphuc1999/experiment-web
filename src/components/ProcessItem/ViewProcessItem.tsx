@@ -1,3 +1,4 @@
+import { Clock, Timer1 } from 'iconsax-reactjs';
 import { ComponentProps } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
@@ -5,7 +6,6 @@ import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
-import { Clock, Timer1 } from 'iconsax-reactjs';
 
 interface Props {
   data: ProcessType;

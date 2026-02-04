@@ -1,38 +1,8 @@
 import { useProcessStore } from 'src/states/process.state';
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessDataObjectType, ProcessStatusType, ProcessType } from 'src/types/process.type';
-
-export interface ProcessContextType {
-  interval: number;
-  counter: number;
-  incomingQueue: PriorityQueue<ProcessType> | null;
-  fifoQueue: Queue<ProcessType> | null;
-  currentProcess: ProcessType | null;
-}
-
-export enum ProcessMachineEvent {
-  INITIALIZE_PROCESS = 'initialize-process',
-  SET_METADATA = 'set-metadata',
-  RESET = 'reset',
-  CLEAR = 'clear',
-}
-
-type InitializeProcessEventType = {
-  type: ProcessMachineEvent.INITIALIZE_PROCESS;
-  processes: ProcessDataObjectType;
-};
-
-type SetMetadataEventType = {
-  type: ProcessMachineEvent.SET_METADATA;
-  interval?: number;
-};
-
-export type ProcessEventType =
-  | InitializeProcessEventType
-  | SetMetadataEventType
-  | { type: ProcessMachineEvent.RESET }
-  | { type: ProcessMachineEvent.CLEAR };
+import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { InitializeProcessEventType, ProcessContextType } from './type.utils';
 
 export function initializeProcessesAction(
   event: InitializeProcessEventType
@@ -44,27 +14,11 @@ export function initializeProcessesAction(
   processes.forEach((p) => incomingQueue.push(p));
   const setMetadata = useProcessStore.getState().fn.setMetadata;
   setMetadata({ status: 'running' });
-  return { incomingQueue, fifoQueue: new Queue<ProcessType>() };
-}
-
-export function scheduleProcessesEntry(context: ProcessContextType): Partial<ProcessContextType> {
-  const incomingQueue = context.incomingQueue;
-  const fifoQueue = context.fifoQueue;
-  if (incomingQueue && fifoQueue) {
-    const updateQueue = useProcessStore.getState().fn.updateProcess;
-    while (
-      !incomingQueue.isEmpty() &&
-      (incomingQueue.peek()?.arrivalTime || 0) <= context.counter
-    ) {
-      const _process = incomingQueue.pop();
-      if (_process) {
-        const readyProcess: ProcessType = { ..._process, state: ProcessStatusType.READY };
-        fifoQueue.enqueue(readyProcess);
-        updateQueue(readyProcess.pid, readyProcess);
-      }
-    }
-  }
-  return { incomingQueue, fifoQueue };
+  return {
+    incomingQueue,
+    blockQueue: new Queue<ProcessType>(),
+    fifoQueue: new Queue<ProcessType>(),
+  };
 }
 
 export function loadProcessContextEntry(context: ProcessContextType): Partial<ProcessContextType> {

@@ -34,6 +34,7 @@ export default function ProcessSettingForm(props: DialogProps) {
         arrivalTime: 0,
         executionTime: 10,
         remainingTime: 10,
+        currentBlockTaskIndex: 0,
         state: ProcessStatusType.NEW,
       };
       return { [pid]: newProcess, ...state };
@@ -52,12 +53,26 @@ export default function ProcessSettingForm(props: DialogProps) {
           const end2 = t.arrivalTime + t.executionTime;
           return start1 < end2 && start2 < end1;
         });
-
-        if (!isIntersects) {
-          cleanBlockTasks.push(task);
-        }
+        if (!isIntersects) cleanBlockTasks.push(task);
       });
-      cleanData[process.pid] = { ...process, blockTasks: cleanBlockTasks };
+
+      let executionTime = process.executionTime;
+      const maxBlockTaskEnd = cleanBlockTasks.reduce((max, task) => {
+        return Math.max(max, task.arrivalTime + task.executionTime);
+      }, 0);
+
+      if (maxBlockTaskEnd > executionTime) {
+        executionTime = maxBlockTaskEnd;
+      }
+
+      cleanData[process.pid] = {
+        ...process,
+        blockTasks: cleanBlockTasks.sort((item1, item2) => {
+          return item1.arrivalTime - item2.arrivalTime;
+        }),
+        executionTime,
+        remainingTime: executionTime,
+      };
     });
 
     setProcesses(cleanData);

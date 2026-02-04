@@ -6,15 +6,17 @@ import {
   clearAction,
   initializeProcessesAction,
   loadProcessContextEntry,
-  ProcessContextType,
-  ProcessEventType,
-  ProcessMachineEvent,
   resetAction,
   runProcessAction,
   runProcessEntry,
   saveProcessContextEntry,
-  scheduleProcessesEntry,
 } from './process.utils';
+import { scheduleProcessesEntry } from './process.utils/schedule.utils';
+import {
+  ProcessContextType,
+  ProcessEventType,
+  ProcessMachineEvent,
+} from './process.utils/type.utils';
 
 export const processMachine = setup({
   types: {
@@ -31,6 +33,7 @@ export const processMachine = setup({
     interval: 1000,
     counter: 0,
     incomingQueue: null,
+    blockQueue: null,
     fifoQueue: null,
     currentProcess: null,
   },

@@ -24,6 +24,7 @@ export type ProcessTimeType = {
 export type ProcessType = ProcessTimeType & {
   pid: string;
   blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
+  currentBlockTaskIndex: number;
   state: ProcessStatusType;
 };
 

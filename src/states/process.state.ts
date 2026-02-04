@@ -15,6 +15,7 @@ interface ProcessMetadataType {
   mode: SchedulerModeType;
   status: ProcessStoreStatusType;
   interval: number;
+  maxBlockTaskPerSlice: number;
 }
 
 interface ProcessStateType extends ProcessMetadataType {
@@ -39,6 +40,7 @@ export const useProcessStore = create<
         processes: {},
         status: 'initial',
         interval: 1000,
+        maxBlockTaskPerSlice: 5,
         fn: {
           setMetadata: (metadata?: Partial<ProcessMetadataType>) => {
             set((state) => {
