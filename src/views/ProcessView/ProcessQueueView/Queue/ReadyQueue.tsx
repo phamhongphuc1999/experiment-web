@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import ViewProcessItem from 'src/components/ProcessItem/ViewProcessItem';
+import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 import BaseQueue from './BaseQueue';
 

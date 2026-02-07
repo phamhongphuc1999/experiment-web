@@ -2,6 +2,7 @@ import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import {
   ProcessDataObjectType,
+  ProcessHistoryType,
   ProcessStatusType,
   ProcessStoreStatusType,
   ProcessType,
@@ -20,8 +21,10 @@ interface ProcessMetadataType {
 
 interface ProcessStateType extends ProcessMetadataType {
   processes: ProcessDataObjectType;
+  history: Array<ProcessHistoryType>;
   fn: {
     setMetadata: (metadata?: Partial<ProcessMetadataType>) => void;
+    updateHistory: (history: ProcessHistoryType) => void;
     setProcesses: (processes: ProcessDataObjectType) => void;
     updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => void;
     resetProcesses: () => void;
@@ -38,6 +41,7 @@ export const useProcessStore = create<
       return {
         mode: SchedulerModeType.FIFO,
         processes: {},
+        history: [],
         status: 'initial',
         interval: 1000,
         maxBlockTaskPerSlice: 5,
@@ -46,6 +50,11 @@ export const useProcessStore = create<
             set((state) => {
               if (metadata?.mode) state.mode = metadata.mode;
               if (metadata?.status) state.status = metadata.status;
+            });
+          },
+          updateHistory: (history: ProcessHistoryType) => {
+            set((state) => {
+              state.history = [...state.history, history];
             });
           },
           setProcesses: (processes: ProcessDataObjectType) => {
@@ -78,6 +87,7 @@ export const useProcessStore = create<
               }
               state.processes = newProcesses;
               state.status = 'ready';
+              state.history = [];
             });
           },
           clear: () => {
@@ -85,13 +95,14 @@ export const useProcessStore = create<
               state.mode = SchedulerModeType.FIFO;
               state.processes = {};
               state.status = 'initial';
+              state.history = [];
             });
           },
         },
       };
     }),
     {
-      name: 'experiment.process.v1',
+      name: 'experiment.process.v2',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {

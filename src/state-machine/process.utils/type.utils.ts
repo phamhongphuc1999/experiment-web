@@ -1,6 +1,6 @@
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessDataObjectType, ProcessType } from 'src/types/process.type';
+import { ProcessDataObjectType, ProcessMachineEvent, ProcessType } from 'src/types/process.type';
 
 export interface ProcessContextType {
   interval: number;
@@ -9,13 +9,6 @@ export interface ProcessContextType {
   waitingQueue: Queue<ProcessType> | null;
   readyQueue: Queue<ProcessType> | null;
   currentProcess: ProcessType | null;
-}
-
-export enum ProcessMachineEvent {
-  INITIALIZE_PROCESS = 'initialize-process',
-  SET_METADATA = 'set-metadata',
-  RESET = 'reset',
-  CLEAR = 'clear',
 }
 
 export type InitializeProcessEventType = {

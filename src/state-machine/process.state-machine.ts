@@ -1,6 +1,11 @@
 import { useMachine } from '@xstate/react';
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessMachineStateType } from 'src/types/process.type';
+import {
+  ProcessHistoryEnum,
+  ProcessHistoryType,
+  ProcessMachineEvent,
+  ProcessMachineStateType,
+} from 'src/types/process.type';
 import { assign, setup } from 'xstate';
 import {
   clearAction,
@@ -11,11 +16,16 @@ import {
 } from './process.utils';
 import { runProcessAction, runProcessEntry } from './process.utils/run-process.utils';
 import { scheduleProcessesEntry } from './process.utils/schedule.utils';
-import {
-  ProcessContextType,
-  ProcessEventType,
-  ProcessMachineEvent,
-} from './process.utils/type.utils';
+import { ProcessContextType, ProcessEventType } from './process.utils/type.utils';
+
+const _updateHistory = useProcessStore.getState().fn.updateHistory;
+
+function updateHistory(
+  context: ProcessContextType,
+  history: Omit<ProcessHistoryType, 'timeInterval'>
+) {
+  _updateHistory({ ...history, timeInterval: context.counter });
+}
 
 export const processMachine = setup({
   types: {
@@ -38,28 +48,45 @@ export const processMachine = setup({
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {
-      entry: () => {
-        console.debug(`Entry: ${ProcessMachineStateType.INITIAL}`);
-      },
       on: {
         [ProcessMachineEvent.INITIALIZE_PROCESS]: {
           target: ProcessMachineStateType.SCHEDULE,
-          actions: assign(({ event }) => {
+          actions: assign(({ context, event }) => {
+            updateHistory(context, {
+              actionType: ProcessHistoryEnum.ACTION,
+              stateType: ProcessMachineStateType.INITIAL,
+              eventType: ProcessMachineEvent.INITIALIZE_PROCESS,
+            });
             return initializeProcessesAction(event);
           }),
         },
         [ProcessMachineEvent.SET_METADATA]: {
-          actions: assign(({ event }) => {
+          actions: assign(({ context, event }) => {
+            updateHistory(context, {
+              actionType: ProcessHistoryEnum.ACTION,
+              stateType: ProcessMachineStateType.INITIAL,
+              eventType: ProcessMachineEvent.SET_METADATA,
+            });
             return { interval: event.interval };
           }),
         },
         [ProcessMachineEvent.RESET]: {
-          actions: assign(() => {
+          actions: assign(({ context }) => {
+            updateHistory(context, {
+              actionType: ProcessHistoryEnum.ACTION,
+              stateType: ProcessMachineStateType.INITIAL,
+              eventType: ProcessMachineEvent.RESET,
+            });
             return resetAction();
           }),
         },
         [ProcessMachineEvent.CLEAR]: {
-          actions: assign(() => {
+          actions: assign(({ context }) => {
+            updateHistory(context, {
+              actionType: ProcessHistoryEnum.ACTION,
+              stateType: ProcessMachineStateType.INITIAL,
+              eventType: ProcessMachineEvent.CLEAR,
+            });
             return clearAction();
           }),
         },
@@ -67,7 +94,10 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.SCHEDULE]: {
       entry: assign(({ context }) => {
-        console.debug(`Entry: ${ProcessMachineStateType.SCHEDULE}`);
+        updateHistory(context, {
+          actionType: ProcessHistoryEnum.ENTRY,
+          stateType: ProcessMachineStateType.SCHEDULE,
+        });
         return scheduleProcessesEntry(context);
       }),
       always: [
@@ -80,7 +110,10 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.LOAD_PROCESS_CONTEXT]: {
       entry: assign(({ context }) => {
-        console.debug(`Entry: ${ProcessMachineStateType.LOAD_PROCESS_CONTEXT}`);
+        updateHistory(context, {
+          actionType: ProcessHistoryEnum.ENTRY,
+          stateType: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+        });
         return loadProcessContextEntry(context);
       }),
       always: [
@@ -99,7 +132,10 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.RUN_PROCESS]: {
       entry: assign(({ context }) => {
-        console.debug(`Entry: ${ProcessMachineStateType.RUN_PROCESS}`);
+        updateHistory(context, {
+          actionType: ProcessHistoryEnum.ENTRY,
+          stateType: ProcessMachineStateType.RUN_PROCESS,
+        });
         return runProcessEntry(context);
       }),
       always: [
@@ -112,6 +148,10 @@ export const processMachine = setup({
         INTERVAL: {
           target: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,
           actions: assign(({ context }) => {
+            updateHistory(context, {
+              actionType: ProcessHistoryEnum.ACTION,
+              stateType: ProcessMachineStateType.RUN_PROCESS,
+            });
             return runProcessAction(context);
           }),
         },
@@ -119,14 +159,20 @@ export const processMachine = setup({
     },
     [ProcessMachineStateType.SAVE_PROCESS_CONTEXT]: {
       entry: assign(({ context }) => {
-        console.debug(`Entry: ${ProcessMachineStateType.SAVE_PROCESS_CONTEXT}`);
+        updateHistory(context, {
+          actionType: ProcessHistoryEnum.ENTRY,
+          stateType: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,
+        });
         return saveProcessContextEntry(context);
       }),
       always: { target: ProcessMachineStateType.SCHEDULE },
     },
     [ProcessMachineStateType.ENDED]: {
-      entry: () => {
-        console.debug(`Entry: ${ProcessMachineStateType.ENDED}`);
+      entry: ({ context }) => {
+        updateHistory(context, {
+          actionType: ProcessHistoryEnum.ENTRY,
+          stateType: ProcessMachineStateType.ENDED,
+        });
         const fn = useProcessStore.getState().fn;
         fn.setMetadata({ status: 'ended' });
       },

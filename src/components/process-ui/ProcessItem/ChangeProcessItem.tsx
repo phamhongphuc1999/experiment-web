@@ -8,11 +8,11 @@ import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
 import BaseInput from 'src/components/input/BaseInput';
 import ProcessStatus from 'src/components/process-ui/ProcessStatus';
+import { Button } from 'src/components/shadcn-ui/button';
 import { Form, FormField, FormItemContent } from 'src/components/shadcn-ui/form';
 import { formatText } from 'src/services';
 import { ProcessType } from 'src/types/process.type';
 import z from 'zod';
-import { Button } from '../shadcn-ui/button';
 
 const processTimeSchema = z.object({
   arrivalTime: z.number().min(0, 'arrivalTime must be >= 0'),
@@ -55,7 +55,7 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
   }, [data.arrivalTime, data.executionTime]);
 
   return (
-    <div {...props} className="mt-2 rounded-lg border p-3">
+    <div {...props} className="mt-2 border p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <AppTooltip tooltipContent={data.pid}>
@@ -80,6 +80,7 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
               >
                 <BaseInput
                   type="number"
+                  className="rounded-none"
                   {...field}
                   onChange={(e) => {
                     const val = e.target.value === '' ? '' : Number(e.target.value);
@@ -102,6 +103,7 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
               >
                 <BaseInput
                   type="number"
+                  className="rounded-none"
                   {...field}
                   onChange={(e) => {
                     const val = e.target.value === '' ? '' : Number(e.target.value);
@@ -114,16 +116,17 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
               </FormItemContent>
             )}
           />
-          <Button className="mt-2" onClick={events?.onAddBlockTask} type="button">
+          <Button className="mt-2 rounded-none" onClick={events?.onAddBlockTask} type="button">
             + add block tasks
           </Button>
           {(data?.blockTasks || []).length > 0 && (
-            <div className="mt-2 space-y-2">
+            <div className="mt-5 flex flex-col gap-5">
               {data.blockTasks!.map((item, index) => {
                 return (
                   <div key={index} className="flex items-center gap-2">
                     <BaseInput
                       type="number"
+                      className="rounded-none"
                       name={`blockTask-${index}-start`}
                       placeholder="Start"
                       value={item.arrivalTime}
@@ -135,6 +138,7 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
                     <BaseInput
                       name={`blockTask-${index}-duration`}
                       type="number"
+                      className="rounded-none"
                       placeholder="Duration"
                       value={item.executionTime}
                       onChange={(event) => {

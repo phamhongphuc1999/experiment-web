@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import ViewProcessItem from 'src/components/ProcessItem/ViewProcessItem';
+import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 import BaseQueue from './BaseQueue';
 
@@ -13,13 +13,7 @@ export default function TerminatedQueue({ processList }: Props) {
     .sort((a, b) => b.arrivalTime - a.arrivalTime); // Show recent first?
 
   return (
-    <BaseQueue
-      title="Terminated"
-      count={terminatedProcesses.length}
-      contentprops={{
-        className: 'opacity-70 grayscale-[0.5] transition-all hover:opacity-100 hover:grayscale-0',
-      }}
-    >
+    <BaseQueue title="Terminated" count={terminatedProcesses.length}>
       {terminatedProcesses.map((process) => (
         <motion.div
           key={process.pid}

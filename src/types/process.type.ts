@@ -22,6 +22,7 @@ export type ProcessTimeType = {
 };
 
 export type ProcessType = ProcessTimeType & {
+  index?: number;
   pid: string;
   blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
   currentBlockTaskIndex: number;
@@ -40,3 +41,22 @@ export enum SchedulerModeType {
   ROUND_ROBIN = 'round-robin',
   MLFQ = 'mlfq',
 }
+
+export enum ProcessHistoryEnum {
+  ACTION = 'actions',
+  ENTRY = 'entry',
+}
+
+export enum ProcessMachineEvent {
+  INITIALIZE_PROCESS = 'initialize-process',
+  SET_METADATA = 'set-metadata',
+  RESET = 'reset',
+  CLEAR = 'clear',
+}
+
+export type ProcessHistoryType = {
+  actionType: ProcessHistoryEnum;
+  stateType: ProcessMachineStateType;
+  eventType?: ProcessMachineEvent;
+  timeInterval: number;
+};
