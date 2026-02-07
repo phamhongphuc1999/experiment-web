@@ -16,14 +16,15 @@ export enum ProcessStatusType {
 }
 
 export type ProcessTimeType = {
-  arrivalTime: number;
-  executionTime: number;
-  remainingTime: number;
+  arrivalTime: number; // Time when the process arrives (enters the ready queue)
+  executionTime: number; // Total CPU time required to finish the process
+  runtime: number; // CPU time already spent running
 };
 
 export type ProcessType = ProcessTimeType & {
   pid: string;
   blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
+  currentBlockTaskIndex: number;
   state: ProcessStatusType;
 };
 
@@ -37,4 +38,5 @@ export enum SchedulerModeType {
   FIFO = 'fifo',
   SJF = 'sjf',
   ROUND_ROBIN = 'round-robin',
+  MLFQ = 'mlfq',
 }

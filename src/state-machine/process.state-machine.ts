@@ -6,15 +6,16 @@ import {
   clearAction,
   initializeProcessesAction,
   loadProcessContextEntry,
+  resetAction,
+  saveProcessContextEntry,
+} from './process.utils';
+import { runProcessAction, runProcessEntry } from './process.utils/run-process.utils';
+import { scheduleProcessesEntry } from './process.utils/schedule.utils';
+import {
   ProcessContextType,
   ProcessEventType,
   ProcessMachineEvent,
-  resetAction,
-  runProcessAction,
-  runProcessEntry,
-  saveProcessContextEntry,
-  scheduleProcessesEntry,
-} from './process.utils';
+} from './process.utils/type.utils';
 
 export const processMachine = setup({
   types: {
@@ -30,8 +31,9 @@ export const processMachine = setup({
   context: {
     interval: 1000,
     counter: 0,
-    incomingQueue: null,
-    fifoQueue: null,
+    newQueue: null,
+    waitingQueue: null,
+    readyQueue: null,
     currentProcess: null,
   },
   states: {
@@ -84,7 +86,10 @@ export const processMachine = setup({
       always: [
         {
           target: ProcessMachineStateType.RUN_PROCESS,
-          guard: ({ context }) => !!context.currentProcess || !context.incomingQueue?.isEmpty(),
+          guard: ({ context }) =>
+            !!context.currentProcess ||
+            !context.newQueue?.isEmpty() ||
+            !context.waitingQueue?.isEmpty(),
         },
         {
           target: ProcessMachineStateType.ENDED,
@@ -93,10 +98,16 @@ export const processMachine = setup({
       ],
     },
     [ProcessMachineStateType.RUN_PROCESS]: {
-      entry: ({ context }) => {
+      entry: assign(({ context }) => {
         console.debug(`Entry: ${ProcessMachineStateType.RUN_PROCESS}`);
-        runProcessEntry(context);
-      },
+        return runProcessEntry(context);
+      }),
+      always: [
+        {
+          target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+          guard: ({ context }) => !context.currentProcess && !context.readyQueue?.isEmpty(),
+        },
+      ],
       after: {
         INTERVAL: {
           target: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,

@@ -10,7 +10,7 @@ interface Props {
 export default function ReadyQueue({ processList }: Props) {
   const readyProcesses = processList
     .filter((p) => p.state === ProcessStatusType.READY)
-    .sort((a, b) => a.arrivalTime - b.arrivalTime); // Assuming FIFO for display, or maintain order
+    .sort((a, b) => a.arrivalTime - b.arrivalTime);
 
   return (
     <BaseQueue title="Ready" count={readyProcesses.length}>

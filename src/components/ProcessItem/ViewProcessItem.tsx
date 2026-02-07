@@ -1,3 +1,4 @@
+import { Clock, Timer1 } from 'iconsax-reactjs';
 import { ComponentProps } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
@@ -5,7 +6,6 @@ import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
-import { Clock, Timer1 } from 'iconsax-reactjs';
 
 interface Props {
   data: ProcessType;
@@ -13,13 +13,13 @@ interface Props {
 }
 
 export default function ViewProcessItem({ data, props }: Props) {
-  const progress = ((data.executionTime - data.remainingTime) / data.executionTime) * 100;
+  const progress = (data.runtime / data.executionTime) * 100;
 
   return (
     <div
       {...props}
       className={cn(
-        'group relative mt-3 overflow-hidden rounded-xl border-2 p-4 transition-all hover:shadow-lg',
+        'group relative overflow-hidden rounded-xl border-2 p-2 transition-all hover:shadow-lg',
         {
           'border-blue-200 bg-blue-50/30 dark:border-blue-900/50 dark:bg-blue-950/20':
             data.state == ProcessStatusType.NEW,
@@ -40,33 +40,27 @@ export default function ViewProcessItem({ data, props }: Props) {
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/50 shadow-sm dark:bg-gray-800/50">
-            <span className="text-xs font-bold text-gray-500">P</span>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1">
+            <AppTooltip tooltipContent={data.pid}>
+              <span className="text-sm font-bold tracking-tight">#{formatText(data.pid, 4)}</span>
+            </AppTooltip>
+            <CopyClipboard copyText={data.pid} iconprops={{ size: 14 }} />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <AppTooltip tooltipContent={data.pid}>
-                <span className="text-sm font-bold tracking-tight">#{formatText(data.pid, 4)}</span>
-              </AppTooltip>
-              <CopyClipboard copyText={data.pid} iconprops={{ size: 14 }} />
-            </div>
-            <div className="text-muted-foreground flex items-center gap-1 text-[10px]">
-              <Clock size={10} />
-              <span>Arrived at T+{data.arrivalTime}</span>
-            </div>
+          <div className="text-muted-foreground flex items-center gap-1 text-[10px]">
+            <Clock size={10} />
+            <span>Arrived at T+{data.arrivalTime}</span>
           </div>
         </div>
-        <ProcessStatus state={data.state} />
+        <ProcessStatus state={data.state} rootprops={{ className: 'text-sm' }} />
       </div>
-
       <div className="mt-4 space-y-3">
         {/* Main Progress */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground font-medium">Execution Progress</span>
             <span className="font-bold">
-              {data.executionTime - data.remainingTime}/{data.executionTime}ms
+              {data.runtime}/{data.executionTime}ms
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
@@ -96,8 +90,8 @@ export default function ViewProcessItem({ data, props }: Props) {
             </p>
             <div className="space-y-2">
               {data.blockTasks!.map((item, index) => {
-                const subProgress =
-                  ((item.executionTime - item.remainingTime) / item.executionTime) * 100;
+                const subProgress = (item.runtime / item.executionTime) * 100;
+
                 return (
                   <div key={index} className="space-y-1">
                     <div className="flex items-center justify-between text-[10px]">

@@ -15,6 +15,7 @@ interface ProcessMetadataType {
   mode: SchedulerModeType;
   status: ProcessStoreStatusType;
   interval: number;
+  maxBlockTaskPerSlice: number;
 }
 
 interface ProcessStateType extends ProcessMetadataType {
@@ -39,6 +40,7 @@ export const useProcessStore = create<
         processes: {},
         status: 'initial',
         interval: 1000,
+        maxBlockTaskPerSlice: 5,
         fn: {
           setMetadata: (metadata?: Partial<ProcessMetadataType>) => {
             set((state) => {
@@ -62,8 +64,17 @@ export const useProcessStore = create<
             set((state) => {
               const newProcesses = cloneDeep(state.processes);
               for (const item of Object.values(newProcesses)) {
-                newProcesses[item.pid].remainingTime = item.executionTime;
+                newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
+                newProcesses[item.pid].currentBlockTaskIndex = 0;
+                if (newProcesses[item.pid].blockTasks) {
+                  newProcesses[item.pid].blockTasks = newProcesses[item.pid].blockTasks?.map(
+                    (task) => ({
+                      ...task,
+                      runtime: 0,
+                    })
+                  );
+                }
               }
               state.processes = newProcesses;
               state.status = 'ready';
@@ -80,7 +91,7 @@ export const useProcessStore = create<
       };
     }),
     {
-      name: 'experiment.process',
+      name: 'experiment.process.v1',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {

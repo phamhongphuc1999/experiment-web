@@ -1,17 +1,13 @@
 import { motion } from 'motion/react';
 import ViewProcessItem from 'src/components/ProcessItem/ViewProcessItem';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessType } from 'src/types/process.type';
 import BaseQueue from './BaseQueue';
 
 interface Props {
-  processList: ProcessType[];
+  incomingProcesses: ProcessType[];
 }
 
-export default function IncomingQueue({ processList }: Props) {
-  const incomingProcesses = processList
-    .filter((p) => p.state === ProcessStatusType.NEW)
-    .sort((a, b) => a.arrivalTime - b.arrivalTime);
-
+export default function IncomingQueue({ incomingProcesses }: Props) {
   return (
     <BaseQueue title="Incoming" count={incomingProcesses.length}>
       {incomingProcesses.map((process) => (

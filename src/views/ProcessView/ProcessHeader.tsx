@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from 'src/components/shadcn-ui/button';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
-import { ProcessMachineEvent } from 'src/state-machine/process.utils';
+import { ProcessMachineEvent } from 'src/state-machine/process.utils/type.utils';
 import { useProcessStore } from 'src/states/process.state';
 import ProcessSettingForm from './ProcessSettingForm';
 
