@@ -2,9 +2,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ViewProcessItem from 'src/components/ProcessItem/ViewProcessItem';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessStatusType } from 'src/types/process.type';
-import IncomingQueue from './IncomingQueue';
-import ReadyQueue from './ReadyQueue';
-import TerminatedQueue from './TerminatedQueue';
+import IncomingQueue from './Queue/IncomingQueue';
+import ReadyQueue from './Queue/ReadyQueue';
+import TerminatedQueue from './Queue/TerminatedQueue';
 
 export default function ProcessQueueView() {
   const { processes } = useProcessStore();

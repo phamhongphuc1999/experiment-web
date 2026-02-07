@@ -3,21 +3,18 @@ import { ProcessContextType } from './type.utils';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 
 export function scheduleProcessesEntry(context: ProcessContextType): Partial<ProcessContextType> {
-  const incomingQueue = context.incomingQueue;
-  const fifoQueue = context.fifoQueue;
-  if (incomingQueue && fifoQueue) {
+  const newQueue = context.newQueue;
+  const readyQueue = context.readyQueue;
+  if (newQueue && readyQueue) {
     const updateQueue = useProcessStore.getState().fn.updateProcess;
-    while (
-      !incomingQueue.isEmpty() &&
-      (incomingQueue.peek()?.arrivalTime || 0) <= context.counter
-    ) {
-      const _process = incomingQueue.pop();
+    while (!newQueue.isEmpty() && (newQueue.peek()?.arrivalTime || 0) <= context.counter) {
+      const _process = newQueue.pop();
       if (_process) {
         const readyProcess: ProcessType = { ..._process, state: ProcessStatusType.READY };
-        fifoQueue.enqueue(readyProcess);
+        readyQueue.enqueue(readyProcess);
         updateQueue(readyProcess.pid, readyProcess);
       }
     }
   }
-  return { incomingQueue, fifoQueue };
+  return { newQueue, readyQueue };
 }

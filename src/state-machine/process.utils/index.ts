@@ -8,42 +8,37 @@ export function initializeProcessesAction(
   event: InitializeProcessEventType
 ): Partial<ProcessContextType> {
   const processes = Object.values(event.processes);
-  const incomingQueue = new PriorityQueue<ProcessType>((a, b) => {
+  const newQueue = new PriorityQueue<ProcessType>((a, b) => {
     return a.arrivalTime - b.arrivalTime;
   });
-  processes.forEach((p) => incomingQueue.push(p));
+  processes.forEach((p) => newQueue.push(p));
   const setMetadata = useProcessStore.getState().fn.setMetadata;
   setMetadata({ status: 'running' });
-  return {
-    incomingQueue,
-    blockQueue: new Queue<ProcessType>(),
-    fifoQueue: new Queue<ProcessType>(),
-  };
+  return { newQueue, waitingQueue: new Queue<ProcessType>(), readyQueue: new Queue<ProcessType>() };
 }
 
 export function loadProcessContextEntry(context: ProcessContextType): Partial<ProcessContextType> {
-  if (!context.currentProcess && !context.fifoQueue?.isEmpty()) {
-    return { currentProcess: context.fifoQueue?.dequeue() };
+  if (!context.currentProcess && !context.readyQueue?.isEmpty()) {
+    return { currentProcess: context.readyQueue?.dequeue() };
   }
   return {};
 }
 
 export function runProcessEntry(context: ProcessContextType) {
   if (context.currentProcess) {
-    useProcessStore
-      .getState()
-      .fn.updateProcess(context.currentProcess.pid, { state: ProcessStatusType.RUNNING });
+    const updateProcess = useProcessStore.getState().fn.updateProcess;
+    updateProcess(context.currentProcess.pid, { state: ProcessStatusType.RUNNING });
   }
 }
 
 export function runProcessAction(context: ProcessContextType): Partial<ProcessContextType> {
   const currentProcess = context.currentProcess;
   if (currentProcess) {
-    const remainingTime = currentProcess.remainingTime - 1;
-    if (remainingTime > 0)
-      return { currentProcess: { ...currentProcess, remainingTime }, counter: context.counter + 1 };
+    const runtime = currentProcess.runtime + 1;
+    if (runtime < currentProcess.executionTime)
+      return { currentProcess: { ...currentProcess, runtime }, counter: context.counter + 1 };
     return {
-      currentProcess: { ...currentProcess, remainingTime: 0, state: ProcessStatusType.TERMINATED },
+      currentProcess: { ...currentProcess, runtime: 0, state: ProcessStatusType.TERMINATED },
       counter: context.counter + 1,
     };
   }
@@ -61,11 +56,11 @@ export function saveProcessContextEntry(context: ProcessContextType): Partial<Pr
 export function resetAction(): Partial<ProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.resetProcesses();
-  return { incomingQueue: null, fifoQueue: null, counter: 0 };
+  return { newQueue: null, readyQueue: null, counter: 0 };
 }
 
 export function clearAction(): Partial<ProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.clear();
-  return { incomingQueue: null, fifoQueue: null, currentProcess: null, counter: 0 };
+  return { newQueue: null, readyQueue: null, currentProcess: null, counter: 0 };
 }

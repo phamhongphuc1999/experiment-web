@@ -33,7 +33,7 @@ export default function ProcessSettingForm(props: DialogProps) {
         pid,
         arrivalTime: 0,
         executionTime: 10,
-        remainingTime: 10,
+        runtime: 10,
         currentBlockTaskIndex: 0,
         state: ProcessStatusType.NEW,
       };
@@ -71,7 +71,7 @@ export default function ProcessSettingForm(props: DialogProps) {
           return item1.arrivalTime - item2.arrivalTime;
         }),
         executionTime,
-        remainingTime: executionTime,
+        runtime: 0,
       };
     });
 
@@ -130,11 +130,7 @@ export default function ProcessSettingForm(props: DialogProps) {
                               [item.pid]: {
                                 ...state[item.pid],
                                 blockTasks: [
-                                  {
-                                    arrivalTime: 0,
-                                    executionTime: 1,
-                                    remainingTime: 1,
-                                  },
+                                  { arrivalTime: 0, executionTime: 1, runtime: 0 },
                                   ...currentTasks,
                                 ],
                               },
@@ -166,7 +162,7 @@ export default function ProcessSettingForm(props: DialogProps) {
                             currentTasks[index] = {
                               ...currentTasks[index],
                               executionTime,
-                              remainingTime: executionTime,
+                              runtime: 0,
                             };
                             return {
                               ...state,

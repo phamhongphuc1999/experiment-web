@@ -5,9 +5,9 @@ import { ProcessDataObjectType, ProcessType } from 'src/types/process.type';
 export interface ProcessContextType {
   interval: number;
   counter: number;
-  incomingQueue: PriorityQueue<ProcessType> | null;
-  blockQueue: Queue<ProcessType> | null;
-  fifoQueue: Queue<ProcessType> | null;
+  newQueue: PriorityQueue<ProcessType> | null; // incoming processes
+  waitingQueue: Queue<ProcessType> | null;
+  readyQueue: Queue<ProcessType> | null;
   currentProcess: ProcessType | null;
 }
 

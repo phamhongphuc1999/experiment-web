@@ -83,4 +83,5 @@ export const ProcessSchedulerConfigs: {
   [SchedulerModeType.FIFO]: { id: SchedulerModeType.FIFO, name: 'First In, First Out' },
   [SchedulerModeType.SJF]: { id: SchedulerModeType.SJF, name: 'Shortest Job First' },
   [SchedulerModeType.ROUND_ROBIN]: { id: SchedulerModeType.ROUND_ROBIN, name: 'Round Robin' },
+  [SchedulerModeType.MLFQ]: { id: SchedulerModeType.MLFQ, name: 'Multilevel Feedback Queue' },
 };

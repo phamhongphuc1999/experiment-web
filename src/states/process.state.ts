@@ -64,7 +64,7 @@ export const useProcessStore = create<
             set((state) => {
               const newProcesses = cloneDeep(state.processes);
               for (const item of Object.values(newProcesses)) {
-                newProcesses[item.pid].remainingTime = item.executionTime;
+                newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
               }
               state.processes = newProcesses;

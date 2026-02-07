@@ -32,9 +32,9 @@ export const processMachine = setup({
   context: {
     interval: 1000,
     counter: 0,
-    incomingQueue: null,
-    blockQueue: null,
-    fifoQueue: null,
+    newQueue: null,
+    waitingQueue: null,
+    readyQueue: null,
     currentProcess: null,
   },
   states: {
@@ -87,7 +87,7 @@ export const processMachine = setup({
       always: [
         {
           target: ProcessMachineStateType.RUN_PROCESS,
-          guard: ({ context }) => !!context.currentProcess || !context.incomingQueue?.isEmpty(),
+          guard: ({ context }) => !!context.currentProcess || !context.newQueue?.isEmpty(),
         },
         {
           target: ProcessMachineStateType.ENDED,

@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function ViewProcessItem({ data, props }: Props) {
-  const progress = ((data.executionTime - data.remainingTime) / data.executionTime) * 100;
+  const progress = (data.runtime / data.executionTime) * 100;
 
   return (
     <div
@@ -66,7 +66,7 @@ export default function ViewProcessItem({ data, props }: Props) {
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground font-medium">Execution Progress</span>
             <span className="font-bold">
-              {data.executionTime - data.remainingTime}/{data.executionTime}ms
+              {data.runtime}/{data.executionTime}ms
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
@@ -96,8 +96,8 @@ export default function ViewProcessItem({ data, props }: Props) {
             </p>
             <div className="space-y-2">
               {data.blockTasks!.map((item, index) => {
-                const subProgress =
-                  ((item.executionTime - item.remainingTime) / item.executionTime) * 100;
+                const subProgress = (item.runtime / item.executionTime) * 100;
+
                 return (
                   <div key={index} className="space-y-1">
                     <div className="flex items-center justify-between text-[10px]">
