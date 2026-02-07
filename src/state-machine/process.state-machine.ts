@@ -7,10 +7,9 @@ import {
   initializeProcessesAction,
   loadProcessContextEntry,
   resetAction,
-  runProcessAction,
-  runProcessEntry,
   saveProcessContextEntry,
 } from './process.utils';
+import { runProcessAction, runProcessEntry } from './process.utils/run-process.utils';
 import { scheduleProcessesEntry } from './process.utils/schedule.utils';
 import {
   ProcessContextType,
@@ -87,7 +86,10 @@ export const processMachine = setup({
       always: [
         {
           target: ProcessMachineStateType.RUN_PROCESS,
-          guard: ({ context }) => !!context.currentProcess || !context.newQueue?.isEmpty(),
+          guard: ({ context }) =>
+            !!context.currentProcess ||
+            !context.newQueue?.isEmpty() ||
+            !context.waitingQueue?.isEmpty(),
         },
         {
           target: ProcessMachineStateType.ENDED,
@@ -96,10 +98,16 @@ export const processMachine = setup({
       ],
     },
     [ProcessMachineStateType.RUN_PROCESS]: {
-      entry: ({ context }) => {
+      entry: assign(({ context }) => {
         console.debug(`Entry: ${ProcessMachineStateType.RUN_PROCESS}`);
-        runProcessEntry(context);
-      },
+        return runProcessEntry(context);
+      }),
+      always: [
+        {
+          target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+          guard: ({ context }) => !context.currentProcess && !context.readyQueue?.isEmpty(),
+        },
+      ],
       after: {
         INTERVAL: {
           target: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,

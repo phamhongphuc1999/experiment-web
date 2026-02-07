@@ -24,4 +24,10 @@ export default class Queue<T> {
   clear(): void {
     this.items = [];
   }
+
+  clone(): Queue<T> {
+    const newQueue = new Queue<T>();
+    newQueue.items = [...this.items];
+    return newQueue;
+  }
 }

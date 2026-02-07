@@ -6,13 +6,13 @@ export function scheduleProcessesEntry(context: ProcessContextType): Partial<Pro
   const newQueue = context.newQueue;
   const readyQueue = context.readyQueue;
   if (newQueue && readyQueue) {
-    const updateQueue = useProcessStore.getState().fn.updateProcess;
+    const updateProcess = useProcessStore.getState().fn.updateProcess;
     while (!newQueue.isEmpty() && (newQueue.peek()?.arrivalTime || 0) <= context.counter) {
       const _process = newQueue.pop();
       if (_process) {
         const readyProcess: ProcessType = { ..._process, state: ProcessStatusType.READY };
         readyQueue.enqueue(readyProcess);
-        updateQueue(readyProcess.pid, readyProcess);
+        updateProcess(readyProcess.pid, readyProcess);
       }
     }
   }

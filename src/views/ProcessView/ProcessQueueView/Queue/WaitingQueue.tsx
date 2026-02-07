@@ -7,28 +7,28 @@ interface Props {
   processList: ProcessType[];
 }
 
-export default function ReadyQueue({ processList }: Props) {
-  const readyProcesses = processList
-    .filter((p) => p.state === ProcessStatusType.READY)
+export default function WaitingQueue({ processList }: Props) {
+  const waitingProcesses = processList
+    .filter((p) => p.state === ProcessStatusType.WAITING)
     .sort((a, b) => a.arrivalTime - b.arrivalTime);
 
   return (
-    <BaseQueue title="Ready" count={readyProcesses.length}>
+    <BaseQueue title="Waiting" count={waitingProcesses.length}>
       <AnimatePresence mode="popLayout">
-        {readyProcesses.map((process) => (
+        {waitingProcesses.map((process) => (
           <motion.div
             key={process.pid}
             layoutId={process.pid}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 20, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
             <ViewProcessItem data={process} />
           </motion.div>
         ))}
-        {readyProcesses.length === 0 && (
-          <p className="py-8 text-center text-sm text-gray-400">Queue is empty</p>
+        {waitingProcesses.length === 0 && (
+          <p className="py-8 text-center text-sm text-gray-400">No waiting processes</p>
         )}
       </AnimatePresence>
     </BaseQueue>

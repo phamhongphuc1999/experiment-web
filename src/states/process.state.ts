@@ -66,6 +66,15 @@ export const useProcessStore = create<
               for (const item of Object.values(newProcesses)) {
                 newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
+                newProcesses[item.pid].currentBlockTaskIndex = 0;
+                if (newProcesses[item.pid].blockTasks) {
+                  newProcesses[item.pid].blockTasks = newProcesses[item.pid].blockTasks?.map(
+                    (task) => ({
+                      ...task,
+                      runtime: 0,
+                    })
+                  );
+                }
               }
               state.processes = newProcesses;
               state.status = 'ready';
@@ -82,7 +91,7 @@ export const useProcessStore = create<
       };
     }),
     {
-      name: 'experiment.process',
+      name: 'experiment.process.v1',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {

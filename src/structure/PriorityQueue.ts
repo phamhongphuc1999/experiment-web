@@ -76,6 +76,12 @@ export class PriorityQueue<T> {
     }
   }
 
+  clone(): PriorityQueue<T> {
+    const newQueue = new PriorityQueue<T>(this.compare);
+    newQueue.fromArray([...this.heap]);
+    return newQueue;
+  }
+
   private swap(i: number, j: number) {
     [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
   }
