@@ -27,6 +27,9 @@ export type ProcessType = ProcessTimeType & {
   blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
   currentBlockTaskIndex: number;
   state: ProcessStatusType;
+  readyPriority: number;
+  waitingPriority: number;
+  endAt: number;
 };
 
 export type ProcessDataObjectType = {

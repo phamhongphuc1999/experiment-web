@@ -10,7 +10,10 @@ interface Props {
 export default function ReadyQueue({ processList }: Props) {
   const readyProcesses = processList
     .filter((p) => p.state === ProcessStatusType.READY)
-    .sort((a, b) => a.arrivalTime - b.arrivalTime);
+    .sort((p1, p2) => {
+      if (p1.readyPriority - p2.readyPriority != 0) return p1.readyPriority - p2.readyPriority;
+      else return p1.arrivalTime - p2.arrivalTime;
+    });
 
   return (
     <BaseQueue title="Ready" count={readyProcesses.length}>
@@ -24,7 +27,7 @@ export default function ReadyQueue({ processList }: Props) {
             exit={{ x: 20, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <ViewProcessItem data={process} />
+            <ViewProcessItem data={process} metadata={{ onlyShowCurrentBlockTask: true }} />
           </motion.div>
         ))}
         {readyProcesses.length === 0 && (

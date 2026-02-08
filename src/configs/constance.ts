@@ -78,10 +78,14 @@ export const PIKACHU_URL =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
 export const ProcessSchedulerConfigs: {
-  [id in SchedulerModeType]: { id: SchedulerModeType; name: string };
+  [id in SchedulerModeType]: { id: SchedulerModeType; name: string; coming?: boolean };
 } = {
   [SchedulerModeType.FIFO]: { id: SchedulerModeType.FIFO, name: 'First In, First Out' },
-  [SchedulerModeType.SJF]: { id: SchedulerModeType.SJF, name: 'Shortest Job First' },
+  [SchedulerModeType.SJF]: { id: SchedulerModeType.SJF, name: 'Shortest Job First', coming: true },
   [SchedulerModeType.ROUND_ROBIN]: { id: SchedulerModeType.ROUND_ROBIN, name: 'Round Robin' },
-  [SchedulerModeType.MLFQ]: { id: SchedulerModeType.MLFQ, name: 'Multilevel Feedback Queue' },
+  [SchedulerModeType.MLFQ]: {
+    id: SchedulerModeType.MLFQ,
+    name: 'Multilevel Feedback Queue',
+    coming: true,
+  },
 };

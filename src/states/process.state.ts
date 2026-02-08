@@ -50,6 +50,9 @@ export const useProcessStore = create<
             set((state) => {
               if (metadata?.mode) state.mode = metadata.mode;
               if (metadata?.status) state.status = metadata.status;
+              if (metadata?.interval) state.interval = metadata.interval;
+              if (metadata?.maxBlockTaskPerSlice)
+                state.maxBlockTaskPerSlice = metadata.maxBlockTaskPerSlice;
             });
           },
           updateHistory: (history: ProcessHistoryType) => {
@@ -76,12 +79,12 @@ export const useProcessStore = create<
                 newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
                 newProcesses[item.pid].currentBlockTaskIndex = 0;
+                newProcesses[item.pid].readyPriority = -1;
+                newProcesses[item.pid].waitingPriority = -1;
+                newProcesses[item.pid].endAt = -1;
                 if (newProcesses[item.pid].blockTasks) {
                   newProcesses[item.pid].blockTasks = newProcesses[item.pid].blockTasks?.map(
-                    (task) => ({
-                      ...task,
-                      runtime: 0,
-                    })
+                    (task) => ({ ...task, runtime: 0 })
                   );
                 }
               }
@@ -92,7 +95,6 @@ export const useProcessStore = create<
           },
           clear: () => {
             set((state) => {
-              state.mode = SchedulerModeType.FIFO;
               state.processes = {};
               state.status = 'initial';
               state.history = [];

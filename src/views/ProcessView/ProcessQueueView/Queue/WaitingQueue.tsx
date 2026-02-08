@@ -10,7 +10,11 @@ interface Props {
 export default function WaitingQueue({ processList }: Props) {
   const waitingProcesses = processList
     .filter((p) => p.state === ProcessStatusType.WAITING)
-    .sort((a, b) => a.arrivalTime - b.arrivalTime);
+    .sort((p1, p2) => {
+      if (p1.waitingPriority - p2.waitingPriority != 0)
+        return p1.waitingPriority - p2.waitingPriority;
+      else return p1.arrivalTime - p2.arrivalTime;
+    });
 
   return (
     <BaseQueue title="Waiting" count={waitingProcesses.length}>
@@ -24,7 +28,7 @@ export default function WaitingQueue({ processList }: Props) {
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <ViewProcessItem data={process} />
+            <ViewProcessItem data={process} metadata={{ onlyShowCurrentBlockTask: true }} />
           </motion.div>
         ))}
         {waitingProcesses.length === 0 && (

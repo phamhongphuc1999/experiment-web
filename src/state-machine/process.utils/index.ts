@@ -1,7 +1,7 @@
 import { useProcessStore } from 'src/states/process.state';
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessType } from 'src/types/process.type';
 import { InitializeProcessEventType, ProcessContextType } from './type.utils';
 
 export function initializeProcessesAction(
@@ -22,14 +22,6 @@ export function loadProcessContextEntry(context: ProcessContextType): Partial<Pr
     return { currentProcess: context.readyQueue?.dequeue() };
   }
   return {};
-}
-
-export function saveProcessContextEntry(context: ProcessContextType): Partial<ProcessContextType> {
-  const currentProcess = context.currentProcess;
-  const updateProcess = useProcessStore.getState().fn.updateProcess;
-  if (currentProcess) updateProcess(currentProcess.pid, currentProcess);
-  if (currentProcess?.state == ProcessStatusType.TERMINATED) return { currentProcess: null };
-  else return { currentProcess };
 }
 
 export function resetAction(): Partial<ProcessContextType> {

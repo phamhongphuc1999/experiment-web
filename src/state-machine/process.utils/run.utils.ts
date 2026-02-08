@@ -2,6 +2,12 @@ import { useProcessStore } from 'src/states/process.state';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 import { ProcessContextType } from './type.utils';
 
+export function runProcessGuard(context: ProcessContextType): boolean {
+  return (
+    !!context.currentProcess || !context.newQueue?.isEmpty() || !context.waitingQueue?.isEmpty()
+  );
+}
+
 export function runProcessEntry(context: ProcessContextType): Partial<ProcessContextType> {
   const currentProcess = context.currentProcess;
   if (currentProcess) {
@@ -9,8 +15,12 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
     const currentBlockTask = currentProcess?.blockTasks?.[currentProcess.currentBlockTaskIndex];
     if (currentBlockTask?.arrivalTime == currentProcess.runtime) {
       const waitingQueue = context.waitingQueue;
-      if (waitingQueue) waitingQueue.enqueue(currentProcess);
-      updateProcess(currentProcess.pid, { state: ProcessStatusType.WAITING });
+      let newPriority: number | undefined = undefined;
+      if (waitingQueue) newPriority = waitingQueue.enqueue(currentProcess);
+      updateProcess(currentProcess.pid, {
+        state: ProcessStatusType.WAITING,
+        waitingPriority: newPriority,
+      });
       return { waitingQueue, currentProcess: null };
     } else updateProcess(currentProcess.pid, { state: ProcessStatusType.RUNNING });
   }
@@ -26,7 +36,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
     let counter = 0;
     const updateProcess = useProcessStore.getState().fn.updateProcess;
     const _willRunWaitingQueue: Array<ProcessType> = [];
-    while (!waitingQueue.isEmpty() && counter <= maxBlockTaskPerSlice) {
+    while (!waitingQueue.isEmpty() && ++counter <= maxBlockTaskPerSlice) {
       _willRunWaitingQueue.push(waitingQueue.dequeue()!);
     }
     for (const _waitingProcess of _willRunWaitingQueue) {
@@ -43,8 +53,12 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
 
         if (taskRuntime < currentBlockTask.executionTime) {
           const updatedProcess = { ..._waitingProcess, runtime, blockTasks: updatedBlockTasks };
-          updateProcess(_waitingProcess.pid, { runtime, blockTasks: updatedBlockTasks });
-          waitingQueue.enqueue(updatedProcess);
+          const newPriority = waitingQueue.enqueue(updatedProcess);
+          updateProcess(_waitingProcess.pid, {
+            runtime,
+            blockTasks: updatedBlockTasks,
+            waitingPriority: newPriority,
+          });
         } else if (runtime < _waitingProcess.executionTime) {
           const updatedProcess = {
             ..._waitingProcess,
@@ -53,22 +67,23 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
             state: ProcessStatusType.READY,
             currentBlockTaskIndex: _waitingProcess.currentBlockTaskIndex + 1,
           };
+          const newPriority = readyQueue.enqueue(updatedProcess);
           updateProcess(_waitingProcess.pid, {
             runtime,
             blockTasks: updatedBlockTasks,
             state: ProcessStatusType.READY,
             currentBlockTaskIndex: _waitingProcess.currentBlockTaskIndex + 1,
+            readyPriority: newPriority,
           });
-          readyQueue.enqueue(updatedProcess);
         } else {
           updateProcess(_waitingProcess.pid, {
             runtime,
             blockTasks: updatedBlockTasks,
             state: ProcessStatusType.TERMINATED,
+            endAt: context.counter + 1,
           });
         }
       }
-      counter++;
     }
   }
   // run current process
@@ -83,7 +98,12 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
         readyQueue,
       };
     return {
-      currentProcess: { ...currentProcess, runtime: 0, state: ProcessStatusType.TERMINATED },
+      currentProcess: {
+        ...currentProcess,
+        runtime,
+        state: ProcessStatusType.TERMINATED,
+        endAt: context.counter + 1,
+      },
       counter: context.counter + 1,
       waitingQueue,
       readyQueue,

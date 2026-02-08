@@ -1,8 +1,10 @@
 export default class Queue<T> {
   private items: T[] = [];
+  private priority = 0;
 
-  enqueue(item: T): void {
+  enqueue(item: T): number {
     this.items.push(item);
+    return this.priority++;
   }
 
   dequeue(): T | undefined {
@@ -23,6 +25,7 @@ export default class Queue<T> {
 
   clear(): void {
     this.items = [];
+    this.priority = 0;
   }
 
   clone(): Queue<T> {

@@ -51,7 +51,7 @@ interface Props {
 }
 
 export default function RunningScreen({ runningProcess }: Props) {
-  const { history } = useProcessStore();
+  const { history, mode } = useProcessStore();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,13 +61,15 @@ export default function RunningScreen({ runningProcess }: Props) {
   }, [history]);
 
   return (
-    <div className="flex h-72 w-full gap-1 overflow-hidden">
+    <div className="flex h-55 w-full gap-1 overflow-hidden">
       {/* CPU CORE SECTION */}
       <div className="relative flex flex-1 flex-col overflow-hidden border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/50">
         <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50/50 px-3 py-2 dark:border-zinc-800/50 dark:bg-zinc-900/80">
           <div className="flex h-4 items-center gap-2">
             <Cpu size={16} className="text-blue-500" variant="Bold" />
-            <h2 className="text-[12px] font-bold tracking-tight uppercase">Processor Core</h2>
+            <h2 className="text-[12px] font-bold tracking-tight uppercase">
+              Processor Core | {mode}
+            </h2>
           </div>
           {runningProcess && (
             <div className="flex items-center gap-1.5">
@@ -121,29 +123,34 @@ export default function RunningScreen({ runningProcess }: Props) {
         </div>
       </div>
       {/* HISTORY TERMINAL SECTION */}
-      <div className="flex w-1/3 flex-col overflow-hidden bg-zinc-900 shadow-2xl ring-1 ring-white/10">
-        <div className="flex items-center gap-2 border-b border-white/5 bg-zinc-800/50 px-3 py-2">
-          <ReceiptText size={14} className="text-zinc-400" />
-          <span className="h-4 text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
-            System Log
-          </span>
-        </div>
+      {history.length > 0 && (
+        <div className="flex w-1/3 flex-col overflow-hidden bg-zinc-900 shadow-2xl ring-1 ring-white/10">
+          <div className="flex items-center gap-2 border-b border-white/5 bg-zinc-800/50 px-3 py-2">
+            <ReceiptText size={14} className="text-zinc-400" />
+            <span className="h-4 text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
+              System Log
+            </span>
+          </div>
 
-        <div ref={scrollRef} className="scroll-hidden flex-1 overflow-x-hidden overflow-y-auto p-2">
-          <div className="flex flex-col gap-1">
-            <AnimatePresence initial={false}>
-              {history.map((item, idx) => (
-                <HistoryItem key={`${item.stateType}-${idx}`} data={item} />
-              ))}
-            </AnimatePresence>
-            {history.length === 0 && (
-              <div className="flex h-full items-center justify-center py-10 text-zinc-600">
-                <span className="font-mono text-[10px]">waiting for events...</span>
-              </div>
-            )}
+          <div
+            ref={scrollRef}
+            className="scroll-hidden flex-1 overflow-x-hidden overflow-y-auto p-2"
+          >
+            <div className="flex flex-col gap-1">
+              <AnimatePresence initial={false}>
+                {history.map((item, idx) => (
+                  <HistoryItem key={`${item.stateType}-${idx}`} data={item} />
+                ))}
+              </AnimatePresence>
+              {history.length === 0 && (
+                <div className="flex h-full items-center justify-center py-10 text-zinc-600">
+                  <span className="font-mono text-[10px]">waiting for events...</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -41,6 +41,9 @@ export default function UpdateProcessDialog(props: DialogProps) {
         runtime: 10,
         currentBlockTaskIndex: 0,
         state: ProcessStatusType.NEW,
+        readyPriority: -1,
+        waitingPriority: -1,
+        endAt: -1,
       };
       return { [pid]: newProcess, ...state };
     });

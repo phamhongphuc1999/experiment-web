@@ -1,6 +1,10 @@
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessContextType } from './type.utils';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessContextType } from './type.utils';
+
+export function scheduleProcessGuard(context: ProcessContextType): boolean {
+  return !context.currentProcess;
+}
 
 export function scheduleProcessesEntry(context: ProcessContextType): Partial<ProcessContextType> {
   const newQueue = context.newQueue;
@@ -11,8 +15,8 @@ export function scheduleProcessesEntry(context: ProcessContextType): Partial<Pro
       const _process = newQueue.pop();
       if (_process) {
         const readyProcess: ProcessType = { ..._process, state: ProcessStatusType.READY };
-        readyQueue.enqueue(readyProcess);
-        updateProcess(readyProcess.pid, readyProcess);
+        const newPriority = readyQueue.enqueue(readyProcess);
+        updateProcess(readyProcess.pid, { ...readyProcess, readyPriority: newPriority });
       }
     }
   }

@@ -10,7 +10,10 @@ interface Props {
 export default function TerminatedQueue({ processList }: Props) {
   const terminatedProcesses = processList
     .filter((p) => p.state === ProcessStatusType.TERMINATED)
-    .sort((a, b) => b.arrivalTime - a.arrivalTime); // Show recent first?
+    .sort((p1, p2) => {
+      if (p1.endAt - p2.endAt != 0) return p2.endAt - p1.endAt;
+      else return p2.arrivalTime - p1.arrivalTime;
+    });
 
   return (
     <BaseQueue title="Terminated" count={terminatedProcesses.length}>
