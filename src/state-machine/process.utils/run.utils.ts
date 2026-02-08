@@ -23,14 +23,15 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
       });
       return { waitingQueue, currentProcess: null };
     } else {
+      const data: Partial<Omit<ProcessType, 'pid'>> = { state: ProcessStatusType.RUNNING };
       const saveProcess = useProcessStore.getState().processes[currentProcess.pid];
-      if (saveProcess.beginAt >= 0)
-        updateProcess(currentProcess.pid, { state: ProcessStatusType.RUNNING });
-      else
-        updateProcess(currentProcess.pid, {
-          state: ProcessStatusType.RUNNING,
-          beginAt: context.counter,
-        });
+
+      if (saveProcess.beginAt === -1) {
+        data.beginAt = context.counter;
+      }
+
+      updateProcess(currentProcess.pid, data);
+      return { currentProcess: { ...currentProcess, ...data } };
     }
   }
   return {};
