@@ -1,4 +1,4 @@
-import { Activity, Cpu, ReceiptText } from 'iconsax-reactjs';
+import { Activity, Cpu, DocumentDownload, ReceiptText } from 'iconsax-reactjs';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
@@ -51,7 +51,7 @@ interface Props {
 }
 
 export default function RunningScreen({ runningProcess }: Props) {
-  const { history, mode } = useProcessStore();
+  const { history, mode, processes } = useProcessStore();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,6 +59,19 @@ export default function RunningScreen({ runningProcess }: Props) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [history]);
+
+  function onDownload() {
+    const jsonStr = JSON.stringify(processes, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.json';
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <div className="flex h-55 w-full gap-1 overflow-hidden">
@@ -71,17 +84,20 @@ export default function RunningScreen({ runningProcess }: Props) {
               Processor Core | {mode}
             </h2>
           </div>
-          {runningProcess && (
-            <div className="flex items-center gap-1.5">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 bg-green-500"></span>
-              </span>
-              <span className="text-[10px] font-medium text-green-600 dark:text-green-400">
-                ACTIVE
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {runningProcess && (
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 bg-green-500"></span>
+                </span>
+                <span className="text-[10px] font-medium text-green-600 dark:text-green-400">
+                  ACTIVE
+                </span>
+              </div>
+            )}
+            <DocumentDownload onClick={onDownload} size={14} className="cursor-pointer" />
+          </div>
         </div>
 
         <div className="relative flex flex-1 items-center justify-center p-4">

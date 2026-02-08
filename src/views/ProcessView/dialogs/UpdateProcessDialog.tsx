@@ -43,6 +43,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
         state: ProcessStatusType.NEW,
         readyPriority: -1,
         waitingPriority: -1,
+        beginAt: -1,
         endAt: -1,
       };
       return { [pid]: newProcess, ...state };

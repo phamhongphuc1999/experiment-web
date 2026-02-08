@@ -146,7 +146,11 @@ export default function ChangeProcessItem({ data, events, props }: Props) {
                         events?.onBlockTaskExecutionTimeChange?.(index, val as number);
                       }}
                     />
-                    <Trash size={14} onClick={() => events?.onBlockTaskDelete?.(index)} />
+                    <Trash
+                      size={14}
+                      className="cursor-pointer"
+                      onClick={() => events?.onBlockTaskDelete?.(index)}
+                    />
                   </div>
                 );
               })}

@@ -42,11 +42,9 @@ export default function ProcessHeader() {
         >
           Reset
         </Button>
-        {status == 'ended' && (
-          <Button className="rounded-none" onClick={onClear}>
-            Clear
-          </Button>
-        )}
+        <Button className="rounded-none" onClick={onClear}>
+          Clear
+        </Button>
       </div>
       <div>
         <p>Runtime: {state.context.counter}</p>

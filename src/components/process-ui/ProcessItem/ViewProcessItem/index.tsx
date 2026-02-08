@@ -70,12 +70,20 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
               <Clock size={11} strokeWidth={2.5} />
               <span>Arrived at T+{data.arrivalTime}</span>
             </div>
-            {isTerminated && data.endAt >= 0 && (
-              <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold dark:text-green-400/80">
-                <Timer1 size={11} variant="Bold" />
-                <span>Finished at T+{data.endAt}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              {data.beginAt >= 0 && (
+                <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold dark:text-green-400/80">
+                  <Timer1 size={11} variant="Bold" />
+                  <span>Begin at T+{data.beginAt}</span>
+                </div>
+              )}
+              {isTerminated && data.endAt >= 0 && (
+                <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold dark:text-green-400/80">
+                  <Timer1 size={11} variant="Bold" />
+                  <span>Finished at T+{data.endAt}</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1.5">
