@@ -29,6 +29,7 @@ export type ProcessType = ProcessTimeType & {
   state: ProcessStatusType;
   readyPriority: number;
   waitingPriority: number;
+  beginAt: number;
   endAt: number;
 };
 

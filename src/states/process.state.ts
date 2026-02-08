@@ -68,6 +68,7 @@ export const useProcessStore = create<
           updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => {
             set((state) => {
               if (state.processes[pid]) {
+                if (data.beginAt == -1) data.beginAt = state.processes[pid].beginAt;
                 merge(state.processes[pid], data);
               }
             });
@@ -81,6 +82,7 @@ export const useProcessStore = create<
                 newProcesses[item.pid].currentBlockTaskIndex = 0;
                 newProcesses[item.pid].readyPriority = -1;
                 newProcesses[item.pid].waitingPriority = -1;
+                newProcesses[item.pid].beginAt = -1;
                 newProcesses[item.pid].endAt = -1;
                 if (newProcesses[item.pid].blockTasks) {
                   newProcesses[item.pid].blockTasks = newProcesses[item.pid].blockTasks?.map(

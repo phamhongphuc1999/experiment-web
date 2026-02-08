@@ -39,10 +39,19 @@ type Props = React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
     isLoading?: boolean;
+    contentprops?: React.ComponentProps<'div'>;
   };
 
 function Button(params: Props) {
-  const { className, variant, size, asChild = false, isLoading = false, ...props } = params;
+  const {
+    className,
+    variant,
+    size,
+    asChild = false,
+    isLoading = false,
+    contentprops,
+    ...props
+  } = params;
   const Comp = asChild ? Slot : 'button';
 
   return (
@@ -53,7 +62,7 @@ function Button(params: Props) {
       {...props}
     >
       <div className="flex items-center gap-2">
-        <div>{props.children}</div>
+        <div {...contentprops}>{props.children}</div>
         {isLoading && <ClockLoader />}
       </div>
     </Comp>

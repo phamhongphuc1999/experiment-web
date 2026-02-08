@@ -1,73 +1,65 @@
-# Experiment Web
+# Experiment Web - Advanced Playground
 
-A personal experimental playground showcasing modern web technologies, web3 integration, and interactive games. Built with **Next.js 16**, **React 19**, and optimized for performance and UX.
+A sophisticated experimental playground showcasing high-performance web engineering, complex state management, and real-time visualization. Built with a premium stack featuring **Next.js 16**, **React 19**, and **XState 5**.
 
-## 🚀 Features
+## 🖥️ Process Management System
 
-### 🎮 Games
+A robust simulation of a modern operating system's process scheduling and execution environment.
 
-- **Caro (Tic-Tac-Toe)**: A robust implementation of the classic game with multiple modes.
-- **Connect4**: Strategy game requiring players to connect four discs vertically, horizontally, or diagonally.
-- **Pikachu**: A tile-matching puzzle game with dynamic board transformations.
+- **MLFQ Scheduler**: Robust implementation of a **Multi-Level Feedback Queue** algorithm with dynamic priority aging and preemption.
+- **CPU Core Dashboard**: Real-time visual monitoring of CPU cores, showing active process execution, idle states, and core utilization metrics.
+- **System Terminal Log**: Animated, auto-scrolling terminal capturing the full history of process state transitions and execution events.
+- **Process Lifecycle**: Full simulation of process states: `NEW` ➔ `READY` ➔ `RUNNING` ➔ `WAITING` ➔ `TERMINATED`.
 
-### 🛠 Utilities
+## 🎮 Experimental Games
 
-- **Web3 Wallet**: Full-featured Web3 integration using Reown AppKit, supporting multiple chains (Solana, EVM).
-- **Crypt**: A secure tool for text encryption and decryption powered by `crypto-js`.
+High-quality game implementations focusing on complex logic and interactive user experiences.
 
-## 💻 Tech Stack
+- **Caro (Tic-Tac-Toe)**: A feature-rich implementation with multiple competitive modes and optimized game-state management.
+- **Connect4**: Tactical strategy game featuring a sophisticated win-detection engine and smooth piece-drop animations.
+- **Pikachu**: Dynamic tile-matching puzzle system with complex board transformations and pathfinding logic.
 
-This project leverages a cutting-edge stack to ensure speed, type safety, and developer experience.
+## 🛠️ Modern Utilities & Web3
 
-### Core
+Cutting-edge tools and integrations for the decentralized and secure web.
 
-- **Runtime**: [Bun](https://bun.sh)
+- **Web3 Ecosystem**: Seamless wallet integration across Solana and EVM chains using the **Reown AppKit** (formerly WalletConnect).
+- **Security Tools (Crypt)**: Professional-grade text encryption and decryption utility powered by `crypto-js`.
+
+---
+
+## 💻 Technical Excellence
+
+This project leverages a cutting-edge stack to ensure speed, type safety, and a premium developer experience.
+
+### Core Architecture
+
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Library**: [React 19](https://react.dev/)
+- **Logic**: [XState 5](https://stately.ai/) (Complex state orchestration)
+- **State**: [Zustand](https://github.com/pmndrs/zustand) (Global state)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 
-### State & Logic
-
-- **Global State**: [Zustand](https://github.com/pmndrs/zustand)
-- **State Machines**: [XState](https://stately.ai/) (for complex game logic)
-- **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
-
-### UI & Styling
+### UI & Aesthetics
 
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations**: [Motion](https://motion.dev/)
 - **Components**: [Radix UI](https://www.radix-ui.com/)
-- **Animations**: [Motion](https://motion.dev/) (formerly Framer Motion)
-- **Icons**: [Lucide React](https://lucide.dev/), Iconsax
+- **Icons**: [Lucide](https://lucide.dev/) & Iconsax
 
-### Web3
-
-- **Kit**: [Reown AppKit](https://reown.com/)
-- **Hooks**: [Wagmi](https://wagmi.sh/)
-- **Core**: [Viem](https://viem.sh/)
-- **Adapters**: Solana & Wagmi adapters
-
-### Quality & Tooling
-
-- **Test Runner**: [Vitest](https://vitest.dev/)
-- **Linting**: Eslint, Prettier, Commitlint
-- **Hooks**: Husky
+---
 
 ## 📂 Project Structure
 
 ```bash
 src/
-├── app/            # Next.js App Router pages
-├── components/     # Reusable UI components
-├── configs/        # App-wide configurations
-├── context/        # React Context providers
-├── hooks/          # Custom React hooks
-├── services/       # API and business logic services
-├── state-machine/  # XState machine definitions
-├── states/         # Zustand stores
-├── styles/         # Global styles
-├── types/          # TypeScript definitions
-├── views/          # Feature-specific view components
-└── web3/           # Web3 wallet configuration
+├── app/            # Next.js App Router (Pages & API)
+├── components/     # Reusable UI system & Design tokens
+├── state-machine/  # XState machine definitions (Scheduler & Games)
+├── views/          # Feature-specific dashboards and views
+├── states/         # Zustand global stores
+├── hooks/          # Custom hooks for real-time state & logic
+└── types/          # Strict TypeScript definitions
 ```
 
 ## 🛠 Getting Started
@@ -80,53 +72,17 @@ Ensure you have [Bun](https://bun.sh/) installed:
 curl -fsSL https://bun.sh/install | bash
 ```
 
-### Installation
-
-Clone the repository and install dependencies:
+### Installation & Development
 
 ```bash
 git clone <repository-url>
 cd experiment-web
 bun install
-```
-
-### Development
-
-Start the development server:
-
-```bash
 bun dev
 ```
 
-Open [http://localhost:3011](http://localhost:3011) to view the app.
-
-### Production Build
-
-To build and start the application for production:
-
-```bash
-bun run build
-bun start
-```
-
-## 🐳 Docker Support
-
-To run the application using Docker:
-
-```bash
-docker-compose up --build -d
-```
-
-## 🧪 Testing
-
-Run strict unit and integration tests:
-
-```bash
-bun test              # Run tests once
-bun test:ui           # Run tests with UI interface
-bun test:coverage     # Generate coverage report
-```
+Open [http://localhost:3011](http://localhost:3011) to view the playground.
 
 ## 📜 Deployment
 
-The project is hosted at: [https://experiment.peter-present.xyz/](https://experiment.peter-present.xyz/)
+The project is live at: [https://experiment.peter-present.xyz/](https://experiment.peter-present.xyz/)

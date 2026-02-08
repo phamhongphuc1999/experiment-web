@@ -43,6 +43,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
         state: ProcessStatusType.NEW,
         readyPriority: -1,
         waitingPriority: -1,
+        beginAt: -1,
         endAt: -1,
       };
       return { [pid]: newProcess, ...state };
@@ -90,7 +91,11 @@ export default function UpdateProcessDialog(props: DialogProps) {
   return (
     <Dialog {...props}>
       <DialogTrigger>
-        <Button disabled={status != 'initial' && status != 'ready'} className="rounded-none">
+        <Button
+          size="sm"
+          disabled={status != 'initial' && status != 'ready'}
+          className="rounded-none"
+        >
           {status == 'ready' ? 'Update' : 'Create'}
         </Button>
       </DialogTrigger>
