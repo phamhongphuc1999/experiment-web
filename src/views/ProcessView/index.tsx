@@ -14,7 +14,7 @@ export default function ProcessView() {
       {Object.values(processes).length == 0 ? (
         <ListEmpty
           title="No processes created yet."
-          rootprops={{ className: 'mt-2 cols-span-2 rounded-none' }}
+          rootprops={{ className: 'cols-span-2 rounded-none' }}
         />
       ) : (
         <ProcessQueueView />

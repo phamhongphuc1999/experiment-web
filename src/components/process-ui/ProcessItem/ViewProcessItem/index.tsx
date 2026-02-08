@@ -27,14 +27,14 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
     <div
       {...props}
       className={cn(
-        'group relative overflow-hidden border p-3 transition-all duration-300 hover:shadow-xl',
+        'group relative overflow-hidden border p-1 transition-all duration-300 hover:shadow-xl',
         'bg-card/40 border-border/50 backdrop-blur-sm',
         {
           'bg-blue-50/30 ring-1 ring-blue-500/20 dark:bg-blue-900/10':
             data.state == ProcessStatusType.NEW,
           'bg-yellow-50/30 ring-1 ring-yellow-500/20 dark:bg-yellow-900/10':
             data.state == ProcessStatusType.READY,
-          'border-green-500/30 bg-green-50/40 shadow-[0_0_15px_rgba(34,197,94,0.1)] ring-2 ring-green-500/30 dark:bg-green-900/20':
+          'border-green-500/30 bg-green-50/40 shadow-[0_0_15px_rgba(34,197,94,0.1)] ring-1 ring-green-500/30 dark:bg-green-900/20':
             isRunning,
           'bg-orange-50/30 ring-1 ring-orange-500/20 dark:bg-orange-900/10':
             data.state == ProcessStatusType.WAITING,
@@ -46,7 +46,7 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
       <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/10 to-transparent" />
 
       {/* Header Info */}
-      <div className="relative mb-3 flex items-start justify-between gap-1">
+      <div className="relative mb-1.5 flex items-start justify-between gap-1">
         <div className="flex w-full flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -107,7 +107,6 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
               />
             </div>
           </div>
-
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium whitespace-nowrap">
               <Clock size={10} strokeWidth={3} className="opacity-70" />
@@ -136,7 +135,7 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
       </div>
 
       {/* Progress & Tasks */}
-      <div className="relative space-y-2">
+      <div className="relative space-y-1.5">
         <div className="space-y-1">
           <div className="flex items-center justify-between text-[9px] font-black tracking-widest uppercase opacity-70">
             <span>CPU Cycle Execution</span>
@@ -146,7 +145,7 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
               {data.runtime}/{data.executionTime}ms
             </span>
           </div>
-          <div className="bg-muted/30 h-1.5 overflow-hidden rounded-full ring-1 ring-black/5 ring-inset dark:ring-white/5">
+          <div className="bg-muted/30 h-1.5 overflow-hidden ring-1 ring-black/5 ring-inset dark:ring-white/5">
             <motion.div
               initial={false}
               animate={{ width: `${progress}%` }}
