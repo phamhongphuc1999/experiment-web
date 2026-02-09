@@ -6,7 +6,6 @@ import {
   Cpu,
   ExternalLink,
   Gamepad2,
-  Github,
   Grid3X3,
   Lock,
   Monitor,
@@ -16,6 +15,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
+import { GithubIcon } from 'src/components/icons';
 
 const features = [
   {
@@ -152,7 +152,7 @@ export default function Home() {
               target="_blank"
               className="bg-card/50 border-border hover:bg-card flex items-center gap-2 rounded-full border px-6 py-3 font-semibold backdrop-blur-sm transition-all hover:border-orange-500/30 active:scale-95"
             >
-              <Github className="h-4 w-4" /> View Source
+              <GithubIcon className="h-4 w-4" /> View Source
             </Link>
           </motion.div>
         </section>

@@ -10,9 +10,9 @@
     "start": "next start",
     "prepare": "husky",
     "eslint": "eslint --config ./eslint.config.js --cache",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test": "npx vitest --run",
+    "test:ui": "npx vitest --ui",
+    "test:coverage": "npx vitest run --coverage"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
@@ -82,6 +82,7 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.1",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "husky": "^9.1.6",

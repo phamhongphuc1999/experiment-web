@@ -21,15 +21,11 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
         state: ProcessStatusType.WAITING,
         waitingPriority: newPriority,
       });
-      return { waitingQueue, currentProcess: null };
+      return { waitingQueue, currentProcess: undefined };
     } else {
       const data: Partial<Omit<ProcessType, 'pid'>> = { state: ProcessStatusType.RUNNING };
       const saveProcess = useProcessStore.getState().processes[currentProcess.pid];
-
-      if (saveProcess.beginAt === -1) {
-        data.beginAt = context.counter;
-      }
-
+      if (saveProcess.beginAt === -1) data.beginAt = context.counter;
       updateProcess(currentProcess.pid, data);
       return { currentProcess: { ...currentProcess, ...data } };
     }
@@ -119,5 +115,5 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
       readyQueue,
     };
   }
-  return { currentProcess: null, counter: context.counter + 1, waitingQueue, readyQueue };
+  return { currentProcess: undefined, counter: context.counter + 1, waitingQueue, readyQueue };
 }

@@ -12,6 +12,7 @@ export default function ProcessQueueView() {
   const processList = Object.values(processes);
 
   const runningProcess = processList.find((p) => p.state === ProcessStatusType.RUNNING);
+
   const incomingProcesses = processList
     .filter((p) => p.state === ProcessStatusType.NEW)
     .sort((a, b) => a.arrivalTime - b.arrivalTime);

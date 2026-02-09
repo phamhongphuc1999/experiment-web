@@ -38,6 +38,7 @@ function Web3WalletViewLayout() {
         {supportedNetworks.map((network) => {
           return (
             <Button
+              key={network}
               variant={chainId == network ? 'secondary' : 'outline'}
               onClick={() => switchNetwork(network)}
             >

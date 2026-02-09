@@ -52,7 +52,7 @@ export default function BlockTaskList({
     ) : (
       <div className="space-y-2">
         {data.map((item, index) => {
-          return <BlockTaskItem index={index} item={item} />;
+          return <BlockTaskItem key={index} index={index} item={item} />;
         })}
       </div>
     );

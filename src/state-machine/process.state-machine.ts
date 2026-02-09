@@ -27,10 +27,10 @@ export const processMachine = setup({
   context: {
     interval: 1000,
     counter: 0,
-    newQueue: null,
-    waitingQueue: null,
-    readyQueue: null,
-    currentProcess: null,
+    newQueue: undefined,
+    waitingQueue: undefined,
+    readyQueue: undefined,
+    currentProcess: undefined,
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {

@@ -1,8 +1,9 @@
 import { Routing } from 'iconsax-reactjs';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
-import { MyAllGameType } from 'src/types/caro.type';
 import { useDialogStore } from 'src/states/dialog.state';
+import { MyAllGameType } from 'src/types/caro.type';
 import AppTooltip from '../AppTooltip';
 import { Button } from '../shadcn-ui/button';
 import {
@@ -12,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../shadcn-ui/dialog';
-import { useMemo } from 'react';
 
 const configs: { [key in MyAllGameType]: { title: string; link: string } } = {
   caro: { title: 'Caro', link: '/caro' },
@@ -56,7 +56,7 @@ export default function RoutingGameDialog({ game }: Props) {
             const _game = configs[g];
 
             return (
-              <Link href={_game.link}>
+              <Link key={_game.title} href={_game.link}>
                 <Button
                   variant="outline"
                   onClick={() => setDialog(DIALOG_KEY.routingGameDialog, false)}

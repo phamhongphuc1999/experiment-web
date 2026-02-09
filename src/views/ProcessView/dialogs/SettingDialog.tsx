@@ -46,7 +46,6 @@ export default function SettingDialog(props: DialogProps) {
         <DialogHeader className="border-b pb-1">
           <DialogTitle>Process Setting</DialogTitle>
         </DialogHeader>
-
         <p className="text-lg font-semibold">Scheduler Mode</p>
         <div className="flex flex-wrap items-center gap-1">
           {Object.values(ProcessSchedulerConfigs).map((item) => {

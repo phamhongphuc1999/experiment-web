@@ -5,10 +5,10 @@ import { ProcessDataObjectType, ProcessMachineEvent, ProcessType } from 'src/typ
 export interface ProcessContextType {
   interval: number;
   counter: number;
-  newQueue: PriorityQueue<ProcessType> | null; // incoming processes
-  waitingQueue: Queue<ProcessType> | null;
-  readyQueue: Queue<ProcessType> | null;
-  currentProcess: ProcessType | null;
+  newQueue: PriorityQueue<ProcessType> | undefined; // incoming processes
+  waitingQueue: Queue<ProcessType> | undefined;
+  readyQueue: Queue<ProcessType> | undefined;
+  currentProcess: ProcessType | undefined;
 }
 
 export type InitializeProcessEventType = {

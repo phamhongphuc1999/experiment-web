@@ -27,11 +27,23 @@ export function loadProcessContextEntry(context: ProcessContextType): Partial<Pr
 export function resetAction(): Partial<ProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.resetProcesses();
-  return { newQueue: null, readyQueue: null, waitingQueue: null, currentProcess: null, counter: 0 };
+  return {
+    newQueue: undefined,
+    readyQueue: undefined,
+    waitingQueue: undefined,
+    currentProcess: undefined,
+    counter: 0,
+  };
 }
 
 export function clearAction(): Partial<ProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.clear();
-  return { newQueue: null, readyQueue: null, waitingQueue: null, currentProcess: null, counter: 0 };
+  return {
+    newQueue: undefined,
+    readyQueue: undefined,
+    waitingQueue: undefined,
+    currentProcess: undefined,
+    counter: 0,
+  };
 }

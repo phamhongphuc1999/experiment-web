@@ -6,7 +6,7 @@ export function saveProcessContextEntry(context: ProcessContextType): Partial<Pr
   const currentProcess = context.currentProcess;
   const updateProcess = useProcessStore.getState().fn.updateProcess;
   if (currentProcess) updateProcess(currentProcess.pid, currentProcess);
-  if (currentProcess?.state == ProcessStatusType.TERMINATED) return { currentProcess: null };
+  if (currentProcess?.state == ProcessStatusType.TERMINATED) return { currentProcess: undefined };
   else {
     const mode = useProcessStore.getState().mode;
     if (mode == SchedulerModeType.ROUND_ROBIN) {
@@ -16,7 +16,10 @@ export function saveProcessContextEntry(context: ProcessContextType): Partial<Pr
           ...currentProcess,
           state: ProcessStatusType.READY,
         });
-        updateProcess(currentProcess.pid, { readyPriority: newPriority });
+        updateProcess(currentProcess.pid, {
+          readyPriority: newPriority,
+          state: ProcessStatusType.READY,
+        });
       }
       return { currentProcess: undefined, readyQueue };
     } else return { currentProcess };
