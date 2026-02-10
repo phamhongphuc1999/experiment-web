@@ -102,20 +102,13 @@ export default function MainProcessList({ data, setData }: Props) {
                 onExecutionTimeChange: (executionTime) => {
                   setData((state) => ({
                     ...state,
-                    [item.pid]: {
-                      ...state[item.pid],
-                      executionTime,
-                      remainingTime: executionTime,
-                    },
+                    [item.pid]: { ...state[item.pid], executionTime },
                   }));
                 },
                 onArrivalTimeChange: (arrivalTime) => {
                   setData((state) => ({
                     ...state,
-                    [item.pid]: {
-                      ...state[item.pid],
-                      arrivalTime,
-                    },
+                    [item.pid]: { ...state[item.pid], arrivalTime },
                   }));
                 },
                 onDelete: () => {

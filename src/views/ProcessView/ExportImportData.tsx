@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Export, Import } from 'iconsax-reactjs';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
+import CopyClipboard from 'src/components/CopyClipboard';
+import { Button } from 'src/components/shadcn-ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'src/components/shadcn-ui/dialog';
+import { Input } from 'src/components/shadcn-ui/input';
+import { Label } from 'src/components/shadcn-ui/label';
+import { exampleProcessData } from 'src/configs/example-process';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessDataObjectType, ProcessStatusType } from 'src/types/process.type';
 
@@ -20,14 +25,20 @@ interface Props {
   isShowExport?: boolean;
 }
 
+const EXAMPLE_JSON_SNIPPET = `{
+  "process-id-1": {
+    "pid": "process-id-1",
+    "arrivalTime": 0,
+    "executionTime": 5,
+    "blockTasks": [
+      { "arrivalTime": 2, "executionTime": 1 }
+    ]
+  }
+}`;
+
 export default function ExportImportData({ components, isShowExport = true }: Props) {
   const { processes, fn } = useProcessStore();
   const [open, setOpen] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  function onImport() {
-    setOpen(true);
-  }
 
   function onExport() {
     const jsonStr = JSON.stringify(processes, null, 2);
@@ -100,35 +111,103 @@ export default function ExportImportData({ components, isShowExport = true }: Pr
     reader.readAsText(file);
   }
 
+  function onUseExampleData() {
+    fn.setProcesses(exampleProcessData);
+    setOpen(false);
+  }
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           {components?.import ? (
-            <div onClick={onImport}>{components.import}</div>
+            <div className="cursor-pointer">{components.import}</div>
           ) : (
-            <AppTooltip tooltipContent="Import">
-              <Import onClick={onImport} size={14} className="cursor-pointer" />
-            </AppTooltip>
+            <button className="flex items-center justify-center">
+              <AppTooltip tooltipContent="Import">
+                <Import size={14} className="cursor-pointer" />
+              </AppTooltip>
+            </button>
           )}
         </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Import data</DialogTitle>
-          </DialogHeader>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="application/json"
-            onChange={onFileChange}
-            className="block w-full cursor-pointer"
-          />
+        <DialogContent className="from-background to-muted/30 max-w-3xl overflow-hidden border-none bg-linear-to-br p-0">
+          <div className="col-span-3 flex flex-col space-y-6 p-8">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold tracking-tight">
+                Data Configuration
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="file-upload" className="text-base font-semibold">
+                  Upload Configuration
+                </Label>
+                <Input
+                  id="file-upload"
+                  type="file"
+                  accept="application/json"
+                  onChange={onFileChange}
+                  className="file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer rounded-none file:mr-4 file:border-0 file:px-4 file:py-1 file:text-sm file:font-semibold"
+                />
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="border-border/50 w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background text-muted-foreground px-3 font-medium">
+                    Alternative
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">Quick Start</Label>
+                <Button
+                  variant="outline"
+                  className="hover:bg-primary/5 hover:text-primary group h-12 w-full justify-start rounded-none px-4 transition-all"
+                  onClick={onUseExampleData}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-primary/10 group-hover:bg-primary/20 p-2 transition-colors">
+                      <Import size={18} />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-bold">Load Example Data</div>
+                      <div className="text-muted-foreground text-xs">
+                        Get started quickly with preset processes
+                      </div>
+                    </div>
+                  </div>
+                </Button>
+              </div>
+              <div className="border-border/50 bg-muted/30 overflow-hidden border">
+                <div className="bg-muted/50 border-border/50 flex items-center justify-between border-b px-4 py-2">
+                  <span className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
+                    JSON Template
+                  </span>
+                  <CopyClipboard
+                    copyText={EXAMPLE_JSON_SNIPPET}
+                    iconprops={{
+                      size: 14,
+                      className: 'text-muted-foreground hover:text-primary transition-colors',
+                    }}
+                  />
+                </div>
+                <div className="bg-zinc-950 p-4">
+                  <pre className="overflow-x-auto font-mono text-[10px] leading-relaxed text-zinc-400">
+                    {EXAMPLE_JSON_SNIPPET}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
       {isShowExport && (
         <AppTooltip tooltipContent="Export">
           {components?.export ? (
-            <div>{components.export}</div>
+            <div className="cursor-pointer">{components.export}</div>
           ) : (
             <Export onClick={onExport} size={14} className="cursor-pointer" />
           )}
