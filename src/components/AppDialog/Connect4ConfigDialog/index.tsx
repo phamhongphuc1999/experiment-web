@@ -1,17 +1,17 @@
 import { Setting2 } from 'iconsax-reactjs';
 import { MouseEvent } from 'react';
+import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
-import { DIALOG_KEY } from 'src/configs/constance';
-import { useConnect4Store } from 'src/states/connect4.state';
-import { useDialogStore } from 'src/states/dialog.state';
-import AppTooltip from '../../AppTooltip';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../shadcn-ui/dialog';
+} from 'src/components/shadcn-ui/dialog';
+import { DIALOG_KEY } from 'src/configs/constance';
+import { useConnect4Store } from 'src/states/connect4.state';
+import { useDialogStore } from 'src/states/dialog.state';
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
 import SoundtrackConfig from '../components/SoundtrackConfig';

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { OptionalQueryType } from 'src/types/global';
-import { useWeb3WalletContext } from '../../context/web3-wallet.context';
-import BalanceService, { BalanceOptionType } from '../../services/BalanceService';
-import { useWeb3Store } from '../../states/web3.state';
+import { useWeb3WalletContext } from 'src/web3/context/web3-wallet.context';
+import BalanceService, { BalanceOptionType } from 'src/web3/services/BalanceService';
+import { useWeb3Store } from 'src/web3/states/web3.state';
 
 type ParamsType = Partial<{
   query: OptionalQueryType<string | number | undefined>;

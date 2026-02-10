@@ -2,18 +2,18 @@ import { Bluetooth } from 'iconsax-reactjs';
 import { useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
-import { DIALOG_KEY } from 'src/configs/constance';
-import { useCaroConnectionContext } from 'src/context/caro-connection.context';
-import { useCaroStore } from 'src/states/caro.state';
-import { useDialogStore } from 'src/states/dialog.state';
-import { RoleType } from 'src/types/caro.type';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../shadcn-ui/dialog';
+} from 'src/components/shadcn-ui/dialog';
+import { DIALOG_KEY } from 'src/configs/constance';
+import { useCaroConnectionContext } from 'src/context/caro-connection.context';
+import { useCaroStore } from 'src/states/caro.state';
+import { useDialogStore } from 'src/states/dialog.state';
+import { RoleType } from 'src/types/caro.type';
 import GuestConnection from './GuestConnection';
 import HostConnection from './HostConnection';
 

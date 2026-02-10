@@ -5,7 +5,7 @@ export async function generateMetadata() {
   return generateAppMetadata('Process');
 }
 
-export default function Web3Wallet() {
+export default function Process() {
   return (
     <div className="container pt-1! pb-0!">
       <ProcessView />

@@ -1,17 +1,17 @@
 import { Setting2 } from 'iconsax-reactjs';
 import { MouseEvent } from 'react';
-import { DIALOG_KEY } from 'src/configs/constance';
-import { useCaroStore } from 'src/states/caro.state';
-import { useDialogStore } from 'src/states/dialog.state';
-import AppTooltip from '../../AppTooltip';
-import { Button } from '../../shadcn-ui/button';
+import AppTooltip from 'src/components/AppTooltip';
+import { Button } from 'src/components/shadcn-ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../shadcn-ui/dialog';
+} from 'src/components/shadcn-ui/dialog';
+import { DIALOG_KEY } from 'src/configs/constance';
+import { useCaroStore } from 'src/states/caro.state';
+import { useDialogStore } from 'src/states/dialog.state';
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
 import SoundtrackConfig from '../components/SoundtrackConfig';

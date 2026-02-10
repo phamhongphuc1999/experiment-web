@@ -1,7 +1,9 @@
-import { useMachine } from '@xstate/react';
+'use client';
+
+import { createActorContext } from '@xstate/react';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessMachineEvent, ProcessMachineStateType } from 'src/types/process.type';
-import { assign, setup } from 'xstate';
+import { assign, cancel, setup } from 'xstate';
 import {
   clearAction,
   initializeProcessesAction,
@@ -13,7 +15,7 @@ import { saveProcessContextEntry } from './process.utils/save.utils';
 import { scheduleProcessesEntry, scheduleProcessGuard } from './process.utils/schedule.utils';
 import { ProcessContextType, ProcessEventType } from './process.utils/type.utils';
 
-export const processMachine = setup({
+const processMachine = setup({
   types: {
     events: {} as ProcessEventType,
     context: {} as ProcessContextType,
@@ -44,16 +46,6 @@ export const processMachine = setup({
         [ProcessMachineEvent.SET_METADATA]: {
           actions: assign(({ event }) => {
             return { interval: event.interval };
-          }),
-        },
-        [ProcessMachineEvent.RESET]: {
-          actions: assign(() => {
-            return resetAction();
-          }),
-        },
-        [ProcessMachineEvent.CLEAR]: {
-          actions: assign(() => {
-            return clearAction();
           }),
         },
       },
@@ -93,6 +85,7 @@ export const processMachine = setup({
       entry: assign(({ context }) => {
         return runProcessEntry(context);
       }),
+      exit: cancel('INTERVAL'),
       always: [
         {
           target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
@@ -120,23 +113,36 @@ export const processMachine = setup({
         fn.setMetadata({ status: 'ended' });
       },
       on: {
-        [ProcessMachineEvent.RESET]: {
-          target: ProcessMachineStateType.INITIAL,
-          actions: assign(() => {
-            return resetAction();
-          }),
-        },
-        [ProcessMachineEvent.CLEAR]: {
-          target: ProcessMachineStateType.INITIAL,
-          actions: assign(() => {
-            return clearAction();
+        [ProcessMachineEvent.INITIALIZE_PROCESS]: {
+          target: ProcessMachineStateType.SCHEDULE,
+          actions: assign(({ event }) => {
+            return initializeProcessesAction(event);
           }),
         },
       },
     },
   },
+  on: {
+    [ProcessMachineEvent.RESET]: {
+      target: `.${ProcessMachineStateType.INITIAL}`,
+      actions: assign(() => {
+        return resetAction();
+      }),
+    },
+    [ProcessMachineEvent.CLEAR]: {
+      target: `.${ProcessMachineStateType.INITIAL}`,
+      actions: assign(() => {
+        return clearAction();
+      }),
+    },
+  },
 });
 
+export const ProcessMachineContext = createActorContext(processMachine);
+
 export function useProcessStateMachine() {
-  return useMachine(processMachine);
+  const actorRef = ProcessMachineContext.useActorRef();
+  const state = ProcessMachineContext.useSelector((s) => s);
+
+  return { state, send: actorRef.send };
 }

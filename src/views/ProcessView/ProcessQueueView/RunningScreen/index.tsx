@@ -1,9 +1,10 @@
-import { Activity, Cpu } from 'iconsax-reactjs';
-import { AnimatePresence, motion } from 'motion/react';
-import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
+import { Cpu } from 'iconsax-reactjs';
+import AppTooltip from 'src/components/AppTooltip';
+import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessType } from 'src/types/process.type';
-import ExportImportData from './ExportImportData';
+import { ProcessMachineEvent, ProcessType } from 'src/types/process.type';
+import ExportImportData from '../../ExportImportData';
+import RunningProcessView from './RunningProcessView';
 import SystemLog from './SystemLog';
 
 interface Props {
@@ -12,6 +13,11 @@ interface Props {
 
 export default function RunningScreen({ runningProcess }: Props) {
   const { mode } = useProcessStore();
+  const { send } = useProcessStateMachine();
+
+  function onReset() {
+    send({ type: ProcessMachineEvent.RESET });
+  }
 
   return (
     <div className="flex h-55 w-full gap-1 overflow-hidden">
@@ -23,55 +29,34 @@ export default function RunningScreen({ runningProcess }: Props) {
               Processor Core | {mode}
             </h2>
           </div>
-          <div className="flex items-center gap-2">
-            {runningProcess && (
-              <div className="flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex h-2 w-2 bg-green-500"></span>
-                </span>
-                <span className="text-[10px] font-medium text-green-600 dark:text-green-400">
-                  ACTIVE
-                </span>
-              </div>
-            )}
-            <ExportImportData />
-          </div>
+          {runningProcess && (
+            <div className="flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-[10px] font-medium text-green-600 dark:text-green-400">
+                ACTIVE
+              </span>
+            </div>
+          )}
         </div>
-        <div className="relative flex flex-1 items-center justify-center p-4">
-          <AnimatePresence mode="popLayout">
-            {runningProcess ? (
-              <motion.div
-                key={runningProcess.pid}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                className="w-full max-w-sm"
-              >
-                <ViewProcessItem
-                  data={runningProcess}
-                  metadata={{ onlyShowCurrentBlockTask: true }}
-                  props={{
-                    className:
-                      'border-none bg-transparent dark:bg-transparent shadow-none hover:shadow-none p-0',
-                  }}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center gap-2 text-zinc-400"
-              >
-                <Activity size={32} className="opacity-20" />
-                <span className="text-xs font-medium tracking-widest uppercase opacity-50">
-                  Core Idle
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px] opacity-40 dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]" />
+        <RunningProcessView runningProcess={runningProcess} />
+        <div className="absolute right-2 bottom-2 flex items-center gap-2">
+          <ExportImportData />
+          <AppTooltip tooltipContent="Reset">
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 24 24"
+              height="12px"
+              width="12px"
+              onClick={onReset}
+            >
+              <path d="M22 12C22 17.5228 17.5229 22 12 22C6.4772 22 2 17.5228 2 12C2 6.47715 6.4772 2 12 2V4C7.5817 4 4 7.58172 4 12C4 16.4183 7.5817 20 12 20C16.4183 20 20 16.4183 20 12C20 9.53614 18.8862 7.33243 17.1346 5.86492L15 8V2L21 2L18.5535 4.44656C20.6649 6.28002 22 8.9841 22 12Z"></path>
+            </svg>
+          </AppTooltip>
         </div>
       </div>
       <SystemLog />

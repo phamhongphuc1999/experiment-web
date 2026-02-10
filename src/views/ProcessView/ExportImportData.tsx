@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Export, Import } from 'iconsax-reactjs';
-import { useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import {
   Dialog,
@@ -12,7 +12,15 @@ import {
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessDataObjectType, ProcessStatusType } from 'src/types/process.type';
 
-export default function ExportImportData() {
+interface Props {
+  components?: {
+    import?: ReactNode;
+    export?: ReactNode;
+  };
+  isShowExport?: boolean;
+}
+
+export default function ExportImportData({ components, isShowExport = true }: Props) {
   const { processes, fn } = useProcessStore();
   const [open, setOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,9 +104,13 @@ export default function ExportImportData() {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger>
-          <AppTooltip tooltipContent="Import">
-            <Import onClick={onImport} size={14} className="cursor-pointer" />
-          </AppTooltip>
+          {components?.import ? (
+            <div onClick={onImport}>{components.import}</div>
+          ) : (
+            <AppTooltip tooltipContent="Import">
+              <Import onClick={onImport} size={14} className="cursor-pointer" />
+            </AppTooltip>
+          )}
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -109,13 +121,19 @@ export default function ExportImportData() {
             type="file"
             accept="application/json"
             onChange={onFileChange}
-            className="block w-full"
+            className="block w-full cursor-pointer"
           />
         </DialogContent>
       </Dialog>
-      <AppTooltip tooltipContent="Export">
-        <Export onClick={onExport} size={14} className="cursor-pointer" />
-      </AppTooltip>
+      {isShowExport && (
+        <AppTooltip tooltipContent="Export">
+          {components?.export ? (
+            <div>{components.export}</div>
+          ) : (
+            <Export onClick={onExport} size={14} className="cursor-pointer" />
+          )}
+        </AppTooltip>
+      )}
     </>
   );
 }

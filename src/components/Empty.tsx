@@ -1,12 +1,13 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { cn } from 'src/lib/utils';
 
 interface Props {
   title?: string;
+  component?: ReactNode;
   rootprops?: ComponentProps<'div'>;
 }
 
-export function ListEmpty({ title, rootprops }: Props) {
+export function ListEmpty({ title, component, rootprops }: Props) {
   return (
     <div
       {...rootprops}
@@ -16,6 +17,7 @@ export function ListEmpty({ title, rootprops }: Props) {
       )}
     >
       {title}
+      {component}
     </div>
   );
 }
