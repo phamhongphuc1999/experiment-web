@@ -1,11 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence } from 'motion/react';
+import cloneDeep from 'lodash.clonedeep';
+import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { PIKACHU_URL } from 'src/configs/constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
-import { PositionType } from 'src/types/global';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { getRandom, isPositionEqual, sleep } from 'src/services';
@@ -13,6 +13,7 @@ import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.
 import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
 import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import { PositionType } from 'src/types/global';
 import PathDraw from './PathDraw';
 import SuggestionDraw from './SuggesstionDraw';
 
@@ -79,7 +80,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
           isPositionEqual(position, suggestion[latestIndex]);
         if (firstCheck && secondCheck) setShowHint(false);
       }
-      const cloneBoard = structuredClone(board);
+      const cloneBoard = cloneDeep(board);
       const path = performPikachuMove({
         board: cloneBoard,
         sourcePiece: firstPiece,

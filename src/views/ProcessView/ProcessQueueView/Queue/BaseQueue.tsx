@@ -15,7 +15,7 @@ export default function BaseQueue(
   const { title, count, children, contentprops } = params;
 
   return (
-    <div className="flex h-fit max-h-full min-h-0 flex-1 flex-col overflow-hidden border-[0.5px] bg-gray-50/50 py-1.5 dark:bg-gray-900/20">
+    <div className="flex h-fit max-h-full min-h-0 flex-1 flex-col overflow-hidden border-[0.5px] bg-gray-50/50 pt-1.5 dark:bg-gray-900/20">
       <div className="px-1">
         <SectionTitle title={title} count={count} />
       </div>

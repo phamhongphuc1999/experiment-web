@@ -51,35 +51,37 @@ export default function UpdateProcessDialog(props: DialogProps) {
 
   function onSave() {
     const cleanData: ProcessDataObjectType = {};
-    Object.values(data).forEach((process, index) => {
-      const cleanBlockTasks: Array<ProcessTimeType> = [];
-      (process.blockTasks || []).forEach((task) => {
-        const isIntersects = cleanBlockTasks.some((t) => {
-          const start1 = task.arrivalTime;
-          const end1 = task.arrivalTime + task.executionTime;
-          const start2 = t.arrivalTime;
-          const end2 = t.arrivalTime + t.executionTime;
-          return start1 < end2 && start2 < end1;
+    Object.values(data)
+      .sort((a, b) => a.arrivalTime - b.arrivalTime)
+      .forEach((process, index) => {
+        const cleanBlockTasks: Array<ProcessTimeType> = [];
+        (process.blockTasks || []).forEach((task) => {
+          const isIntersects = cleanBlockTasks.some((t) => {
+            const start1 = task.arrivalTime;
+            const end1 = task.arrivalTime + task.executionTime;
+            const start2 = t.arrivalTime;
+            const end2 = t.arrivalTime + t.executionTime;
+            return start1 < end2 && start2 < end1;
+          });
+          if (!isIntersects) cleanBlockTasks.push(task);
         });
-        if (!isIntersects) cleanBlockTasks.push(task);
+
+        let executionTime = process.executionTime;
+        const maxBlockTaskEnd = cleanBlockTasks.reduce((max, task) => {
+          return Math.max(max, task.arrivalTime + task.executionTime);
+        }, 0);
+
+        if (maxBlockTaskEnd > executionTime) executionTime = maxBlockTaskEnd;
+        cleanData[process.pid] = {
+          ...process,
+          blockTasks: cleanBlockTasks.sort((item1, item2) => {
+            return item1.arrivalTime - item2.arrivalTime;
+          }),
+          executionTime,
+          runtime: 0,
+          index: index + 1,
+        };
       });
-
-      let executionTime = process.executionTime;
-      const maxBlockTaskEnd = cleanBlockTasks.reduce((max, task) => {
-        return Math.max(max, task.arrivalTime + task.executionTime);
-      }, 0);
-
-      if (maxBlockTaskEnd > executionTime) executionTime = maxBlockTaskEnd;
-      cleanData[process.pid] = {
-        ...process,
-        blockTasks: cleanBlockTasks.sort((item1, item2) => {
-          return item1.arrivalTime - item2.arrivalTime;
-        }),
-        executionTime,
-        runtime: 0,
-        index: index + 1,
-      };
-    });
 
     setProcesses(cleanData);
     if (Object.keys(cleanData).length > 0) setMetadata({ status: 'ready' });

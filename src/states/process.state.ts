@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash.clonedeep';
 import {
   ProcessDataObjectType,
   ProcessHistoryType,
@@ -73,8 +74,12 @@ export const useProcessStore = create<
           },
           resetProcesses: () => {
             set((state) => {
-              const newProcesses = structuredClone(state.processes);
-              for (const item of Object.values(newProcesses)) {
+              const newProcesses = cloneDeep(state.processes);
+              let counter = 1;
+              for (const item of Object.values(newProcesses).sort(
+                (a, b) => a.arrivalTime - b.arrivalTime
+              )) {
+                newProcesses[item.pid].index = counter++;
                 newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
                 newProcesses[item.pid].currentBlockTaskIndex = 0;
