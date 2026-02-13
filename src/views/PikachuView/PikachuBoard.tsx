@@ -1,6 +1,5 @@
 'use client';
 
-import cloneDeep from 'lodash.clonedeep';
 import { motion, AnimatePresence } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -80,7 +79,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
           isPositionEqual(position, suggestion[latestIndex]);
         if (firstCheck && secondCheck) setShowHint(false);
       }
-      const cloneBoard = cloneDeep(board);
+      const cloneBoard = structuredClone(board);
       const path = performPikachuMove({
         board: cloneBoard,
         sourcePiece: firstPiece,

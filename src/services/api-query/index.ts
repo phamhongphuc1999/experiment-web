@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import queryString from 'query-string';
-import * as uuid from 'uuid';
 import { hexToUint8Array } from '..';
 import { initWasm } from '../wasm';
 
@@ -24,56 +21,54 @@ export default class ApiQuery {
     } else this.config = { headers: defaultHeader };
   }
 
-  async get<T = any>(url: string, config?: AxiosRequestConfig) {
+  async get<T = unknown>(url: string, config?: AxiosRequestConfig) {
     return await axios
       .get(`${this.root}${url}`, { ...config, ...this.config })
       .then<T>(responseBody);
   }
 
-  async post<T = any, B = any>(url: string, data?: B, config?: AxiosRequestConfig) {
+  async post<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig) {
     return await axios
       .post(`${this.root}${url}`, data, { ...config, ...this.config })
       .then<T>(responseBody);
   }
 
-  async put<T = any, B = any>(url: string, data?: B, config?: AxiosRequestConfig) {
+  async put<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig) {
     return await axios
       .put(`${this.root}${url}`, data, { ...config, ...this.config })
       .then<T>(responseBody);
   }
 
-  async del<T = any>(url: string, config?: AxiosRequestConfig) {
+  async del<T = unknown>(url: string, config?: AxiosRequestConfig) {
     return await axios
       .delete(`${this.root}${url}`, { ...config, ...this.config })
       .then<T>(responseBody);
   }
 }
 
-export function serializeParams(params: Record<string, any>) {
+export function serializeParams(params: Record<string, unknown>) {
   const { filter, sort, ...other } = params;
-  const queryStr = queryString.stringify(other, { arrayFormat: 'none', skipNull: true });
-  const strings = [];
-  if (queryStr) strings.push(queryStr);
+  const searchParams = new URLSearchParams();
 
-  if (typeof filter === 'object') {
-    const filterStr = Object.entries(filter)
-      .map(([key, value]) => `filter%5B${key}%5D=${value}`)
-      .join('&');
-    if (filterStr) {
-      strings.push(filterStr);
+  Object.entries(other).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      searchParams.append(key, String(value));
     }
+  });
+
+  if (typeof filter === 'object' && filter !== null) {
+    Object.entries(filter).forEach(([key, value]) => {
+      searchParams.append(`filter[${key}]`, String(value));
+    });
   }
 
-  if (typeof sort === 'object') {
-    const sortStr = Object.entries(sort)
-      .map(([key, value]) => `sort%5B${key}%5D=${value}`)
-      .join('&');
-    if (sortStr) {
-      strings.push(sortStr);
-    }
+  if (typeof sort === 'object' && sort !== null) {
+    Object.entries(sort).forEach(([key, value]) => {
+      searchParams.append(`sort[${key}]`, String(value));
+    });
   }
 
-  return strings.join('&');
+  return searchParams.toString();
 }
 
 const CancelToken = axios.CancelToken;
@@ -92,7 +87,7 @@ const baseQuery: AxiosInstance = axios.create({
 });
 
 baseQuery.interceptors.request.use(async (config) => {
-  const id = uuid.v4();
+  const id = crypto.randomUUID();
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const expiredTimestamp = currentTimestamp;
   const _key = `${expiredTimestamp}_${id}`;

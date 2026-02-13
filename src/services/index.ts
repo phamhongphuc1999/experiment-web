@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { toast } from 'sonner';
 import { APP_NAME } from 'src/configs/constance';
 import { PositionType } from 'src/types/global';
@@ -79,7 +78,17 @@ export function getCurrentTimestamp(): number {
  * @returns Formatted date string in 'MMM DD, YYYY HH:mm' format
  */
 export function postgrestMoment(time: string): string {
-  return moment.utc(time).local().format('MMM DD, YYYY HH:mm');
+  const date = new Date(time);
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+    .format(date)
+    .replace(',', '');
 }
 
 /**

@@ -75,13 +75,13 @@ curl -fsSL https://bun.sh/install | bash
 ### Installation & Development
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/phamhongphuc1999/experiment-web
 cd experiment-web
 bun install
 bun dev
 ```
 
-Open [http://localhost:3011](http://localhost:3011) to view the playground.
+Open [http://localhost:3000](http://localhost:3000) to view the playground.
 
 ## 📜 Deployment
 

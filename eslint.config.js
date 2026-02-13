@@ -4,27 +4,25 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import { globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config([
-  globalIgnores(['dist', '.next', 'coverage']),
+export default [
+  {
+    ignores: ['dist', '.next', 'coverage', 'public/**', 'next-env.d.ts'],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  eslintPluginReact.configs.flat.recommended,
+  reactHooks.configs['recommended-latest'],
+  reactRefresh.configs.vite,
   {
     files: ['**/*.{ts,tsx}'],
-    ignores: ['/out/**', '/resources/**', '/.next/**', 'next-env.d.ts', 'coverage/**'],
     plugins: {
       import: eslintPluginImport,
       prettier: prettierPlugin,
       react: eslintPluginReact,
     },
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      eslintPluginReact.configs.flat.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -57,8 +55,8 @@ export default tseslint.config([
       'import/no-unresolved': 'warn',
       'no-console': ['warn', { allow: ['debug', 'warn', 'error'] }],
       'no-debugger': 'warn',
-      'react/jsx-key': 'error',
 
+      'react/jsx-key': 'error',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/jsx-no-undef': 'error',
@@ -67,12 +65,5 @@ export default tseslint.config([
       'react/jsx-pascal-case': 'warn',
       'react/no-direct-mutation-state': 'error',
     },
-    settings: {
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
-      },
-    },
   },
-]);
+];

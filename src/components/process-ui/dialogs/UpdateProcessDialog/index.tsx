@@ -15,7 +15,6 @@ import {
   ProcessTimeType,
   ProcessType,
 } from 'src/types/process.type';
-import { v4 as uuidv4 } from 'uuid';
 import MainProcessList from './MainProcessList';
 import UpdateFooter from './UpdateFooter';
 
@@ -33,7 +32,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
 
   function onCreateProcess() {
     setData((state) => {
-      const pid = uuidv4();
+      const pid = crypto.randomUUID();
       const newProcess: ProcessType = {
         pid,
         arrivalTime: 0,

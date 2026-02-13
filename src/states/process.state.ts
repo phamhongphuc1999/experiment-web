@@ -1,5 +1,3 @@
-import cloneDeep from 'lodash.clonedeep';
-import merge from 'lodash.merge';
 import {
   ProcessDataObjectType,
   ProcessHistoryType,
@@ -69,13 +67,13 @@ export const useProcessStore = create<
             set((state) => {
               if (state.processes[pid]) {
                 if (data.beginAt == -1) data.beginAt = state.processes[pid].beginAt;
-                merge(state.processes[pid], data);
+                Object.assign(state.processes[pid], data);
               }
             });
           },
           resetProcesses: () => {
             set((state) => {
-              const newProcesses = cloneDeep(state.processes);
+              const newProcesses = structuredClone(state.processes);
               for (const item of Object.values(newProcesses)) {
                 newProcesses[item.pid].runtime = 0;
                 newProcesses[item.pid].state = ProcessStatusType.NEW;
