@@ -33,6 +33,7 @@ const processMachine = setup({
     waitingQueue: undefined,
     readyQueue: undefined,
     currentProcess: undefined,
+    monitorData: [],
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {

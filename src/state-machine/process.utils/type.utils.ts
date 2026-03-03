@@ -1,6 +1,11 @@
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessDataObjectType, ProcessMachineEvent, ProcessType } from 'src/types/process.type';
+import {
+  ProcessDataObjectType,
+  ProcessMachineEvent,
+  ProcessMonitorType,
+  ProcessType,
+} from 'src/types/process.type';
 
 export interface ProcessContextType {
   interval: number;
@@ -9,6 +14,7 @@ export interface ProcessContextType {
   waitingQueue: Queue<ProcessType> | undefined;
   readyQueue: Queue<ProcessType> | undefined;
   currentProcess: ProcessType | undefined;
+  monitorData: Array<ProcessMonitorType>;
 }
 
 export type InitializeProcessEventType = {

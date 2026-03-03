@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -43,23 +44,53 @@ export default function PikachuStateProvider({ children }: Props) {
   const [isPaused, setIsPaused] = useState(false);
   const { metadata, fn } = usePikachuStore();
 
+  // Keep refs in sync so the interval callback always reads fresh values
+  // without needing to restart the interval on every state change.
+  const isPausedRef = useRef(isPaused);
+  const statusRef = useRef(metadata.status);
+  const timeConfigTypeRef = useRef(metadata.timeConfigType);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
+    statusRef.current = metadata.status;
+  }, [metadata.status]);
+
+  useEffect(() => {
+    timeConfigTypeRef.current = metadata.timeConfigType;
+  }, [metadata.timeConfigType]);
+
+  // Sync remainingTime from store when it changes (e.g. new game / next round)
   useEffect(() => {
     setRemainingTime((_) => metadata.remainingTime);
   }, [metadata.remainingTime]);
 
+  // Single stable interval — only restarts when the "should be running" condition changes,
+  // NOT every second when remainingTime ticks down.
+  const shouldRun = metadata.status === 'playing' && !isPaused && metadata.timeConfigType !== 'off';
+
   useEffect(() => {
-    if (
-      remainingTime == 0 ||
-      metadata.status != 'playing' ||
-      isPaused ||
-      metadata.timeConfigType == 'off'
-    )
-      return;
+    if (!shouldRun) return;
+
     const timer = setInterval(() => {
-      setRemainingTime((prev) => prev - 1);
+      // Read from refs so we always have the latest values without restarting the interval.
+      if (
+        isPausedRef.current ||
+        statusRef.current !== 'playing' ||
+        timeConfigTypeRef.current === 'off'
+      )
+        return;
+
+      setRemainingTime((prev) => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
     }, 1000);
+
     return () => clearInterval(timer);
-  }, [remainingTime, metadata.status, isPaused, metadata.timeConfigType]);
+  }, [shouldRun]);
 
   const _callback = useCallback(() => {
     fn.setMetadata({ remainingTime });
