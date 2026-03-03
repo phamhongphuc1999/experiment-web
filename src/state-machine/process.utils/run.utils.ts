@@ -1,10 +1,12 @@
 import { useProcessStore } from 'src/states/process.state';
 import {
   ProcessMonitoringStatusType,
+  ProcessMonitorType,
   ProcessStatusType,
   ProcessType,
 } from 'src/types/process.type';
 import { ProcessContextType } from './type.utils';
+import { addMonitorData } from './monitor.utils';
 
 export function runProcessGuard(context: ProcessContextType): boolean {
   return (
@@ -43,7 +45,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
   // run waiting tasks
   const waitingQueue = context.waitingQueue;
   const readyQueue = context.readyQueue;
-  const monitorData = context.monitorData;
+  const monitorData: Array<ProcessMonitorType> = [];
   if (waitingQueue && readyQueue) {
     const maxBlockTaskPerSlice = useProcessStore.getState().maxBlockTaskPerSlice;
     let counter = 0;
@@ -125,7 +127,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
         counter: context.counter + 1,
         waitingQueue,
         readyQueue,
-        monitorData,
+        monitorData: addMonitorData(monitorData, context.monitorData),
       };
     return {
       currentProcess: {
@@ -137,7 +139,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
       counter: context.counter + 1,
       waitingQueue,
       readyQueue,
-      monitorData,
+      monitorData: addMonitorData(monitorData, context.monitorData),
     };
   }
   return {
@@ -145,6 +147,6 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
     counter: context.counter + 1,
     waitingQueue,
     readyQueue,
-    monitorData,
+    monitorData: addMonitorData(monitorData, context.monitorData),
   };
 }

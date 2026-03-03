@@ -13,7 +13,7 @@ import TimeSliceCounter from './TimeSliceCounter';
 
 export default function ProcessHeader() {
   const [updateProcessOpen, setUpdateProcessOpen] = useState(false);
-  const { processes, status } = useProcessStore();
+  const { processes, status, displayMode, fn } = useProcessStore();
   const { send } = useProcessStateMachine();
 
   const text = useMemo(() => {
@@ -35,6 +35,11 @@ export default function ProcessHeader() {
     }
   }
 
+  function onChangeDisplayMode() {
+    if (displayMode == 'chart') fn.setMetadata({ displayMode: 'column' });
+    else fn.setMetadata({ displayMode: 'chart' });
+  }
+
   return (
     <div className="bg-background/80 relative z-10 flex items-center justify-between gap-1 backdrop-blur-xl">
       <div className="flex items-center gap-1">
@@ -48,6 +53,9 @@ export default function ProcessHeader() {
         >
           {status == 'initial' || status == 'ready' ? <Play size={5} /> : <></>}
           <span className="text-[11px] font-bold tracking-tight uppercase">{text}</span>
+        </Button>
+        <Button onClick={onChangeDisplayMode} className="rounded-none" size="sm">
+          {displayMode}
         </Button>
       </div>
       <SettingSpot />
