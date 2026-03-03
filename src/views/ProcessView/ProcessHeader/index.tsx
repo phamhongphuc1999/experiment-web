@@ -1,6 +1,6 @@
 'use client';
 
-import { Play } from 'lucide-react';
+import { BarChart2, LayoutGrid, Play } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import UpdateProcessDialog from 'src/components/process-ui/dialogs/UpdateProcessDialog';
 import { Button } from 'src/components/shadcn-ui/button';
@@ -54,8 +54,23 @@ export default function ProcessHeader() {
           {status == 'initial' || status == 'ready' ? <Play size={5} /> : <></>}
           <span className="text-[11px] font-bold tracking-tight uppercase">{text}</span>
         </Button>
-        <Button onClick={onChangeDisplayMode} className="rounded-none" size="sm">
-          {displayMode}
+        <Button
+          onClick={onChangeDisplayMode}
+          variant="ghost"
+          className="hover:border-border hover:bg-muted h-8 rounded-none border-x border-transparent"
+          size="sm"
+        >
+          {displayMode == 'chart' ? (
+            <div className="flex items-center gap-1.5">
+              <LayoutGrid size={12} className="text-muted-foreground" />
+              <span className="text-[10px] font-bold tracking-tight uppercase">Column View</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5">
+              <BarChart2 size={12} className="text-muted-foreground" />
+              <span className="text-[10px] font-bold tracking-tight uppercase">Chart View</span>
+            </div>
+          )}
         </Button>
       </div>
       <SettingSpot />

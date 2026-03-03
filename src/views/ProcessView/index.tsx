@@ -31,7 +31,11 @@ function ProcessViewLayout() {
       ) : (
         <>
           {displayMode == 'column' && <ProcessQueueView />}
-          {displayMode == 'chart' && <TimelineChart />}
+          {displayMode == 'chart' && (
+            <div className="h-[calc(100vh-100px)] border p-1 shadow-sm transition-all duration-300">
+              <TimelineChart />
+            </div>
+          )}
         </>
       )}
     </div>
