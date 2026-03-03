@@ -15,6 +15,19 @@ export enum ProcessStatusType {
   TERMINATED = 'terminated',
 }
 
+export enum ProcessMonitoringStatusType {
+  RUNNING = 'running',
+  RUNNING_BLOCKING_TASK = 'running-blocking-task',
+}
+
+export interface ProcessMonitorType {
+  pid: string;
+  index?: number;
+  start: number;
+  end: number;
+  state: ProcessMonitoringStatusType;
+}
+
 export type ProcessTimeType = {
   arrivalTime: number; // Time when the process arrives (enters the ready queue)
   executionTime: number; // Total CPU time required to finish the process

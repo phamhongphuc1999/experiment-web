@@ -7,9 +7,10 @@ import { useProcessStore } from 'src/states/process.state';
 import ExportImportData from './ExportImportData';
 import ProcessHeader from './ProcessHeader';
 import ProcessQueueView from './ProcessQueueView';
+import TimelineChart from './TimelineChart';
 
 function ProcessViewLayout() {
-  const { processes } = useProcessStore();
+  const { processes, displayMode } = useProcessStore();
 
   return (
     <div>
@@ -28,7 +29,14 @@ function ProcessViewLayout() {
           }
         />
       ) : (
-        <ProcessQueueView />
+        <>
+          {displayMode == 'column' && <ProcessQueueView />}
+          {displayMode == 'chart' && (
+            <div className="h-[calc(100vh-100px)] border p-1 shadow-sm transition-all duration-300">
+              <TimelineChart />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

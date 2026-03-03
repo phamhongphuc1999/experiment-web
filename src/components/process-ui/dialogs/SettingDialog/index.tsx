@@ -18,6 +18,7 @@ export default function SettingDialog(props: DialogProps) {
   const {
     mode,
     maxBlockTaskPerSlice,
+    displayMode,
     fn: { setMetadata },
   } = useProcessStore();
 
@@ -36,6 +37,11 @@ export default function SettingDialog(props: DialogProps) {
     setMetadata({ mode: localMode, maxBlockTaskPerSlice: localMaxBlock });
     setOpen(false);
   };
+
+  function onChangeDisplayMode() {
+    if (displayMode == 'chart') setMetadata({ displayMode: 'column' });
+    else setMetadata({ displayMode: 'chart' });
+  }
 
   return (
     <Dialog {...props} open={open} onOpenChange={setOpen}>
@@ -78,6 +84,11 @@ export default function SettingDialog(props: DialogProps) {
             setLocalMaxBlock(validatedValue);
           }}
         />
+
+        <p className="border-t pt-2 text-lg font-semibold">Display mode</p>
+        <Button onClick={onChangeDisplayMode} className="w-fit rounded-none" size="sm">
+          {displayMode}
+        </Button>
 
         <DialogFooter className="mt-4 border-t pt-2">
           <Button onClick={onSave} className="rounded-none">

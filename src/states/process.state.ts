@@ -16,6 +16,7 @@ interface ProcessMetadataType {
   status: ProcessStoreStatusType;
   interval: number;
   maxBlockTaskPerSlice: number;
+  displayMode: 'chart' | 'column';
 }
 
 interface ProcessStateType extends ProcessMetadataType {
@@ -41,6 +42,7 @@ export const useProcessStore = create<
         mode: SchedulerModeType.FIFO,
         processes: {},
         history: [],
+        displayMode: 'column',
         status: 'initial',
         interval: 1000,
         maxBlockTaskPerSlice: 5,
@@ -52,6 +54,7 @@ export const useProcessStore = create<
               if (metadata?.interval) state.interval = metadata.interval;
               if (metadata?.maxBlockTaskPerSlice)
                 state.maxBlockTaskPerSlice = metadata.maxBlockTaskPerSlice;
+              if (metadata?.displayMode) state.displayMode = metadata.displayMode;
             });
           },
           updateHistory: (history: ProcessHistoryType) => {
@@ -109,7 +112,7 @@ export const useProcessStore = create<
       };
     }),
     {
-      name: 'experiment.process.v2',
+      name: 'experiment.process.v3',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {

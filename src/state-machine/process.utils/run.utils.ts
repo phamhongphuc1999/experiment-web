@@ -1,6 +1,12 @@
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import {
+  ProcessMonitoringStatusType,
+  ProcessMonitorType,
+  ProcessStatusType,
+  ProcessType,
+} from 'src/types/process.type';
 import { ProcessContextType } from './type.utils';
+import { addMonitorData } from './monitor.utils';
 
 export function runProcessGuard(context: ProcessContextType): boolean {
   return (
@@ -8,6 +14,7 @@ export function runProcessGuard(context: ProcessContextType): boolean {
   );
 }
 
+// change process state
 export function runProcessEntry(context: ProcessContextType): Partial<ProcessContextType> {
   const currentProcess = context.currentProcess;
   if (currentProcess) {
@@ -33,10 +40,12 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
   return {};
 }
 
+// run waiting process and execute active process
 export function runProcessAction(context: ProcessContextType): Partial<ProcessContextType> {
   // run waiting tasks
   const waitingQueue = context.waitingQueue;
   const readyQueue = context.readyQueue;
+  const monitorData: Array<ProcessMonitorType> = [];
   if (waitingQueue && readyQueue) {
     const maxBlockTaskPerSlice = useProcessStore.getState().maxBlockTaskPerSlice;
     let counter = 0;
@@ -47,6 +56,15 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
     }
     for (const _waitingProcess of _willRunWaitingQueue) {
       if (_waitingProcess && _waitingProcess.blockTasks) {
+        // update monitor
+        monitorData.push({
+          pid: _waitingProcess.pid,
+          index: _waitingProcess.index,
+          start: context.counter,
+          end: context.counter + 1,
+          state: ProcessMonitoringStatusType.RUNNING_BLOCKING_TASK,
+        });
+
         const currentBlockTask = _waitingProcess.blockTasks[_waitingProcess.currentBlockTaskIndex];
         const runtime = _waitingProcess.runtime + 1;
         const taskRuntime = currentBlockTask.runtime + 1;
@@ -95,6 +113,13 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
   // run current process
   const currentProcess = context.currentProcess;
   if (currentProcess) {
+    monitorData.push({
+      pid: currentProcess.pid,
+      index: currentProcess.index,
+      start: context.counter,
+      end: context.counter + 1,
+      state: ProcessMonitoringStatusType.RUNNING,
+    });
     const runtime = currentProcess.runtime + 1;
     if (runtime < currentProcess.executionTime)
       return {
@@ -102,6 +127,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
         counter: context.counter + 1,
         waitingQueue,
         readyQueue,
+        monitorData: addMonitorData(monitorData, context.monitorData),
       };
     return {
       currentProcess: {
@@ -113,7 +139,14 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
       counter: context.counter + 1,
       waitingQueue,
       readyQueue,
+      monitorData: addMonitorData(monitorData, context.monitorData),
     };
   }
-  return { currentProcess: undefined, counter: context.counter + 1, waitingQueue, readyQueue };
+  return {
+    currentProcess: undefined,
+    counter: context.counter + 1,
+    waitingQueue,
+    readyQueue,
+    monitorData: addMonitorData(monitorData, context.monitorData),
+  };
 }

@@ -33,6 +33,7 @@ export function resetAction(): Partial<ProcessContextType> {
     waitingQueue: undefined,
     currentProcess: undefined,
     counter: 0,
+    monitorData: [],
   };
 }
 
@@ -45,5 +46,6 @@ export function clearAction(): Partial<ProcessContextType> {
     waitingQueue: undefined,
     currentProcess: undefined,
     counter: 0,
+    monitorData: [],
   };
 }
