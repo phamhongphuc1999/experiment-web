@@ -37,7 +37,6 @@
     "crypto-js": "^4.2.0",
     "highcharts": "^12.5.0",
     "highcharts-react-official": "^3.2.3",
-    "iconsax-reactjs": "^0.0.8",
     "immer": "^10.1.1",
     "lodash.clonedeep": "^4.5.0",
     "lucide-react": "^0.539.0",

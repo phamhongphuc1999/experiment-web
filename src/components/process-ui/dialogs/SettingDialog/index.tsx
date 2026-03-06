@@ -1,5 +1,5 @@
 import { DialogProps } from '@radix-ui/react-dialog';
-import { Setting } from 'iconsax-reactjs';
+import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BaseInput from 'src/components/input/BaseInput';
 import { Button } from 'src/components/shadcn-ui/button';
@@ -46,7 +46,7 @@ export default function SettingDialog(props: DialogProps) {
   return (
     <Dialog {...props} open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Setting size={14} className="cursor-pointer" />
+        <Settings size={14} className="cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="max-w-2xl rounded-none p-4">
         <DialogHeader className="border-b pb-1">

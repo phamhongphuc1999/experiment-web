@@ -1,4 +1,4 @@
-import { Routing } from 'iconsax-reactjs';
+import { Locate } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { DIALOG_KEY } from 'src/configs/constance';
@@ -41,7 +41,7 @@ export default function RoutingGameDialog({ game }: Props) {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Routing">
-          <Routing size={16} />
+          <Locate size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>

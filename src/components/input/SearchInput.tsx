@@ -1,6 +1,6 @@
 'use client';
 
-import { CloseCircle, SearchNormal1 } from 'iconsax-reactjs';
+import { CircleX, Search } from 'lucide-react';
 import { ComponentProps } from 'react';
 import BaseInput from './BaseInput';
 
@@ -28,8 +28,8 @@ export default function SearchInput({ name, rootprops, events, ...props }: Props
       rootprops={rootprops}
       onChange={(event) => onTextChange(event.target.value)}
       icon={{
-        start: <SearchNormal1 className="size-4" />,
-        end: <CloseCircle className="size-4 cursor-pointer" onClick={onResetSearch} />,
+        start: <Search className="size-4" />,
+        end: <CircleX className="size-4 cursor-pointer" onClick={onResetSearch} />,
       }}
     />
   );

@@ -1,4 +1,3 @@
-import { Cpu } from 'iconsax-reactjs';
 import AppTooltip from 'src/components/AppTooltip';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';
@@ -6,6 +5,7 @@ import { ProcessMachineEvent, ProcessType } from 'src/types/process.type';
 import ExportImportData from '../../ExportImportData';
 import RunningProcessView from './RunningProcessView';
 import SystemLog from './SystemLog';
+import { Cpu } from 'lucide-react';
 
 interface Props {
   runningProcess: ProcessType | undefined;
@@ -24,7 +24,7 @@ export default function RunningScreen({ runningProcess }: Props) {
       <div className="relative flex flex-1 flex-col overflow-hidden border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/50">
         <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50/50 px-3 py-2 dark:border-zinc-800/50 dark:bg-zinc-900/80">
           <div className="flex h-4 items-center gap-2">
-            <Cpu size={16} className="text-blue-500" variant="Bold" />
+            <Cpu size={16} className="text-blue-500" />
             <h2 className="text-[12px] font-bold tracking-tight uppercase">
               Processor Core | {mode}
             </h2>

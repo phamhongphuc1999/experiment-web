@@ -1,9 +1,12 @@
 import { UseQueryOptions } from '@tanstack/react-query';
-import { ComponentProps } from 'react';
+import { LucideProps } from 'lucide-react';
+import { ComponentProps, RefAttributes } from 'react';
 
 export type ThemeType = 'light' | 'dark';
 export type PositionType = [number, number]; // expect [row, column]
 export type VectorType = PositionType; // expect [x, y]
+
+export type IconProps = Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>;
 
 export enum ENV_TYPE {
   DEVELOPMENT = 'development',

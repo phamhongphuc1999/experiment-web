@@ -1,4 +1,4 @@
-import { Activity } from 'iconsax-reactjs';
+import { Activity } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
 import { ProcessType } from 'src/types/process.type';

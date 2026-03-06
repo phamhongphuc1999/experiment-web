@@ -1,4 +1,4 @@
-import { Timer1 } from 'iconsax-reactjs';
+import { Timer } from 'lucide-react';
 import { ProcessTimeType } from 'src/types/process.type';
 
 interface BlockTaskItemProps {
@@ -60,7 +60,7 @@ export default function BlockTaskList({
   return (
     <div className="bg-black/5 p-2 dark:bg-white/5">
       <p className="text-muted-foreground mb-2 flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase">
-        <Timer1 size={12} variant="Outline" />
+        <Timer size={12} />
         {onlyShowCurrentBlockTask ? 'Next task' : `Blocked Tasks (${data.length})`}
       </p>
       {content}

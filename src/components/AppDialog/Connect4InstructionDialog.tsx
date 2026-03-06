@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { InfoCircle } from 'iconsax-reactjs';
+import { Info } from 'lucide-react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
@@ -21,7 +21,7 @@ export default function Connect4InstructionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <InfoCircle size={16} />
+          <Info size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">

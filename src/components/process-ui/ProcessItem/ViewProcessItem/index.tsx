@@ -1,4 +1,3 @@
-import { Clock, Timer1 } from 'iconsax-reactjs';
 import { motion } from 'motion/react';
 import { ComponentProps } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
@@ -9,6 +8,7 @@ import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';
 import BlockTaskList from './BlockTaskList';
+import { Clock, Timer } from 'lucide-react';
 
 interface Props {
   data: ProcessType;
@@ -116,7 +116,7 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
             </div>
             {data.beginAt >= 0 && (
               <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium whitespace-nowrap">
-                <Timer1 size={10} variant="Bold" className="text-green-500/70" />
+                <Timer size={10} className="text-green-500/70" />
                 <span>
                   Start: <span className="text-foreground font-mono">{data.beginAt}</span>
                 </span>
@@ -124,7 +124,7 @@ export default function ViewProcessItem({ data, metadata, props }: Props) {
             )}
             {isTerminated && data.endAt >= 0 && (
               <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium whitespace-nowrap">
-                <Timer1 size={10} variant="Bold" className="text-primary/70" />
+                <Timer size={10} className="text-primary/70" />
                 <span>
                   End: <span className="text-foreground font-mono">{data.endAt}</span>
                 </span>

@@ -1,4 +1,4 @@
-import { Messenger, Send } from 'iconsax-reactjs';
+import { MessageCircle, Send } from 'lucide-react';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { beVietnamPro } from 'src/configs/font-family';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
@@ -58,7 +58,7 @@ export default function CaroMessengerDialog({ gameType }: Props) {
     <Dialog>
       <DialogTrigger className="cursor-pointer">
         <AppTooltip tooltipContent="Message" contentProps={{ side: 'bottom' }}>
-          <Messenger size={16} />
+          <MessageCircle size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="flex h-3/4 flex-col">

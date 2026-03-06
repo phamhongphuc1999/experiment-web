@@ -15,7 +15,7 @@ import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikac
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PositionType } from 'src/types/global';
 import PathDraw from './PathDraw';
-import SuggestionDraw from './SuggesstionDraw';
+import SuggestionDraw from './SuggestionDraw';
 
 interface Props {
   size: number;

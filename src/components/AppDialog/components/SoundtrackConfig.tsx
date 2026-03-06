@@ -1,4 +1,4 @@
-import { VolumeHigh, VolumeSlash } from 'iconsax-reactjs';
+import { Volume2, VolumeOff } from 'lucide-react';
 import IconButton from 'src/components/buttons/IconButton';
 import { Button } from 'src/components/shadcn-ui/button';
 import { gameConfigs } from 'src/configs/constance';
@@ -24,7 +24,7 @@ export default function SoundtrackConfig({ game }: Props) {
         className="mt-2 flex cursor-pointer items-center gap-1"
         onClick={() => setIsSound((preValue) => !preValue)}
       >
-        <IconButton>{isSound ? <VolumeHigh size={16} /> : <VolumeSlash size={16} />}</IconButton>
+        <IconButton>{isSound ? <Volume2 size={16} /> : <VolumeOff size={16} />}</IconButton>
         <p>{isSound ? 'Mute' : 'Unmute'}</p>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Export, Import } from 'iconsax-reactjs';
+import { Download, Import } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
@@ -137,7 +137,6 @@ export default function ExportImportData({ components, isShowExport = true }: Pr
                 Data Configuration
               </DialogTitle>
             </DialogHeader>
-
             <div className="space-y-6">
               <div className="space-y-3">
                 <Label htmlFor="file-upload" className="text-base font-semibold">
@@ -209,7 +208,7 @@ export default function ExportImportData({ components, isShowExport = true }: Pr
           {components?.export ? (
             <div className="cursor-pointer">{components.export}</div>
           ) : (
-            <Export onClick={onExport} size={14} className="cursor-pointer" />
+            <Download onClick={onExport} size={14} className="cursor-pointer" />
           )}
         </AppTooltip>
       )}

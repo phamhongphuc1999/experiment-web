@@ -1,4 +1,4 @@
-import { InfoCircle } from 'iconsax-reactjs';
+import { Info } from 'lucide-react';
 import { useMemo } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import BaseInput from 'src/components/input/BaseInput';
@@ -75,7 +75,7 @@ export default function GameTypeConfig({ game }: Props) {
             icon={{
               end: (
                 <AppTooltip tooltipContent="The maximum number of errors that player can make in blind mode">
-                  <InfoCircle size={14} />
+                  <Info size={14} />
                 </AppTooltip>
               ),
             }}

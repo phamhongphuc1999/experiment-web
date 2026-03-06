@@ -1,4 +1,4 @@
-import { Bluetooth, Setting2 } from 'iconsax-reactjs';
+import { Bluetooth, Settings } from 'lucide-react';
 import { Button } from 'src/components/shadcn-ui/button';
 import useBoardGameConnectionContext from 'src/hooks/useBoardGameConnection';
 import { MyGameType, PlayModeType } from 'src/types/caro.type';
@@ -46,7 +46,7 @@ export default function PlayModeConfig({ game }: Props) {
       {playMode == 'online' && (
         <div className="mt-1 text-justify text-xs">
           When online mode is on, the connection icon <Bluetooth className="inline" size={14} />{' '}
-          (right next to setting icon <Setting2 className="inline" size={14} />) is showed, you
+          (right next to setting icon <Settings className="inline" size={14} />) is showed, you
           should follow its instruction to connect with your friends. Please press save button to
           confirm changes.
         </div>

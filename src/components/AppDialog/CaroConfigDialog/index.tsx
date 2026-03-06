@@ -1,4 +1,4 @@
-import { Setting2 } from 'iconsax-reactjs';
+import { Settings } from 'lucide-react';
 import { MouseEvent } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';
@@ -65,7 +65,7 @@ function CaroConfigDialogLayout() {
     <Dialog open={dialog[DIALOG_KEY.caroConfigDialog]} onOpenChange={onOpenChange}>
       <DialogTrigger>
         <AppTooltip tooltipContent="Config" contentProps={{ side: 'bottom' }}>
-          <Setting2 size={16} />
+          <Settings size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>

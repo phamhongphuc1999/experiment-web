@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash } from 'iconsax-reactjs';
+import { Trash } from 'lucide-react';
 import { ComponentProps, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AppTooltip from 'src/components/AppTooltip';

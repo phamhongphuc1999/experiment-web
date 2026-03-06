@@ -1,4 +1,4 @@
-import { Bluetooth } from 'iconsax-reactjs';
+import { Bluetooth } from 'lucide-react';
 import { useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import { Button } from 'src/components/shadcn-ui/button';

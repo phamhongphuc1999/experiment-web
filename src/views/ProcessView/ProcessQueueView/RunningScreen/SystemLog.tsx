@@ -1,4 +1,4 @@
-import { ReceiptText } from 'iconsax-reactjs';
+import { ReceiptText } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { cn } from 'src/lib/utils';

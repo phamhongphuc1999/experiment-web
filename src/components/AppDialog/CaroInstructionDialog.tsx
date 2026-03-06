@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { Bluetooth, InfoCircle, Setting2 } from 'iconsax-reactjs';
+import { Bluetooth, Circle, Settings } from 'lucide-react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
@@ -26,7 +26,7 @@ export default function CaroInstructionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <InfoCircle size={16} />
+          <Circle size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">
@@ -43,7 +43,7 @@ export default function CaroInstructionDialog() {
           <p className="mt-2 text-lg">2. Setting</p>
           <div className="text-justify text-sm">
             {'Click on the icon'}{' '}
-            <Setting2 onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
+            <Settings onClick={onSettingClick} className="inline cursor-pointer" size={14} />{' '}
             {
               'to open the config dialog. In the config dialog, you can change control the caro board. When you press save button, your changes will be applied and the new game will be started.'
             }

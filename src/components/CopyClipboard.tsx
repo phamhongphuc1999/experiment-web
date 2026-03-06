@@ -1,9 +1,9 @@
 'use client';
 
-import { Copy, IconProps } from 'iconsax-reactjs';
+import { Check, Copy } from 'lucide-react';
 import { MouseEvent, useState } from 'react';
 import { cn } from 'src/lib/utils';
-import { CheckIcon } from './icons';
+import { IconProps } from 'src/types/global';
 
 interface Props {
   copyText: string;
@@ -27,7 +27,7 @@ export default function CopyClipboard({ copyText, iconprops }: Props) {
   return (
     <button onClick={handleCopy}>
       {copied ? (
-        <CheckIcon {...iconprops} className={cn('size-4 cursor-pointer', iconprops?.className)} />
+        <Check {...iconprops} className={cn('size-4 cursor-pointer', iconprops?.className)} />
       ) : (
         <Copy {...iconprops} className={cn('cursor-pointer', iconprops?.className)} />
       )}

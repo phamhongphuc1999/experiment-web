@@ -1,4 +1,4 @@
-import { InfoCircle } from 'iconsax-reactjs';
+import { Info } from 'lucide-react';
 import { useState } from 'react';
 import { DIALOG_KEY, PIKACHU_PIECE_SIZE, PIKACHU_URL } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
@@ -17,7 +17,7 @@ export default function PikachuInstructionDialog() {
     >
       <DialogTrigger className="cursor-pointer">
         <AppTooltip contentProps={{ side: 'bottom' }} tooltipContent="Instructions">
-          <InfoCircle size={16} />
+          <Info size={16} />
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">
