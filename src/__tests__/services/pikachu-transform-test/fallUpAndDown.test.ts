@@ -1,4 +1,4 @@
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('fallUp', () => {
@@ -11,7 +11,7 @@ describe('fallUp', () => {
       [0, 10, 11, 12, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -43,7 +43,7 @@ describe('fallUp', () => {
       [0, 16, 17, 18, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -76,7 +76,7 @@ describe('fallUp', () => {
       [0, 34, 16, 0, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -109,7 +109,7 @@ describe('fallDown', () => {
       [0, 10, 11, 12, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -141,7 +141,7 @@ describe('fallDown', () => {
       [0, 16, 17, 18, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -174,7 +174,7 @@ describe('fallDown', () => {
       [0, 34, 10, 16, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [

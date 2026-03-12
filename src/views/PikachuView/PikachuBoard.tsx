@@ -9,8 +9,7 @@ import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { getRandom, isPositionEqual, sleep } from 'src/services';
-import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.utils';
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
+import PikachuService from 'src/services/pikachu';
 import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PositionType } from 'src/types/global';
@@ -92,7 +91,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
       if (path) {
         const transformType =
           gameType != 'randomBoard' ? roundList[round - 1] : roundList[randomRoundListIndex];
-        pikachuBoardTransformation(
+        PikachuService.transform(
           { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
           transformType
         );
@@ -103,7 +102,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
             const randomRoundListIndex = getRandom(roundList.length);
             setMetadata({ randomRoundListIndex });
             setRandomCounter(1);
-            pikachuBoardFormatting(
+            PikachuService.format(
               { board: cloneBoard, numberOfRows, numberOfColumns },
               roundList[randomRoundListIndex]
             );

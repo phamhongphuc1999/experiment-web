@@ -1,4 +1,4 @@
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('shiftLeftAndRight', () => {
@@ -12,7 +12,7 @@ describe('shiftLeftAndRight', () => {
       [0, 21, 22, 23, 24, 25, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -46,7 +46,7 @@ describe('shiftLeftAndRight', () => {
       [0, 21, 22, 23, 24, 25, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [

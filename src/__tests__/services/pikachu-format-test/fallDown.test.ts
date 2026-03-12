@@ -1,4 +1,4 @@
-import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('fallDown', () => {
@@ -11,7 +11,7 @@ describe('fallDown', () => {
       [0, 0, 11, 12, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardFormatting({ board, numberOfRows: 4, numberOfColumns: 3 }, 'fallDown');
+    PikachuService.format({ board, numberOfRows: 4, numberOfColumns: 3 }, 'fallDown');
     expect(board).toEqual([
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],

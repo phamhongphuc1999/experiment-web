@@ -1,4 +1,4 @@
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('normal', () => {
@@ -11,7 +11,7 @@ describe('normal', () => {
       [0, 10, 11, 12, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [

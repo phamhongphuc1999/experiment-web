@@ -43,13 +43,13 @@ export type PikachuBoardTransformType =
   | 'spreadOut'
   | 'collapseToCenter';
 
-export type PerformFormattingParamsType = {
+export type PerformFormatParamsType = {
   board: Array<Array<number>>;
   vector: VectorType;
   space: [PositionType, PositionType];
 };
 
-export type PerformTransformationParamsType = PerformFormattingParamsType & {
+export type PerformTransformParamsType = PerformFormatParamsType & {
   moves: Array<PositionType>;
 };
 
