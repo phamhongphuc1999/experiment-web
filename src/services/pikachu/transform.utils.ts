@@ -1,9 +1,5 @@
 import { PositionType, VectorType } from 'src/types/global';
-import {
-  MoveParamsType,
-  PerformTransformParamsType,
-  PikachuBoardTransformType,
-} from 'src/types/pikachu.type';
+import { MoveParamsType, PerformTransformType, PikachuTransformType } from 'src/types/pikachu.type';
 
 export function moveAnUnit(move: PositionType, vector: VectorType): PositionType {
   return [move[0] + vector[0], move[1] + vector[1]];
@@ -18,7 +14,7 @@ export function isInSpace(move: PositionType, space: [PositionType, PositionType
   );
 }
 
-function performTransform(params: PerformTransformParamsType) {
+function performTransform(params: PerformTransformType) {
   const { board, moves, vector, space } = params;
   const inSpaceMoves = moves.filter((move) => isInSpace(move, space));
   for (const move of inSpaceMoves) {
@@ -237,7 +233,7 @@ function collapseToCenter(params: MoveParamsType) {
   });
 }
 
-const configs: { [id in PikachuBoardTransformType]: (params: MoveParamsType) => void } = {
+const configs: { [id in PikachuTransformType]: (params: MoveParamsType) => void } = {
   normal,
   fallDown: (params) => _straight(params, [-1, 0]),
   fallUp: (params) => _straight(params, [1, 0]),
@@ -255,6 +251,6 @@ const configs: { [id in PikachuBoardTransformType]: (params: MoveParamsType) => 
   collapseToCenter,
 };
 
-export function pikachuBoardTransform(params: MoveParamsType, type: PikachuBoardTransformType) {
+export function pikachuBoardTransform(params: MoveParamsType, type: PikachuTransformType) {
   configs[type](params);
 }

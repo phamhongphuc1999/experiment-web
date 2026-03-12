@@ -1,9 +1,5 @@
-import {
-  changePikachuBoard,
-  createNewPikachuBoard,
-  findPossibleMove,
-  _refineNumTypes,
-} from 'src/services/pikachu/pikachu.utils';
+import PikachuService from 'src/services/pikachu';
+import { _refineNumTypes } from 'src/services/pikachu/board.utils';
 import { describe, expect, it } from 'vitest';
 
 describe('Test pikachu utils', () => {
@@ -17,8 +13,8 @@ describe('Test pikachu utils', () => {
     const refinedNumTypes3 = _refineNumTypes(12, 36);
     expect(refinedNumTypes3).lessThanOrEqual(12);
   });
-  it('findPossibleMove', () => {
-    const result = findPossibleMove({
+  it('findPathWithoutTarget', () => {
+    const result = PikachuService.findPathWithoutTarget({
       numberOfRows: 4,
       numberOfColumns: 3,
       board: [
@@ -36,8 +32,8 @@ describe('Test pikachu utils', () => {
       [3, 3],
     ]);
   });
-  it('createNewPikachuBoard', () => {
-    const { board } = createNewPikachuBoard({
+  it('createNewBoard', () => {
+    const { board } = PikachuService.createNewBoard({
       numberOfRows: 16,
       numberOfColumns: 9,
       numberOfLines: 2,
@@ -55,7 +51,7 @@ describe('Test pikachu utils', () => {
       expect(value).equal(4);
     }
   });
-  it('changePikachuBoard', () => {
+  it('changeBoard', () => {
     const currentBoard = [
       [0, 0, 0, 0, 0, 0],
       [0, 3, 3, 1, 0, 0],
@@ -64,7 +60,7 @@ describe('Test pikachu utils', () => {
       [0, 4, 3, 2, 1, 0],
       [0, 0, 0, 0, 0, 0],
     ];
-    const { board } = changePikachuBoard({
+    const { board } = PikachuService.changeBoard({
       currentBoard,
       numberOfRows: 4,
       numberOfColumns: 4,
@@ -109,7 +105,7 @@ describe('Test pikachu utils', () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
-    const { board } = changePikachuBoard({
+    const { board } = PikachuService.changeBoard({
       currentBoard,
       numberOfRows: 9,
       numberOfColumns: 16,

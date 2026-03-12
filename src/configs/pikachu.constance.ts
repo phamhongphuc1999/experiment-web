@@ -1,8 +1,8 @@
-import { PikachuBoardTransformType } from 'src/types/pikachu.type';
+import { PikachuTransformType } from 'src/types/pikachu.type';
 
 export const PIKACHU_PIECE_SIZE = 52;
 
-export const pikachuRoundTransformations: Array<PikachuBoardTransformType> = [
+export const pikachuRoundTransformations: Array<PikachuTransformType> = [
   'normal',
   'fallDown',
   'fallUp',
@@ -21,7 +21,7 @@ export const pikachuRoundTransformations: Array<PikachuBoardTransformType> = [
 ];
 
 export const pikachuTransformConfig: {
-  [id in PikachuBoardTransformType]: { id: PikachuBoardTransformType; title: string };
+  [id in PikachuTransformType]: { id: PikachuTransformType; title: string };
 } = {
   normal: { id: 'normal', title: 'Normal' },
   fallDown: { id: 'fallDown', title: 'Fall down' },

@@ -10,7 +10,6 @@ import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { getRandom, isPositionEqual, sleep } from 'src/services';
 import PikachuService from 'src/services/pikachu';
-import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PositionType } from 'src/types/global';
 import PathDraw from './PathDraw';
@@ -80,7 +79,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
         if (firstCheck && secondCheck) setShowHint(false);
       }
       const cloneBoard = cloneDeep(board);
-      const path = performPikachuMove({
+      const path = PikachuService.findPath({
         board: cloneBoard,
         sourcePiece: firstPiece,
         targetPiece: position,
@@ -108,7 +107,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
             );
           } else setRandomCounter((preValue) => preValue + 1);
         }
-        const possiblePath = findPossibleMove({
+        const possiblePath = PikachuService.findPathWithoutTarget({
           board: cloneBoard,
           numberOfRows,
           numberOfColumns,

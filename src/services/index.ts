@@ -1,51 +1,5 @@
-import { toast } from 'sonner';
 import { APP_NAME } from 'src/configs/constance';
 import { PositionType } from 'src/types/global';
-import { ZodError } from 'zod';
-
-type SBase = {
-  toString: () => string;
-};
-
-export class LocalStorage {
-  static set<T extends SBase>(key: string, value: T, formatter?: (value: T) => string) {
-    if (formatter) localStorage.setItem(key, formatter(value));
-    else localStorage.setItem(key, value.toString());
-  }
-
-  static get<T>(key: string): T | null {
-    return localStorage.getItem(key) as T | null;
-  }
-
-  static remove(key: string) {
-    localStorage.removeItem(key);
-  }
-
-  static expireSet<T extends SBase>(
-    key: string,
-    value: T,
-    interval: number,
-    formatter?: (value: T) => string
-  ) {
-    const currentTimestamp = Date.now();
-    const expiredTimestamp = interval + currentTimestamp;
-    const data = {
-      value: formatter ? formatter(value) : value.toString(),
-      timestamp: expiredTimestamp,
-    };
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-
-  static expireGet(key: string): { data: string | null; error?: string } {
-    const rawData = localStorage.getItem(key);
-    if (rawData) {
-      const data: { value: string; timestamp: string } = JSON.parse(rawData);
-      const currentTimestamp = Date.now();
-      if (Number(data.timestamp) < currentTimestamp) return { data: null, error: 'key is expired' };
-      return { data: data.value };
-    } else return { data: null, error: 'Invalid key' };
-  }
-}
 
 /**
  * Converts a hexadecimal string to a Uint8Array.
@@ -70,25 +24,6 @@ export function hexToUint8Array(hex: string): Uint8Array {
  */
 export function getCurrentTimestamp(): number {
   return Math.floor(Date.now() / 1000);
-}
-
-/**
- * Formats a PostgreSQL timestamp to a human-readable local time string.
- * @param time - The UTC timestamp string from PostgreSQL
- * @returns Formatted date string in 'MMM DD, YYYY HH:mm' format
- */
-export function postgrestMoment(time: string): string {
-  const date = new Date(time);
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })
-    .format(date)
-    .replace(',', '');
 }
 
 /**
@@ -117,13 +52,6 @@ export function formatText(s: string, frac = 3): string {
 
 export function generateAppMetadata(title: string) {
   return { title: `${APP_NAME} | ${title}`, openGraph: { title: `${APP_NAME} | ${title}` } };
-}
-
-export function zodError<T>(error?: ZodError<T>) {
-  if (error && error.issues.length > 0) {
-    const issue = error.issues[0];
-    toast.error(`${String(issue.path[0])}: ${issue.message}`);
-  }
 }
 
 /**

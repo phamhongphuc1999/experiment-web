@@ -1,12 +1,8 @@
 import { PositionType, VectorType } from 'src/types/global';
-import {
-  BasePikachuParamsType,
-  PerformFormatParamsType,
-  PikachuBoardTransformType,
-} from 'src/types/pikachu.type';
+import { BasePikachuType, PerformFormatType, PikachuTransformType } from 'src/types/pikachu.type';
 import { isInSpace, moveAnUnit } from './transform.utils';
 
-function performFormat(params: PerformFormatParamsType) {
+function performFormat(params: PerformFormatType) {
   const { board, vector, space } = params;
   const result: Array<PositionType> = [];
   for (let i = space[0][0]; i <= space[1][0]; i++) {
@@ -35,7 +31,7 @@ function performFormat(params: PerformFormatParamsType) {
   }
 }
 
-function _straight(params: BasePikachuParamsType, vector: VectorType) {
+function _straight(params: BasePikachuType, vector: VectorType) {
   const { board, numberOfRows, numberOfColumns } = params;
   performFormat({
     board,
@@ -47,7 +43,7 @@ function _straight(params: BasePikachuParamsType, vector: VectorType) {
   });
 }
 
-function splitHorizontally(params: BasePikachuParamsType) {
+function splitHorizontally(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const rowCenter = Math.floor(numberOfRows / 2);
   performFormat({
@@ -68,7 +64,7 @@ function splitHorizontally(params: BasePikachuParamsType) {
   });
 }
 
-function mergeHorizontally(params: BasePikachuParamsType) {
+function mergeHorizontally(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const rowCenter = Math.floor(numberOfRows / 2);
   performFormat({
@@ -89,7 +85,7 @@ function mergeHorizontally(params: BasePikachuParamsType) {
   });
 }
 
-function splitVertically(params: BasePikachuParamsType) {
+function splitVertically(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const columnCenter = Math.floor(numberOfColumns / 2);
   performFormat({
@@ -110,7 +106,7 @@ function splitVertically(params: BasePikachuParamsType) {
   });
 }
 
-function mergeVertically(params: BasePikachuParamsType) {
+function mergeVertically(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const columnCenter = Math.floor(numberOfColumns / 2);
   performFormat({
@@ -131,7 +127,7 @@ function mergeVertically(params: BasePikachuParamsType) {
   });
 }
 
-function spreadOut(params: BasePikachuParamsType) {
+function spreadOut(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const rowCenter = Math.floor(numberOfRows / 2);
   const columnCenter = Math.floor(numberOfColumns / 2);
@@ -169,7 +165,7 @@ function spreadOut(params: BasePikachuParamsType) {
   });
 }
 
-function collapseToCenter(params: BasePikachuParamsType) {
+function collapseToCenter(params: BasePikachuType) {
   const { board, numberOfRows, numberOfColumns } = params;
   const rowCenter = Math.floor(numberOfRows / 2);
   const columnCenter = Math.floor(numberOfColumns / 2);
@@ -208,7 +204,7 @@ function collapseToCenter(params: BasePikachuParamsType) {
 }
 
 const configs: {
-  [id in PikachuBoardTransformType]: (params: BasePikachuParamsType) => void;
+  [id in PikachuTransformType]: (params: BasePikachuType) => void;
 } = {
   normal: () => {},
   fallDown: (params) => _straight(params, [-1, 0]),
@@ -227,6 +223,6 @@ const configs: {
   collapseToCenter,
 };
 
-export function pikachuBoardFormat(params: BasePikachuParamsType, type: PikachuBoardTransformType) {
+export function pikachuBoardFormat(params: BasePikachuType, type: PikachuTransformType) {
   configs[type](params);
 }

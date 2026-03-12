@@ -21,7 +21,7 @@ import {
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import { PikachuBoardTransformType } from 'src/types/pikachu.type';
+import { PikachuTransformType } from 'src/types/pikachu.type';
 import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
 import GameTypeConfig from './GameTypeConfig';
@@ -147,12 +147,12 @@ function PikachuConfigDialogDndLayout() {
 
     if (over.id == 'pikachu-config-droppable') {
       setRounds((rounds) => {
-        return [active.id as PikachuBoardTransformType, ...rounds];
+        return [active.id as PikachuTransformType, ...rounds];
       });
     } else {
       setRounds((rounds) => {
-        const oldIndex = rounds.indexOf(active.id as PikachuBoardTransformType);
-        const newIndex = rounds.indexOf(over.id as PikachuBoardTransformType);
+        const oldIndex = rounds.indexOf(active.id as PikachuTransformType);
+        const newIndex = rounds.indexOf(over.id as PikachuTransformType);
 
         return arrayMove(rounds, oldIndex, newIndex);
       });
