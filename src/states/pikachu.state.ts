@@ -1,4 +1,4 @@
-import { pikachuRoundTransformations } from 'src/configs/constance';
+import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { getRandom } from 'src/services';
 import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
 import { PositionType } from 'src/types/global';

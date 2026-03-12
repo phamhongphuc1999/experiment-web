@@ -10,7 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { pikachuRoundTransformations } from 'src/configs/constance';
+import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import {
   PikachuBoardTransformType,

@@ -4,7 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { PIKACHU_URL } from 'src/configs/constance';
+import { PIKACHU_URL } from 'src/configs/pikachu.constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';

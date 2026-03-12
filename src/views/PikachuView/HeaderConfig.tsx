@@ -5,7 +5,7 @@ import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
-import { pikachuTransformConfig } from 'src/configs/constance';
+import { pikachuTransformConfig } from 'src/configs/pikachu.constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';

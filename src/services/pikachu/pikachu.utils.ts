@@ -1,3 +1,4 @@
+import Queue from 'src/structure/Queue';
 import { PositionType } from 'src/types/global';
 import {
   FindPossibleMoveParamsType,
@@ -5,7 +6,6 @@ import {
   PikachuNewBoardType,
 } from 'src/types/pikachu.type';
 import { isPositionEqual, randomSubGroup } from '..';
-import Queue from '../Queue';
 
 export function __refineNumTypes(halfCells: number, maxNumTypes: number, percent: number) {
   const newNumTypes = Math.min(maxNumTypes, Math.floor(halfCells * percent));

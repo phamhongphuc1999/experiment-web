@@ -10,7 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from 'src/components/shadcn-ui/collapsible';
-import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/constance';
+import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/pikachu.constance';
 import { cn } from 'src/lib/utils';
 import { removeAtIndex } from 'src/services';
 import { PikachuBoardTransformType } from 'src/types/pikachu.type';
