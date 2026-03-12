@@ -1,3 +1,4 @@
+import { Cpu } from 'lucide-react';
 import AppTooltip from 'src/components/AppTooltip';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';
@@ -5,7 +6,6 @@ import { ProcessMachineEvent, ProcessType } from 'src/types/process.type';
 import ExportImportData from '../../ExportImportData';
 import RunningProcessView from './RunningProcessView';
 import SystemLog from './SystemLog';
-import { Cpu } from 'lucide-react';
 
 interface Props {
   runningProcess: ProcessType | undefined;

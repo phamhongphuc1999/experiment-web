@@ -4,14 +4,12 @@ import cloneDeep from 'lodash.clonedeep';
 import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { PIKACHU_URL } from 'src/configs/constance';
+import { PIKACHU_URL } from 'src/configs/pikachu.constance';
 import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
 import { getRandom, isPositionEqual, sleep } from 'src/services';
-import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.utils';
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
-import { findPossibleMove, performPikachuMove } from 'src/services/pikachu/pikachu.utils';
+import PikachuService from 'src/services/pikachu';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PositionType } from 'src/types/global';
 import PathDraw from './PathDraw';
@@ -81,7 +79,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
         if (firstCheck && secondCheck) setShowHint(false);
       }
       const cloneBoard = cloneDeep(board);
-      const path = performPikachuMove({
+      const path = PikachuService.findPath({
         board: cloneBoard,
         sourcePiece: firstPiece,
         targetPiece: position,
@@ -92,7 +90,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
       if (path) {
         const transformType =
           gameType != 'randomBoard' ? roundList[round - 1] : roundList[randomRoundListIndex];
-        pikachuBoardTransformation(
+        PikachuService.transform(
           { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
           transformType
         );
@@ -103,13 +101,13 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
             const randomRoundListIndex = getRandom(roundList.length);
             setMetadata({ randomRoundListIndex });
             setRandomCounter(1);
-            pikachuBoardFormatting(
+            PikachuService.format(
               { board: cloneBoard, numberOfRows, numberOfColumns },
               roundList[randomRoundListIndex]
             );
           } else setRandomCounter((preValue) => preValue + 1);
         }
-        const possiblePath = findPossibleMove({
+        const possiblePath = PikachuService.findPathWithoutTarget({
           board: cloneBoard,
           numberOfRows,
           numberOfColumns,

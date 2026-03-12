@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { PIKACHU_PIECE_SIZE } from 'src/configs/constance';
+import { PIKACHU_PIECE_SIZE } from 'src/configs/pikachu.constance';
 import PikachuStateProvider from 'src/context/pikachu-state.context';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import HeaderConfig from './HeaderConfig';

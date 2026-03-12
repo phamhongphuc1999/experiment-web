@@ -1,12 +1,12 @@
-import { pikachuRoundTransformations } from 'src/configs/constance';
+import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { getRandom } from 'src/services';
-import { changePikachuBoard, createNewPikachuBoard } from 'src/services/pikachu/pikachu.utils';
+import PikachuService from 'src/services/pikachu';
 import { PositionType } from 'src/types/global';
 import {
-  PikachuBoardTransformType,
   PikachuGameType,
   PikachuImgType,
   PikachuTimeType,
+  PikachuTransformType,
 } from 'src/types/pikachu.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -25,7 +25,7 @@ type PikachuMetadataType = {
   isChangeBoard: boolean;
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
-  roundList: Array<PikachuBoardTransformType>;
+  roundList: Array<PikachuTransformType>;
   randomRoundListIndex: number;
   gameType: PikachuGameType;
 };
@@ -75,7 +75,7 @@ export const usePikachuStore = create<
             set((state) => {
               const { numberOfRows, numberOfColumns, numberOfLines, imgType, roundList } =
                 state.metadata;
-              const { board, path } = createNewPikachuBoard({
+              const { board, path } = PikachuService.createNewBoard({
                 numberOfRows,
                 numberOfColumns,
                 numberOfLines,
@@ -101,7 +101,7 @@ export const usePikachuStore = create<
           changeBoard: () => {
             set((state) => {
               const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
-              const { board, path } = changePikachuBoard({
+              const { board, path } = PikachuService.changeBoard({
                 currentBoard: state.board,
                 numberOfRows,
                 numberOfColumns,

@@ -1,36 +1,53 @@
 export default class Queue<T> {
   private items: T[] = [];
-  private priority = 0;
+  private head = 0;
+  private tail = 0;
 
   enqueue(item: T): number {
-    this.items.push(item);
-    return this.priority++;
+    this.items[this.tail++] = item;
+    return this.tail - this.head;
   }
 
-  dequeue(): T | undefined {
-    return this.items.shift();
+  dequeue(): T {
+    const item = this.items[this.head];
+    delete this.items[this.head++];
+
+    // memory cleanup
+    if (this.head > 1000 && this.head * 2 > this.tail) {
+      this.items = this.items.slice(this.head);
+      this.tail -= this.head;
+      this.head = 0;
+    }
+
+    return item;
   }
 
-  peek(): T | undefined {
-    return this.items[0];
+  peek(): T {
+    return this.items[this.head];
   }
 
   isEmpty(): boolean {
-    return this.items.length === 0;
+    return this.head === this.tail;
   }
 
   size(): number {
-    return this.items.length;
+    return this.tail - this.head;
   }
 
   clear(): void {
     this.items = [];
-    this.priority = 0;
+    this.head = 0;
+    this.tail = 0;
   }
 
   clone(): Queue<T> {
     const newQueue = new Queue<T>();
-    newQueue.items = [...this.items];
+    newQueue.items = this.items.slice(this.head, this.tail);
+    newQueue.tail = newQueue.items.length;
     return newQueue;
+  }
+
+  toArray(): T[] {
+    return this.items.slice(this.head, this.tail);
   }
 }

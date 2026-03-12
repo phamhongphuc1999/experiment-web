@@ -1,4 +1,4 @@
-import { pikachuBoardFormatting } from 'src/services/pikachu/pikachu-formatting.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('mergeHorizontallyAndVertical', () => {
@@ -13,7 +13,7 @@ describe('mergeHorizontallyAndVertical', () => {
       [0, 16, 0, 18, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardFormatting({ board, numberOfRows: 6, numberOfColumns: 3 }, 'splitHorizontally');
+    PikachuService.format({ board, numberOfRows: 6, numberOfColumns: 3 }, 'splitHorizontally');
     expect(board).toEqual([
       [0, 0, 0, 0, 0],
       [0, 1, 2, 3, 0],
@@ -36,7 +36,7 @@ describe('mergeHorizontallyAndVertical', () => {
       [0, 0, 17, 0, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardFormatting({ board, numberOfRows: 6, numberOfColumns: 3 }, 'mergeHorizontally');
+    PikachuService.format({ board, numberOfRows: 6, numberOfColumns: 3 }, 'mergeHorizontally');
     expect(board).toEqual([
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],

@@ -1,4 +1,4 @@
-import { pikachuBoardTransformation } from 'src/services/pikachu/pikachu-transformation.utils';
+import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
 describe('HorizontallyAndVertical', () => {
@@ -13,7 +13,7 @@ describe('HorizontallyAndVertical', () => {
       [0, 16, 17, 18, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -50,7 +50,7 @@ describe('HorizontallyAndVertical', () => {
       [0, 16, 17, 18, 0],
       [0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -84,7 +84,7 @@ describe('HorizontallyAndVertical', () => {
       [0, 13, 14, 15, 16, 17, 18, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [
@@ -114,7 +114,7 @@ describe('HorizontallyAndVertical', () => {
       [0, 13, 14, 15, 16, 17, 18, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    pikachuBoardTransformation(
+    PikachuService.transform(
       {
         board,
         moves: [

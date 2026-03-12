@@ -10,13 +10,13 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { pikachuRoundTransformations } from 'src/configs/constance';
+import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import {
-  PikachuBoardTransformType,
   PikachuGameType,
   PikachuImgType,
   PikachuTimeType,
+  PikachuTransformType,
 } from 'src/types/pikachu.type';
 
 type PikachuConfigContextType = {
@@ -25,7 +25,7 @@ type PikachuConfigContextType = {
   numberOfLines: number;
   timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
-  rounds: Array<PikachuBoardTransformType>;
+  rounds: Array<PikachuTransformType>;
   gameType: PikachuGameType;
   fn: {
     setIsSound: Dispatch<SetStateAction<boolean>>;
@@ -33,7 +33,7 @@ type PikachuConfigContextType = {
     setNumberOfLines: Dispatch<SetStateAction<number>>;
     setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
     setImgType: Dispatch<SetStateAction<PikachuImgType>>;
-    setRounds: Dispatch<SetStateAction<PikachuBoardTransformType[]>>;
+    setRounds: Dispatch<SetStateAction<PikachuTransformType[]>>;
     setGameType: Dispatch<SetStateAction<PikachuGameType>>;
   };
 };
@@ -73,9 +73,7 @@ export default function PikachuConfigProvider({ children }: Props) {
   });
   const [numberOfLines, setNumberOfLines] = useState(2);
   const [imgType, setImgType] = useState<PikachuImgType>('internal');
-  const [rounds, setRounds] = useState<Array<PikachuBoardTransformType>>(
-    pikachuRoundTransformations
-  );
+  const [rounds, setRounds] = useState<Array<PikachuTransformType>>(pikachuRoundTransformations);
   const [gameType, setGameType] = useState<PikachuGameType>('normal');
 
   useEffect(() => {

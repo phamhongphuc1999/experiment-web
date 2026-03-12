@@ -10,10 +10,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from 'src/components/shadcn-ui/collapsible';
-import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/constance';
+import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/pikachu.constance';
 import { cn } from 'src/lib/utils';
 import { removeAtIndex } from 'src/services';
-import { PikachuBoardTransformType } from 'src/types/pikachu.type';
+import { PikachuTransformType } from 'src/types/pikachu.type';
 import { usePikachuConfigContext } from './pikachuConfig.context';
 
 export default function RoundConfig() {
@@ -23,7 +23,7 @@ export default function RoundConfig() {
     fn: { setRounds },
   } = usePikachuConfigContext();
 
-  function onRemove(id: PikachuBoardTransformType) {
+  function onRemove(id: PikachuTransformType) {
     setRounds((preValue) => {
       const index = preValue.indexOf(id);
       return removeAtIndex(preValue, index);
