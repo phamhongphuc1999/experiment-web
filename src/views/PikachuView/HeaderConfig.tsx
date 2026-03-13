@@ -1,63 +1,33 @@
 'use client';
 
-import { ComponentProps, Dispatch, SetStateAction } from 'react';
+import { ComponentProps } from 'react';
 import PikachuConfigDialog from 'src/components/AppDialog/PikachuConfigDialog';
 import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
 import { pikachuTransformConfig } from 'src/configs/pikachu.constance';
-import { usePikachuStateContext } from 'src/context/pikachu-state.context';
 import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
+import { usePikachuStateMachine } from 'src/state-machine/pikachu.state-machine';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import { PikachuMachineEvent } from 'src/types/pikachu.type';
 
-interface Props extends ComponentProps<'div'> {
-  hintCountdown: number;
-  setHintCountdown: Dispatch<SetStateAction<number>>;
-  setShowHint: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function HeaderConfig({
-  hintCountdown,
-  setHintCountdown,
-  setShowHint,
-  ...props
-}: Props) {
+export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
-    metadata: {
-      remainingChanges,
-      round,
-      isSound,
-      status,
-      maxRemainingTime,
-      roundList,
-      timeConfigType,
-      randomRoundListIndex,
-      gameType,
-    },
-    fn: { createBoard, changeBoard, setMetadata },
+    metadata: { round, isSound, roundList, randomRoundListIndex, gameType },
   } = usePikachuStore();
-  const {
-    remainingTime,
-    fn: { setRemainingTime },
-  } = usePikachuStateContext();
+  const { send, state } = usePikachuStateMachine();
+  const { hintCountdown } = state.context;
   const { playSuccess } = useSoundtrack();
 
   function onNewGame() {
-    createBoard('newGame');
+    send({ type: PikachuMachineEvent.CREATE, mode: 'newGame' });
     playSuccess(isSound);
-    setRemainingTime(() => maxRemainingTime);
   }
 
   function onChangeBoard() {
-    changeBoard();
-    setMetadata({ isChangeBoard: false });
+    send({ type: PikachuMachineEvent.CHANGE });
     playSuccess(isSound);
-  }
-
-  function onPauseGame() {
-    if (status == 'playing') setMetadata({ status: 'paused' });
-    else setMetadata({ status: 'playing' });
   }
 
   return (
@@ -77,8 +47,6 @@ export default function HeaderConfig({
         <RoutingGameDialog game="pikachu" />
         <PikachuConfigDialog />
         <PikachuInstructionDialog />
-        <p className="font-semibold">{`Changes: ${remainingChanges}`}</p>
-        {timeConfigType != 'off' && <p className="font-semibold">{`Time: ${remainingTime}s`}</p>}
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <Button onClick={onNewGame}>New game</Button>
@@ -89,17 +57,11 @@ export default function HeaderConfig({
           className="w-16.5"
           disabled={hintCountdown > 0}
           onClick={() => {
-            setShowHint(true);
-            setHintCountdown(20);
+            send({ type: PikachuMachineEvent.SHOW_HINT });
           }}
         >
           {hintCountdown > 0 ? hintCountdown : 'Hint'}
         </Button>
-        {timeConfigType != 'off' && (
-          <Button variant="secondary" onClick={onPauseGame}>
-            {status == 'paused' ? 'Resume' : 'Pause'}
-          </Button>
-        )}
       </div>
     </div>
   );

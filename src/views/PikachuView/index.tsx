@@ -1,28 +1,23 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { PIKACHU_PIECE_SIZE } from 'src/configs/pikachu.constance';
-import PikachuStateProvider from 'src/context/pikachu-state.context';
+import {
+  PikachuMachineContext,
+  usePikachuStateMachine,
+} from 'src/state-machine/pikachu.state-machine';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import { PikachuMachineStateType } from 'src/types/pikachu.type';
 import HeaderConfig from './HeaderConfig';
 import PikachuBoard from './PikachuBoard';
 
-export default function PikachuView() {
+function PikachuViewLayout() {
   const boardContainerRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(PIKACHU_PIECE_SIZE);
   const {
-    metadata: { numberOfColumns, numberOfRows, status },
+    metadata: { numberOfColumns, numberOfRows },
   } = usePikachuStore();
-  const [hintCountdown, setHintCountdown] = useState(0);
-  const [showHint, setShowHint] = useState(false);
-
-  useEffect(() => {
-    if (hintCountdown == 0) return;
-    const timeout = setInterval(() => {
-      setHintCountdown((preValue) => preValue - 1);
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, [hintCountdown]);
+  const { state } = usePikachuStateMachine();
 
   useLayoutEffect(() => {
     if (!boardContainerRef.current) return;
@@ -53,26 +48,21 @@ export default function PikachuView() {
   }, [numberOfColumns, numberOfRows]);
 
   return (
-    <PikachuStateProvider>
-      <div className="mx-4 flex h-full justify-center gap-2 py-4">
-        <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden">
-          <HeaderConfig
-            hintCountdown={hintCountdown}
-            setHintCountdown={setHintCountdown}
-            setShowHint={setShowHint}
-          />
-          <div ref={boardContainerRef} className="flex min-h-0 w-full flex-1 justify-center">
-            {status != 'init' && (
-              <PikachuBoard
-                hintCountdown={hintCountdown}
-                size={size}
-                showHint={showHint}
-                setShowHint={setShowHint}
-              />
-            )}
-          </div>
+    <div className="mx-4 flex h-full justify-center gap-2 py-4">
+      <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden">
+        <HeaderConfig />
+        <div ref={boardContainerRef} className="flex min-h-0 w-full flex-1 justify-center">
+          {state.value != PikachuMachineStateType.INITIAL && <PikachuBoard size={size} />}
         </div>
       </div>
-    </PikachuStateProvider>
+    </div>
+  );
+}
+
+export default function PikachuView() {
+  return (
+    <PikachuMachineContext.Provider>
+      <PikachuViewLayout />
+    </PikachuMachineContext.Provider>
   );
 }

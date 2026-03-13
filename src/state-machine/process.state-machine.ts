@@ -38,8 +38,8 @@ const processMachine = setup({
   states: {
     [ProcessMachineStateType.INITIAL]: {
       on: {
-        [ProcessMachineEvent.INITIALIZE_PROCESS]: {
-          target: ProcessMachineStateType.SCHEDULE,
+        [ProcessMachineEvent.INITIALIZE]: {
+          target: ProcessMachineStateType.SCHEDULING,
           actions: assign(({ event }) => {
             return initializeProcessesAction(event);
           }),
@@ -51,71 +51,71 @@ const processMachine = setup({
         },
       },
     },
-    [ProcessMachineStateType.SCHEDULE]: {
+    [ProcessMachineStateType.SCHEDULING]: {
       entry: assign(({ context }) => {
         return scheduleProcessesEntry(context);
       }),
       always: [
         {
-          target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+          target: ProcessMachineStateType.CONTEXT_LOADING,
           guard: ({ context }) => {
             return scheduleProcessGuard(context);
           },
         },
-        { target: ProcessMachineStateType.RUN_PROCESS },
+        { target: ProcessMachineStateType.RUNNING },
       ],
     },
-    [ProcessMachineStateType.LOAD_PROCESS_CONTEXT]: {
+    [ProcessMachineStateType.CONTEXT_LOADING]: {
       entry: assign(({ context }) => {
         return loadProcessContextEntry(context);
       }),
       always: [
         {
-          target: ProcessMachineStateType.RUN_PROCESS,
+          target: ProcessMachineStateType.RUNNING,
           guard: ({ context }) => {
             return runProcessGuard(context);
           },
         },
         {
-          target: ProcessMachineStateType.ENDED,
+          target: ProcessMachineStateType.TERMINATED,
           guard: ({ context }) => !context.currentProcess,
         },
       ],
     },
-    [ProcessMachineStateType.RUN_PROCESS]: {
+    [ProcessMachineStateType.RUNNING]: {
       entry: assign(({ context }) => {
         return runProcessEntry(context);
       }),
       exit: cancel('INTERVAL'),
       always: [
         {
-          target: ProcessMachineStateType.LOAD_PROCESS_CONTEXT,
+          target: ProcessMachineStateType.CONTEXT_LOADING,
           guard: ({ context }) => !context.currentProcess && !context.readyQueue?.isEmpty(),
         },
       ],
       after: {
         INTERVAL: {
-          target: ProcessMachineStateType.SAVE_PROCESS_CONTEXT,
+          target: ProcessMachineStateType.CONTEXT_SAVING,
           actions: assign(({ context }) => {
             return runProcessAction(context);
           }),
         },
       },
     },
-    [ProcessMachineStateType.SAVE_PROCESS_CONTEXT]: {
+    [ProcessMachineStateType.CONTEXT_SAVING]: {
       entry: assign(({ context }) => {
         return saveProcessContextEntry(context);
       }),
-      always: { target: ProcessMachineStateType.SCHEDULE },
+      always: { target: ProcessMachineStateType.SCHEDULING },
     },
-    [ProcessMachineStateType.ENDED]: {
+    [ProcessMachineStateType.TERMINATED]: {
       entry: () => {
         const fn = useProcessStore.getState().fn;
         fn.setMetadata({ status: 'ended' });
       },
       on: {
-        [ProcessMachineEvent.INITIALIZE_PROCESS]: {
-          target: ProcessMachineStateType.SCHEDULE,
+        [ProcessMachineEvent.INITIALIZE]: {
+          target: ProcessMachineStateType.SCHEDULING,
           actions: assign(({ event }) => {
             return initializeProcessesAction(event);
           }),

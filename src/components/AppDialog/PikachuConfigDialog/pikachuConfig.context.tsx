@@ -12,18 +12,12 @@ import {
 } from 'react';
 import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import {
-  PikachuGameType,
-  PikachuImgType,
-  PikachuTimeType,
-  PikachuTransformType,
-} from 'src/types/pikachu.type';
+import { PikachuGameType, PikachuImgType, PikachuTransformType } from 'src/types/pikachu.type';
 
 type PikachuConfigContextType = {
   isSound: boolean;
   size: { numberOfRows: number; numberOfColumns: number };
   numberOfLines: number;
-  timeConfigType: PikachuTimeType;
   imgType: PikachuImgType;
   rounds: Array<PikachuTransformType>;
   gameType: PikachuGameType;
@@ -31,7 +25,6 @@ type PikachuConfigContextType = {
     setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
-    setTimeConfigType: Dispatch<SetStateAction<PikachuTimeType>>;
     setImgType: Dispatch<SetStateAction<PikachuImgType>>;
     setRounds: Dispatch<SetStateAction<PikachuTransformType[]>>;
     setGameType: Dispatch<SetStateAction<PikachuGameType>>;
@@ -42,7 +35,6 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   isSound: true,
   size: { numberOfRows: 16, numberOfColumns: 9 },
   numberOfLines: 2,
-  timeConfigType: 'normal',
   imgType: 'internal',
   rounds: [],
   gameType: 'normal',
@@ -50,7 +42,6 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
     setIsSound: () => {},
     setSize: () => {},
     setNumberOfLines: () => {},
-    setTimeConfigType: () => {},
     setImgType: () => {},
     setRounds: () => {},
     setGameType: () => {},
@@ -66,7 +57,6 @@ interface Props {
 export default function PikachuConfigProvider({ children }: Props) {
   const { metadata } = usePikachuStore();
   const [isSound, setIsSound] = useState(metadata.isSound);
-  const [timeConfigType, setTimeConfigType] = useState<PikachuTimeType>('normal');
   const [size, setSize] = useState<{ numberOfRows: number; numberOfColumns: number }>({
     numberOfRows: 16,
     numberOfColumns: 9,
@@ -89,10 +79,6 @@ export default function PikachuConfigProvider({ children }: Props) {
   }, [metadata.numberOfLines]);
 
   useEffect(() => {
-    setTimeConfigType(metadata.timeConfigType);
-  }, [metadata.timeConfigType]);
-
-  useEffect(() => {
     setImgType(metadata.imgType);
   }, [metadata.imgType]);
 
@@ -109,7 +95,6 @@ export default function PikachuConfigProvider({ children }: Props) {
       isSound,
       size,
       numberOfLines,
-      timeConfigType,
       imgType,
       rounds,
       gameType,
@@ -117,13 +102,12 @@ export default function PikachuConfigProvider({ children }: Props) {
         setIsSound,
         setSize,
         setNumberOfLines,
-        setTimeConfigType,
         setImgType,
         setRounds,
         setGameType,
       },
     };
-  }, [isSound, size, numberOfLines, timeConfigType, imgType, rounds, gameType]);
+  }, [isSound, size, numberOfLines, imgType, rounds, gameType]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

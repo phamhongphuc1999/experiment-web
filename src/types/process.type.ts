@@ -1,10 +1,10 @@
 export enum ProcessMachineStateType {
   INITIAL = 'initial',
-  SCHEDULE = 'schedule', // simulate the incoming process go and the scheduler arrange process priority
-  RUN_PROCESS = 'run-process',
-  SAVE_PROCESS_CONTEXT = 'save-process-context',
-  LOAD_PROCESS_CONTEXT = 'load-process-context',
-  ENDED = 'ended',
+  SCHEDULING = 'scheduling', // simulate the incoming process go and the scheduler arrange process priority
+  RUNNING = 'running',
+  CONTEXT_SAVING = 'context-saving',
+  CONTEXT_LOADING = 'context-loading',
+  TERMINATED = 'terminated',
 }
 
 export enum ProcessStatusType {
@@ -65,7 +65,7 @@ export enum ProcessHistoryEnum {
 }
 
 export enum ProcessMachineEvent {
-  INITIALIZE_PROCESS = 'initialize-process',
+  INITIALIZE = 'initialize',
   SET_METADATA = 'set-metadata',
   RESET = 'reset',
   CLEAR = 'clear',

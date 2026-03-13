@@ -1,139 +1,31 @@
 'use client';
 
-import cloneDeep from 'lodash.clonedeep';
 import { AnimatePresence, motion } from 'motion/react';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { useRef } from 'react';
 import { PIKACHU_URL } from 'src/configs/pikachu.constance';
-import { usePikachuStateContext } from 'src/context/pikachu-state.context';
-import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
-import { getRandom, isPositionEqual, sleep } from 'src/services';
-import PikachuService from 'src/services/pikachu';
+import { usePikachuStateMachine } from 'src/state-machine/pikachu.state-machine';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PositionType } from 'src/types/global';
+import { PikachuMachineEvent, PikachuMachineStateType } from 'src/types/pikachu.type';
 import PathDraw from './PathDraw';
 import SuggestionDraw from './SuggestionDraw';
 
 interface Props {
   size: number;
-  hintCountdown: number;
-  showHint: boolean;
-  setShowHint: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function PikachuBoard({ size, hintCountdown, showHint, setShowHint }: Props) {
+export default function PikachuBoard({ size }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [selectedPath, setSelectedPath] = useState<Array<PositionType>>([]);
+  const { state, send } = usePikachuStateMachine();
+  const { position, selectedPath, hintCountdown, hintRunning } = state.context;
   const {
     board,
-    suggestion,
-    fn: { movePath, moveChangeBoard, createBoard, setMetadata },
-    metadata: {
-      numberOfRows,
-      numberOfColumns,
-      numberOfLines,
-      isSound,
-      isChangeBoard,
-      round,
-      status,
-      maxRemainingTime,
-      imgType,
-      roundList,
-      gameType,
-      randomRoundListIndex,
-    },
+    metadata: { numberOfRows, numberOfColumns, imgType },
   } = usePikachuStore();
-  const {
-    fn: { move, setRemainingTime },
-  } = usePikachuStateContext();
-  const [firstPiece, setFirstPiece] = useState<PositionType | undefined>(undefined);
-  const { playMove, playError } = useSoundtrack();
-  const [randomCounter, setRandomCounter] = useState(1);
-
-  useEffect(() => {
-    if (selectedPath.length === 0) return;
-
-    const timer = setTimeout(() => {
-      setSelectedPath([]);
-    }, 150);
-
-    return () => clearTimeout(timer);
-  }, [selectedPath]);
 
   function onPieceClick(position: PositionType) {
-    if (board[position[0]][position[1]] == 0) return;
-    if (firstPiece == undefined) setFirstPiece(position);
-    else if (firstPiece[0] == position[0] && firstPiece[1] == position[1]) {
-      setFirstPiece(undefined);
-      playError(isSound);
-    } else {
-      if (showHint && hintCountdown > 0) {
-        const latestIndex = suggestion.length - 1;
-        const firstCheck =
-          isPositionEqual(firstPiece, suggestion[0]) ||
-          isPositionEqual(firstPiece, suggestion[latestIndex]);
-        const secondCheck =
-          isPositionEqual(position, suggestion[0]) ||
-          isPositionEqual(position, suggestion[latestIndex]);
-        if (firstCheck && secondCheck) setShowHint(false);
-      }
-      const cloneBoard = cloneDeep(board);
-      const path = PikachuService.findPath({
-        board: cloneBoard,
-        sourcePiece: firstPiece,
-        targetPiece: position,
-        numberOfRows,
-        numberOfColumns,
-        numberOfLines,
-      });
-      if (path) {
-        const transformType =
-          gameType != 'randomBoard' ? roundList[round - 1] : roundList[randomRoundListIndex];
-        PikachuService.transform(
-          { board: cloneBoard, moves: [firstPiece, position], numberOfRows, numberOfColumns },
-          transformType
-        );
-        playMove(isSound);
-        setSelectedPath(path);
-        if (gameType == 'randomBoard') {
-          if (randomCounter >= 5) {
-            const randomRoundListIndex = getRandom(roundList.length);
-            setMetadata({ randomRoundListIndex });
-            setRandomCounter(1);
-            PikachuService.format(
-              { board: cloneBoard, numberOfRows, numberOfColumns },
-              roundList[randomRoundListIndex]
-            );
-          } else setRandomCounter((preValue) => preValue + 1);
-        }
-        const possiblePath = PikachuService.findPathWithoutTarget({
-          board: cloneBoard,
-          numberOfRows,
-          numberOfColumns,
-          numberOfLines,
-        });
-        if (possiblePath)
-          sleep(150).then(() => {
-            move();
-            movePath(cloneBoard, possiblePath);
-          });
-        else if (possiblePath === null) {
-          toast.warning('Out of move, please change board');
-          sleep(150).then(() => {
-            move();
-            moveChangeBoard(cloneBoard);
-          });
-        } else {
-          sleep(200).then(() => {
-            setRemainingTime((_) => maxRemainingTime);
-            if (gameType != 'randomBoard') createBoard('nextRound');
-            else createBoard('newGame');
-          });
-        }
-      } else playError(isSound);
-      setFirstPiece(undefined);
-    }
+    send({ type: PikachuMachineEvent.MOVE, position });
   }
 
   return (
@@ -146,7 +38,9 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
         className="border-ring pointer-events-none absolute border-[0.5px]"
         style={{ top: size - 2, bottom: size - 2, left: size - 2, right: size - 2 }}
       />
-      {isChangeBoard && <div className="absolute inset-0 bg-black/50" />}
+      {state.value == PikachuMachineStateType.CHANGING && (
+        <div className="absolute inset-0 bg-black/50" />
+      )}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
         const row = _row + 1;
         return (
@@ -154,7 +48,7 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
             {Array.from({ length: numberOfColumns }).map((_, _column) => {
               const column = _column + 1;
               const _index = board[row][column];
-              const isSelected = firstPiece?.[1] == column && firstPiece?.[0] == row;
+              const isSelected = position?.[1] == column && position?.[0] == row;
               const isPiece = board[row][column];
 
               return (
@@ -194,9 +88,8 @@ export default function PikachuBoard({ size, hintCountdown, showHint, setShowHin
           </div>
         );
       })}
-      {status == 'paused' && <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-md" />}
       {selectedPath.length > 0 && <PathDraw size={size} selectedPath={selectedPath} />}
-      {hintCountdown > 0 && showHint && <SuggestionDraw size={size} />}
+      {hintCountdown > 0 && hintRunning && <SuggestionDraw size={size} />}
     </div>
   );
 }

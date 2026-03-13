@@ -2,10 +2,10 @@ import {
   initializeProcessesAction,
   loadProcessContextEntry,
 } from 'src/state-machine/process.utils';
+import { ProcessContextType } from 'src/state-machine/process.utils/type.utils';
 import { ProcessMachineEvent } from 'src/types/process.type';
 import { afterAll, assert, describe, it, vi } from 'vitest';
 import { initialProcesses } from '../fake-data';
-import { ProcessContextType } from 'src/state-machine/process.utils/type.utils';
 
 vi.mock('src/states/process.state', () => {
   return {
@@ -26,7 +26,7 @@ describe('Common utils test', () => {
   });
   it('initializeProcessesAction', () => {
     const { newQueue, waitingQueue, readyQueue } = initializeProcessesAction({
-      type: ProcessMachineEvent.INITIALIZE_PROCESS,
+      type: ProcessMachineEvent.INITIALIZE,
       processes: initialProcesses,
     });
     assert.isOk(waitingQueue?.isEmpty());
@@ -42,7 +42,7 @@ describe('Common utils test', () => {
   });
   it('loadProcessContextEntry', () => {
     const { newQueue, waitingQueue, readyQueue } = initializeProcessesAction({
-      type: ProcessMachineEvent.INITIALIZE_PROCESS,
+      type: ProcessMachineEvent.INITIALIZE,
       processes: initialProcesses,
     });
     const context: Omit<ProcessContextType, 'currentProcess'> = {
@@ -51,6 +51,7 @@ describe('Common utils test', () => {
       newQueue,
       waitingQueue,
       readyQueue,
+      monitorData: [],
     };
     const PID = '52227ece-ad70-4d20-b196-026479e33770';
     const result = loadProcessContextEntry({ ...context, currentProcess: undefined });

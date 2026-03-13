@@ -29,7 +29,6 @@ import ImgTypeConfig from './ImgTypeConfig';
 import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
 import RoundConfig from './RoundConfig';
-import TimeTypeConfig from './TimeTypeConfig';
 
 function PikachuConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
@@ -41,38 +40,20 @@ function PikachuConfigDialogLayout() {
     isSound,
     size,
     numberOfLines,
-    timeConfigType,
     imgType,
     rounds,
     gameType,
-    fn: {
-      setIsSound,
-      setSize,
-      setNumberOfLines,
-      setTimeConfigType,
-      setImgType,
-      setRounds,
-      setGameType,
-    },
+    fn: { setIsSound, setSize, setNumberOfLines, setImgType, setRounds, setGameType },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    const _figure = size.numberOfRows == 9 ? 4 : 2;
-    const maxRemainingTime = Math.floor(
-      timeConfigType == 'normal'
-        ? size.numberOfRows * size.numberOfColumns * _figure
-        : (size.numberOfRows * size.numberOfColumns * _figure) / 2
-    );
+
     setMetadata({
       isSound,
       numberOfRows: size.numberOfRows,
       numberOfColumns: size.numberOfColumns,
       numberOfLines,
-      remainingChanges: numberOfLines == 2 ? 20 : 10,
-      status: 'init',
-      timeConfigType,
-      maxRemainingTime,
       imgType,
       roundList: rounds,
       gameType,
@@ -88,7 +69,6 @@ function PikachuConfigDialogLayout() {
     setIsSound(metadata.isSound);
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setNumberOfLines(metadata.numberOfLines);
-    setTimeConfigType(metadata.timeConfigType);
     setImgType(metadata.imgType);
     setRounds(metadata.roundList);
     setGameType(metadata.gameType);
@@ -111,7 +91,6 @@ function PikachuConfigDialogLayout() {
           <SoundtrackConfig game="pikachu" />
           <ImgTypeConfig />
           <LineConfig />
-          <TimeTypeConfig />
           <RoundConfig />
           <GameTypeConfig />
           <div className="mt-4 flex items-center justify-between">

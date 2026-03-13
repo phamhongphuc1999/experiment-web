@@ -18,7 +18,7 @@ export interface ProcessContextType {
 }
 
 export type InitializeProcessEventType = {
-  type: ProcessMachineEvent.INITIALIZE_PROCESS;
+  type: ProcessMachineEvent.INITIALIZE;
   processes: ProcessDataObjectType;
 };
 
