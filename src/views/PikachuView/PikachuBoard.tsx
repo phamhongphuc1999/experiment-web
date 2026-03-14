@@ -18,7 +18,7 @@ interface Props {
 export default function PikachuBoard({ size }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const { state, send } = usePikachuStateMachine();
-  const { position, selectedPath, hintCountdown, hintRunning } = state.context;
+  const { position, selectedPath, hintRunning } = state.context;
   const {
     board,
     metadata: { numberOfRows, numberOfColumns, imgType },
@@ -38,7 +38,7 @@ export default function PikachuBoard({ size }: Props) {
         className="border-ring pointer-events-none absolute border-[0.5px]"
         style={{ top: size - 2, bottom: size - 2, left: size - 2, right: size - 2 }}
       />
-      {state.value == PikachuMachineStateType.CHANGING && (
+      {state.value == PikachuMachineStateType.OUT_OF_MOVE && (
         <div className="absolute inset-0 bg-black/50" />
       )}
       {Array.from({ length: numberOfRows }).map((_, _row) => {
@@ -89,7 +89,7 @@ export default function PikachuBoard({ size }: Props) {
         );
       })}
       {selectedPath.length > 0 && <PathDraw size={size} selectedPath={selectedPath} />}
-      {hintCountdown > 0 && hintRunning && <SuggestionDraw size={size} />}
+      {hintRunning && <SuggestionDraw size={size} />}
     </div>
   );
 }

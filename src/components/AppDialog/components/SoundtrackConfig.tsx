@@ -2,7 +2,7 @@ import { Volume2, VolumeOff } from 'lucide-react';
 import IconButton from 'src/components/buttons/IconButton';
 import { Button } from 'src/components/shadcn-ui/button';
 import { gameConfigs } from 'src/configs/constance';
-import useSoundtrack from 'src/hooks/useSoundtrack';
+import { soundtrack } from 'src/services/soundtrack';
 import { MyAllGameType } from 'src/types/caro.type';
 import { useAllGameConfigContext } from './useBoardGameConfigContext';
 
@@ -15,7 +15,6 @@ export default function SoundtrackConfig({ game }: Props) {
     isSound,
     fn: { setIsSound },
   } = useAllGameConfigContext(game);
-  const { playMove, playError, playSuccess } = useSoundtrack();
 
   return (
     <div className="mt-2 rounded-sm border p-2">
@@ -28,11 +27,11 @@ export default function SoundtrackConfig({ game }: Props) {
         <p>{isSound ? 'Mute' : 'Unmute'}</p>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <Button onClick={() => playSuccess()}>Success</Button>
-        <Button onClick={() => playMove()} variant="destructive">
+        <Button onClick={() => soundtrack.playSuccess()}>Success</Button>
+        <Button onClick={() => soundtrack.playMove()} variant="destructive">
           Move
         </Button>
-        <Button onClick={() => playError()}>Error</Button>
+        <Button onClick={() => soundtrack.playError()}>Error</Button>
       </div>
     </div>
   );

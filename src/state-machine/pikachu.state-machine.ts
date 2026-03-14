@@ -8,13 +8,22 @@ import {
   PikachuMachineStateType,
 } from 'src/types/pikachu.type';
 import { assign, setup } from 'xstate';
-import { createPikachuAction } from './pikachu.utils/create.utils';
 import { changeBoardAction, move } from './pikachu.utils/board.utils';
+import { createPikachuAction } from './pikachu.utils/create.utils';
 
 const pikachuMachine = setup({
   types: {
     events: {} as PikachuEventType,
     context: {} as PikachuContextType,
+  },
+  actions: {
+    scheduleResetSelection: ({ context, self }) => {
+      if (context.selectedPath.length === 0) return;
+
+      setTimeout(() => {
+        self.send({ type: PikachuMachineEvent.RESET_SELECTION });
+      }, 300);
+    },
   },
 }).createMachine({
   id: 'process-machine',
@@ -23,7 +32,6 @@ const pikachuMachine = setup({
     position: undefined,
     selectedPath: [],
     randomCounter: 1,
-    hintCountdown: 0,
     hintRunning: false,
   },
   states: {
@@ -40,18 +48,37 @@ const pikachuMachine = setup({
     [PikachuMachineStateType.PLAYING]: {
       on: {
         [PikachuMachineEvent.MOVE]: {
-          actions: assign(({ context, event }) => {
-            return move(context, event);
+          actions: [
+            assign(({ context, event, self: { send } }) => {
+              return move(context, event, send);
+            }),
+            'scheduleResetSelection',
+          ],
+        },
+        [PikachuMachineEvent.RESET_SELECTION]: {
+          actions: assign(() => {
+            return { position: undefined, selectedPath: [] };
           }),
         },
+        [PikachuMachineEvent.CHANGE]: {
+          actions: assign(() => {
+            return changeBoardAction();
+          }),
+        },
+        [PikachuMachineEvent.OUT_OF_MOVE]: {
+          target: PikachuMachineStateType.OUT_OF_MOVE,
+        },
         [PikachuMachineEvent.SHOW_HINT]: {
-          //
+          actions: assign(({ context }) => {
+            return { hintRunning: !context.hintRunning };
+          }),
         },
       },
     },
-    [PikachuMachineStateType.CHANGING]: {
+    [PikachuMachineStateType.OUT_OF_MOVE]: {
       on: {
         [PikachuMachineEvent.CHANGE]: {
+          target: PikachuMachineStateType.PLAYING,
           actions: assign(() => {
             return changeBoardAction();
           }),

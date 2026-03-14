@@ -2,8 +2,14 @@ import cloneDeep from 'lodash.clonedeep';
 import { toast } from 'sonner';
 import { getRandom, isPositionEqual, sleep } from 'src/services';
 import PikachuService from 'src/services/pikachu';
+import { soundtrack } from 'src/services/soundtrack';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import { PikachuContextType, PikachuMoveEventType } from 'src/types/pikachu.type';
+import {
+  PikachuContextType,
+  PikachuEventType,
+  PikachuMachineEvent,
+  PikachuMoveEventType,
+} from 'src/types/pikachu.type';
 
 export function changeBoardAction(): Partial<PikachuContextType> {
   const state = usePikachuStore.getState();
@@ -16,12 +22,13 @@ export function changeBoardAction(): Partial<PikachuContextType> {
     numTypes: imgType == 'internal' ? 90 : 1025,
   });
   state.fn.changeBoard(board, path);
-  return {};
+  return { position: undefined, selectedPath: [] };
 }
 
 export function move(
   context: PikachuContextType,
-  { position }: PikachuMoveEventType
+  { position }: PikachuMoveEventType,
+  send: (event: PikachuEventType) => void
 ): Partial<PikachuContextType> {
   const { board, metadata } = usePikachuStore.getState();
   const {
@@ -66,12 +73,22 @@ export function move(
           );
         } else randomCounter += 1;
       }
+      if (context.hintRunning) {
+        const latestIndex = path.length - 1;
+        const firstCheck =
+          isPositionEqual(position, path[0]) || isPositionEqual(position, path[latestIndex]);
+        const secondCheck =
+          isPositionEqual(context.position, path[0]) ||
+          isPositionEqual(context.position, path[latestIndex]);
+        if (firstCheck && secondCheck) send({ type: PikachuMachineEvent.SHOW_HINT });
+      }
       const possiblePath = PikachuService.findPathWithoutTarget({
         board: cloneBoard,
         numberOfRows,
         numberOfColumns,
         numberOfLines,
       });
+      soundtrack.playMove();
       if (possiblePath)
         sleep(150).then(() => {
           fn.movePath(cloneBoard, possiblePath);
@@ -81,27 +98,16 @@ export function move(
         sleep(150).then(() => {
           fn.moveChangeBoard(cloneBoard);
         });
+        send({ type: PikachuMachineEvent.OUT_OF_MOVE });
+      } else {
+        sleep(200).then(() => {
+          if (gameType != 'randomBoard')
+            send({ type: PikachuMachineEvent.CREATE, mode: 'nextRound' });
+          else send({ type: PikachuMachineEvent.CREATE, mode: 'newGame' });
+        });
       }
-      // else {
-      //   sleep(200).then(() => {
-      //     if (gameType != 'randomBoard')
-      //       send({ type: PikachuMachineEvent.CREATE, mode: 'nextRound' });
-      //     else send({ type: PikachuMachineEvent.CREATE, mode: 'newGame' });
-      //   });
-      // }
-
-      // if (showHint && hintCountdown > 0) {
-      //   const latestIndex = suggestion.length - 1;
-      //   const firstCheck =
-      //     isPositionEqual(firstPiece, suggestion[0]) ||
-      //     isPositionEqual(firstPiece, suggestion[latestIndex]);
-      //   const secondCheck =
-      //     isPositionEqual(position, suggestion[0]) ||
-      //     isPositionEqual(position, suggestion[latestIndex]);
-      //   if (firstCheck && secondCheck) setShowHint(false);
-      // }
       return { randomCounter, selectedPath: path };
-    }
+    } else soundtrack.playError();
   }
   return {};
 }

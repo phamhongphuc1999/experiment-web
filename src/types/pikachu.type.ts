@@ -59,14 +59,16 @@ export type MoveParamsType = BasePikachuType & {
 export enum PikachuMachineStateType {
   INITIAL = 'initial',
   PLAYING = 'playing',
-  CHANGING = 'changing',
+  OUT_OF_MOVE = 'out-of-move',
   ENDED = 'ended',
 }
 
 export enum PikachuMachineEvent {
   CREATE = 'create',
   CHANGE = 'change',
+  OUT_OF_MOVE = 'out-of-move',
   MOVE = 'move',
+  RESET_SELECTION = 'reset-selection',
   SHOW_HINT = 'show-hint',
 }
 
@@ -82,12 +84,13 @@ export type PikachuEventType =
   | PikachuCreateEventType
   | { type: PikachuMachineEvent.CHANGE }
   | PikachuMoveEventType
-  | { type: PikachuMachineEvent.SHOW_HINT };
+  | { type: PikachuMachineEvent.RESET_SELECTION }
+  | { type: PikachuMachineEvent.SHOW_HINT }
+  | { type: PikachuMachineEvent.OUT_OF_MOVE };
 
 export type PikachuContextType = {
   position?: PositionType;
   selectedPath: Array<PositionType>;
   randomCounter: number;
-  hintCountdown: number;
   hintRunning: boolean;
 };

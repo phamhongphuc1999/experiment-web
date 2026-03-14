@@ -98,7 +98,7 @@ export const usePikachuStore = create<
       };
     }),
     {
-      name: 'experiment.pikachu.v2',
+      name: 'experiment.pikachu',
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) return { ...(persistedState as PikachuStateType) };

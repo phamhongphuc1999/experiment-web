@@ -6,8 +6,8 @@ import PikachuInstructionDialog from 'src/components/AppDialog/PikachuInstructio
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import { Button } from 'src/components/shadcn-ui/button';
 import { pikachuTransformConfig } from 'src/configs/pikachu.constance';
-import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
+import { soundtrack } from 'src/services/soundtrack';
 import { usePikachuStateMachine } from 'src/state-machine/pikachu.state-machine';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PikachuMachineEvent } from 'src/types/pikachu.type';
@@ -17,17 +17,16 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
     metadata: { round, isSound, roundList, randomRoundListIndex, gameType },
   } = usePikachuStore();
   const { send, state } = usePikachuStateMachine();
-  const { hintCountdown } = state.context;
-  const { playSuccess } = useSoundtrack();
+  const { hintRunning } = state.context;
 
   function onNewGame() {
     send({ type: PikachuMachineEvent.CREATE, mode: 'newGame' });
-    playSuccess(isSound);
+    soundtrack.playSuccess(isSound);
   }
 
   function onChangeBoard() {
     send({ type: PikachuMachineEvent.CHANGE });
-    playSuccess(isSound);
+    soundtrack.playSuccess(isSound);
   }
 
   return (
@@ -54,13 +53,12 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
           Change board
         </Button>
         <Button
-          className="w-16.5"
-          disabled={hintCountdown > 0}
+          disabled={hintRunning}
           onClick={() => {
             send({ type: PikachuMachineEvent.SHOW_HINT });
           }}
         >
-          {hintCountdown > 0 ? hintCountdown : 'Hint'}
+          Hint
         </Button>
       </div>
     </div>

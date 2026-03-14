@@ -1,13 +1,13 @@
 'use client';
 
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CONNECT4_BOARD_SIZE } from 'src/configs/constance';
 import { useConnect4StateContext } from 'src/context/connect4-state.context';
-import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
+import { soundtrack } from 'src/services/soundtrack';
 import { useConnect4Store } from 'src/states/connect4.state';
 import HeaderConfig from './HeaderConfig';
 
@@ -23,7 +23,6 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
     turn,
     fn: { countNumberOfBlindError },
   } = useConnect4Store();
-  const { playMove, playError } = useSoundtrack();
   const {
     fn: { move },
   } = useConnect4StateContext();
@@ -56,12 +55,12 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
 
     if (steps?.[column] && steps[column].length >= numberOfRows) {
       toast.warning('Invalid move');
-      playError(isSound);
+      soundtrack.playError(isSound);
       if (gameType == 'blind') countNumberOfBlindError(turn);
     } else if (!isWin) {
       move(column);
-      playMove(isSound);
-    } else playError(isSound);
+      soundtrack.playMove(isSound);
+    } else soundtrack.playError(isSound);
   }
 
   const isWin = useMemo(() => {

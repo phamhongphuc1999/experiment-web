@@ -3,8 +3,8 @@
 import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
 import { useCaroStateContext } from 'src/context/caro-state.context';
-import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
+import { soundtrack } from 'src/services/soundtrack';
 import { useCaroStore } from 'src/states/caro.state';
 import CaroCell from './CaroCell';
 import HeaderConfig from './HeaderConfig';
@@ -23,7 +23,6 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     turn,
     fn: { countNumberOfBlindError },
   } = useCaroStore();
-  const { playMove, playError } = useSoundtrack();
   const {
     shouldDisableBoard,
     fn: { move },
@@ -57,18 +56,18 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     if (gameType == 'blind' && steps[location] != undefined) {
       countNumberOfBlindError(turn);
-      playError(isSound);
+      soundtrack.playError(isSound);
     }
 
     if (isOverride) {
       if (!isWin && !shouldDisableBoard && steps[location] != turn) {
-        playMove(isSound);
+        soundtrack.playMove(isSound);
         move(location);
-      } else playError(isSound);
+      } else soundtrack.playError(isSound);
     } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      playMove(isSound);
+      soundtrack.playMove(isSound);
       move(location);
-    } else playError(isSound);
+    } else soundtrack.playError(isSound);
   }
 
   useEffect(() => {
