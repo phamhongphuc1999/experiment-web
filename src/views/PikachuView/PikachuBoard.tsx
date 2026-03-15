@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useRef } from 'react';
 import { PIKACHU_URL } from 'src/configs/pikachu.constance';
 import { cn } from 'src/lib/utils';
@@ -21,23 +21,22 @@ export default function PikachuBoard({ size }: Props) {
   const { position, selectedPath, hintRunning } = state.context;
   const {
     board,
-    metadata: { numberOfRows, numberOfColumns, imgType },
+    metadata: { numberOfRows, numberOfColumns, imgType, isSound },
   } = usePikachuStore();
 
   function onPieceClick(position: PositionType) {
-    send({ type: PikachuMachineEvent.MOVE, position });
+    send({ type: PikachuMachineEvent.MOVE, position, isSound });
   }
 
   return (
-    <div
+    <motion.div
       ref={ref}
+      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
       className="relative flex h-fit w-fit flex-col items-center gap-y-px"
       style={{ padding: `${size}px` }}
     >
-      <div
-        className="border-ring pointer-events-none absolute border-[0.5px]"
-        style={{ top: size - 2, bottom: size - 2, left: size - 2, right: size - 2 }}
-      />
       {state.value == PikachuMachineStateType.OUT_OF_MOVE && (
         <div className="absolute inset-0 bg-black/50" />
       )}
@@ -54,34 +53,34 @@ export default function PikachuBoard({ size }: Props) {
               return (
                 <motion.div
                   key={`${row}_${column}`}
-                  whileHover={isPiece ? { scale: 1.05 } : {}}
-                  whileTap={isPiece ? { scale: 0.95 } : {}}
+                  whileHover={isPiece ? { scale: 1.06, y: -1 } : {}}
+                  whileTap={isPiece ? { scale: 0.97 } : {}}
                   style={{ width: `${size - 1}px`, height: `${size - 1}px` }}
                   className={cn(
-                    'transition-all duration-200',
+                    'relative overflow-hidden rounded-md border border-slate-200/60 transition-all duration-200 dark:border-white/4',
                     isPiece
-                      ? 'bg-secondary/80 hover:bg-secondary flex items-center justify-center overflow-hidden shadow-sm'
-                      : 'bg-background',
-                    isSelected && 'z-10 bg-orange-400/20 ring-2 ring-orange-400'
+                      ? 'bg-linear-to-br from-amber-200/35 via-white to-amber-100/30 dark:from-amber-300/8 dark:via-slate-900/35 dark:to-amber-200/8'
+                      : 'border-none',
+                    isSelected &&
+                      'shadow-[0_0_14px_rgba(251,191,36,0.25)] ring-2 ring-amber-300/70 dark:shadow-[0_0_14px_rgba(251,191,36,0.35)]'
                   )}
                   onClick={() => onPieceClick([row, column])}
                 >
-                  <AnimatePresence>
-                    {isPiece > 0 && (
-                      <motion.img
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        src={
-                          imgType == 'external'
-                            ? `${PIKACHU_URL}/${_index}.png`
-                            : `/pikachu/piece${_index}.png`
-                        }
-                        alt={`${row}_${column}`}
-                        className="h-full w-full cursor-pointer object-contain p-1"
-                      />
-                    )}
-                  </AnimatePresence>
+                  {isPiece > 0 && (
+                    <motion.img
+                      initial={{ scale: 0, rotate: -4, opacity: 0 }}
+                      animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+                      src={
+                        imgType == 'external'
+                          ? `${PIKACHU_URL}/${_index}.png`
+                          : `/pikachu/piece${_index}.png`
+                      }
+                      alt={`${row}_${column}`}
+                      className="h-full w-full cursor-pointer object-contain p-1 drop-shadow-[0_6px_12px_rgba(15,23,42,0.22)] dark:drop-shadow-[0_6px_12px_rgba(0,0,0,0.45)]"
+                    />
+                  )}
                 </motion.div>
               );
             })}
@@ -90,6 +89,6 @@ export default function PikachuBoard({ size }: Props) {
       })}
       {selectedPath.length > 0 && <PathDraw size={size} selectedPath={selectedPath} />}
       {hintRunning && <SuggestionDraw size={size} />}
-    </div>
+    </motion.div>
   );
 }

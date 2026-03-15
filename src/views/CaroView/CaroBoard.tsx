@@ -8,6 +8,7 @@ import { soundtrack } from 'src/services/soundtrack';
 import { useCaroStore } from 'src/states/caro.state';
 import CaroCell from './CaroCell';
 import HeaderConfig from './HeaderConfig';
+import { SoundType } from 'src/types/global';
 
 export default function CaroBoard(props: ComponentProps<'div'>) {
   const caroRef = useRef<HTMLDivElement | null>(null);
@@ -56,18 +57,18 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     if (gameType == 'blind' && steps[location] != undefined) {
       countNumberOfBlindError(turn);
-      soundtrack.playError(isSound);
+      soundtrack.play(SoundType.ERROR, isSound);
     }
 
     if (isOverride) {
       if (!isWin && !shouldDisableBoard && steps[location] != turn) {
-        soundtrack.playMove(isSound);
+        soundtrack.play(SoundType.MOVE, isSound);
         move(location);
-      } else soundtrack.playError(isSound);
+      } else soundtrack.play(SoundType.ERROR, isSound);
     } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      soundtrack.playMove(isSound);
+      soundtrack.play(SoundType.MOVE, isSound);
       move(location);
-    } else soundtrack.playError(isSound);
+    } else soundtrack.play(SoundType.ERROR, isSound);
   }
 
   useEffect(() => {

@@ -5,6 +5,8 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { cn } from 'src/lib/utils';
+import { soundtrack } from 'src/services/soundtrack';
+import { SoundType } from 'src/types/global';
 import ClockLoader from '../ClockLoader';
 
 const buttonVariants = cva(
@@ -37,6 +39,8 @@ const buttonVariants = cva(
 
 type Props = React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
+    sound?: SoundType;
+    isSound?: boolean;
     asChild?: boolean;
     isLoading?: boolean;
     contentprops?: React.ComponentProps<'div'>;
@@ -47,6 +51,8 @@ function Button(params: Props) {
     className,
     variant,
     size,
+    sound = SoundType.CLICK,
+    isSound = false,
     asChild = false,
     isLoading = false,
     contentprops,
@@ -60,6 +66,12 @@ function Button(params: Props) {
       className={cn('cursor-pointer', buttonVariants({ variant, size, className }))}
       type="button"
       {...props}
+      onClick={(event) => {
+        if (props?.onClick) {
+          props.onClick(event);
+          soundtrack.play(sound, isSound);
+        }
+      }}
     >
       <div className="flex items-center gap-2">
         <div {...contentprops}>{props.children}</div>

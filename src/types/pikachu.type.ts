@@ -65,11 +65,13 @@ export enum PikachuMachineStateType {
 
 export enum PikachuMachineEvent {
   CREATE = 'create',
+  LOAD_SAVE_GAME = 'load-save-game',
   CHANGE = 'change',
   OUT_OF_MOVE = 'out-of-move',
   MOVE = 'move',
   RESET_SELECTION = 'reset-selection',
   SHOW_HINT = 'show-hint',
+  WIN = 'win',
 }
 
 export type PikachuCreateEventType = {
@@ -79,6 +81,7 @@ export type PikachuCreateEventType = {
 export type PikachuMoveEventType = {
   type: PikachuMachineEvent.MOVE;
   position: PositionType;
+  isSound: boolean;
 };
 export type PikachuEventType =
   | PikachuCreateEventType
@@ -86,7 +89,9 @@ export type PikachuEventType =
   | PikachuMoveEventType
   | { type: PikachuMachineEvent.RESET_SELECTION }
   | { type: PikachuMachineEvent.SHOW_HINT }
-  | { type: PikachuMachineEvent.OUT_OF_MOVE };
+  | { type: PikachuMachineEvent.OUT_OF_MOVE }
+  | { type: PikachuMachineEvent.LOAD_SAVE_GAME }
+  | { type: PikachuMachineEvent.WIN };
 
 export type PikachuContextType = {
   position?: PositionType;

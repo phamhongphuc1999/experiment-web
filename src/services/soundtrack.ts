@@ -1,9 +1,21 @@
-class Soundtrack {
-  private moveAudio: HTMLAudioElement | null = null;
-  private errorAudio: HTMLAudioElement | null = null;
-  private successAudio: HTMLAudioElement | null = null;
+import { SoundType } from 'src/types/global';
 
-  private play(ref: HTMLAudioElement | null, src: string): HTMLAudioElement | null {
+const sources: Record<SoundType, string> = {
+  [SoundType.CLICK]: '/sounds/click.mp3',
+  [SoundType.MOVE]: '/sounds/move.mp3',
+  [SoundType.SUCCESS]: '/sounds/success.mp3',
+  [SoundType.ERROR]: '/sounds/error.mp3',
+};
+
+class Soundtrack {
+  private cache: Record<SoundType, HTMLAudioElement | null> = {
+    [SoundType.CLICK]: null,
+    [SoundType.MOVE]: null,
+    [SoundType.SUCCESS]: null,
+    [SoundType.ERROR]: null,
+  };
+
+  private _play(ref: HTMLAudioElement | null, src: string): HTMLAudioElement | null {
     try {
       if (!ref) {
         ref = new Audio(src);
@@ -19,19 +31,9 @@ class Soundtrack {
     }
   }
 
-  playMove(isEnabled = true) {
+  play(type: SoundType, isEnabled = true) {
     if (!isEnabled) return;
-    this.moveAudio = this.play(this.moveAudio, '/sounds/move.wav');
-  }
-
-  playError(isEnabled = true) {
-    if (!isEnabled) return;
-    this.errorAudio = this.play(this.errorAudio, '/sounds/error.wav');
-  }
-
-  playSuccess(isEnabled = true) {
-    if (!isEnabled) return;
-    this.successAudio = this.play(this.successAudio, '/sounds/success.wav');
+    this.cache[type] = this._play(this.cache[type], sources[type]);
   }
 }
 

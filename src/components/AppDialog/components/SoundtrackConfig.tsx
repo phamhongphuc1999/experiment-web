@@ -4,6 +4,7 @@ import { Button } from 'src/components/shadcn-ui/button';
 import { gameConfigs } from 'src/configs/constance';
 import { soundtrack } from 'src/services/soundtrack';
 import { MyAllGameType } from 'src/types/caro.type';
+import { SoundType } from 'src/types/global';
 import { useAllGameConfigContext } from './useBoardGameConfigContext';
 
 interface Props {
@@ -27,11 +28,14 @@ export default function SoundtrackConfig({ game }: Props) {
         <p>{isSound ? 'Mute' : 'Unmute'}</p>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <Button onClick={() => soundtrack.playSuccess()}>Success</Button>
-        <Button onClick={() => soundtrack.playMove()} variant="destructive">
+        <Button variant="outline" onClick={() => soundtrack.play(SoundType.CLICK)}>
+          Click
+        </Button>
+        <Button onClick={() => soundtrack.play(SoundType.SUCCESS)}>Success</Button>
+        <Button onClick={() => soundtrack.play(SoundType.MOVE)} variant="destructive">
           Move
         </Button>
-        <Button onClick={() => soundtrack.playError()}>Error</Button>
+        <Button onClick={() => soundtrack.play(SoundType.ERROR)}>Error</Button>
       </div>
     </div>
   );

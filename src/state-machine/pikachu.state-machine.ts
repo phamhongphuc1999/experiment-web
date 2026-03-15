@@ -43,10 +43,19 @@ const pikachuMachine = setup({
             return createPikachuAction(event);
           }),
         },
+        [PikachuMachineEvent.LOAD_SAVE_GAME]: {
+          target: PikachuMachineStateType.PLAYING,
+        },
       },
     },
     [PikachuMachineStateType.PLAYING]: {
       on: {
+        [PikachuMachineEvent.CREATE]: {
+          target: PikachuMachineStateType.PLAYING,
+          actions: assign(({ event }) => {
+            return createPikachuAction(event);
+          }),
+        },
         [PikachuMachineEvent.MOVE]: {
           actions: [
             assign(({ context, event, self: { send } }) => {
@@ -72,6 +81,9 @@ const pikachuMachine = setup({
           actions: assign(({ context }) => {
             return { hintRunning: !context.hintRunning };
           }),
+        },
+        [PikachuMachineEvent.WIN]: {
+          target: PikachuMachineStateType.INITIAL,
         },
       },
     },

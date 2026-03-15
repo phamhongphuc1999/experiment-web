@@ -10,6 +10,7 @@ import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { useConnect4Store } from 'src/states/connect4.state';
 import HeaderConfig from './HeaderConfig';
+import { SoundType } from 'src/types/global';
 
 export default function Connect4Board(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -55,12 +56,12 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
 
     if (steps?.[column] && steps[column].length >= numberOfRows) {
       toast.warning('Invalid move');
-      soundtrack.playError(isSound);
+      soundtrack.play(SoundType.ERROR, isSound);
       if (gameType == 'blind') countNumberOfBlindError(turn);
     } else if (!isWin) {
       move(column);
-      soundtrack.playMove(isSound);
-    } else soundtrack.playError(isSound);
+      soundtrack.play(SoundType.MOVE, isSound);
+    } else soundtrack.play(SoundType.ERROR, isSound);
   }
 
   const isWin = useMemo(() => {

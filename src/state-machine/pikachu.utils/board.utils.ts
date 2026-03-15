@@ -4,6 +4,7 @@ import { getRandom, isPositionEqual, sleep } from 'src/services';
 import PikachuService from 'src/services/pikachu';
 import { soundtrack } from 'src/services/soundtrack';
 import { usePikachuStore } from 'src/states/pikachu.state';
+import { SoundType } from 'src/types/global';
 import {
   PikachuContextType,
   PikachuEventType,
@@ -27,7 +28,7 @@ export function changeBoardAction(): Partial<PikachuContextType> {
 
 export function move(
   context: PikachuContextType,
-  { position }: PikachuMoveEventType,
+  { position, isSound }: PikachuMoveEventType,
   send: (event: PikachuEventType) => void
 ): Partial<PikachuContextType> {
   const { board, metadata } = usePikachuStore.getState();
@@ -41,9 +42,13 @@ export function move(
     randomRoundListIndex,
   } = metadata;
   if (board[position[0]][position[1]] == 0) return {};
-  if (context.position == undefined) return { position };
-  else if (isPositionEqual(context.position, position)) return { position: undefined };
-  else {
+  if (context.position == undefined) {
+    soundtrack.play(SoundType.CLICK, isSound);
+    return { position };
+  } else if (isPositionEqual(context.position, position)) {
+    soundtrack.play(SoundType.CLICK, isSound);
+    return { position: undefined };
+  } else {
     const cloneBoard = cloneDeep(board);
     const path = PikachuService.findPath({
       board: cloneBoard,
@@ -88,7 +93,7 @@ export function move(
         numberOfColumns,
         numberOfLines,
       });
-      soundtrack.playMove();
+      soundtrack.play(SoundType.MOVE, isSound);
       if (possiblePath)
         sleep(150).then(() => {
           fn.movePath(cloneBoard, possiblePath);
@@ -98,16 +103,23 @@ export function move(
         sleep(150).then(() => {
           fn.moveChangeBoard(cloneBoard);
         });
+        send({ type: PikachuMachineEvent.RESET_SELECTION });
         send({ type: PikachuMachineEvent.OUT_OF_MOVE });
       } else {
         sleep(200).then(() => {
           if (gameType != 'randomBoard')
             send({ type: PikachuMachineEvent.CREATE, mode: 'nextRound' });
-          else send({ type: PikachuMachineEvent.CREATE, mode: 'newGame' });
+          else {
+            toast.success('You win!!!');
+            send({ type: PikachuMachineEvent.WIN });
+          }
         });
       }
       return { randomCounter, selectedPath: path };
-    } else soundtrack.playError();
+    } else {
+      soundtrack.play(SoundType.ERROR, isSound);
+      return { position: undefined, selectedPath: [] };
+    }
   }
   return {};
 }
