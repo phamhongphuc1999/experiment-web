@@ -9,7 +9,7 @@ export default function BoardSizeConfig() {
   } = usePikachuConfigContext();
 
   return (
-    <TitleContainer className="mt-2" title="Board config">
+    <TitleContainer className="mt-16" title="Board config">
       <Button
         variant={size.numberOfColumns == 6 ? 'default' : 'outline'}
         onClick={() => setSize({ numberOfRows: 4, numberOfColumns: 6 })}

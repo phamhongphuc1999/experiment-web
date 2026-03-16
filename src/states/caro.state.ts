@@ -20,7 +20,6 @@ type CaroMetadataType = {
   size: CaroSizeBoardType;
   maxNumberOfBlindError: number;
   preWinner: number;
-  isSound: boolean;
 };
 
 type CaroStateType = {

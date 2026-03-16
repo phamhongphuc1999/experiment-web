@@ -21,6 +21,7 @@ export enum DIALOG_KEY {
   pikachuInstructionDialog = 'pikachuInstructionDialog',
   routingGameDialog = 'routingGameDialog',
   changeBoardConfirmDialog = 'changeBoardConfirmDialog',
+  globalConfigDialog = 'globalConfigDialog',
 }
 
 export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {

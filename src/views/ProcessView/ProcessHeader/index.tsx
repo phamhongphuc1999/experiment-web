@@ -24,12 +24,12 @@ export default function ProcessHeader() {
 
   async function onRun() {
     if (status == 'initial' || status == 'ready')
-      send({ type: ProcessMachineEvent.INITIALIZE_PROCESS, processes });
+      send({ type: ProcessMachineEvent.INITIALIZE, processes });
     else if (status == 'ended') {
       send({ type: ProcessMachineEvent.RESET });
       await sleep(1400);
       send({
-        type: ProcessMachineEvent.INITIALIZE_PROCESS,
+        type: ProcessMachineEvent.INITIALIZE,
         processes: useProcessStore.getState().processes,
       });
     }

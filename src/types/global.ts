@@ -6,6 +6,21 @@ export type ThemeType = 'light' | 'dark';
 export type PositionType = [number, number]; // expect [row, column]
 export type VectorType = PositionType; // expect [x, y]
 
+export enum SoundType {
+  CLICK = 'click',
+  MOVE = 'move',
+  SUCCESS = 'success',
+  ERROR = 'error',
+  BACKGROUND = 'background',
+}
+
+export type SoundConfigType = {
+  type: SoundType;
+  loop?: boolean;
+  volume?: number;
+  isEnabled?: boolean;
+};
+
 export type IconProps = Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>;
 
 export enum ENV_TYPE {

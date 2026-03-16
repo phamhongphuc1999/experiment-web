@@ -30,7 +30,7 @@ interface Props {
 
 export default function PathDraw({ size, selectedPath }: Props) {
   return (
-    <>
+    <div className="pointer-events-none">
       {selectedPath.slice(1).map((toPosition, index) => {
         const fromPosition = selectedPath[index];
         const { left, top, width, height } = getMetadata(fromPosition, toPosition, size);
@@ -38,11 +38,11 @@ export default function PathDraw({ size, selectedPath }: Props) {
         return (
           <div
             key={index}
-            style={{ width, height, left, top, backgroundColor: 'yellow' }}
-            className="absolute"
+            style={{ width, height, left, top }}
+            className="absolute rounded-full bg-amber-500/60 shadow-[0_0_12px_rgba(251,191,36,0.35)] dark:bg-amber-300/80 dark:shadow-[0_0_12px_rgba(251,191,36,0.7)]"
           />
         );
       })}
-    </>
+    </div>
   );
 }

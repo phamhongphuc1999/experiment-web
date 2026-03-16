@@ -3,9 +3,10 @@
 import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
 import { useCaroStateContext } from 'src/context/caro-state.context';
-import useSoundtrack from 'src/hooks/useSoundtrack';
 import { cn } from 'src/lib/utils';
+import { soundtrack } from 'src/services/soundtrack';
 import { useCaroStore } from 'src/states/caro.state';
+import { SoundType } from 'src/types/global';
 import CaroCell from './CaroCell';
 import HeaderConfig from './HeaderConfig';
 
@@ -14,7 +15,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { size: boardSize, isOverride, gameType, isSound },
+    metadata: { size: boardSize, isOverride, gameType },
     numberOfBlindError,
     isBlindForceOver,
     steps,
@@ -23,7 +24,6 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     turn,
     fn: { countNumberOfBlindError },
   } = useCaroStore();
-  const { playMove, playError } = useSoundtrack();
   const {
     shouldDisableBoard,
     fn: { move },
@@ -57,18 +57,18 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     if (gameType == 'blind' && steps[location] != undefined) {
       countNumberOfBlindError(turn);
-      playError(isSound);
+      soundtrack.play({ type: SoundType.ERROR });
     }
 
     if (isOverride) {
       if (!isWin && !shouldDisableBoard && steps[location] != turn) {
-        playMove(isSound);
+        soundtrack.play({ type: SoundType.CLICK });
         move(location);
-      } else playError(isSound);
+      } else soundtrack.play({ type: SoundType.ERROR });
     } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      playMove(isSound);
+      soundtrack.play({ type: SoundType.CLICK });
       move(location);
-    } else playError(isSound);
+    } else soundtrack.play({ type: SoundType.ERROR });
   }
 
   useEffect(() => {

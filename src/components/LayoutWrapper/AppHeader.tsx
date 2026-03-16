@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ThemeButton from '../buttons/ThemeButton';
+import GlobalConfigDialog from '../AppDialog/GlobalConfigDialog';
 
 export default function AppHeader() {
   return (
@@ -9,7 +9,7 @@ export default function AppHeader() {
           <span className="hidden text-xl font-bold tracking-tight sm:block">Experiment Web</span>
         </Link>
         <div className="flex items-center gap-4">
-          <ThemeButton />
+          <GlobalConfigDialog />
         </div>
       </div>
     </header>

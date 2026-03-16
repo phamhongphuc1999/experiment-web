@@ -22,14 +22,12 @@ import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PikachuTransformType } from 'src/types/pikachu.type';
-import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
 import GameTypeConfig from './GameTypeConfig';
 import ImgTypeConfig from './ImgTypeConfig';
 import LineConfig from './LineConfig';
 import PikachuConfigProvider, { usePikachuConfigContext } from './pikachuConfig.context';
 import RoundConfig from './RoundConfig';
-import TimeTypeConfig from './TimeTypeConfig';
 
 function PikachuConfigDialogLayout() {
   const { dialog, setDialog } = useDialogStore();
@@ -38,41 +36,21 @@ function PikachuConfigDialogLayout() {
     fn: { setMetadata },
   } = usePikachuStore();
   const {
-    isSound,
     size,
     numberOfLines,
-    timeConfigType,
     imgType,
     rounds,
     gameType,
-    fn: {
-      setIsSound,
-      setSize,
-      setNumberOfLines,
-      setTimeConfigType,
-      setImgType,
-      setRounds,
-      setGameType,
-    },
+    fn: { setSize, setNumberOfLines, setImgType, setRounds, setGameType },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    const _figure = size.numberOfRows == 9 ? 4 : 2;
-    const maxRemainingTime = Math.floor(
-      timeConfigType == 'normal'
-        ? size.numberOfRows * size.numberOfColumns * _figure
-        : (size.numberOfRows * size.numberOfColumns * _figure) / 2
-    );
+
     setMetadata({
-      isSound,
       numberOfRows: size.numberOfRows,
       numberOfColumns: size.numberOfColumns,
       numberOfLines,
-      remainingChanges: numberOfLines == 2 ? 20 : 10,
-      status: 'init',
-      timeConfigType,
-      maxRemainingTime,
       imgType,
       roundList: rounds,
       gameType,
@@ -85,10 +63,8 @@ function PikachuConfigDialogLayout() {
   }
 
   function onCancel() {
-    setIsSound(metadata.isSound);
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setNumberOfLines(metadata.numberOfLines);
-    setTimeConfigType(metadata.timeConfigType);
     setImgType(metadata.imgType);
     setRounds(metadata.roundList);
     setGameType(metadata.gameType);
@@ -107,19 +83,17 @@ function PikachuConfigDialogLayout() {
           <DialogTitle>Pikachu config</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
-          <BoardSizeConfig />
-          <SoundtrackConfig game="pikachu" />
-          <ImgTypeConfig />
-          <LineConfig />
-          <TimeTypeConfig />
-          <RoundConfig />
-          <GameTypeConfig />
-          <div className="mt-4 flex items-center justify-between">
+          <div className="bg-background fixed right-0 left-0 flex items-center justify-between px-6 py-2 shadow-2xl">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel
             </Button>
             <Button type="submit">Save</Button>
           </div>
+          <BoardSizeConfig />
+          <ImgTypeConfig />
+          <LineConfig />
+          <RoundConfig />
+          <GameTypeConfig />
         </form>
       </DialogContent>
     </Dialog>

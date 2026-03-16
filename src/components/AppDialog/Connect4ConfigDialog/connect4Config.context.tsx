@@ -17,12 +17,10 @@ type Connect4ConfigContextType = {
   playMode: PlayModeType;
   gameType: CaroGameType;
   maxError: number;
-  isSound: boolean;
   fn: {
     setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
     setGameType: Dispatch<SetStateAction<CaroGameType>>;
     setMaxError: Dispatch<SetStateAction<number>>;
-    setIsSound: Dispatch<SetStateAction<boolean>>;
   };
 };
 
@@ -30,13 +28,7 @@ const connect4ConfigContextDefault: Connect4ConfigContextType = {
   playMode: 'offline',
   gameType: 'normal',
   maxError: 5,
-  isSound: true,
-  fn: {
-    setPlayMode: () => {},
-    setGameType: () => {},
-    setMaxError: () => {},
-    setIsSound: () => {},
-  },
+  fn: { setPlayMode: () => {}, setGameType: () => {}, setMaxError: () => {} },
 };
 
 const Connect4ConfigContext = createContext<Connect4ConfigContextType>(
@@ -53,7 +45,6 @@ export default function Connect4ConfigProvider({ children }: Props) {
   const [playMode, setPlayMode] = useState(metadata.playMode);
   const [gameType, setGameType] = useState(metadata.gameType);
   const [maxError, setMaxError] = useState(metadata.maxNumberOfBlindError);
-  const [isSound, setIsSound] = useState(metadata.isSound);
 
   useEffect(() => {
     setPlayMode(metadata.playMode);
@@ -68,14 +59,8 @@ export default function Connect4ConfigProvider({ children }: Props) {
   }, [metadata.maxNumberOfBlindError]);
 
   const contextData = useMemo<Connect4ConfigContextType>(() => {
-    return {
-      playMode,
-      gameType,
-      maxError,
-      isSound,
-      fn: { setPlayMode, setGameType, setMaxError, setIsSound },
-    };
-  }, [playMode, gameType, maxError, isSound]);
+    return { playMode, gameType, maxError, fn: { setPlayMode, setGameType, setMaxError } };
+  }, [playMode, gameType, maxError]);
 
   return (
     <Connect4ConfigContext.Provider value={contextData}>{children}</Connect4ConfigContext.Provider>
