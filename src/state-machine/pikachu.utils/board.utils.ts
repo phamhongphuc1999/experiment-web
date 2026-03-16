@@ -28,7 +28,7 @@ export function changeBoardAction(): Partial<PikachuContextType> {
 
 export function move(
   context: PikachuContextType,
-  { position, isSound }: PikachuMoveEventType,
+  { position }: PikachuMoveEventType,
   send: (event: PikachuEventType) => void
 ): Partial<PikachuContextType> {
   const { board, metadata } = usePikachuStore.getState();
@@ -43,10 +43,10 @@ export function move(
   } = metadata;
   if (board[position[0]][position[1]] == 0) return {};
   if (context.position == undefined) {
-    soundtrack.play(SoundType.CLICK, isSound);
+    soundtrack.play({ type: SoundType.CLICK });
     return { position };
   } else if (isPositionEqual(context.position, position)) {
-    soundtrack.play(SoundType.CLICK, isSound);
+    soundtrack.play({ type: SoundType.CLICK });
     return { position: undefined };
   } else {
     const cloneBoard = cloneDeep(board);
@@ -93,7 +93,7 @@ export function move(
         numberOfColumns,
         numberOfLines,
       });
-      soundtrack.play(SoundType.MOVE, isSound);
+      soundtrack.play({ type: SoundType.MOVE });
       if (possiblePath)
         sleep(150).then(() => {
           fn.movePath(cloneBoard, possiblePath);
@@ -117,7 +117,7 @@ export function move(
       }
       return { randomCounter, selectedPath: path };
     } else {
-      soundtrack.play(SoundType.ERROR, isSound);
+      soundtrack.play({ type: SoundType.ERROR });
       return { position: undefined, selectedPath: [] };
     }
   }

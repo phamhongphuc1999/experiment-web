@@ -8,6 +8,7 @@ import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { SoundType } from 'src/types/global';
 import ClockLoader from '../ClockLoader';
+import { useConfigStore } from 'src/states/config.state';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -52,7 +53,7 @@ function Button(params: Props) {
     variant,
     size,
     sound = SoundType.CLICK,
-    isSound = false,
+    isSound = useConfigStore.getState().isSound,
     asChild = false,
     isLoading = false,
     contentprops,
@@ -67,10 +68,8 @@ function Button(params: Props) {
       type="button"
       {...props}
       onClick={(event) => {
-        if (props?.onClick) {
-          props.onClick(event);
-          soundtrack.play(sound, isSound);
-        }
+        if (props?.onClick) props.onClick(event);
+        soundtrack.play({ type: sound, isEnabled: isSound });
       }}
     >
       <div className="flex items-center gap-2">

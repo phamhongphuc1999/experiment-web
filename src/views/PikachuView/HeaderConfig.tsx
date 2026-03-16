@@ -14,7 +14,7 @@ import { PikachuMachineEvent } from 'src/types/pikachu.type';
 
 export default function HeaderConfig(props: ComponentProps<'div'>) {
   const {
-    metadata: { round, isSound, roundList, randomRoundListIndex, gameType },
+    metadata: { round, roundList, randomRoundListIndex, gameType },
   } = usePikachuStore();
   const { send } = usePikachuStateMachine();
 
@@ -57,7 +57,6 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
           onClick={onNewGame}
           className="bg-amber-400 text-slate-950 shadow-[0_10px_24px_rgba(251,191,36,0.22)] transition-transform hover:-translate-y-0.5 hover:bg-amber-300"
           sound={SoundType.SUCCESS}
-          isSound={isSound}
         >
           New game
         </Button>
@@ -66,13 +65,10 @@ export default function HeaderConfig(props: ComponentProps<'div'>) {
           onClick={onChangeBoard}
           className="border-slate-200/70 bg-white/70 text-slate-700 hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/8"
           sound={SoundType.SUCCESS}
-          isSound={isSound}
         >
           Change board
         </Button>
-        <Button isSound={isSound} onClick={() => send({ type: PikachuMachineEvent.SHOW_HINT })}>
-          Hint
-        </Button>
+        <Button onClick={() => send({ type: PikachuMachineEvent.SHOW_HINT })}>Hint</Button>
       </div>
     </div>
   );

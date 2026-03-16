@@ -21,11 +21,11 @@ export default function PikachuBoard({ size }: Props) {
   const { position, selectedPath, hintRunning } = state.context;
   const {
     board,
-    metadata: { numberOfRows, numberOfColumns, imgType, isSound },
+    metadata: { numberOfRows, numberOfColumns, imgType },
   } = usePikachuStore();
 
   function onPieceClick(position: PositionType) {
-    send({ type: PikachuMachineEvent.MOVE, position, isSound });
+    send({ type: PikachuMachineEvent.MOVE, position });
   }
 
   return (

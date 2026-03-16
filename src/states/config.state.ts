@@ -6,6 +6,10 @@ import { immer } from 'zustand/middleware/immer';
 interface ConfigStateType {
   theme: ThemeType;
   setTheme: () => void;
+  isSound: boolean;
+  setIsSound: () => void;
+  backgroundSound: boolean;
+  setBackgroundSound: () => void;
 }
 
 export const useConfigStore = create<
@@ -19,6 +23,18 @@ export const useConfigStore = create<
         setTheme: () => {
           set((state) => {
             state.theme = state.theme == 'dark' ? 'light' : 'dark';
+          });
+        },
+        isSound: true,
+        setIsSound: () => {
+          set((state) => {
+            state.isSound = !state.isSound;
+          });
+        },
+        backgroundSound: true,
+        setBackgroundSound: () => {
+          set((state) => {
+            state.backgroundSound = !state.backgroundSound;
           });
         },
       };

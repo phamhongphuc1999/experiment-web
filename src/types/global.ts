@@ -11,7 +11,15 @@ export enum SoundType {
   MOVE = 'move',
   SUCCESS = 'success',
   ERROR = 'error',
+  BACKGROUND = 'background',
 }
+
+export type SoundConfigType = {
+  type: SoundType;
+  loop?: boolean;
+  volume?: number;
+  isEnabled?: boolean;
+};
 
 export type IconProps = Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>;
 

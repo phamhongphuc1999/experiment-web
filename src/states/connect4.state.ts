@@ -11,7 +11,6 @@ type Connect4MetadataType = {
   gameType: CaroGameType;
   status: 'playing' | 'win';
   maxNumberOfBlindError: number;
-  isSound: boolean;
 };
 
 type Connect4Type = {

@@ -2,6 +2,8 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { PIKACHU_PIECE_SIZE } from 'src/configs/pikachu.constance';
+import useAssetsPreLoader from 'src/hooks/useAssetsPreLoader';
+import useEnableSoundtrack from 'src/hooks/useEnableSoundtrack';
 import {
   PikachuMachineContext,
   usePikachuStateMachine,
@@ -20,6 +22,12 @@ function PikachuViewLayout() {
     metadata: { numberOfColumns, numberOfRows },
   } = usePikachuStore();
   const { state, send } = usePikachuStateMachine();
+  useEnableSoundtrack();
+  useAssetsPreLoader(
+    Array.from({ length: 90 }, (_, i) => i + 1).map((i) => {
+      return `/pikachu/piece${i}.png`;
+    })
+  );
 
   useLayoutEffect(() => {
     if (!boardContainerRef.current) return;

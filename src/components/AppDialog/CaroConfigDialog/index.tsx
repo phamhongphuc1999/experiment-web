@@ -14,7 +14,6 @@ import { useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
-import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
 import CaroConfigProvider, { useCaroConfigContext } from './caroConfig.context';
 import WinTypeConfig from './WinTypeConfig';
@@ -31,13 +30,12 @@ function CaroConfigDialogLayout() {
     gameType,
     isOverride,
     winMode,
-    isSound,
-    fn: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode, setIsSound },
+    fn: { setSize, setPlayMode, setGameType, setIsOverride, setWinMode },
   } = useCaroConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMetadata({ size, playMode, gameType, isOverride, winMode, isSound });
+    setMetadata({ size, playMode, gameType, isOverride, winMode });
     if (size != metadata.size) reset();
     setDialog(DIALOG_KEY.caroConfigDialog, false);
   }
@@ -53,7 +51,6 @@ function CaroConfigDialogLayout() {
     setGameType(metadata.gameType);
     setIsOverride(metadata.isOverride);
     setWinMode(metadata.winMode);
-    setIsSound(metadata.isSound);
     setDialog(DIALOG_KEY.caroConfigDialog, open);
   }
 
@@ -77,7 +74,6 @@ function CaroConfigDialogLayout() {
           <GameTypeConfig game="caro" />
           <WinTypeConfig />
           <BoardSizeConfig />
-          <SoundtrackConfig game="caro" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>
             <div>

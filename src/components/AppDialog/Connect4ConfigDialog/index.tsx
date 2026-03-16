@@ -14,7 +14,6 @@ import { useConnect4Store } from 'src/states/connect4.state';
 import { useDialogStore } from 'src/states/dialog.state';
 import GameTypeConfig from '../components/GameTypeConfig';
 import PlayModeConfig from '../components/PlayModeConfig';
-import SoundtrackConfig from '../components/SoundtrackConfig';
 import Connect4ConfigProvider, { useConnect4ConfigContext } from './connect4Config.context';
 
 function Connect4ConfigDialogLayout() {
@@ -22,11 +21,11 @@ function Connect4ConfigDialogLayout() {
   const {
     fn: { reset, setMetadata },
   } = useConnect4Store();
-  const { playMode, gameType, isSound } = useConnect4ConfigContext();
+  const { playMode, gameType } = useConnect4ConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMetadata({ playMode, gameType, isSound });
+    setMetadata({ playMode, gameType });
     setDialog(DIALOG_KEY.connect4ConfigDialog, false);
   }
 
@@ -57,7 +56,6 @@ function Connect4ConfigDialogLayout() {
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <PlayModeConfig game="connect4" />
           <GameTypeConfig game="connect4" />
-          <SoundtrackConfig game="connect4" />
           <div className="mt-4 flex items-center justify-between">
             <Button onClick={onNewGame}>New game</Button>
             <div>

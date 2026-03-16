@@ -15,14 +15,12 @@ import { usePikachuStore } from 'src/states/pikachu.state';
 import { PikachuGameType, PikachuImgType, PikachuTransformType } from 'src/types/pikachu.type';
 
 type PikachuConfigContextType = {
-  isSound: boolean;
   size: { numberOfRows: number; numberOfColumns: number };
   numberOfLines: number;
   imgType: PikachuImgType;
   rounds: Array<PikachuTransformType>;
   gameType: PikachuGameType;
   fn: {
-    setIsSound: Dispatch<SetStateAction<boolean>>;
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
     setImgType: Dispatch<SetStateAction<PikachuImgType>>;
@@ -32,14 +30,12 @@ type PikachuConfigContextType = {
 };
 
 const pikachuConfigContextDefault: PikachuConfigContextType = {
-  isSound: true,
   size: { numberOfRows: 16, numberOfColumns: 9 },
   numberOfLines: 2,
   imgType: 'internal',
   rounds: [],
   gameType: 'normal',
   fn: {
-    setIsSound: () => {},
     setSize: () => {},
     setNumberOfLines: () => {},
     setImgType: () => {},
@@ -56,7 +52,6 @@ interface Props {
 
 export default function PikachuConfigProvider({ children }: Props) {
   const { metadata } = usePikachuStore();
-  const [isSound, setIsSound] = useState(metadata.isSound);
   const [size, setSize] = useState<{ numberOfRows: number; numberOfColumns: number }>({
     numberOfRows: 16,
     numberOfColumns: 9,
@@ -65,10 +60,6 @@ export default function PikachuConfigProvider({ children }: Props) {
   const [imgType, setImgType] = useState<PikachuImgType>('internal');
   const [rounds, setRounds] = useState<Array<PikachuTransformType>>(pikachuRoundTransformations);
   const [gameType, setGameType] = useState<PikachuGameType>('normal');
-
-  useEffect(() => {
-    setIsSound(metadata.isSound);
-  }, [metadata.isSound]);
 
   useEffect(() => {
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
@@ -92,22 +83,14 @@ export default function PikachuConfigProvider({ children }: Props) {
 
   const contextData = useMemo<PikachuConfigContextType>(() => {
     return {
-      isSound,
       size,
       numberOfLines,
       imgType,
       rounds,
       gameType,
-      fn: {
-        setIsSound,
-        setSize,
-        setNumberOfLines,
-        setImgType,
-        setRounds,
-        setGameType,
-      },
+      fn: { setSize, setNumberOfLines, setImgType, setRounds, setGameType },
     };
-  }, [isSound, size, numberOfLines, imgType, rounds, gameType]);
+  }, [size, numberOfLines, imgType, rounds, gameType]);
 
   return (
     <PikachuConfigContext.Provider value={contextData}>{children}</PikachuConfigContext.Provider>

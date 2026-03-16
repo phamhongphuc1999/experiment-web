@@ -81,7 +81,6 @@ export type PikachuCreateEventType = {
 export type PikachuMoveEventType = {
   type: PikachuMachineEvent.MOVE;
   position: PositionType;
-  isSound: boolean;
 };
 export type PikachuEventType =
   | PikachuCreateEventType

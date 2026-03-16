@@ -22,7 +22,6 @@ import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { PikachuTransformType } from 'src/types/pikachu.type';
-import SoundtrackConfig from '../components/SoundtrackConfig';
 import BoardSizeConfig from './BoardSizeConfig';
 import GameTypeConfig from './GameTypeConfig';
 import ImgTypeConfig from './ImgTypeConfig';
@@ -37,20 +36,18 @@ function PikachuConfigDialogLayout() {
     fn: { setMetadata },
   } = usePikachuStore();
   const {
-    isSound,
     size,
     numberOfLines,
     imgType,
     rounds,
     gameType,
-    fn: { setIsSound, setSize, setNumberOfLines, setImgType, setRounds, setGameType },
+    fn: { setSize, setNumberOfLines, setImgType, setRounds, setGameType },
   } = usePikachuConfigContext();
 
   function onSaveConfig(event: MouseEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setMetadata({
-      isSound,
       numberOfRows: size.numberOfRows,
       numberOfColumns: size.numberOfColumns,
       numberOfLines,
@@ -66,7 +63,6 @@ function PikachuConfigDialogLayout() {
   }
 
   function onCancel() {
-    setIsSound(metadata.isSound);
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
     setNumberOfLines(metadata.numberOfLines);
     setImgType(metadata.imgType);
@@ -87,18 +83,17 @@ function PikachuConfigDialogLayout() {
           <DialogTitle>Pikachu config</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
-          <BoardSizeConfig />
-          <SoundtrackConfig game="pikachu" />
-          <ImgTypeConfig />
-          <LineConfig />
-          <RoundConfig />
-          <GameTypeConfig />
-          <div className="mt-4 flex items-center justify-between">
+          <div className="bg-background fixed right-0 left-0 flex items-center justify-between px-6 py-2 shadow-2xl">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
               Cancel
             </Button>
             <Button type="submit">Save</Button>
           </div>
+          <BoardSizeConfig />
+          <ImgTypeConfig />
+          <LineConfig />
+          <RoundConfig />
+          <GameTypeConfig />
         </form>
       </DialogContent>
     </Dialog>

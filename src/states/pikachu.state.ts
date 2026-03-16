@@ -11,7 +11,6 @@ type PikachuMetadataType = {
   numberOfColumns: number;
   numberOfLines: number;
   round: number;
-  isSound: boolean;
   imgType: PikachuImgType;
   roundList: Array<PikachuTransformType>;
   randomRoundListIndex: number;

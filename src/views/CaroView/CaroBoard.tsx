@@ -6,16 +6,16 @@ import { useCaroStateContext } from 'src/context/caro-state.context';
 import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { useCaroStore } from 'src/states/caro.state';
+import { SoundType } from 'src/types/global';
 import CaroCell from './CaroCell';
 import HeaderConfig from './HeaderConfig';
-import { SoundType } from 'src/types/global';
 
 export default function CaroBoard(props: ComponentProps<'div'>) {
   const caroRef = useRef<HTMLDivElement | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
-    metadata: { size: boardSize, isOverride, gameType, isSound },
+    metadata: { size: boardSize, isOverride, gameType },
     numberOfBlindError,
     isBlindForceOver,
     steps,
@@ -57,18 +57,18 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
 
     if (gameType == 'blind' && steps[location] != undefined) {
       countNumberOfBlindError(turn);
-      soundtrack.play(SoundType.ERROR, isSound);
+      soundtrack.play({ type: SoundType.ERROR });
     }
 
     if (isOverride) {
       if (!isWin && !shouldDisableBoard && steps[location] != turn) {
-        soundtrack.play(SoundType.MOVE, isSound);
+        soundtrack.play({ type: SoundType.CLICK });
         move(location);
-      } else soundtrack.play(SoundType.ERROR, isSound);
+      } else soundtrack.play({ type: SoundType.ERROR });
     } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      soundtrack.play(SoundType.MOVE, isSound);
+      soundtrack.play({ type: SoundType.CLICK });
       move(location);
-    } else soundtrack.play(SoundType.ERROR, isSound);
+    } else soundtrack.play({ type: SoundType.ERROR });
   }
 
   useEffect(() => {

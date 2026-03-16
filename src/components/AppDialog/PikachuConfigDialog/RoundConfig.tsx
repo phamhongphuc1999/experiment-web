@@ -1,4 +1,4 @@
-import { ArrowDown, Trash } from 'lucide-react';
+import { ChevronDown, Trash } from 'lucide-react';
 import { useState } from 'react';
 import IconButton from 'src/components/buttons/IconButton';
 import Draggable from 'src/components/dnd/Draggable';
@@ -39,8 +39,8 @@ export default function RoundConfig() {
       <Collapsible open={isOpen} onOpenChange={onCollapseClose}>
         <CollapsibleTrigger className="flex w-full items-center justify-between">
           <p className="text-sm font-bold">Round config</p>
-          <ArrowDown
-            className={cn('size-4 cursor-pointer transition duration-100', isOpen && 'rotate-180')}
+          <ChevronDown
+            className={cn('size-4 cursor-pointer transition duration-400', isOpen && 'rotate-180')}
           />
         </CollapsibleTrigger>
         <CollapsibleContent>
