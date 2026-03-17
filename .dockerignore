@@ -1,0 +1,14 @@
+node_modules
+.next
+.turbo
+dist
+out
+coverage
+.git
+.gitignore
+.DS_Store
+.env
+.env.*
+*.log
+tmp
+temp

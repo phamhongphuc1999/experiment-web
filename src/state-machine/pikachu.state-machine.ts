@@ -12,10 +12,7 @@ import { changeBoardAction, move } from './pikachu.utils/board.utils';
 import { createPikachuAction } from './pikachu.utils/create.utils';
 
 const pikachuMachine = setup({
-  types: {
-    events: {} as PikachuEventType,
-    context: {} as PikachuContextType,
-  },
+  types: { events: {} as PikachuEventType, context: {} as PikachuContextType },
   actions: {
     scheduleResetSelection: ({ context, self }) => {
       if (context.selectedPath.length === 0) return;

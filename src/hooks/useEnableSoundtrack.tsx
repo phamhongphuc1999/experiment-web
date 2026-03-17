@@ -1,37 +1,37 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { soundtrack } from 'src/services/soundtrack';
 import { useConfigStore } from 'src/states/config.state';
 import { SoundType } from 'src/types/global';
 
 export default function useEnableSoundtrack() {
   const { backgroundSound } = useConfigStore();
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
 
   useEffect(() => {
-    if (!backgroundSound) {
-      soundtrack.stop(SoundType.BACKGROUND);
-      return;
-    }
-
-    const startMusic = () => {
-      soundtrack.play({ type: SoundType.BACKGROUND, loop: true, volume: 0.4, isEnabled: true });
-    };
-
-    document.addEventListener('click', startMusic, { once: true });
-
-    return () => {
-      document.removeEventListener('click', startMusic);
-    };
-  }, [backgroundSound]);
-
-  useEffect(() => {
-    const initSound = () => {
+    const unlock = () => {
       soundtrack.preload();
+      setAudioUnlocked(true);
     };
 
-    window.addEventListener('click', initSound, { once: true });
+    window.addEventListener('click', unlock, { once: true });
 
     return () => {
-      window.removeEventListener('click', initSound);
+      window.removeEventListener('click', unlock);
     };
   }, []);
+
+  useEffect(() => {
+    if (!audioUnlocked) return;
+
+    if (backgroundSound) {
+      soundtrack.play({
+        type: SoundType.BACKGROUND,
+        loop: true,
+        volume: 0.4,
+        isEnabled: true,
+      });
+    } else {
+      soundtrack.stop(SoundType.BACKGROUND);
+    }
+  }, [backgroundSound, audioUnlocked]);
 }

@@ -5,19 +5,19 @@ import { useConfigStore } from 'src/states/config.state';
 import { SoundType } from 'src/types/global';
 
 export default function SoundtrackConfig() {
-  const { isSound, backgroundSound, setIsSound, setBackgroundSound } = useConfigStore();
+  const { isSound, backgroundSound, fn } = useConfigStore();
 
   return (
     <div className="mt-2 rounded-sm border p-2">
       <p className="text-sm font-bold">Sound effect and Background</p>
       <div className="mt-2 flex items-center gap-3">
-        <div className="flex cursor-pointer items-center gap-1" onClick={() => setIsSound()}>
+        <div className="flex cursor-pointer items-center gap-1" onClick={() => fn.setIsSound()}>
           <IconButton>{isSound ? <Volume2 size={16} /> : <VolumeOff size={16} />}</IconButton>
           <p>{isSound ? 'Mute' : 'Unmute'}</p>
         </div>
         <div
           className="flex cursor-pointer items-center gap-1"
-          onClick={() => setBackgroundSound()}
+          onClick={() => fn.setBackgroundSound()}
         >
           <IconButton>
             {backgroundSound ? <Volume2 size={16} /> : <VolumeOff size={16} />}

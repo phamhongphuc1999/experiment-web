@@ -20,7 +20,12 @@ class Soundtrack {
 
   private createAudio(config: SoundConfigType) {
     const { type, loop = false, volume } = config;
-    const audio = this.cache[type] ?? new Audio(sources[type]);
+    let audio = this.cache[type];
+
+    if (!audio) {
+      audio = new Audio(sources[type]);
+      this.cache[type] = audio;
+    }
 
     audio.loop = loop;
     if (volume != undefined) audio.volume = volume;

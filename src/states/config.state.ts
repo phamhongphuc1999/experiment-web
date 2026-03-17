@@ -5,11 +5,9 @@ import { immer } from 'zustand/middleware/immer';
 
 interface ConfigStateType {
   theme: ThemeType;
-  setTheme: () => void;
   isSound: boolean;
-  setIsSound: () => void;
   backgroundSound: boolean;
-  setBackgroundSound: () => void;
+  fn: { setTheme: () => void; setIsSound: () => void; setBackgroundSound: () => void };
 }
 
 export const useConfigStore = create<
@@ -20,22 +18,24 @@ export const useConfigStore = create<
     immer((set) => {
       return {
         theme: 'dark',
-        setTheme: () => {
-          set((state) => {
-            state.theme = state.theme == 'dark' ? 'light' : 'dark';
-          });
-        },
         isSound: true,
-        setIsSound: () => {
-          set((state) => {
-            state.isSound = !state.isSound;
-          });
-        },
         backgroundSound: true,
-        setBackgroundSound: () => {
-          set((state) => {
-            state.backgroundSound = !state.backgroundSound;
-          });
+        fn: {
+          setTheme: () => {
+            set((state) => {
+              state.theme = state.theme == 'dark' ? 'light' : 'dark';
+            });
+          },
+          setIsSound: () => {
+            set((state) => {
+              state.isSound = !state.isSound;
+            });
+          },
+          setBackgroundSound: () => {
+            set((state) => {
+              state.backgroundSound = !state.backgroundSound;
+            });
+          },
         },
       };
     }),
@@ -49,9 +49,8 @@ export const useConfigStore = create<
         return persistedState;
       },
       partialize: (state) => {
-        return {
-          theme: state.theme,
-        };
+        const { fn, ...rest } = state;
+        return rest;
       },
     }
   )

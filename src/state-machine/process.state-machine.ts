@@ -16,10 +16,7 @@ import { scheduleProcessesEntry, scheduleProcessGuard } from './process.utils/sc
 import { ProcessContextType, ProcessEventType } from './process.utils/type.utils';
 
 const processMachine = setup({
-  types: {
-    events: {} as ProcessEventType,
-    context: {} as ProcessContextType,
-  },
+  types: { events: {} as ProcessEventType, context: {} as ProcessContextType },
   delays: {
     INTERVAL: ({ context }) => context.interval,
   },
