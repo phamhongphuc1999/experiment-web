@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import GlobalConfigDialog from '../AppDialog/GlobalConfigDialog';
+import GlobalConfigDialog from 'src/components/AppDialog/GlobalConfigDialog';
 
 export default function AppHeader() {
   return (

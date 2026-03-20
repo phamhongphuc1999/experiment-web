@@ -7,6 +7,7 @@ export const MAX_CONNECT4_BOARD_SIZE = 80;
 
 export const ENCRYPT_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || '';
 export const IV_HEX = process.env.NEXT_PUBLIC_IV_HEX || '00112233445566778899aabbccddeeff';
+export const PAPP_BACKEND_URL = process.env.NEXT_PUBLIC_PAPP_BACKEND_URL || '';
 export const ENV = (process.env.NEXT_PUBLIC_ENV || 'production') as ENV_TYPE;
 
 export const APP_NAME = 'Experiment App';

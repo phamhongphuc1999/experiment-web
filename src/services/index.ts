@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { APP_NAME } from 'src/configs/constance';
 import { PositionType } from 'src/types/global';
 
@@ -102,4 +103,14 @@ export function removeAtIndex<T>(arr: T[], index: number): T[] {
  */
 export function getRandom(len: number): number {
   return Math.floor(Math.random() * len);
+}
+
+export function getAxiosError(error: any) {
+  let message = error?.response?.data?.message;
+  if (typeof message == 'string') return message;
+  message = error?.response?.data;
+  if (typeof message == 'string') return message;
+  message = error?.message;
+  if (typeof message == 'string') return message;
+  return undefined;
 }

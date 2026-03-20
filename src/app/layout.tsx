@@ -1,6 +1,7 @@
 import { Fira_Code } from 'next/font/google';
 import { ReactNode } from 'react';
-import LayoutWrapper from 'src/components/LayoutWrapper';
+import { Toaster } from 'sonner';
+import EffectBox from 'src/components/Layouts/EffectBox';
 import { MetadataHead } from 'src/components/MetadataHead';
 import { APP_NAME } from 'src/configs/constance';
 import '../styles/globals.css';
@@ -31,7 +32,10 @@ export default function RootLayout({ children }: Props) {
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <EffectBox>
+          <Toaster expand={true} position="top-right" richColors />
+          {children}
+        </EffectBox>
       </body>
     </html>
   );

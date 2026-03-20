@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from 'lucide-react';
 import * as React from 'react';
 import { cn } from 'src/lib/utils';
 
@@ -17,4 +18,24 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   );
 }
 
-export { Input };
+function PasswordInput({
+  rootpprops,
+  ...props
+}: React.ComponentProps<'input'> & { rootpprops?: React.ComponentProps<'div'> }) {
+  const [isShow, setIsShow] = React.useState(false);
+
+  return (
+    <div {...rootpprops} className={cn('relative', rootpprops?.className)}>
+      <Input {...props} type={isShow ? 'text' : 'password'} />
+      <div className="absolute top-1/2 right-4 -translate-1/2 cursor-pointer">
+        {isShow ? (
+          <Eye size={14} onClick={() => setIsShow(false)} />
+        ) : (
+          <EyeOff size={14} onClick={() => setIsShow(true)} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+export { Input, PasswordInput };

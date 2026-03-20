@@ -1,4 +1,4 @@
-import { UseQueryOptions } from '@tanstack/react-query';
+import { DefaultError, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 import { LucideProps } from 'lucide-react';
 import { ComponentProps, RefAttributes } from 'react';
 
@@ -58,3 +58,16 @@ export type PageMetadataType = Partial<{
   image: string;
   keywords: string;
 }>;
+
+export type MutationOptionsWithoutFn<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TOnMutateResult = unknown,
+> = Omit<UseMutationOptions<TData, TError, TVariables, TOnMutateResult>, 'mutationFn'>;
+
+export type MutationOptionsDefaultError<
+  TData = unknown,
+  TVariables = void,
+  TOnMutateResult = unknown,
+> = MutationOptionsWithoutFn<TData, Error, TVariables, TOnMutateResult>;

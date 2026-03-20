@@ -1,4 +1,5 @@
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { PAPP_BACKEND_URL } from 'src/configs/constance';
 import { hexToUint8Array } from '..';
 import { initWasm } from '../wasm';
 
@@ -74,37 +75,41 @@ export function serializeParams(params: Record<string, unknown>) {
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
-const baseQuery: AxiosInstance = axios.create({
-  baseURL: '/api',
-  cancelToken: source.token,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 30000,
-  paramsSerializer: {
-    serialize: serializeParams,
-  },
-});
+function createBaseQuery(baseUrl: string) {
+  const baseQuery: AxiosInstance = axios.create({
+    baseURL: baseUrl,
+    cancelToken: source.token,
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 30000,
+    paramsSerializer: {
+      serialize: serializeParams,
+    },
+  });
 
-baseQuery.interceptors.request.use(async (config) => {
-  const id = crypto.randomUUID();
-  const currentTimestamp = Math.floor(Date.now() / 1000);
-  const expiredTimestamp = currentTimestamp;
-  const _key = `${expiredTimestamp}_${id}`;
-  config.headers['x-client-id'] = _key;
-  return config;
-});
+  baseQuery.interceptors.request.use(async (config) => {
+    const id = crypto.randomUUID();
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const expiredTimestamp = currentTimestamp;
+    const _key = `${expiredTimestamp}_${id}`;
+    config.headers['x-client-id'] = _key;
+    return config;
+  });
 
-baseQuery.interceptors.response.use(async (response: AxiosResponse) => {
-  const headers = response.headers as AxiosHeaders;
-  const clientId = headers.get('x-client-id');
-  const rawData = response.data;
-  if (!clientId) return rawData;
-  const wasm = await initWasm();
-  const iv = hexToUint8Array(rawData.iv);
-  const [timestamp, id] = clientId.toString().split('_');
-  const decryptedData = wasm.decrypt(timestamp, id, iv, rawData.data);
-  return JSON.parse(decryptedData);
-});
+  baseQuery.interceptors.response.use(async (response: AxiosResponse) => {
+    const headers = response.headers as AxiosHeaders;
+    const clientId = headers.get('x-client-id');
+    const rawData = response.data;
+    if (!clientId) return rawData;
+    const wasm = await initWasm();
+    const iv = hexToUint8Array(rawData.iv);
+    const [timestamp, id] = clientId.toString().split('_');
+    const decryptedData = wasm.decrypt(timestamp, id, iv, rawData.data);
+    return JSON.parse(decryptedData);
+  });
+  return baseQuery;
+}
 
-export { baseQuery };
+const baseQuery = createBaseQuery('/api');
+const pAppQuery = createBaseQuery(PAPP_BACKEND_URL);
+
+export { baseQuery, pAppQuery };

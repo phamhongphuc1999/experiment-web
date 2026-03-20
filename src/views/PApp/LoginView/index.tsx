@@ -1,0 +1,117 @@
+/* eslint-disable react/no-unescaped-entities */
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import PAppGoogleButton from 'src/components/buttons/PAppGoogleButton';
+import BaseAuthorForm from 'src/components/form/BaseAuthorForm';
+import { Button } from 'src/components/shadcn-ui/button';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from 'src/components/shadcn-ui/form';
+import { Input, PasswordInput } from 'src/components/shadcn-ui/input';
+import { usePasswordLogin } from 'src/queries/papp/auth.query';
+import { getAxiosError } from 'src/services';
+import z from 'zod';
+
+const loginSchema = z.object({
+  email: z.email('Please enter a valid email address'),
+  password: z.string('Please enter password'),
+});
+
+type FormValues = z.infer<typeof loginSchema>;
+
+interface Props {
+  redirect?: string;
+}
+
+export default function LoginView({ redirect }: Props) {
+  const router = useRouter();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const mutation = usePasswordLogin({
+    onSuccess: () => {
+      toast.success('Login successfully!');
+      form.reset();
+      if (redirect) router.push(redirect);
+    },
+    onError: (error) => {
+      toast.error(getAxiosError(error) || 'Failed to login!');
+    },
+  });
+
+  async function onSubmit(values: FormValues) {
+    mutation.mutate(values);
+  }
+
+  return (
+    <BaseAuthorForm form={form} title="Sign in" description="Access your account">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email address</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="e.g.example@gmail.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem className="mt-4">
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-white">Remember password</p>
+          <Link href="/app/forgot-password">
+            <p className="text-special font-semibold">Forgot password?</p>
+          </Link>
+        </div>
+        <Button
+          type="submit"
+          isLoading={mutation.isPending}
+          loadingText="Loading..."
+          className="mt-4 h-9 w-full"
+        >
+          Sign in
+        </Button>
+      </form>
+      <div className="relative mt-6 flex items-center">
+        <div className="bg-popover absolute top-1/2 left-1/2 -translate-1/2 px-4">
+          <p className="text-sm text-[#6C7278]">or link via email</p>
+        </div>
+        <div className="h-px w-full bg-[#FFFFFF1F]" />
+      </div>
+      <PAppGoogleButton className="mt-5" />
+      <p className="text-muted-foreground mt-4 text-center text-sm">
+        Don't have an account?{' '}
+        <Link href="/papp/signup">
+          <span className="text-special font-semibold">Create an account</span>
+        </Link>
+      </p>
+    </BaseAuthorForm>
+  );
+}
