@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import PAppGoogleButton from 'src/components/buttons/PAppGoogleButton';
+import PAppGoogleButton from 'src/components/buttons/GoogleButton/PAppGoogleButton';
 import BaseAuthorForm from 'src/components/form/BaseAuthorForm';
 import { Button } from 'src/components/shadcn-ui/button';
 import {
@@ -19,6 +19,7 @@ import {
 import { Input, PasswordInput } from 'src/components/shadcn-ui/input';
 import { usePasswordLogin } from 'src/queries/papp/auth.query';
 import { getAxiosError } from 'src/services';
+import { useAuthStore } from 'src/states/auth.state';
 import z from 'zod';
 
 const loginSchema = z.object({
@@ -34,6 +35,7 @@ interface Props {
 
 export default function LoginView({ redirect }: Props) {
   const router = useRouter();
+  const { fn } = useAuthStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(loginSchema),
@@ -41,10 +43,12 @@ export default function LoginView({ redirect }: Props) {
   });
 
   const mutation = usePasswordLogin({
-    onSuccess: () => {
-      toast.success('Login successfully!');
+    onSuccess: (data) => {
       form.reset();
+      fn.setAccessToken(data.accessToken);
+      toast.success('Login successfully!');
       if (redirect) router.push(redirect);
+      else router.push('/papp');
     },
     onError: (error) => {
       toast.error(getAxiosError(error) || 'Failed to login!');
@@ -84,8 +88,7 @@ export default function LoginView({ redirect }: Props) {
             </FormItem>
           )}
         />
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-white">Remember password</p>
+        <div className="mt-4 flex items-center justify-end">
           <Link href="/app/forgot-password">
             <p className="text-special font-semibold">Forgot password?</p>
           </Link>

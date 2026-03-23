@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import PAppGoogleButton from 'src/components/buttons/PAppGoogleButton';
+import PAppGoogleButton from 'src/components/buttons/GoogleButton/PAppGoogleButton';
 import BaseAuthorForm from 'src/components/form/BaseAuthorForm';
 import { Button } from 'src/components/shadcn-ui/button';
 import {
@@ -37,7 +37,7 @@ type FormValues = z.infer<typeof signupSchema>;
 export default function SignupView() {
   const form = useForm<FormValues>({
     resolver: zodResolver(signupSchema),
-    defaultValues: { email: '', name: '', password: '' },
+    defaultValues: { email: '', name: '', password: '', confirmedPassword: '' },
   });
 
   const mutation = useSignup({
@@ -55,7 +55,7 @@ export default function SignupView() {
   });
 
   function onSubmit(values: FormValues) {
-    mutation.mutate(values);
+    mutation.mutate({ name: values.name, password: values.password, email: values.email });
   }
 
   return (

@@ -13,22 +13,22 @@ import {
 export default class Auth {
   static async signup(params: AuthSignupDto) {
     const response = await pAppQuery.post<OnlyOkResponseType>('/auth/signup', params);
-    return response.data;
+    return response;
   }
 
   static async verifyEmail(params: VerifyTokenDto) {
     const response = await pAppQuery.post<OnlyOkResponseType>('/auth/verify-email', params);
-    return response.data;
+    return response;
   }
 
   static async googleLogin(params: GoogleSigninDto) {
     const response = await pAppQuery.post<AccessTokenResponseType>('/auth/signin/google', params);
-    return response.data;
+    return response;
   }
 
   static async signinWithPassword(params: PasswordLoginDto) {
     const response = await pAppQuery.post<AccessTokenResponseType>('/auth/signin/password', params);
-    return response.data;
+    return response;
   }
 
   static async sendRecoverMailPassword(params: GoogleRecoverPasswordDto) {
@@ -36,7 +36,7 @@ export default class Auth {
       '/auth/forgot-password/send-recovery',
       params
     );
-    return response.data;
+    return response;
   }
 
   static async recoverPassword(params: RecoverTokenDto) {
@@ -44,6 +44,6 @@ export default class Auth {
       '/auth/forgot-password/recovery',
       params
     );
-    return response.data;
+    return response;
   }
 }

@@ -41,7 +41,7 @@ export function usePasswordLogin(
 ) {
   return useMutation({
     ...options,
-    mutationFn: (data: PasswordLoginDto) => PAppClient.auth.signinWithPassword(data),
+    mutationFn: async (data: PasswordLoginDto) => PAppClient.auth.signinWithPassword(data),
   });
 }
 

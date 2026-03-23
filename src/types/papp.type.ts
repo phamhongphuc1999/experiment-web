@@ -1,3 +1,8 @@
+export enum USER_ROLE {
+  USER = 1,
+  ADMIN = 2,
+}
+
 export type AuthSignupDto = {
   name: string;
   password: string;
@@ -32,4 +37,11 @@ export type OnlyOkResponseType = {
 
 export type AccessTokenResponseType = {
   accessToken: string;
+};
+
+export type UserType = {
+  id: number;
+  name: string;
+  email: string;
+  role: USER_ROLE;
 };

@@ -1,5 +1,10 @@
+import AuthGuard from 'src/guards/AuthGuard';
 import PAppHomeView from 'src/views/PApp/PAppHomeView';
 
 export default function PAppHome() {
-  return <PAppHomeView />;
+  return (
+    <AuthGuard className="container">
+      <PAppHomeView />
+    </AuthGuard>
+  );
 }

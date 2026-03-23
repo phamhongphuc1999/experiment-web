@@ -1,5 +1,7 @@
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { PAPP_BACKEND_URL } from 'src/configs/constance';
+import { useAuthStore } from 'src/states/auth.state';
+import { BaseQueryInstance } from 'src/types/global';
 import { hexToUint8Array } from '..';
 import { initWasm } from '../wasm';
 
@@ -75,15 +77,13 @@ export function serializeParams(params: Record<string, unknown>) {
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
-function createBaseQuery(baseUrl: string) {
+function createBaseQuery(baseUrl: string): BaseQueryInstance {
   const baseQuery: AxiosInstance = axios.create({
     baseURL: baseUrl,
     cancelToken: source.token,
     headers: { 'Content-Type': 'application/json' },
     timeout: 30000,
-    paramsSerializer: {
-      serialize: serializeParams,
-    },
+    paramsSerializer: { serialize: serializeParams },
   });
 
   baseQuery.interceptors.request.use(async (config) => {
@@ -92,6 +92,8 @@ function createBaseQuery(baseUrl: string) {
     const expiredTimestamp = currentTimestamp;
     const _key = `${expiredTimestamp}_${id}`;
     config.headers['x-client-id'] = _key;
+    const token = useAuthStore.getState().accessToken;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   });
 

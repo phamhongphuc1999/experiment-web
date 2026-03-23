@@ -25,6 +25,14 @@ export enum DIALOG_KEY {
   globalConfigDialog = 'globalConfigDialog',
 }
 
+export enum QUERY_KEY {
+  getMe = 'getMe',
+}
+
+export enum MICROSERVICE_EVENTS {
+  WEBSOCKET_MESSAGE = 'websocket_message',
+}
+
 export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {
   caro: { title: 'Caro' },
   connect4: { title: 'Connect4' },

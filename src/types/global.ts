@@ -1,4 +1,5 @@
 import { DefaultError, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import { AxiosRequestConfig } from 'axios';
 import { LucideProps } from 'lucide-react';
 import { ComponentProps, RefAttributes } from 'react';
 
@@ -71,3 +72,10 @@ export type MutationOptionsDefaultError<
   TVariables = void,
   TOnMutateResult = unknown,
 > = MutationOptionsWithoutFn<TData, Error, TVariables, TOnMutateResult>;
+
+export type BaseQueryInstance = {
+  get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig): Promise<T>;
+  put<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig): Promise<T>;
+  delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+};

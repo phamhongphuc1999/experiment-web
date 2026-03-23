@@ -1,8 +1,9 @@
 import { CredentialResponse } from '@react-oauth/google';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useGoogleLogin } from 'src/queries/papp/auth.query';
-import GoogleButton from './GoogleButton';
-import { useRouter } from 'next/navigation';
+import GoogleButton from '.';
+import { useAuthStore } from 'src/states/auth.state';
 
 interface Props {
   className?: string;
@@ -10,8 +11,10 @@ interface Props {
 
 export default function PAppGoogleButton({ className }: Props) {
   const router = useRouter();
+  const { fn } = useAuthStore();
   const googleMutation = useGoogleLogin({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      fn.setAccessToken(data.accessToken);
       router.push('/papp');
     },
   });
