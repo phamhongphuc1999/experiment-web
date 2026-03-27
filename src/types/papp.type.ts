@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export enum USER_ROLE {
   USER = 1,
   ADMIN = 2,
+}
+
+export enum USER_STATUS {
+  EMAIL_INACTIVE = 1,
+  ACTIVE = 2,
+  INACTIVE = 3,
 }
 
 export type AuthSignupDto = {
@@ -44,4 +51,28 @@ export type UserType = {
   name: string;
   email: string;
   role: USER_ROLE;
+  status: USER_STATUS;
+};
+
+export type CreatePrivateChatDto = {
+  partnerId: number;
+};
+
+export type PaginationResponseType = {
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
+};
+
+export type ConversationType = any; // Schema was empty in swagger
+
+export type GetListConversationResponseType = {
+  data: any[];
+  metadata: PaginationResponseType;
+};
+
+export type GetPrivateConversationResponseType = {
+  conversation: ConversationType;
 };

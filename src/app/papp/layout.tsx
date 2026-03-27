@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { GoogleAuthProvider } from 'src/context/GoogleAuthProvider';
 
 interface Props {
@@ -6,5 +6,9 @@ interface Props {
 }
 
 export default function RootLayout({ children }: Props) {
-  return <GoogleAuthProvider>{children}</GoogleAuthProvider>;
+  return (
+    <Suspense>
+      <GoogleAuthProvider>{children}</GoogleAuthProvider>
+    </Suspense>
+  );
 }

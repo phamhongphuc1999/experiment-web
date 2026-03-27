@@ -22,12 +22,18 @@ export default class Auth {
   }
 
   static async googleLogin(params: GoogleSigninDto) {
-    const response = await pAppQuery.post<AccessTokenResponseType>('/auth/signin/google', params);
+    const response = await pAppQuery.post<AccessTokenResponseType>('/auth/signin/google', params, {
+      withCredentials: true,
+    });
     return response;
   }
 
   static async signinWithPassword(params: PasswordLoginDto) {
-    const response = await pAppQuery.post<AccessTokenResponseType>('/auth/signin/password', params);
+    const response = await pAppQuery.post<AccessTokenResponseType>(
+      '/auth/signin/password',
+      params,
+      { withCredentials: true }
+    );
     return response;
   }
 
@@ -43,6 +49,15 @@ export default class Auth {
     const response = await pAppQuery.post<OnlyOkResponseType>(
       '/auth/forgot-password/recovery',
       params
+    );
+    return response;
+  }
+
+  static async refresh() {
+    const response = await pAppQuery.post<AccessTokenResponseType>(
+      '/auth/refresh',
+      {},
+      { withCredentials: true }
     );
     return response;
   }

@@ -21,8 +21,11 @@ export function useSignup(
   });
 }
 
-export function useVerifyEmail() {
+export function useVerifyEmail(
+  options?: MutationOptionsDefaultError<OnlyOkResponseType, VerifyTokenDto>
+) {
   return useMutation({
+    ...options,
     mutationFn: (data: VerifyTokenDto) => PAppClient.auth.verifyEmail(data),
   });
 }
@@ -54,5 +57,14 @@ export function useSendRecoverPassword() {
 export function useRecoverPassword() {
   return useMutation({
     mutationFn: (data: RecoverTokenDto) => PAppClient.auth.recoverPassword(data),
+  });
+}
+
+export function useRefresh(
+  options?: MutationOptionsDefaultError<AccessTokenResponseType, void>
+) {
+  return useMutation({
+    ...options,
+    mutationFn: () => PAppClient.auth.refresh(),
   });
 }

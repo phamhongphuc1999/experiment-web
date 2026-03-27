@@ -1,7 +1,5 @@
 'use client';
 
-import Overview from './Overview';
-
 export default function PAppHomeView() {
   // const { socket } = useSocket();
 
@@ -22,9 +20,5 @@ export default function PAppHomeView() {
   //   if (socket) socket.emit(MICROSERVICE_EVENTS.WEBSOCKET_MESSAGE, { foo: 'bar' });
   // }
 
-  return (
-    <div>
-      <Overview />
-    </div>
-  );
+  return <div></div>;
 }

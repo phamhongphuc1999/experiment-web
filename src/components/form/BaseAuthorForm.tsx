@@ -3,17 +3,16 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { cn } from 'src/lib/utils';
 import { Form } from '../shadcn-ui/form';
 
-interface Props<T extends FieldValues> {
+interface AbstractAuthorFormProps {
   headerTitle?: string;
   title: string;
   description?: ReactNode;
-  form: UseFormReturn<T>;
   className?: string;
   children?: ReactNode;
 }
 
-export default function BaseAuthorForm<T extends FieldValues>(params: Props<T>) {
-  const { headerTitle = 'PApp', title, description, form, className, children } = params;
+export function AbstractAuthorForm(params: AbstractAuthorFormProps) {
+  const { headerTitle = 'PApp', title, description, className, children } = params;
 
   return (
     <div className="bg-background flex justify-center pt-[10vh]">
@@ -30,10 +29,27 @@ export default function BaseAuthorForm<T extends FieldValues>(params: Props<T>) 
         ) : (
           <>{description}</>
         )}
-        <Form {...form}>
-          <div className="mt-6">{children}</div>
-        </Form>
+        <div className="mt-6">{children}</div>
       </div>
     </div>
+  );
+}
+
+interface Props<T extends FieldValues> extends AbstractAuthorFormProps {
+  form: UseFormReturn<T>;
+}
+
+export default function BaseAuthorForm<T extends FieldValues>(params: Props<T>) {
+  const { headerTitle = 'PApp', title, description, form, className, children } = params;
+
+  return (
+    <AbstractAuthorForm
+      headerTitle={headerTitle}
+      title={title}
+      description={description}
+      className={className}
+    >
+      <Form {...form}>{children}</Form>
+    </AbstractAuthorForm>
   );
 }
