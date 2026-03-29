@@ -31,7 +31,9 @@ export enum QUERY_KEY {
 }
 
 export enum MICROSERVICE_EVENTS {
-  WEBSOCKET_MESSAGE = 'websocket_message',
+  join_conversation = 'join_conversation',
+  send_message = 'send_message',
+  receive_message = 'receive_message',
 }
 
 export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {
