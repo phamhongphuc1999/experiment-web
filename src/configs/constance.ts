@@ -28,7 +28,6 @@ export enum DIALOG_KEY {
 export enum QUERY_KEY {
   getMe = 'getMe',
   getListConversations = 'getListConversations',
-  getPrivateConversation = 'getPrivateConversation',
 }
 
 export enum MICROSERVICE_EVENTS {

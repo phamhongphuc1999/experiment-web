@@ -60,9 +60,7 @@ export function useRecoverPassword() {
   });
 }
 
-export function useRefresh(
-  options?: MutationOptionsDefaultError<AccessTokenResponseType, void>
-) {
+export function useRefresh(options?: MutationOptionsDefaultError<AccessTokenResponseType, void>) {
   return useMutation({
     ...options,
     mutationFn: () => PAppClient.auth.refresh(),

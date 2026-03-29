@@ -1,5 +1,9 @@
 'use client';
 
+import ChatInput from './ChatInput';
+import HomeHeader from './HomeHeader';
+import MainMessage from './MainMessage';
+
 export default function PAppHomeView() {
   // const { socket } = useSocket();
 
@@ -20,5 +24,11 @@ export default function PAppHomeView() {
   //   if (socket) socket.emit(MICROSERVICE_EVENTS.WEBSOCKET_MESSAGE, { foo: 'bar' });
   // }
 
-  return <div></div>;
+  return (
+    <div className="flex flex-1 flex-col">
+      <HomeHeader />
+      <MainMessage className="flex-1" />
+      <ChatInput />
+    </div>
+  );
 }

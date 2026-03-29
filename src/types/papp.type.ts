@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { PaginationResponseType } from './global';
+
 export enum USER_ROLE {
   USER = 1,
   ADMIN = 2,
@@ -8,6 +9,16 @@ export enum USER_STATUS {
   EMAIL_INACTIVE = 1,
   ACTIVE = 2,
   INACTIVE = 3,
+}
+
+export enum CONVERSATION_TYPE {
+  GROUP = 1,
+  PRIVATE = 2,
+}
+
+export enum CONVERSATION_USER_ROLE {
+  USER = 1,
+  ADMIN = 2,
 }
 
 export type AuthSignupDto = {
@@ -58,21 +69,48 @@ export type CreatePrivateChatDto = {
   partnerId: number;
 };
 
-export type PaginationResponseType = {
-  totalItems: number;
-  itemCount: number;
-  itemsPerPage: number;
-  totalPages: number;
-  currentPage: number;
+export type ConversationType = {
+  id: number;
+  name: string;
+  type: number;
+  hash: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 };
 
-export type ConversationType = any; // Schema was empty in swagger
-
-export type GetListConversationResponseType = {
-  data: any[];
-  metadata: PaginationResponseType;
-};
-
-export type GetPrivateConversationResponseType = {
+export type ConversationParticipantType = {
+  id: number;
+  role: number;
   conversation: ConversationType;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+};
+
+export type ParticipantItemType = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+export type ConversationItemType = {
+  conversationId: number;
+  conversationName: string;
+
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+
+  id: number;
+  role: CONVERSATION_USER_ROLE;
+  groupType: CONVERSATION_TYPE;
+
+  yourParticipant: ParticipantItemType;
+  anotherParticipant: ParticipantItemType | null;
+};
+
+export type ConversationResponseType = {
+  data: Array<ConversationItemType>;
+  metadata: PaginationResponseType;
 };

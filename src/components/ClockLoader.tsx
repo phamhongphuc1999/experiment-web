@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import { AnimationComponentDivProps, AnimationComponentProps } from 'src/types/global';
 import { cn } from 'src/lib/utils';
+import { AnimationComponentDivProps, AnimationComponentProps } from 'src/types/global';
 
 interface ClockLoaderProps extends AnimationComponentProps {
   isReverse?: boolean;

@@ -5,9 +5,9 @@ import AppHeader from './AppHeader';
 
 export default function PAppLayout({ children }: PropsWithChildren) {
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <AppHeader />
-      <div className="pt-15">{children}</div>
+      <div className="relative container flex flex-1 flex-col pt-17!">{children}</div>
     </div>
   );
 }

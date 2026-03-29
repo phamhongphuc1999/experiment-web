@@ -79,3 +79,11 @@ export type BaseQueryInstance = {
   put<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig): Promise<T>;
   delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
 };
+
+export type PaginationResponseType = {
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
+};

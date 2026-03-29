@@ -23,7 +23,7 @@ export default function AccountSetting() {
 
   const { mutate } = useUserSendVerifyEmail({
     onSuccess: () => {
-      router.push('/papp/verify-email');
+      toast.success('Go to your email');
     },
     onError: (error) => {
       toast.error(getAxiosError(error));

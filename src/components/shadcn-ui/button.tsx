@@ -75,10 +75,12 @@ function Button(params: Props) {
       }}
     >
       <div className="flex items-center gap-2">
-        <div {...contentprops}>{props.children}</div>
-        {isLoading && (
+        {!isLoading ? (
+          <div {...contentprops}>{props.children}</div>
+        ) : (
           <>
-            <ClockLoader /> {loadingText}
+            <ClockLoader color="#000000" />
+            {loadingText}
           </>
         )}
       </div>

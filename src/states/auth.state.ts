@@ -11,12 +11,15 @@ interface AuthStateType {
   };
 }
 
+let setStateRef: ((fn: (state: AuthStateType) => void) => void) | null = null;
+
 export const useAuthStore = create<
   AuthStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
     immer((set) => {
+      setStateRef = set;
       return {
         accessToken: '',
         isReady: false,
@@ -30,7 +33,7 @@ export const useAuthStore = create<
           clearAccessToken: () => {
             set((state) => {
               state.accessToken = '';
-              state.isReady = false;
+              state.isReady = true;
             });
           },
         },
@@ -39,6 +42,11 @@ export const useAuthStore = create<
     {
       name: 'experiment.auth',
       version: 1.0,
+      onRehydrateStorage: () => () => {
+        setStateRef?.((state) => {
+          state.isReady = true;
+        });
+      },
       partialize: (state) => {
         const { fn, ...rest } = state;
         return rest;

@@ -1,9 +1,8 @@
 import { pAppQuery } from 'src/services/api-query';
 import {
+  ConversationResponseType,
   ConversationType,
   CreatePrivateChatDto,
-  GetListConversationResponseType,
-  GetPrivateConversationResponseType,
 } from 'src/types/papp.type';
 
 export default class Conversation {
@@ -13,17 +12,9 @@ export default class Conversation {
   }
 
   static async getListConversations(params?: { page?: number; limit?: number }) {
-    const response = await pAppQuery.get<GetListConversationResponseType>(
-      '/conversation/conversations',
-      { params }
-    );
-    return response;
-  }
-
-  static async getPrivateConversation(conversationId: number) {
-    const response = await pAppQuery.get<GetPrivateConversationResponseType>(
-      `/conversation/private-conversation/${conversationId}`
-    );
+    const response = await pAppQuery.get<ConversationResponseType>('/conversation/conversations', {
+      params,
+    });
     return response;
   }
 }

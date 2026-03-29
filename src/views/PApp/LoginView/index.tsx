@@ -88,9 +88,9 @@ export default function LoginView({ redirect }: Props) {
             </FormItem>
           )}
         />
-        <div className="mt-4 flex items-center justify-end">
+        <div className="mt-2 flex items-center justify-end">
           <Link href="/app/forgot-password">
-            <p className="text-special font-semibold">Forgot password?</p>
+            <p className="text-sm font-semibold">Forgot password?</p>
           </Link>
         </div>
         <Button

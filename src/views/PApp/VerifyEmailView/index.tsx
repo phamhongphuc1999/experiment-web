@@ -10,6 +10,7 @@ import { useVerifyEmail } from 'src/queries/papp/auth.query';
 export default function VerifyEmailView() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  console.log('🚀 ~ VerifyEmailView ~ token:', token);
   const router = useRouter();
 
   const { mutate, isPending } = useVerifyEmail({

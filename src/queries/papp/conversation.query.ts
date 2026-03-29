@@ -19,10 +19,3 @@ export function useGetListConversations(params?: { page?: number; limit?: number
     queryFn: () => PAppClient.conversation.getListConversations(params),
   });
 }
-
-export function useGetPrivateConversation(conversationId: number) {
-  return useAuthQuery({
-    queryKey: [QUERY_KEY.getPrivateConversation, conversationId],
-    queryFn: () => PAppClient.conversation.getPrivateConversation(conversationId),
-  });
-}
