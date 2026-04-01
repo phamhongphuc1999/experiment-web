@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import { ComponentProps, useMemo } from 'react';
+import { ComponentProps, memo, useMemo } from 'react';
 import GameWinLines from 'src/components/games/GameWinLines';
 import { cn } from 'src/lib/utils';
 import { CaroGameType, TurnType, WinStateType } from 'src/types/caro.type';
@@ -20,11 +20,7 @@ interface CaroCellProps extends ComponentProps<'div'> {
   onMove: (location: number) => void;
 }
 
-/**
- * Individual cell component for the Caro board.
- * Handles rendering of X/O icons, win lines, and cell styling.
- */
-export default function CaroCell({
+function CaroCell({
   location,
   size: cellSize,
   turn,
@@ -116,3 +112,5 @@ export default function CaroCell({
     </div>
   );
 }
+
+export default memo(CaroCell);

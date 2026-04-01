@@ -10,10 +10,7 @@ export default function useSocket(url = PAPP_BACKEND_URL) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io(url, {
-      transports: ['websocket'],
-      auth: { token: accessToken },
-    });
+    const newSocket = io(url, { transports: ['websocket'], auth: { token: accessToken } });
     setSocket(newSocket);
 
     return () => {

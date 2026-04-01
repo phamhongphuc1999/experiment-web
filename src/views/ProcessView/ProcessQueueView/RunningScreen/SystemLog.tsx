@@ -1,6 +1,6 @@
 import { ReceiptText } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { cn } from 'src/lib/utils';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessHistoryEnum, ProcessHistoryType } from 'src/types/process.type';
@@ -9,7 +9,7 @@ interface HistoryItemProps {
   data: ProcessHistoryType;
 }
 
-function HistoryItem({ data }: HistoryItemProps) {
+const HistoryItem = memo(function HistoryItem({ data }: HistoryItemProps) {
   const isAction = data.actionType === ProcessHistoryEnum.ACTION;
 
   return (
@@ -43,11 +43,16 @@ function HistoryItem({ data }: HistoryItemProps) {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function SystemLog() {
   const { history } = useProcessStore();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const visibleHistory = useMemo(() => {
+    const MAX_HISTORY = 200;
+    if (history.length <= MAX_HISTORY) return history;
+    return history.slice(-MAX_HISTORY);
+  }, [history]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -55,7 +60,7 @@ export default function SystemLog() {
     }
   }, [history]);
 
-  if (history.length == 0) return null;
+  if (visibleHistory.length == 0) return null;
 
   return (
     <div className="flex w-1/3 flex-col overflow-hidden bg-zinc-900 shadow-2xl ring-1 ring-white/10">
@@ -68,11 +73,11 @@ export default function SystemLog() {
       <div ref={scrollRef} className="scroll-hidden flex-1 overflow-x-hidden overflow-y-auto p-2">
         <div className="flex flex-col gap-1">
           <AnimatePresence initial={false}>
-            {history.map((item, idx) => (
+            {visibleHistory.map((item, idx) => (
               <HistoryItem key={`${item.stateType}-${idx}`} data={item} />
             ))}
           </AnimatePresence>
-          {history.length === 0 && (
+          {visibleHistory.length === 0 && (
             <div className="flex h-full items-center justify-center py-10 text-zinc-600">
               <span className="font-mono text-[10px]">waiting for events...</span>
             </div>

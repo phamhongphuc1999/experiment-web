@@ -6,12 +6,16 @@ import { useConversationStore } from 'src/states/conversation.state';
 
 export default function Conversation() {
   const [open, setOpen] = useState(false);
-  const { currentConversationId, fn } = useConversationStore();
+  const { currentConversationId, fn } = useConversationStore((state) => {
+    return { currentConversationId: state.currentConversationId, fn: state.fn };
+  });
   const { data } = useGetListConversations();
 
   const currentConversation = useMemo(() => {
     if (currentConversationId) {
-      const _conversation = (data?.data || []).find((item) => item.id == currentConversationId);
+      const _conversation = (data?.data || []).find(
+        (item) => item.conversationId == currentConversationId
+      );
       return _conversation;
     }
     return undefined;
@@ -41,10 +45,10 @@ export default function Conversation() {
 
             return (
               <div
-                key={item.id}
+                key={item.conversationId}
                 className="hover:bg-background flex cursor-pointer items-center rounded-sm px-1 py-1"
                 onClick={() => {
-                  fn.setCurrentConversationId(item.id);
+                  fn.setCurrentConversationId(item.conversationId);
                   setOpen(false);
                 }}
               >

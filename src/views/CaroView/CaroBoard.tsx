@@ -1,6 +1,14 @@
 'use client';
 
-import { ComponentProps, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  ComponentProps,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { MAX_CARO_BOARD_SIZE } from 'src/configs/constance';
 import { useCaroStateContext } from 'src/context/caro-state.context';
 import { cn } from 'src/lib/utils';
@@ -52,24 +60,41 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
     return () => observer.disconnect();
   }, [boardSize]);
 
-  function onMove(location: number) {
-    const isWin = winState != undefined || isBlindForceOver == true;
+  const onMove = useCallback(
+    (location: number) => {
+      const isWin = winState != undefined || isBlindForceOver == true;
 
-    if (gameType == 'blind' && steps[location] != undefined) {
-      countNumberOfBlindError(turn);
-      soundtrack.play({ type: SoundType.ERROR });
-    }
+      if (gameType == 'blind' && steps[location] != undefined) {
+        countNumberOfBlindError(turn);
+        soundtrack.play({ type: SoundType.ERROR });
+      }
 
-    if (isOverride) {
-      if (!isWin && !shouldDisableBoard && steps[location] != turn) {
+      if (isOverride) {
+        if (!isWin && !shouldDisableBoard && steps[location] != turn) {
+          soundtrack.play({ type: SoundType.CLICK });
+          move(location);
+        } else soundtrack.play({ type: SoundType.ERROR });
+      } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
         soundtrack.play({ type: SoundType.CLICK });
         move(location);
       } else soundtrack.play({ type: SoundType.ERROR });
-    } else if (steps[location] == undefined && !isWin && !shouldDisableBoard) {
-      soundtrack.play({ type: SoundType.CLICK });
-      move(location);
-    } else soundtrack.play({ type: SoundType.ERROR });
-  }
+    },
+    [
+      countNumberOfBlindError,
+      gameType,
+      isBlindForceOver,
+      isOverride,
+      move,
+      shouldDisableBoard,
+      steps,
+      turn,
+      winState,
+    ]
+  );
+
+  const locations = useMemo(() => {
+    return Array.from({ length: boardSize * boardSize }, (_, index) => index);
+  }, [boardSize]);
 
   useEffect(() => {
     if (errorCount > 0 && gameType == 'blind') {
@@ -106,7 +131,7 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
               turn === 0 ? 'shadow-orange-400/20' : 'shadow-blue-400/20'
             )}
           >
-            {Array.from({ length: boardSize * boardSize }).map((_, location) => {
+            {locations.map((location) => {
               const _turn = steps[location];
               const _winTypes = winState?.locations?.[location];
               const isCurrent = stepsOrder.at(-1) === location;

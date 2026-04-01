@@ -1,7 +1,15 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import { ComponentProps, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  ComponentProps,
+  memo,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { toast } from 'sonner';
 import GameWinLines from 'src/components/games/GameWinLines';
 import { MAX_CONNECT4_BOARD_SIZE } from 'src/configs/constance';
@@ -9,8 +17,9 @@ import { useConnect4StateContext } from 'src/context/connect4-state.context';
 import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { useConnect4Store } from 'src/states/connect4.state';
-import HeaderConfig from './HeaderConfig';
+import { Connect4WinStateType, TurnType } from 'src/types/caro.type';
 import { SoundType } from 'src/types/global';
+import HeaderConfig from './HeaderConfig';
 
 export default function Connect4Board(props: ComponentProps<'div'>) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -51,18 +60,21 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
     return () => observer.disconnect();
   }, [numberOfColumns, numberOfRows]);
 
-  function onMove(column: number) {
-    const isWin = winState != undefined || isBlindForceOver == true;
+  const onMove = useCallback(
+    (column: number) => {
+      const isWin = winState != undefined || isBlindForceOver == true;
 
-    if (steps?.[column] && steps[column].length >= numberOfRows) {
-      toast.warning('Invalid move');
-      soundtrack.play({ type: SoundType.ERROR });
-      if (gameType == 'blind') countNumberOfBlindError(turn);
-    } else if (!isWin) {
-      move(column);
-      soundtrack.play({ type: SoundType.MOVE });
-    } else soundtrack.play({ type: SoundType.ERROR });
-  }
+      if (steps?.[column] && steps[column].length >= numberOfRows) {
+        toast.warning('Invalid move');
+        soundtrack.play({ type: SoundType.ERROR });
+        if (gameType == 'blind') countNumberOfBlindError(turn);
+      } else if (!isWin) {
+        move(column);
+        soundtrack.play({ type: SoundType.MOVE });
+      } else soundtrack.play({ type: SoundType.ERROR });
+    },
+    [countNumberOfBlindError, gameType, isBlindForceOver, move, numberOfRows, steps, turn, winState]
+  );
 
   const isWin = useMemo(() => {
     return winState != undefined || isBlindForceOver == true;
@@ -77,6 +89,14 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
     return { currentRow: undefined, currentColumn };
   }, [steps, stepsOrder]);
 
+  const columns = useMemo(() => {
+    return Array.from({ length: numberOfColumns }, (_, index) => index);
+  }, [numberOfColumns]);
+
+  const rows = useMemo(() => {
+    return Array.from({ length: numberOfRows }, (_, index) => index);
+  }, [numberOfRows]);
+
   return (
     <div {...props} className={cn('flex flex-col items-center gap-2', props.className)}>
       <HeaderConfig />
@@ -89,14 +109,14 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
             }}
             className="bg-accent/20 border-accent/30 flex flex-wrap gap-px overflow-hidden rounded-xl border"
           >
-            {Array.from({ length: numberOfColumns }).map((_, column) => {
+            {columns.map((column) => {
               return (
                 <div
                   key={column}
                   className="group relative flex flex-col-reverse justify-between bg-transparent transition-colors hover:bg-white/5"
                   onClick={() => onMove(column)}
                 >
-                  {Array.from({ length: numberOfRows }).map((_, row) => {
+                  {rows.map((row) => {
                     const _turn = steps[column]?.[row];
                     const _winTypes = winState?.locations[`${row}_${column}`];
                     const isCurrentMove = currentColumn == column && currentRow == row;
@@ -104,43 +124,16 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
                       gameType != 'blind' || (gameType == 'blind' && (isWin || isCurrentMove));
 
                     return (
-                      <div
+                      <Connect4Cell
                         key={`${row}_${column}`}
-                        className={cn(
-                          'relative flex items-center justify-center border-[0.5px] border-white/5',
-                          _turn == undefined && 'cursor-pointer'
-                        )}
-                        style={{ width: size, height: size }}
-                      >
-                        {/* Empty hole shadow */}
-                        <div
-                          className="absolute rounded-full bg-black/20 shadow-inner"
-                          style={{ width: itemSize, height: itemSize }}
-                        />
-
-                        <AnimatePresence>
-                          {_turn != undefined && isShouldShowMove && (
-                            <motion.div
-                              initial={{ y: -size * (numberOfRows - row), opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{
-                                type: 'spring',
-                                stiffness: 300,
-                                damping: 20,
-                                mass: 0.8,
-                              }}
-                              className={cn(
-                                'z-10 rounded-full shadow-lg',
-                                _turn == 0
-                                  ? 'bg-linear-to-br from-orange-400 to-red-600'
-                                  : 'bg-linear-to-br from-blue-400 to-indigo-600'
-                              )}
-                              style={{ width: itemSize, height: itemSize }}
-                            />
-                          )}
-                        </AnimatePresence>
-                        <GameWinLines turn={_turn} winTypes={_winTypes} />
-                      </div>
+                        row={row}
+                        size={size}
+                        itemSize={itemSize}
+                        numberOfRows={numberOfRows}
+                        turn={_turn}
+                        winTypes={_winTypes}
+                        isShouldShowMove={isShouldShowMove}
+                      />
                     );
                   })}
                 </div>
@@ -152,3 +145,61 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
     </div>
   );
 }
+
+type Connect4CellProps = {
+  row: number;
+  size: number;
+  itemSize: number;
+  numberOfRows: number;
+  turn: TurnType | undefined;
+  winTypes: Connect4WinStateType['locations'][string] | undefined;
+  isShouldShowMove: boolean;
+};
+
+const Connect4Cell = memo(function Connect4Cell({
+  row,
+  size,
+  itemSize,
+  numberOfRows,
+  turn,
+  winTypes,
+  isShouldShowMove,
+}: Connect4CellProps) {
+  return (
+    <div
+      className={cn(
+        'relative flex items-center justify-center border-[0.5px] border-white/5',
+        turn == undefined && 'cursor-pointer'
+      )}
+      style={{ width: size, height: size }}
+    >
+      <div
+        className="absolute rounded-full bg-black/20 shadow-inner"
+        style={{ width: itemSize, height: itemSize }}
+      />
+
+      <AnimatePresence>
+        {turn != undefined && isShouldShowMove && (
+          <motion.div
+            initial={{ y: -size * (numberOfRows - row), opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 20,
+              mass: 0.8,
+            }}
+            className={cn(
+              'z-10 rounded-full shadow-lg',
+              turn == 0
+                ? 'bg-linear-to-br from-orange-400 to-red-600'
+                : 'bg-linear-to-br from-blue-400 to-indigo-600'
+            )}
+            style={{ width: itemSize, height: itemSize }}
+          />
+        )}
+      </AnimatePresence>
+      <GameWinLines turn={turn} winTypes={winTypes} />
+    </div>
+  );
+});
