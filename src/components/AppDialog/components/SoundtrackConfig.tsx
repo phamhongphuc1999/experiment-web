@@ -1,6 +1,6 @@
 import { Volume2, VolumeOff } from 'lucide-react';
 import IconButton from 'src/components/buttons/IconButton';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useConfigStore } from 'src/states/config.state';
 import { SoundType } from 'src/types/global';
 

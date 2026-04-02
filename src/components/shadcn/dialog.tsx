@@ -71,7 +71,7 @@ function DialogContent({
   );
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function PrivateDialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
@@ -101,6 +101,21 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
   );
 }
 
+function DialogHeader({
+  className,
+  titleProps,
+  children,
+  ...props
+}: React.ComponentProps<'div'> & {
+  titleProps?: Omit<React.ComponentProps<typeof DialogPrimitive.Title>, 'children'>;
+}) {
+  return (
+    <PrivateDialogHeader {...props} className={className}>
+      <DialogTitle {...titleProps}>{children}</DialogTitle>
+    </PrivateDialogHeader>
+  );
+}
+
 function DialogDescription({
   className,
   ...props
@@ -123,6 +138,5 @@ export {
   DialogHeader,
   DialogOverlay,
   DialogPortal,
-  DialogTitle,
   DialogTrigger,
 };

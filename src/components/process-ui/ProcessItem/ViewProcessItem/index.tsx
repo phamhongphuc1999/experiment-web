@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
 import ProcessStatus from 'src/components/process-ui/ProcessStatus';
-import { Badge } from 'src/components/shadcn-ui/badge';
+import { Badge } from 'src/components/shadcn/badge';
 import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
 import { ProcessStatusType, ProcessType } from 'src/types/process.type';

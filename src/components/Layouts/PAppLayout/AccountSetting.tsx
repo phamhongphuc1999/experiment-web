@@ -2,14 +2,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import TitleBox from 'src/components/box/TitleBox';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { useGetMe, useUserSendVerifyEmail } from 'src/queries/papp/user.query';
 import { getAxiosError } from 'src/services';
 import { useAuthStore } from 'src/states/auth.state';
@@ -49,9 +43,7 @@ export default function AccountSetting() {
           />
         </DialogTrigger>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Account</DialogTitle>
-          </DialogHeader>
+          <DialogHeader>Account</DialogHeader>
           <div>
             <div className="flex flex-wrap items-center gap-10">
               <TitleBox title="Name" value={data?.name} />

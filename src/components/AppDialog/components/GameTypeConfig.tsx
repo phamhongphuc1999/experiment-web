@@ -2,7 +2,7 @@ import { Info } from 'lucide-react';
 import { useMemo } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import BaseInput from 'src/components/input/BaseInput';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { useCaroStore } from 'src/states/caro.state';
 import { MyGameType } from 'src/types/caro.type';

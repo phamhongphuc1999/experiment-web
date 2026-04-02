@@ -6,15 +6,15 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import PAppGoogleButton from 'src/components/buttons/GoogleButton/PAppGoogleButton';
 import BaseAuthorForm from 'src/components/form/BaseAuthorForm';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from 'src/components/shadcn-ui/form';
-import { Input, PasswordInput } from 'src/components/shadcn-ui/input';
+} from 'src/components/shadcn/form';
+import { Input, PasswordInput } from 'src/components/shadcn/input';
 import { strongPassword } from 'src/configs/zod.config';
 import { useSignup } from 'src/queries/papp/auth.query';
 import { getAxiosError } from 'src/services';

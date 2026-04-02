@@ -141,7 +141,6 @@ export default function CaroBoard(props: ComponentProps<'div'>) {
                   key={location}
                   location={location}
                   size={size}
-                  cellSize={size}
                   turn={_turn}
                   winTypes={_winTypes}
                   gameType={gameType}

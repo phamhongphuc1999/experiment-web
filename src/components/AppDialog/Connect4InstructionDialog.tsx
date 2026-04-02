@@ -3,13 +3,7 @@ import { Info } from 'lucide-react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../shadcn-ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 
 export default function Connect4InstructionDialog() {
   const { dialog, setDialog } = useDialogStore();
@@ -25,9 +19,7 @@ export default function Connect4InstructionDialog() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">
-        <DialogHeader>
-          <DialogTitle>Connect4 instruction</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Connect4 instruction</DialogHeader>
         <div className="scroll-hidden h-fit max-h-[75vh] overflow-auto">
           <p className="text-lg">1. How to play?</p>
           <p className="text-justify text-sm">

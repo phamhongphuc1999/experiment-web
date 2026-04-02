@@ -2,7 +2,7 @@ import { Settings2 } from 'lucide-react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import ThemeButton from '../buttons/ThemeButton';
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn-ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 import SoundtrackConfig from './components/SoundtrackConfig';
 
 export default function GlobalConfigDialog() {

@@ -3,13 +3,7 @@ import { Bluetooth, Circle, Settings } from 'lucide-react';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppTooltip from '../AppTooltip';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../shadcn-ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 
 export default function CaroInstructionDialog() {
   const { dialog, setDialog } = useDialogStore();
@@ -30,9 +24,7 @@ export default function CaroInstructionDialog() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl!">
-        <DialogHeader>
-          <DialogTitle>Caro instruction</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Caro instruction</DialogHeader>
         <div className="scroll-hidden h-fit max-h-[75vh] overflow-auto">
           <p className="text-lg">1. How to play?</p>
           <p className="text-justify text-sm">

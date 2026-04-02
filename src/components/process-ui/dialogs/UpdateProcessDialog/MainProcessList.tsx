@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ListEmpty } from 'src/components/Empty';
 import ChangeProcessItem from 'src/components/process-ui/ProcessItem/ChangeProcessItem';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { ProcessDataObjectType } from 'src/types/process.type';
 import ExportImportData from 'src/views/ProcessView/ExportImportData';
 

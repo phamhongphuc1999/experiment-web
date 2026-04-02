@@ -1,7 +1,7 @@
 'use client';
 
 import { AppKitAccountButton, AppKitConnectButton, AppKitNetworkButton } from '@reown/appkit/react';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { supportedNetworks } from 'src/web3/configs/constance';
 import { useWeb3WalletContext } from 'src/web3/context/web3-wallet.context';
 import { useWeb3Store } from 'src/web3/states/web3.state';

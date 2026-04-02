@@ -9,7 +9,6 @@ import { CaroGameType, TurnType, WinStateType } from 'src/types/caro.type';
 interface CaroCellProps extends ComponentProps<'div'> {
   location: number;
   size: number;
-  cellSize: number;
   turn: TurnType | undefined;
   winTypes: WinStateType['locations'][number] | undefined;
   gameType: CaroGameType;
@@ -20,19 +19,20 @@ interface CaroCellProps extends ComponentProps<'div'> {
   onMove: (location: number) => void;
 }
 
-function CaroCell({
-  location,
-  size: cellSize,
-  turn,
-  winTypes,
-  gameType,
-  isCurrent,
-  isWin,
-  isBlindForceOver,
-  shouldDisableBoard,
-  onMove,
-  ...props
-}: CaroCellProps) {
+function CaroCell(params: CaroCellProps) {
+  const {
+    location,
+    size,
+    turn,
+    winTypes,
+    gameType,
+    isCurrent,
+    isWin,
+    isBlindForceOver,
+    shouldDisableBoard,
+    onMove,
+    ...props
+  } = params;
   const icon = useMemo(() => {
     // In blind mode, only show icon if game is over or it's the last move
     if (gameType === 'blind' && !isWin && !isCurrent) {
@@ -84,9 +84,9 @@ function CaroCell({
       {...props}
       className={cellClassName}
       style={{
-        width: cellSize,
-        height: cellSize,
-        fontSize: cellSize * 0.7,
+        width: size,
+        height: size,
+        fontSize: size * 0.7,
         border: '0.5px solid var(--border)',
       }}
       onClick={() => onMove(location)}

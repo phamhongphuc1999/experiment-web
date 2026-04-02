@@ -1,5 +1,5 @@
 import { Bluetooth, Settings } from 'lucide-react';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import useBoardGameConnectionContext from 'src/hooks/useBoardGameConnection';
 import { MyGameType, PlayModeType } from 'src/types/caro.type';
 import useBoardGameConfigContext from './useBoardGameConfigContext';

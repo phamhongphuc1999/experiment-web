@@ -1,5 +1,5 @@
 import { TitleContainer } from 'src/components/box/TitleBox';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { usePikachuConfigContext } from './pikachuConfig.context';
 
 export default function GameTypeConfig() {

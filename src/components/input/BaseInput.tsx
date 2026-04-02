@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from 'src/lib/utils';
-import { Input } from '../shadcn-ui/input';
+import { Input } from '../shadcn/input';
 
 interface Props extends ComponentProps<'input'> {
   name: string;

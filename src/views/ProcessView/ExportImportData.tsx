@@ -3,16 +3,10 @@ import { Download, Import } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
 import CopyClipboard from 'src/components/CopyClipboard';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
-import { Input } from 'src/components/shadcn-ui/input';
-import { Label } from 'src/components/shadcn-ui/label';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
+import { Input } from 'src/components/shadcn/input';
+import { Label } from 'src/components/shadcn/label';
 import { exampleProcessData } from 'src/configs/example-process';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessDataObjectType, ProcessStatusType } from 'src/types/process.type';
@@ -132,10 +126,8 @@ export default function ExportImportData({ components, isShowExport = true }: Pr
         </DialogTrigger>
         <DialogContent className="from-background to-muted/30 max-w-3xl overflow-hidden border-none bg-linear-to-br p-0">
           <div className="col-span-3 flex flex-col space-y-6 p-8">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold tracking-tight">
-                Data Configuration
-              </DialogTitle>
+            <DialogHeader titleProps={{ className: 'text-2xl font-bold tracking-tight' }}>
+              Data Configuration
             </DialogHeader>
             <div className="space-y-6">
               <div className="space-y-3">

@@ -2,15 +2,14 @@ import { DialogProps } from '@radix-ui/react-dialog';
 import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BaseInput from 'src/components/input/BaseInput';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+} from 'src/components/shadcn/dialog';
 import { ProcessSchedulerConfigs } from 'src/configs/constance';
 import { useProcessStore } from 'src/states/process.state';
 
@@ -49,9 +48,7 @@ export default function SettingDialog(props: DialogProps) {
         <Settings size={14} className="cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="max-w-2xl rounded-none p-4">
-        <DialogHeader className="border-b pb-1">
-          <DialogTitle>Process Setting</DialogTitle>
-        </DialogHeader>
+        <DialogHeader className="max-w-2xl rounded-none p-4">Process Setting</DialogHeader>
         <p className="text-lg font-semibold">Scheduler Mode</p>
         <div className="flex flex-wrap items-center gap-1">
           {Object.values(ProcessSchedulerConfigs).map((item) => {

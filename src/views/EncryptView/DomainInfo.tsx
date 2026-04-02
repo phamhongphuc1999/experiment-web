@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction } from 'react';
 import DynamicReactJson from 'src/components/DynamicReactJson';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { initWasm } from 'src/services/wasm';
 
 export type DomainInfoType = {

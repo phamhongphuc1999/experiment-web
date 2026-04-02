@@ -1,5 +1,5 @@
 import { TitleContainer } from 'src/components/box/TitleBox';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useCaroConfigContext } from './caroConfig.context';
 
 export default function BoardSizeConfig() {

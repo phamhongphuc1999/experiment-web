@@ -5,7 +5,7 @@ import { PIKACHU_PIECE_SIZE, PIKACHU_URL } from 'src/configs/pikachu.constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import AppPagination from '../AppPagination';
 import AppTooltip from '../AppTooltip';
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn-ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 
 export default function PikachuInstructionDialog() {
   const { dialog, setDialog } = useDialogStore();

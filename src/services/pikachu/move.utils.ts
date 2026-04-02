@@ -1,7 +1,7 @@
-import { PositionType } from 'src/types/global';
-import { FindPathWithoutTargetType, FindPathType } from 'src/types/pikachu.type';
-import { isPositionEqual } from '..';
 import Queue from 'src/structure/Queue';
+import { PositionType } from 'src/types/global';
+import { FindPathType, FindPathWithoutTargetType } from 'src/types/pikachu.type';
+import { isPositionEqual } from '..';
 
 export function reconstructPath(
   parent: (number[] | null)[][][],

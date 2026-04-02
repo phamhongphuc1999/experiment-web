@@ -7,14 +7,8 @@ import { createCaroMessage } from 'src/services/caro.utils';
 import { useGameMessengerChat } from 'src/states/messenger.state';
 import { MyGameType } from 'src/types/caro.type';
 import AppTooltip from '../AppTooltip';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../shadcn-ui/dialog';
-import { Textarea } from '../shadcn-ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
+import { Textarea } from '../shadcn/textarea';
 
 interface Props {
   gameType: MyGameType;
@@ -62,9 +56,7 @@ export default function CaroMessengerDialog({ gameType }: Props) {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent className="flex h-3/4 flex-col">
-        <DialogHeader className="h-fit">
-          <DialogTitle>Messenger</DialogTitle>
-        </DialogHeader>
+        <DialogHeader className="h-fit">Messenger</DialogHeader>
         <div className="flex h-[calc(100%-20px)] flex-col gap-4">
           <div ref={messagesEndRef} className="scroll-hidden flex-1 overflow-y-scroll">
             {chats.map((chat, index) => {

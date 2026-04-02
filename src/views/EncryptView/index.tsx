@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import DynamicReactJson from 'src/components/DynamicReactJson';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { ENCRYPT_KEY, IV_HEX } from 'src/configs/constance';
 import { useRandomNumber } from 'src/hooks/actions/crypt.action';
 import { decryptText } from 'src/services/encrypt';

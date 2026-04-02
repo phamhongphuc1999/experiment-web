@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 import Connect4ConfigDialog from 'src/components/AppDialog/Connect4ConfigDialog';
 import Connect4InstructionDialog from 'src/components/AppDialog/Connect4InstructionDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useConnect4StateContext } from 'src/context/connect4-state.context';
 import { cn } from 'src/lib/utils';
 import { useConnect4Store } from 'src/states/connect4.state';

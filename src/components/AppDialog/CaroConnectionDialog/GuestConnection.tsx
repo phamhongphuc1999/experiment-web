@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import BaseInput from 'src/components/input/BaseInput';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import SignalTitleBox from './SignalTitleBox';
 

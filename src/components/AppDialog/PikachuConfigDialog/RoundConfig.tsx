@@ -4,12 +4,12 @@ import IconButton from 'src/components/buttons/IconButton';
 import Draggable from 'src/components/dnd/Draggable';
 import Droppable from 'src/components/dnd/Droppable';
 import SortableItem from 'src/components/dnd/SortableItem';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from 'src/components/shadcn-ui/collapsible';
+} from 'src/components/shadcn/collapsible';
 import { pikachuRoundTransformations, pikachuTransformConfig } from 'src/configs/pikachu.constance';
 import { cn } from 'src/lib/utils';
 import { removeAtIndex } from 'src/services';

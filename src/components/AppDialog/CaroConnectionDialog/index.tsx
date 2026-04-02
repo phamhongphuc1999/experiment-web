@@ -1,14 +1,8 @@
 import { Bluetooth } from 'lucide-react';
 import { useState } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { useCaroStore } from 'src/states/caro.state';
@@ -36,9 +30,7 @@ export default function CaroConnectionDialog() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Caro peer-to-peer connection</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Caro peer-to-peer connection</DialogHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Button

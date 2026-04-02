@@ -1,14 +1,8 @@
 import { Settings } from 'lucide-react';
 import { MouseEvent } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useCaroStore } from 'src/states/caro.state';
 import { useDialogStore } from 'src/states/dialog.state';
@@ -66,9 +60,7 @@ function CaroConfigDialogLayout() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Caro config</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Caro config</DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <PlayModeConfig game="caro" />
           <GameTypeConfig game="caro" />

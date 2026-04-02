@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { AbstractAuthorForm } from 'src/components/form/BaseAuthorForm';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useVerifyEmail } from 'src/queries/papp/auth.query';
 
 export default function VerifyEmailView() {

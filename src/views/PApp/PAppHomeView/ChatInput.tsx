@@ -1,6 +1,6 @@
 import { SendHorizonal } from 'lucide-react';
 import { ChangeEvent, ComponentProps, KeyboardEvent, useState } from 'react';
-import { Input } from 'src/components/shadcn-ui/input';
+import { Input } from 'src/components/shadcn/input';
 import { cn } from 'src/lib/utils';
 
 type Props = ComponentProps<'div'> & {

@@ -1,5 +1,5 @@
 import SettingDialog from 'src/components/process-ui/dialogs/SettingDialog';
-import { Badge } from 'src/components/shadcn-ui/badge';
+import { Badge } from 'src/components/shadcn/badge';
 import { useProcessStore } from 'src/states/process.state';
 
 export default function SettingSpot() {

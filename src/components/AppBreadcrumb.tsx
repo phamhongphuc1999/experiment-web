@@ -6,7 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from './shadcn-ui/breadcrumb';
+} from './shadcn/breadcrumb';
 
 interface Props {
   items: Array<{ title?: string; href?: string }>;

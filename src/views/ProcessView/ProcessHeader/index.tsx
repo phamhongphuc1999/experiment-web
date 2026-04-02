@@ -3,7 +3,7 @@
 import { BarChart2, LayoutGrid, Play } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import UpdateProcessDialog from 'src/components/process-ui/dialogs/UpdateProcessDialog';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { sleep } from 'src/services';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';

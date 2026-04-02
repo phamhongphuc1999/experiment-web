@@ -1,14 +1,8 @@
 import { Settings } from 'lucide-react';
 import { MouseEvent } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useConnect4Store } from 'src/states/connect4.state';
 import { useDialogStore } from 'src/states/dialog.state';
@@ -50,9 +44,7 @@ function Connect4ConfigDialogLayout() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Connect4 config</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Connect4 config</DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <PlayModeConfig game="connect4" />
           <GameTypeConfig game="connect4" />

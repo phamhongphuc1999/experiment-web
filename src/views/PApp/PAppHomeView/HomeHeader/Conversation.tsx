@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Button } from 'src/components/shadcn-ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from 'src/components/shadcn-ui/popover';
+import { Button } from 'src/components/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from 'src/components/shadcn/popover';
 import { useGetListConversations } from 'src/queries/papp/conversation.query';
 import { useConversationStore } from 'src/states/conversation.state';
 

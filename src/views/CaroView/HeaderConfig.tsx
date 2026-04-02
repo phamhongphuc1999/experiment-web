@@ -5,7 +5,7 @@ import CaroInstructionDialog from 'src/components/AppDialog/CaroInstructionDialo
 import CaroMessengerDialog from 'src/components/AppDialog/CaroMessengerDialog';
 import RoutingGameDialog from 'src/components/AppDialog/RoutingGameDialog';
 import TitleBox from 'src/components/box/TitleBox';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useCaroStateContext } from 'src/context/caro-state.context';
 import { cn } from 'src/lib/utils';
 import { useCaroStore } from 'src/states/caro.state';

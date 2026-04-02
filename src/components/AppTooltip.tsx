@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from './shadcn-ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from './shadcn/tooltip';
 import { TooltipContentProps } from '@radix-ui/react-tooltip';
 
 interface Props {

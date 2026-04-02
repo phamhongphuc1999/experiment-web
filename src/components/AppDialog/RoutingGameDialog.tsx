@@ -5,14 +5,8 @@ import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { MyAllGameType } from 'src/types/caro.type';
 import AppTooltip from '../AppTooltip';
-import { Button } from '../shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../shadcn-ui/dialog';
+import { Button } from '../shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 
 const configs: { [key in MyAllGameType]: { title: string; link: string } } = {
   caro: { title: 'Caro', link: '/caro' },
@@ -45,9 +39,7 @@ export default function RoutingGameDialog({ game }: Props) {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{`${config.title} routing`}</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>{`${config.title} routing`}</DialogHeader>
         <div className="scroll-hidden flex h-[30vh] flex-wrap gap-2 overflow-auto">
           <Link href="/">
             <Button onClick={() => setDialog(DIALOG_KEY.routingGameDialog, false)}>Go home</Button>

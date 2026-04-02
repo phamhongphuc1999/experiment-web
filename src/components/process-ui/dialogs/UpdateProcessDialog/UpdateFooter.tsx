@@ -1,5 +1,5 @@
 import { Trash } from 'lucide-react';
-import { Button } from 'src/components/shadcn-ui/button';
+import { Button } from 'src/components/shadcn/button';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessMachineEvent } from 'src/types/process.type';

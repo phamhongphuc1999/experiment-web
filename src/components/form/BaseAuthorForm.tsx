@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { cn } from 'src/lib/utils';
-import { Form } from '../shadcn-ui/form';
+import { Form } from '../shadcn/form';
 
 interface AbstractAuthorFormProps {
   headerTitle?: string;

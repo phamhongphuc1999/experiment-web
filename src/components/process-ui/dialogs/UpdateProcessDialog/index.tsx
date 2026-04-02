@@ -1,13 +1,7 @@
 import { DialogProps } from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { useProcessStore } from 'src/states/process.state';
 import {
   ProcessDataObjectType,
@@ -91,7 +85,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
 
   return (
     <Dialog {...props}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           size="sm"
           variant="outline"
@@ -102,9 +96,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl rounded-none p-4">
-        <DialogHeader className="border-b pb-1">
-          <DialogTitle>Update Process</DialogTitle>
-        </DialogHeader>
+        <DialogHeader className="border-b pb-1">Update Process</DialogHeader>
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Processes</p>
           <Button

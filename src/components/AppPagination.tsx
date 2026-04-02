@@ -10,7 +10,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from './shadcn-ui/pagination';
+} from './shadcn/pagination';
 
 interface Props {
   currentPage: number;

@@ -10,14 +10,8 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 import { Settings } from 'lucide-react';
 import { MouseEvent } from 'react';
 import AppTooltip from 'src/components/AppTooltip';
-import { Button } from 'src/components/shadcn-ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'src/components/shadcn-ui/dialog';
+import { Button } from 'src/components/shadcn/button';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from 'src/components/shadcn/dialog';
 import { DIALOG_KEY } from 'src/configs/constance';
 import { useDialogStore } from 'src/states/dialog.state';
 import { usePikachuStore } from 'src/states/pikachu.state';
@@ -79,9 +73,7 @@ function PikachuConfigDialogLayout() {
         </AppTooltip>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Pikachu config</DialogTitle>
-        </DialogHeader>
+        <DialogHeader>Pikachu config</DialogHeader>
         <form onSubmit={onSaveConfig} className="scroll-hidden max-h-[75vh] overflow-auto">
           <div className="bg-background fixed right-0 left-0 flex items-center justify-between px-6 py-2 shadow-2xl">
             <Button onClick={onCancel} variant="destructive" className="mr-2">
