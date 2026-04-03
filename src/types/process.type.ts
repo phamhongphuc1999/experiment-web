@@ -59,11 +59,6 @@ export enum SchedulerModeType {
   MLFQ = 'mlfq',
 }
 
-export enum ProcessHistoryEnum {
-  ACTION = 'actions',
-  ENTRY = 'entry',
-}
-
 export enum ProcessMachineEvent {
   INITIALIZE = 'initialize',
   SET_METADATA = 'set-metadata',
@@ -71,9 +66,16 @@ export enum ProcessMachineEvent {
   CLEAR = 'clear',
 }
 
-export type ProcessHistoryType = {
-  actionType: ProcessHistoryEnum;
-  stateType: ProcessMachineStateType;
-  eventType?: ProcessMachineEvent;
-  timeInterval: number;
+export type ProcessMetricsType = {
+  index?: number;
+  arrivalTime: number;
+  burstTime: number; // the total process run
+  startTime?: number; // the first time process run
+  completionTime?: number; // the time process fullfil
+};
+
+export type ProcessMeasureMetricsType = {
+  turnaroundTime?: number; // = completionTime - arrivalTime
+  waitingTime?: number; // = turnaroundTime - burstTime
+  responseTime?: number; // = startTime - arrivalTime
 };

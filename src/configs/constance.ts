@@ -42,9 +42,10 @@ export const gameConfigs: { [game in MyAllGameType]: { title: string } } = {
   pikachu: { title: 'Pikachu' },
 };
 
-export const ProcessSchedulerConfigs: {
-  [id in SchedulerModeType]: { id: SchedulerModeType; name: string; coming?: boolean };
-} = {
+export const ProcessSchedulerConfigs: Record<
+  SchedulerModeType,
+  { id: SchedulerModeType; name: string; coming?: boolean }
+> = {
   [SchedulerModeType.FIFO]: { id: SchedulerModeType.FIFO, name: 'First In, First Out' },
   [SchedulerModeType.SJF]: { id: SchedulerModeType.SJF, name: 'Shortest Job First', coming: true },
   [SchedulerModeType.ROUND_ROBIN]: { id: SchedulerModeType.ROUND_ROBIN, name: 'Round Robin' },

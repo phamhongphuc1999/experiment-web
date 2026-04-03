@@ -34,6 +34,7 @@ export function resetAction(): Partial<ProcessContextType> {
     currentProcess: undefined,
     counter: 0,
     monitorData: [],
+    metricsData: {},
   };
 }
 
@@ -47,5 +48,6 @@ export function clearAction(): Partial<ProcessContextType> {
     currentProcess: undefined,
     counter: 0,
     monitorData: [],
+    metricsData: {},
   };
 }

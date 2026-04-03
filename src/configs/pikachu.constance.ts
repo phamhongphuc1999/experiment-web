@@ -20,9 +20,10 @@ export const pikachuRoundTransformations: Array<PikachuTransformType> = [
   'collapseToCenter',
 ];
 
-export const pikachuTransformConfig: {
-  [id in PikachuTransformType]: { id: PikachuTransformType; title: string };
-} = {
+export const pikachuTransformConfig: Record<
+  PikachuTransformType,
+  { id: PikachuTransformType; title: string }
+> = {
   normal: { id: 'normal', title: 'Normal' },
   fallDown: { id: 'fallDown', title: 'Fall down' },
   fallUp: { id: 'fallUp', title: 'Fall up' },

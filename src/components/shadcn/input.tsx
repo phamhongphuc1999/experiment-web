@@ -1,8 +1,8 @@
 import { Eye, EyeOff } from 'lucide-react';
-import * as React from 'react';
+import { ComponentProps, useState } from 'react';
 import { cn } from 'src/lib/utils';
 
-function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
+function Input({ className, type, ...props }: ComponentProps<'input'>) {
   return (
     <input
       type={type}
@@ -21,8 +21,8 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
 function PasswordInput({
   rootpprops,
   ...props
-}: React.ComponentProps<'input'> & { rootpprops?: React.ComponentProps<'div'> }) {
-  const [isShow, setIsShow] = React.useState(false);
+}: ComponentProps<'input'> & { rootpprops?: ComponentProps<'div'> }) {
+  const [isShow, setIsShow] = useState(false);
 
   return (
     <div {...rootpprops} className={cn('relative', rootpprops?.className)}>

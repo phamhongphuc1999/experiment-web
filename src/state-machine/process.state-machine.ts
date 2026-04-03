@@ -31,6 +31,7 @@ const processMachine = setup({
     readyQueue: undefined,
     currentProcess: undefined,
     monitorData: [],
+    metricsData: {},
   },
   states: {
     [ProcessMachineStateType.INITIAL]: {

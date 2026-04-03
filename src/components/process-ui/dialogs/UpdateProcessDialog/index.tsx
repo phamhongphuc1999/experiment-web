@@ -96,7 +96,7 @@ export default function UpdateProcessDialog(props: DialogProps) {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl rounded-none p-4">
-        <DialogHeader className="border-b pb-1">Update Process</DialogHeader>
+        <DialogHeader>Update Process</DialogHeader>
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Processes</p>
           <Button

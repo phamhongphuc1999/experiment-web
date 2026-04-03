@@ -2,6 +2,7 @@
 
 import { BarChart2, LayoutGrid, Play } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import MetricDialog from 'src/components/process-ui/dialogs/MetricDialog';
 import UpdateProcessDialog from 'src/components/process-ui/dialogs/UpdateProcessDialog';
 import { Button } from 'src/components/shadcn/button';
 import { sleep } from 'src/services';
@@ -72,6 +73,7 @@ export default function ProcessHeader() {
             </div>
           )}
         </Button>
+        <MetricDialog />
       </div>
       <SettingSpot />
       <TimeSliceCounter className="absolute top-1/2 left-1/2 -translate-1/2" />

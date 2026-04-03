@@ -3,7 +3,7 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import * as React from 'react';
+import { ComponentProps } from 'react';
 import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { useConfigStore } from 'src/states/config.state';
@@ -38,14 +38,14 @@ const buttonVariants = cva(
   }
 );
 
-type Props = React.ComponentProps<'button'> &
+type Props = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     sound?: SoundType;
     isSound?: boolean;
     asChild?: boolean;
     isLoading?: boolean;
     loadingText?: string;
-    contentprops?: React.ComponentProps<'div'>;
+    contentprops?: ComponentProps<'div'>;
   };
 
 function Button(params: Props) {

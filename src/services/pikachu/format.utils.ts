@@ -203,9 +203,7 @@ function collapseToCenter(params: BasePikachuType) {
   });
 }
 
-const configs: {
-  [id in PikachuTransformType]: (params: BasePikachuType) => void;
-} = {
+const configs: Record<PikachuTransformType, (params: BasePikachuType) => void> = {
   normal: () => {},
   fallDown: (params) => _straight(params, [-1, 0]),
   fallUp: (params) => _straight(params, [1, 0]),

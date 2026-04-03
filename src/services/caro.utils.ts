@@ -114,12 +114,13 @@ function checkRightHorizontal(params: ParamsType) {
   );
 }
 
-const config: {
-  [id in CaroWinType]: {
+const config: Record<
+  CaroWinType,
+  {
     side1Func: (params: ParamsType) => SideReturnType;
     side2Func: (params: ParamsType) => SideReturnType;
-  };
-} = {
+  }
+> = {
   leftDiagonal: { side1Func: checkTopLeftDiagonal, side2Func: checkBottomRightDiagonal },
   rightDiagonal: { side1Func: checkTopRightDiagonal, side2Func: checkBottomLeftDiagonal },
   vertical: { side1Func: checkTopVertical, side2Func: checkBottomVertical },

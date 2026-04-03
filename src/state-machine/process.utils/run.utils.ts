@@ -5,8 +5,8 @@ import {
   ProcessStatusType,
   ProcessType,
 } from 'src/types/process.type';
-import { ProcessContextType } from './type.utils';
 import { addMonitorData } from './monitor.utils';
+import { ProcessContextType } from './type.utils';
 
 export function runProcessGuard(context: ProcessContextType): boolean {
   return (
@@ -16,6 +16,7 @@ export function runProcessGuard(context: ProcessContextType): boolean {
 
 // change process state
 export function runProcessEntry(context: ProcessContextType): Partial<ProcessContextType> {
+  const metricsData = context.metricsData;
   const currentProcess = context.currentProcess;
   if (currentProcess) {
     const updateProcess = useProcessStore.getState().fn.updateProcess;
@@ -32,7 +33,11 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
     } else {
       const data: Partial<Omit<ProcessType, 'pid'>> = { state: ProcessStatusType.RUNNING };
       const saveProcess = useProcessStore.getState().processes[currentProcess.pid];
-      if (saveProcess.beginAt === -1) data.beginAt = context.counter;
+      if (saveProcess.beginAt === -1) {
+        data.beginAt = context.counter;
+        const _currentMetric = metricsData[currentProcess.pid];
+        metricsData[currentProcess.pid] = { ..._currentMetric, startTime: context.counter };
+      }
       updateProcess(currentProcess.pid, data);
       return { currentProcess: { ...currentProcess, ...data } };
     }
@@ -45,6 +50,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
   // run waiting tasks
   const waitingQueue = context.waitingQueue;
   const readyQueue = context.readyQueue;
+  const metricsData = context.metricsData;
   const monitorData: Array<ProcessMonitorType> = [];
   if (waitingQueue && readyQueue) {
     const maxBlockTaskPerSlice = useProcessStore.getState().maxBlockTaskPerSlice;
@@ -100,6 +106,11 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
             readyPriority: newPriority,
           });
         } else {
+          const _currentMetric = metricsData[_waitingProcess.pid];
+          metricsData[_waitingProcess.pid] = {
+            ..._currentMetric,
+            completionTime: context.counter + 1,
+          };
           updateProcess(_waitingProcess.pid, {
             runtime,
             blockTasks: updatedBlockTasks,
@@ -128,7 +139,13 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
         waitingQueue,
         readyQueue,
         monitorData: addMonitorData(monitorData, context.monitorData),
+        metricsData: { ...metricsData },
       };
+    const _currentMetric = metricsData[currentProcess.pid];
+    metricsData[currentProcess.pid] = {
+      ..._currentMetric,
+      completionTime: context.counter + 1,
+    };
     return {
       currentProcess: {
         ...currentProcess,
@@ -140,6 +157,7 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
       waitingQueue,
       readyQueue,
       monitorData: addMonitorData(monitorData, context.monitorData),
+      metricsData: { ...metricsData },
     };
   }
   return {
@@ -148,5 +166,6 @@ export function runProcessAction(context: ProcessContextType): Partial<ProcessCo
     waitingQueue,
     readyQueue,
     monitorData: addMonitorData(monitorData, context.monitorData),
+    metricsData: { ...metricsData },
   };
 }

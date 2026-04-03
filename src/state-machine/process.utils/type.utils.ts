@@ -3,6 +3,7 @@ import Queue from 'src/structure/Queue';
 import {
   ProcessDataObjectType,
   ProcessMachineEvent,
+  ProcessMetricsType,
   ProcessMonitorType,
   ProcessType,
 } from 'src/types/process.type';
@@ -15,6 +16,7 @@ export interface ProcessContextType {
   readyQueue: Queue<ProcessType> | undefined;
   currentProcess: ProcessType | undefined;
   monitorData: Array<ProcessMonitorType>;
+  metricsData: Record<string, ProcessMetricsType>;
 }
 
 export type InitializeProcessEventType = {

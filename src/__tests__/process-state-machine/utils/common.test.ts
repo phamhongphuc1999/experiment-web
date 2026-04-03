@@ -52,6 +52,7 @@ describe('Common utils test', () => {
       waitingQueue,
       readyQueue,
       monitorData: [],
+      metricsData: {},
     };
     const PID = '52227ece-ad70-4d20-b196-026479e33770';
     const result = loadProcessContextEntry({ ...context, currentProcess: undefined });

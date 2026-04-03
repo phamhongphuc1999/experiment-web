@@ -96,12 +96,13 @@ function checkRightHorizontal(params: InternalParamsType): Array<PositionType> {
   );
 }
 
-const config: {
-  [id in Connect4WinType]: {
+const config: Record<
+  Connect4WinType,
+  {
     side1Func: (params: InternalParamsType) => Array<PositionType>;
     side2Func: (params: InternalParamsType) => Array<PositionType>;
-  };
-} = {
+  }
+> = {
   leftDiagonal: { side1Func: checkTopLeftDiagonal, side2Func: checkBottomRightDiagonal },
   rightDiagonal: { side1Func: checkTopRightDiagonal, side2Func: checkBottomLeftDiagonal },
   vertical: { side1Func: checkTopVertical, side2Func: checkBottomVertical },

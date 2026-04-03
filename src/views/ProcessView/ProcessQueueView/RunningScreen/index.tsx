@@ -5,7 +5,6 @@ import { useProcessStore } from 'src/states/process.state';
 import { ProcessMachineEvent, ProcessType } from 'src/types/process.type';
 import ExportImportData from '../../ExportImportData';
 import RunningProcessView from './RunningProcessView';
-import SystemLog from './SystemLog';
 
 interface Props {
   runningProcess: ProcessType | undefined;
@@ -59,7 +58,6 @@ export default function RunningScreen({ runningProcess }: Props) {
           </AppTooltip>
         </div>
       </div>
-      <SystemLog />
     </div>
   );
 }

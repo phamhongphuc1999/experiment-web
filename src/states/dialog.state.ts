@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 type DialogStateType = {
-  dialog: Partial<{ [id in DIALOG_KEY]: boolean }>;
+  dialog: Partial<Record<DIALOG_KEY, boolean>>;
   setDialog: (id: DIALOG_KEY, isOpen: boolean) => void;
 };
 

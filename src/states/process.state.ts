@@ -1,7 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 import {
   ProcessDataObjectType,
-  ProcessHistoryType,
   ProcessStatusType,
   ProcessStoreStatusType,
   ProcessType,
@@ -21,10 +20,8 @@ interface ProcessMetadataType {
 
 interface ProcessStateType extends ProcessMetadataType {
   processes: ProcessDataObjectType;
-  history: Array<ProcessHistoryType>;
   fn: {
     setMetadata: (metadata?: Partial<ProcessMetadataType>) => void;
-    updateHistory: (history: ProcessHistoryType) => void;
     setProcesses: (processes: ProcessDataObjectType) => void;
     updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => void;
     resetProcesses: () => void;
@@ -41,7 +38,6 @@ export const useProcessStore = create<
       return {
         mode: SchedulerModeType.FIFO,
         processes: {},
-        history: [],
         displayMode: 'column',
         status: 'initial',
         interval: 1000,
@@ -55,11 +51,6 @@ export const useProcessStore = create<
               if (metadata?.maxBlockTaskPerSlice)
                 state.maxBlockTaskPerSlice = metadata.maxBlockTaskPerSlice;
               if (metadata?.displayMode) state.displayMode = metadata.displayMode;
-            });
-          },
-          updateHistory: (history: ProcessHistoryType) => {
-            set((state) => {
-              state.history = [...state.history, history];
             });
           },
           setProcesses: (processes: ProcessDataObjectType) => {
@@ -98,14 +89,12 @@ export const useProcessStore = create<
               }
               state.processes = newProcesses;
               state.status = 'ready';
-              state.history = [];
             });
           },
           clear: () => {
             set((state) => {
               state.processes = {};
               state.status = 'initial';
-              state.history = [];
             });
           },
         },
