@@ -1,7 +1,7 @@
 import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
-describe('fallUp', () => {
+describe('/services/pikachu-transform-test/fallUpAndDown.test.ts', () => {
   it('testcase 1', () => {
     const board = [
       [0, 0, 0, 0, 0],

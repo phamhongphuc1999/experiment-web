@@ -1,7 +1,7 @@
 import { isPositionIncludes } from 'src/services';
 import { describe, expect, it } from 'vitest';
 
-describe('Test common utils', () => {
+describe('/services/common.test.ts', () => {
   it('isPositionIncludes', () => {
     const result = isPositionIncludes(
       [1, 2],

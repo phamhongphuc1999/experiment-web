@@ -2,7 +2,7 @@ import PikachuService from 'src/services/pikachu';
 import { _refineNumTypes } from 'src/services/pikachu/board.utils';
 import { describe, expect, it } from 'vitest';
 
-describe('Test pikachu utils', () => {
+describe('/services/pikachu.test.ts', () => {
   it('refineNumTypes', () => {
     const refinedNumTypes1 = _refineNumTypes(72, 36);
     expect(refinedNumTypes1).toEqual(36);

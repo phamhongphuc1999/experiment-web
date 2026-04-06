@@ -10,6 +10,6 @@ vi.mock('src/states/process.state', () => {
   };
 });
 
-describe('run utils test', () => {
+describe('/process-state-machine/utils/run.test.ts', () => {
   it('runProcessEntry', () => {});
 });

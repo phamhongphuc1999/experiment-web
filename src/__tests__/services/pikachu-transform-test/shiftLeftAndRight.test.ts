@@ -1,7 +1,7 @@
 import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
-describe('shiftLeftAndRight', () => {
+describe('/services/pikachu-transform-test/shiftLeftAndRight.test.ts', () => {
   it('testcase 1: shiftLeft', () => {
     const board = [
       [0, 0, 0, 0, 0],

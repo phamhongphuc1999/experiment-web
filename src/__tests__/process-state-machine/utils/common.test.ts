@@ -19,7 +19,7 @@ vi.mock('src/states/process.state', () => {
 
 vi.useFakeTimers();
 
-describe('Common utils test', () => {
+describe('/process-state-machine/utils/common.test.ts', () => {
   afterAll(() => {
     vi.clearAllMocks();
     vi.useRealTimers();

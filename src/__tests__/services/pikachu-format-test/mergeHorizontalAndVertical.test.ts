@@ -1,7 +1,7 @@
 import PikachuService from 'src/services/pikachu';
 import { describe, expect, it } from 'vitest';
 
-describe('mergeHorizontallyAndVertical', () => {
+describe('/services/pikachu-format-test/mergeHorizontalAndVertical.test.ts', () => {
   it('testcase 1: divide by horizontal center', () => {
     const board = [
       [0, 0, 0, 0, 0],
