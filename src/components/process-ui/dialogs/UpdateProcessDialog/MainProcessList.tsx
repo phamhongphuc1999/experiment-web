@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ListEmpty } from 'src/components/Empty';
+import { ListEmpty } from 'src/components/box/Empty';
 import ChangeProcessItem from 'src/components/process-ui/ProcessItem/ChangeProcessItem';
 import { Button } from 'src/components/shadcn/button';
 import { ProcessDataObjectType } from 'src/types/process.type';

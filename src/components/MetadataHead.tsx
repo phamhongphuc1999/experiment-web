@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import { APP_NAME } from 'src/configs/constance';
-import { siteMetadata } from 'src/configs/siteMetadata';
+import { siteMetadata } from 'src/configs/app-metadata';
 import { PageMetadataType } from 'src/types/global';
 
 export function MetadataHead(props: Pick<PageMetadataType, 'title' | 'description'>) {

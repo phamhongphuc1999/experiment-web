@@ -1,3 +1,4 @@
+import { Be_Vietnam_Pro } from 'next/font/google';
 import IconImg from 'public/star.svg';
 import ThumbImg from 'public/thumbnail.webp';
 import { PageMetadataType } from 'src/types/global';
@@ -13,3 +14,9 @@ export const siteMetadata: PageMetadataType = {
   image: ThumbImg.src,
   keywords: '',
 };
+
+export const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  weight: ['400', '700'],
+  variable: '--font-be-vietnam-pro',
+});

@@ -1,6 +1,6 @@
 import { MessageCircle, Send } from 'lucide-react';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import { beVietnamPro } from 'src/configs/font-family';
+import { beVietnamPro } from 'src/configs/app-metadata';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { cn } from 'src/lib/utils';
 import { createCaroMessage } from 'src/services/caro.utils';
