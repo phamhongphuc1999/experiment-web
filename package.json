@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "format": "prettier --write .",
     "start": "next start",
+    "format": "prettier --write .",
     "prepare": "husky",
     "eslint": "eslint --config ./eslint.config.js --cache",
     "test": "npx vitest --run",

@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { Fira_Code } from 'next/font/google';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
@@ -8,7 +9,7 @@ import '../styles/globals.css';
 
 const firaCode = Fira_Code({ subsets: ['latin'] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: APP_NAME,
     template: '%s',

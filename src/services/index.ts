@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Metadata } from 'next';
 import { APP_NAME } from 'src/configs/constance';
 import { PositionType } from 'src/types/global';
 
@@ -51,7 +52,7 @@ export function formatText(s: string, frac = 3): string {
   return s.length > frac * 2 + 5 ? `${s.substring(0, frac)}...${s.slice(-frac)}` : s;
 }
 
-export function generateAppMetadata(title: string) {
+export function generateAppMetadata(title: string): Metadata {
   return { title: `${APP_NAME} | ${title}`, openGraph: { title: `${APP_NAME} | ${title}` } };
 }
 

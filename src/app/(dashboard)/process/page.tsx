@@ -1,9 +1,8 @@
+import { Metadata } from 'next';
 import { generateAppMetadata } from 'src/services';
 import ProcessView from 'src/views/ProcessView';
 
-export async function generateMetadata() {
-  return generateAppMetadata('Process');
-}
+export const metadata: Metadata = generateAppMetadata('Process');
 
 export default function Process() {
   return (
