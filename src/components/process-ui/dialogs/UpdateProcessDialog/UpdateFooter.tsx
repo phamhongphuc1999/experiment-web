@@ -4,12 +4,12 @@ import { useProcessStateMachine } from 'src/state-machine/process.state-machine'
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessMachineEvent } from 'src/types/process.type';
 
-interface Props {
+interface TProps {
   onSave(): void;
   onOpenChange?: (open: boolean) => void;
 }
 
-export default function UpdateFooter({ onSave, onOpenChange }: Props) {
+export default function UpdateFooter({ onSave, onOpenChange }: TProps) {
   const { status } = useProcessStore();
   const { send } = useProcessStateMachine();
 

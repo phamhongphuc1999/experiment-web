@@ -2,15 +2,15 @@ import { Cpu } from 'lucide-react';
 import AppTooltip from 'src/components/AppTooltip';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessMachineEvent, ProcessType } from 'src/types/process.type';
+import { ProcessMachineEvent, TProcessType } from 'src/types/process.type';
 import ExportImportData from '../../ExportImportData';
 import RunningProcessView from './RunningProcessView';
 
-interface Props {
-  runningProcess: ProcessType | undefined;
+interface TProps {
+  runningProcess: TProcessType | undefined;
 }
 
-export default function RunningScreen({ runningProcess }: Props) {
+export default function RunningScreen({ runningProcess }: TProps) {
   const { mode } = useProcessStore();
   const { send } = useProcessStateMachine();
 

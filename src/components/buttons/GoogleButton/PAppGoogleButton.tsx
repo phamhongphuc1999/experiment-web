@@ -5,11 +5,11 @@ import { useGoogleLogin } from 'src/queries/papp/auth.query';
 import GoogleButton from '.';
 import { useAuthStore } from 'src/states/auth.state';
 
-interface Props {
+type TProps = {
   className?: string;
-}
+};
 
-export default function PAppGoogleButton({ className }: Props) {
+export default function PAppGoogleButton({ className }: TProps) {
   const router = useRouter();
   const { fn } = useAuthStore();
   const googleMutation = useGoogleLogin({

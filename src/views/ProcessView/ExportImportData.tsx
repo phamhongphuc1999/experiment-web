@@ -9,9 +9,9 @@ import { Input } from 'src/components/shadcn/input';
 import { Label } from 'src/components/shadcn/label';
 import { exampleProcessData } from 'src/configs/example-process';
 import { useProcessStore } from 'src/states/process.state';
-import { ProcessDataObjectType, ProcessStatusType } from 'src/types/process.type';
+import { TProcessDataObjectType, ProcessStatusType } from 'src/types/process.type';
 
-interface Props {
+interface TProps {
   components?: {
     import?: ReactNode;
     export?: ReactNode;
@@ -30,7 +30,7 @@ const EXAMPLE_JSON_SNIPPET = `{
   }
 }`;
 
-export default function ExportImportData({ components, isShowExport = true }: Props) {
+export default function ExportImportData({ components, isShowExport = true }: TProps) {
   const { processes, fn } = useProcessStore();
   const [open, setOpen] = useState(false);
 
@@ -54,7 +54,7 @@ export default function ExportImportData({ components, isShowExport = true }: Pr
       try {
         const json = JSON.parse(event.target?.result as string);
 
-        const result: ProcessDataObjectType = {};
+        const result: TProcessDataObjectType = {};
 
         if (Array.isArray(json)) {
           json.forEach((item: Record<string, any>, index: number) => {

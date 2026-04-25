@@ -2,15 +2,15 @@ import { Dispatch, SetStateAction } from 'react';
 import { ListEmpty } from 'src/components/box/Empty';
 import ChangeProcessItem from 'src/components/process-ui/ProcessItem/ChangeProcessItem';
 import { Button } from 'src/components/shadcn/button';
-import { ProcessDataObjectType } from 'src/types/process.type';
+import { TProcessDataObjectType } from 'src/types/process.type';
 import ExportImportData from 'src/views/ProcessView/ExportImportData';
 
-interface Props {
-  data: ProcessDataObjectType;
-  setData: Dispatch<SetStateAction<ProcessDataObjectType>>;
+interface TProps {
+  data: TProcessDataObjectType;
+  setData: Dispatch<SetStateAction<TProcessDataObjectType>>;
 }
 
-export default function MainProcessList({ data, setData }: Props) {
+export default function MainProcessList({ data, setData }: TProps) {
   return (
     <div className="max-h-100 overflow-y-auto">
       {Object.values(data).length === 0 ? (

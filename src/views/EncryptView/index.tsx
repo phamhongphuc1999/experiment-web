@@ -6,7 +6,7 @@ import { Button } from 'src/components/shadcn/button';
 import { ENCRYPT_KEY, IV_HEX } from 'src/configs/constance';
 import { useRandomNumber } from 'src/hooks/actions/crypt.action';
 import { decryptText } from 'src/services/encrypt';
-import DomainInfo, { DomainInfoType } from './DomainInfo';
+import DomainInfo, { TDomainInfoType } from './DomainInfo';
 
 export default function EncryptView() {
   const [hello, setHello] = useState<{ data: string }>({ data: '' });
@@ -14,7 +14,7 @@ export default function EncryptView() {
   const [error, setError] = useState('');
   const [axiosError, setAxiosError] = useState('');
   const [axiosRandomData, setAxiosRandomData] = useState<object>({});
-  const [data, setData] = useState<DomainInfoType | undefined>(undefined);
+  const [data, setData] = useState<TDomainInfoType | undefined>(undefined);
 
   const { mutate, isPending } = useRandomNumber({
     onSuccess: (data) => {

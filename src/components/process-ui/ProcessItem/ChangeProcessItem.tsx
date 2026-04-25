@@ -11,7 +11,7 @@ import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { Button } from 'src/components/shadcn/button';
 import { Form, FormField, FormItemContent } from 'src/components/shadcn/form';
 import { formatText } from 'src/services';
-import { ProcessType } from 'src/types/process.type';
+import { TProcessType } from 'src/types/process.type';
 import z from 'zod';
 
 const processTimeSchema = z.object({
@@ -26,10 +26,10 @@ const schema = processTimeSchema.extend({
   blockTasks: z.array(processTimeSchema).optional(),
 });
 
-type FormValues = z.infer<typeof schema>;
+type TFormValues = z.infer<typeof schema>;
 
-interface Props {
-  data: ProcessType;
+interface TProps {
+  data: TProcessType;
   events?: {
     onAddBlockTask?: () => void;
     onArrivalTimeChange?: (arrivalTime: number) => void;
@@ -42,8 +42,8 @@ interface Props {
   props?: ComponentProps<'div'>;
 }
 
-export default function ChangeProcessItem({ data, events, props }: Props) {
-  const form = useForm<FormValues>({
+export default function ChangeProcessItem({ data, events, props }: TProps) {
+  const form = useForm<TFormValues>({
     mode: 'onChange',
     resolver: zodResolver(schema),
     defaultValues: { arrivalTime: data.arrivalTime, executionTime: data.executionTime },

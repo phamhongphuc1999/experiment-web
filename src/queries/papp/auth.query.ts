@@ -1,66 +1,66 @@
 import { useMutation } from '@tanstack/react-query';
 import PAppClient from 'src/api/papp';
-import { MutationOptionsDefaultError } from 'src/types/global';
+import { TMutationOptionsDefaultError } from 'src/types/global';
 import {
-  AccessTokenResponseType,
-  AuthSignupDto,
-  GoogleRecoverPasswordDto,
-  GoogleSigninDto,
-  OnlyOkResponseType,
-  PasswordLoginDto,
-  RecoverTokenDto,
-  VerifyTokenDto,
+  TAccessTokenResponseType,
+  TAuthSignupDto,
+  TGoogleRecoverPasswordDto,
+  TGoogleSigninDto,
+  TOnlyOkResponseType,
+  TPasswordLoginDto,
+  TRecoverTokenDto,
+  TVerifyTokenDto,
 } from 'src/types/papp.type';
 
 export function useSignup(
-  options?: MutationOptionsDefaultError<OnlyOkResponseType, AuthSignupDto>
+  options?: TMutationOptionsDefaultError<TOnlyOkResponseType, TAuthSignupDto>
 ) {
   return useMutation({
     ...options,
-    mutationFn: (data: AuthSignupDto) => PAppClient.auth.signup(data),
+    mutationFn: (data: TAuthSignupDto) => PAppClient.auth.signup(data),
   });
 }
 
 export function useVerifyEmail(
-  options?: MutationOptionsDefaultError<OnlyOkResponseType, VerifyTokenDto>
+  options?: TMutationOptionsDefaultError<TOnlyOkResponseType, TVerifyTokenDto>
 ) {
   return useMutation({
     ...options,
-    mutationFn: (data: VerifyTokenDto) => PAppClient.auth.verifyEmail(data),
+    mutationFn: (data: TVerifyTokenDto) => PAppClient.auth.verifyEmail(data),
   });
 }
 
 export function useGoogleLogin(
-  options?: MutationOptionsDefaultError<AccessTokenResponseType, GoogleSigninDto>
+  options?: TMutationOptionsDefaultError<TAccessTokenResponseType, TGoogleSigninDto>
 ) {
   return useMutation({
     ...options,
-    mutationFn: (data: GoogleSigninDto) => PAppClient.auth.googleLogin(data),
+    mutationFn: (data: TGoogleSigninDto) => PAppClient.auth.googleLogin(data),
   });
 }
 
 export function usePasswordLogin(
-  options?: MutationOptionsDefaultError<AccessTokenResponseType, PasswordLoginDto>
+  options?: TMutationOptionsDefaultError<TAccessTokenResponseType, TPasswordLoginDto>
 ) {
   return useMutation({
     ...options,
-    mutationFn: async (data: PasswordLoginDto) => PAppClient.auth.signinWithPassword(data),
+    mutationFn: async (data: TPasswordLoginDto) => PAppClient.auth.signinWithPassword(data),
   });
 }
 
 export function useSendRecoverPassword() {
   return useMutation({
-    mutationFn: (data: GoogleRecoverPasswordDto) => PAppClient.auth.sendRecoverMailPassword(data),
+    mutationFn: (data: TGoogleRecoverPasswordDto) => PAppClient.auth.sendRecoverMailPassword(data),
   });
 }
 
 export function useRecoverPassword() {
   return useMutation({
-    mutationFn: (data: RecoverTokenDto) => PAppClient.auth.recoverPassword(data),
+    mutationFn: (data: TRecoverTokenDto) => PAppClient.auth.recoverPassword(data),
   });
 }
 
-export function useRefresh(options?: MutationOptionsDefaultError<AccessTokenResponseType, void>) {
+export function useRefresh(options?: TMutationOptionsDefaultError<TAccessTokenResponseType, void>) {
   return useMutation({
     ...options,
     mutationFn: () => PAppClient.auth.refresh(),

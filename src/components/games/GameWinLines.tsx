@@ -1,12 +1,12 @@
 import { cn } from 'src/lib/utils';
-import { CaroWinType, TurnType } from 'src/types/caro.type';
+import { TCaroWinType, TTurnType } from 'src/types/caro.type';
 
-interface Props {
-  turn?: TurnType;
-  winTypes?: Partial<{ [type in CaroWinType]: boolean }>;
+interface TProps {
+  turn?: TTurnType;
+  winTypes?: Partial<{ [type in TCaroWinType]: boolean }>;
 }
 
-export default function GameWinLines({ turn, winTypes }: Props) {
+export default function GameWinLines({ turn, winTypes }: TProps) {
   return (
     <>
       {winTypes?.horizontal && (

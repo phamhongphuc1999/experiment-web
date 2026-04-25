@@ -2,12 +2,12 @@ import { Fragment } from 'react';
 import TitleBox from 'src/components/box/TitleBox';
 import CopyClipboard from 'src/components/CopyClipboard';
 
-interface Props {
+interface TProps {
   title: string;
   signal: string;
 }
 
-export default function SignalTitleBox({ title, signal }: Props) {
+export default function SignalTitleBox({ title, signal }: TProps) {
   return (
     <TitleBox
       className="mt-2 items-start"

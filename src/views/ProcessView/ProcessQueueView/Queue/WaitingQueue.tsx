@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from 'motion/react';
 import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessStatusType, TProcessType } from 'src/types/process.type';
 import BaseQueue from './BaseQueue';
 
-interface Props {
-  processList: ProcessType[];
+interface TProps {
+  processList: TProcessType[];
 }
 
-export default function WaitingQueue({ processList }: Props) {
+export default function WaitingQueue({ processList }: TProps) {
   const waitingProcesses = processList
     .filter((p) => p.state === ProcessStatusType.WAITING)
     .sort((p1, p2) => {

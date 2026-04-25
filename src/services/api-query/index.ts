@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { PAPP_BACKEND_URL } from 'src/configs/constance';
 import { useAuthStore } from 'src/states/auth.state';
-import { BaseQueryInstance } from 'src/types/global';
+import { TBaseQueryInstance } from 'src/types/global';
 import { hexToUint8Array } from '..';
 import { initWasm } from '../wasm';
 
@@ -77,7 +77,7 @@ export function serializeParams(params: Record<string, unknown>) {
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
-function createBaseQuery(baseUrl: string): BaseQueryInstance {
+function createBaseQuery(baseUrl: string): TBaseQueryInstance {
   const baseQuery: AxiosInstance = axios.create({
     baseURL: baseUrl,
     cancelToken: source.token,

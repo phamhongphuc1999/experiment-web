@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from 'src/lib/utils';
 
-interface Props {
+interface TProps {
   title: ReactNode;
   value: ReactNode;
   titleProps?: ComponentProps<'div'>;
@@ -9,7 +9,7 @@ interface Props {
   className?: string;
 }
 
-export default function TitleBox({ title, value, titleProps, className, valueProps }: Props) {
+export default function TitleBox({ title, value, titleProps, className, valueProps }: TProps) {
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <div {...titleProps} className={cn('shrink-0 text-sm font-bold', titleProps?.className)}>

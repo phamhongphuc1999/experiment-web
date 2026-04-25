@@ -1,6 +1,6 @@
 import { AppKitNetwork, base, bsc, ChainNamespace, solana } from '@reown/appkit/networks';
 import { Cluster } from '@solana/web3.js';
-import { ChainId, NetworkConfig } from '../types';
+import { ChainId, TNetworkConfig } from '../types';
 
 export const REOWN_PROJECT_ID = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || '';
 export const supportedNetworks = [ChainId.BSC, ChainId.BASE, ChainId.SOL, ChainId.APT, ChainId.SUI];
@@ -23,7 +23,7 @@ export const SolanaNetworkConfig: { [network in Cluster]: string } = {
   testnet: 'solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3zQawwpjk2NsNY',
 };
 
-export const AppNetworkConfig: { [chainId in ChainId]: NetworkConfig } = {
+export const AppNetworkConfig: { [chainId in ChainId]: TNetworkConfig } = {
   [ChainId.BSC]: { chain: { chainIntegerId: 56, chainId: ChainId.BSC } },
   [ChainId.BASE]: { chain: { chainIntegerId: 8453, chainId: ChainId.BASE } },
   [ChainId.SOL]: { chain: { chainId: ChainId.SOL } },

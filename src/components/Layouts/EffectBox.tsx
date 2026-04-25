@@ -10,11 +10,11 @@ const queryClient = new QueryClient({
   },
 });
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function EffectBox({ children }: Props) {
+export default function EffectBox({ children }: TProps) {
   const { theme } = useConfigStore();
 
   useEffect(() => {

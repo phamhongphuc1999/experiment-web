@@ -38,7 +38,7 @@ const buttonVariants = cva(
   }
 );
 
-type Props = ComponentProps<'button'> &
+type TProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     sound?: SoundType;
     isSound?: boolean;
@@ -48,7 +48,7 @@ type Props = ComponentProps<'button'> &
     contentprops?: ComponentProps<'div'>;
   };
 
-function Button(params: Props) {
+function Button(params: TProps) {
   const {
     className,
     variant,

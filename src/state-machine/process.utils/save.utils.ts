@@ -1,8 +1,10 @@
 import { useProcessStore } from 'src/states/process.state';
 import { ProcessStatusType, SchedulerModeType } from 'src/types/process.type';
-import { ProcessContextType } from './type.utils';
+import { TProcessContextType } from './type.utils';
 
-export function saveProcessContextEntry(context: ProcessContextType): Partial<ProcessContextType> {
+export function saveProcessContextEntry(
+  context: TProcessContextType
+): Partial<TProcessContextType> {
   const currentProcess = context.currentProcess;
   const updateProcess = useProcessStore.getState().fn.updateProcess;
   if (currentProcess) updateProcess(currentProcess.pid, currentProcess);

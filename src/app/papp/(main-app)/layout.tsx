@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import PAppLayout from 'src/components/Layouts/PAppLayout';
 
-interface Props {
+type TProps = {
   children: ReactNode;
-}
+};
 
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: TProps) {
   return <PAppLayout>{children}</PAppLayout>;
 }

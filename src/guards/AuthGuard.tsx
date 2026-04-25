@@ -7,7 +7,7 @@ import { ComponentProps, useEffect } from 'react';
 import ClockLoader from 'src/components/ClockLoader';
 import { useAuthStore } from 'src/states/auth.state';
 
-type JwtPayload = {
+type TJwtPayload = {
   exp: number;
   iat: number;
   sub: number;
@@ -21,7 +21,7 @@ export default function AuthGuard(props: ComponentProps<'div'>) {
     if (isReady) {
       if (!accessToken) router.push('/papp/login');
       else {
-        const decoded = jwtDecode<JwtPayload>(accessToken);
+        const decoded = jwtDecode<TJwtPayload>(accessToken);
         if (dayjs().isAfter(dayjs.unix(decoded.exp))) {
           fn.clearAccessToken();
           router.push('/papp/login');

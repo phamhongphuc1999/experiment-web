@@ -2,12 +2,12 @@ import { ComponentProps } from 'react';
 import { cn } from 'src/lib/utils';
 import { ProcessStatusType } from 'src/types/process.type';
 
-interface Props {
+type TProps = {
   state: ProcessStatusType;
   rootprops?: ComponentProps<'span'>;
-}
+};
 
-export default function ProcessStatus({ state, rootprops }: Props) {
+export default function ProcessStatus({ state, rootprops }: TProps) {
   return (
     <span
       {...rootprops}

@@ -1,37 +1,42 @@
 import { checkWin } from 'src/services/connect4.utils';
-import { CaroGameType, Connect4WinStateType, PlayModeType, TurnType } from 'src/types/caro.type';
+import {
+  TCaroGameType,
+  TConnect4WinStateType,
+  TPlayModeType,
+  TTurnType,
+} from 'src/types/caro.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-type Connect4MetadataType = {
+type TConnect4MetadataType = {
   numberOfRows: number;
   numberOfColumns: number;
-  playMode: PlayModeType;
-  gameType: CaroGameType;
+  playMode: TPlayModeType;
+  gameType: TCaroGameType;
   status: 'playing' | 'win';
   maxNumberOfBlindError: number;
 };
 
-type Connect4Type = {
-  metadata: Connect4MetadataType;
+type TConnect4Type = {
+  metadata: TConnect4MetadataType;
   numberOfBlindError: { 0: number; 1: number };
   isBlindForceOver: boolean;
-  turn: TurnType;
-  steps: { [column: number]: Array<TurnType> };
+  turn: TTurnType;
+  steps: { [column: number]: Array<TTurnType> };
   stepsOrder: Array<number>;
-  winState?: Connect4WinStateType;
+  winState?: TConnect4WinStateType;
   fn: {
     move: (column: number) => void;
     undo: () => void;
-    reset: (turn?: TurnType) => void;
-    countNumberOfBlindError: (turn: TurnType) => void;
-    setMetadata: (metadata: Partial<Connect4MetadataType>) => void;
+    reset: (turn?: TTurnType) => void;
+    countNumberOfBlindError: (turn: TTurnType) => void;
+    setMetadata: (metadata: Partial<TConnect4MetadataType>) => void;
   };
 };
 
 export const useConnect4Store = create<
-  Connect4Type,
+  TConnect4Type,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -67,7 +72,7 @@ export const useConnect4Store = create<
               if (_winState.winMode.length > 0) {
                 state.winState = _winState;
                 state.metadata.status = 'win';
-              } else state.turn = (1 - state.turn) as TurnType;
+              } else state.turn = (1 - state.turn) as TTurnType;
             });
           },
           undo: () => {
@@ -93,18 +98,18 @@ export const useConnect4Store = create<
               state.winState = undefined;
             });
           },
-          countNumberOfBlindError: (turn: TurnType) => {
+          countNumberOfBlindError: (turn: TTurnType) => {
             set((state) => {
               const currentErrors = state.numberOfBlindError[turn];
               state.numberOfBlindError[turn] = currentErrors + 1;
               if (state.numberOfBlindError[turn] > state.metadata.maxNumberOfBlindError) {
                 state.isBlindForceOver = true;
-                state.turn = (1 - state.turn) as TurnType;
+                state.turn = (1 - state.turn) as TTurnType;
               }
             });
           },
           setMetadata: (
-            metadata: Partial<Omit<Connect4MetadataType, 'numberOfRows' | 'numberOfColumns'>>
+            metadata: Partial<Omit<TConnect4MetadataType, 'numberOfRows' | 'numberOfColumns'>>
           ) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
@@ -117,7 +122,7 @@ export const useConnect4Store = create<
       name: 'experiment.connect4',
       version: 1.0,
       migrate(persistedState, version) {
-        if (version < 1.0) return { ...(persistedState as Connect4Type) };
+        if (version < 1.0) return { ...(persistedState as TConnect4Type) };
         return persistedState;
       },
       partialize: (state) => {

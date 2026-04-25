@@ -1,13 +1,13 @@
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from 'src/lib/utils';
 
-interface Props {
+interface TProps {
   title?: string;
   component?: ReactNode;
   rootprops?: ComponentProps<'div'>;
 }
 
-export function ListEmpty({ title, component, rootprops }: Props) {
+export function ListEmpty({ title, component, rootprops }: TProps) {
   return (
     <div
       {...rootprops}

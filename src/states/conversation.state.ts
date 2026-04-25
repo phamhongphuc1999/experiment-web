@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface ConversationStateType {
+interface TConversationStateType {
   currentConversationId: number | undefined;
   fn: {
     setCurrentConversationId: (currentConversationId: number) => void;
@@ -10,7 +10,7 @@ interface ConversationStateType {
 }
 
 export const useConversationStore = create<
-  ConversationStateType,
+  TConversationStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(

@@ -32,10 +32,10 @@ const signupSchema = z
     path: ['confirmedPassword'],
   });
 
-type FormValues = z.infer<typeof signupSchema>;
+type TFormValues = z.infer<typeof signupSchema>;
 
 export default function SignupView() {
-  const form = useForm<FormValues>({
+  const form = useForm<TFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: { email: '', name: '', password: '', confirmedPassword: '' },
   });
@@ -54,7 +54,7 @@ export default function SignupView() {
     },
   });
 
-  function onSubmit(values: FormValues) {
+  function onSubmit(values: TFormValues) {
     mutation.mutate({ name: values.name, password: values.password, email: values.email });
   }
 

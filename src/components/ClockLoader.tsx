@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 import { cn } from 'src/lib/utils';
-import { AnimationComponentDivProps, AnimationComponentProps } from 'src/types/global';
+import { TAnimationComponentDivProps, TAnimationComponentProps } from 'src/types/global';
 
-interface ClockLoaderProps extends AnimationComponentProps {
+interface TClockLoaderProps extends TAnimationComponentProps {
   isReverse?: boolean;
 }
 
@@ -10,7 +10,7 @@ export default function ClockLoader({
   color = 'var(--primary)',
   size = 16,
   isReverse = false,
-}: ClockLoaderProps) {
+}: TClockLoaderProps) {
   return (
     <div
       className="ClockLoader_root relative inline-block rounded-[50%] border perspective-[800]"
@@ -54,7 +54,7 @@ export default function ClockLoader({
 export function ClockLoaderBox({
   iconProps,
   ...props
-}: AnimationComponentDivProps<ClockLoaderProps>) {
+}: TAnimationComponentDivProps<TClockLoaderProps>) {
   return (
     <div {...props} className={cn('flex justify-center', props.className)}>
       <ClockLoader {...iconProps} />

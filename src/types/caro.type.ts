@@ -1,30 +1,30 @@
-export type TurnType = 0 | 1;
-export type RoleType = 'host' | 'guest';
-export type ConnectionType = 'init' | 'connecting' | 'connected';
-export type PlayModeType = 'offline' | 'online' | 'machine';
-export type CaroGameType = 'normal' | 'blind';
-export type CaroWinModeType = 'blockOpponent' | 'non-blockOpponent';
-export type CaroSizeBoardType = 3 | 10 | 15;
-export type ChatType = 'yourChat' | 'friendChat';
-export type MyGameType = 'caro' | 'connect4';
-export type MyAllGameType = MyGameType | 'pikachu';
+export type TTurnType = 0 | 1;
+export type TRoleType = 'host' | 'guest';
+export type TConnectionType = 'init' | 'connecting' | 'connected';
+export type TPlayModeType = 'offline' | 'online' | 'machine';
+export type TCaroGameType = 'normal' | 'blind';
+export type TCaroWinModeType = 'blockOpponent' | 'non-blockOpponent';
+export type TCaroSizeBoardType = 3 | 10 | 15;
+export type TChatType = 'yourChat' | 'friendChat';
+export type TMyGameType = 'caro' | 'connect4';
+export type TMyAllGameType = TMyGameType | 'pikachu';
 
-export type CaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
+export type TCaroWinType = 'leftDiagonal' | 'rightDiagonal' | 'vertical' | 'horizontal';
 
-export type WinStateType = {
-  winMode: Array<CaroWinType>;
+export type TWinStateType = {
+  winMode: Array<TCaroWinType>;
   locations: {
-    [location: number]: Partial<{ [type in CaroWinType]: boolean }>;
+    [location: number]: Partial<{ [type in TCaroWinType]: boolean }>;
   };
 };
 
-export type Connect4WinType = CaroWinType;
+export type TConnect4WinType = TCaroWinType;
 
-export type Connect4WinStateType = {
-  winMode: Array<Connect4WinType>;
+export type TConnect4WinStateType = {
+  winMode: Array<TConnect4WinType>;
   locations: {
-    [key: string]: Partial<{ [type in Connect4WinType]: boolean }>;
+    [key: string]: Partial<{ [type in TConnect4WinType]: boolean }>;
   };
 };
 
-export type CaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';
+export type TCaroMessageType = 'chat' | 'move' | 'newGame' | 'undo' | 'sync';

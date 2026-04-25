@@ -1,36 +1,36 @@
 import cloneDeep from 'lodash.clonedeep';
 import {
-  ProcessDataObjectType,
+  TProcessDataObjectType,
   ProcessStatusType,
-  ProcessStoreStatusType,
-  ProcessType,
+  TProcessStoreStatusType,
+  TProcessType,
   SchedulerModeType,
 } from 'src/types/process.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface ProcessMetadataType {
+interface TProcessMetadataType {
   mode: SchedulerModeType;
-  status: ProcessStoreStatusType;
+  status: TProcessStoreStatusType;
   interval: number;
   maxBlockTaskPerSlice: number;
   displayMode: 'chart' | 'column';
 }
 
-interface ProcessStateType extends ProcessMetadataType {
-  processes: ProcessDataObjectType;
+interface TProcessStateType extends TProcessMetadataType {
+  processes: TProcessDataObjectType;
   fn: {
-    setMetadata: (metadata?: Partial<ProcessMetadataType>) => void;
-    setProcesses: (processes: ProcessDataObjectType) => void;
-    updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => void;
+    setMetadata: (metadata?: Partial<TProcessMetadataType>) => void;
+    setProcesses: (processes: TProcessDataObjectType) => void;
+    updateProcess: (pid: string, data: Partial<Omit<TProcessType, 'pid'>>) => void;
     resetProcesses: () => void;
     clear: () => void;
   };
 }
 
 export const useProcessStore = create<
-  ProcessStateType,
+  TProcessStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -43,7 +43,7 @@ export const useProcessStore = create<
         interval: 1000,
         maxBlockTaskPerSlice: 5,
         fn: {
-          setMetadata: (metadata?: Partial<ProcessMetadataType>) => {
+          setMetadata: (metadata?: Partial<TProcessMetadataType>) => {
             set((state) => {
               if (metadata?.mode) state.mode = metadata.mode;
               if (metadata?.status) state.status = metadata.status;
@@ -53,12 +53,12 @@ export const useProcessStore = create<
               if (metadata?.displayMode) state.displayMode = metadata.displayMode;
             });
           },
-          setProcesses: (processes: ProcessDataObjectType) => {
+          setProcesses: (processes: TProcessDataObjectType) => {
             set((state) => {
               state.processes = processes;
             });
           },
-          updateProcess: (pid: string, data: Partial<Omit<ProcessType, 'pid'>>) => {
+          updateProcess: (pid: string, data: Partial<Omit<TProcessType, 'pid'>>) => {
             set((state) => {
               if (state.processes[pid]) {
                 if (data.beginAt == -1) data.beginAt = state.processes[pid].beginAt;
@@ -105,7 +105,7 @@ export const useProcessStore = create<
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {
-          return { ...(persistedState as ProcessStateType) };
+          return { ...(persistedState as TProcessStateType) };
         }
         return persistedState;
       },

@@ -5,12 +5,12 @@ import { AnchorProvider, Program } from '@coral-xyz/anchor';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { OptionalQueryType } from 'src/types/global';
+import { TOptionalQueryType } from 'src/types/global';
 import { getSolanaRpc } from 'src/web3/services/utils';
-import { ContractActionParams } from 'src/web3/types';
+import { TContractActionParams } from 'src/web3/types';
 
 export default function useSolanaReadContract() {
-  const readContract = useCallback(async (params: ContractActionParams) => {
+  const readContract = useCallback(async (params: TContractActionParams) => {
     const { address, functionName, args = [], idl, cluster = 'mainnet-beta' } = params;
 
     const rpcUrl = getSolanaRpc(cluster);
@@ -48,12 +48,12 @@ export default function useSolanaReadContract() {
   return { readContract };
 }
 
-type QueryType = {
-  contractParams: ContractActionParams;
-  queryParams?: OptionalQueryType<unknown>;
+type TQueryType = {
+  contractParams: TContractActionParams;
+  queryParams?: TOptionalQueryType<unknown>;
 };
 
-export function useQuerySolanaReadContract({ contractParams, queryParams }: QueryType) {
+export function useQuerySolanaReadContract({ contractParams, queryParams }: TQueryType) {
   const { readContract } = useSolanaReadContract();
 
   return useQuery({

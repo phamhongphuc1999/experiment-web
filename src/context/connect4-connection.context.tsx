@@ -5,12 +5,12 @@ import { createContext, ReactNode, useCallback, useContext, useMemo, useState } 
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
 import { useGameMessengerChat } from 'src/states/messenger.state';
-import { ConnectionType, RoleType } from 'src/types/caro.type';
-import { CaroConnectionContextType } from './caro-connection.context';
+import { TConnectionType, TRoleType } from 'src/types/caro.type';
+import { TCaroConnectionContextType } from './caro-connection.context';
 
-type Connect4ConnectionContextType = CaroConnectionContextType;
+type TConnect4ConnectionContextType = TCaroConnectionContextType;
 
-const connect4ConnectionContextDefault: Connect4ConnectionContextType = {
+const connect4ConnectionContextDefault: TConnect4ConnectionContextType = {
   peer: null,
   yourSignal: '',
   friendSignal: '',
@@ -22,25 +22,25 @@ const connect4ConnectionContextDefault: Connect4ConnectionContextType = {
   },
 };
 
-const Connect4ConnectionContext = createContext<Connect4ConnectionContextType>(
+const Connect4ConnectionContext = createContext<TConnect4ConnectionContextType>(
   connect4ConnectionContextDefault
 );
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function Connect4ConnectionProvider({ children }: Props) {
+export default function Connect4ConnectionProvider({ children }: TProps) {
   const [peer, setPeer] = useState<Instance | null>(null);
-  const [role, setRole] = useState<RoleType>('host');
+  const [role, setRole] = useState<TRoleType>('host');
   const [yourSignal, setYourSignal] = useState('');
   const [friendSignal, setFriendSignal] = useState('');
-  const [connection, setConnection] = useState<ConnectionType>('init');
+  const [connection, setConnection] = useState<TConnectionType>('init');
   const {
     fn: { addChats },
   } = useGameMessengerChat('connect4');
 
-  const initConnection = useCallback((type: RoleType) => {
+  const initConnection = useCallback((type: TRoleType) => {
     const p = new Peer({ initiator: type == 'host' ? true : false, trickle: false });
     setPeer(p);
     setRole(type);
@@ -57,7 +57,7 @@ export default function Connect4ConnectionProvider({ children }: Props) {
     [peer]
   );
 
-  const contextData = useMemo<CaroConnectionContextType>(() => {
+  const contextData = useMemo<TCaroConnectionContextType>(() => {
     return {
       peer,
       yourSignal,

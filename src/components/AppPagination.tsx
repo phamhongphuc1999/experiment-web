@@ -12,7 +12,7 @@ import {
   PaginationPrevious,
 } from './shadcn/pagination';
 
-interface Props {
+interface TProps {
   currentPage: number;
   totalPages: number;
   events?: {
@@ -21,7 +21,7 @@ interface Props {
   className?: string;
 }
 
-export default function AppPagination({ currentPage, totalPages, events, className }: Props) {
+export default function AppPagination({ currentPage, totalPages, events, className }: TProps) {
   const pages = useMemo(() => {
     const delta = 2;
     const range: Array<number | string> = [];

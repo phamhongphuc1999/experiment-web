@@ -17,11 +17,13 @@ import { useConnect4StateContext } from 'src/context/connect4-state.context';
 import { cn } from 'src/lib/utils';
 import { soundtrack } from 'src/services/soundtrack';
 import { useConnect4Store } from 'src/states/connect4.state';
-import { Connect4WinStateType, TurnType } from 'src/types/caro.type';
+import { TConnect4WinStateType, TTurnType } from 'src/types/caro.type';
 import { SoundType } from 'src/types/global';
 import HeaderConfig from './HeaderConfig';
 
-export default function Connect4Board(props: ComponentProps<'div'>) {
+type TProps = ComponentProps<'div'>;
+
+export default function Connect4Board(props: TProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState(0);
   const {
@@ -146,13 +148,13 @@ export default function Connect4Board(props: ComponentProps<'div'>) {
   );
 }
 
-type Connect4CellProps = {
+type TConnect4CellProps = {
   row: number;
   size: number;
   itemSize: number;
   numberOfRows: number;
-  turn: TurnType | undefined;
-  winTypes: Connect4WinStateType['locations'][string] | undefined;
+  turn: TTurnType | undefined;
+  winTypes: TConnect4WinStateType['locations'][string] | undefined;
   isShouldShowMove: boolean;
 };
 
@@ -164,7 +166,7 @@ const Connect4Cell = memo(function Connect4Cell({
   turn,
   winTypes,
   isShouldShowMove,
-}: Connect4CellProps) {
+}: TConnect4CellProps) {
   return (
     <div
       className={cn(

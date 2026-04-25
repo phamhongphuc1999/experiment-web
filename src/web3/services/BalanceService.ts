@@ -6,7 +6,7 @@ import { AppNetworkConfig } from '../configs/constance';
 import { ChainId } from '../types';
 import { getSolanaRpc } from './utils';
 
-export type BalanceOptionType = Partial<{ cluster: Cluster }>;
+export type TBalanceOptionType = Partial<{ cluster: Cluster }>;
 
 export default class BalanceService {
   static async getSolanaBalance(address: string, cluster: Cluster = 'mainnet-beta') {
@@ -23,7 +23,7 @@ export default class BalanceService {
   static async balance(
     address: string,
     chainId: ChainId,
-    options: BalanceOptionType | undefined = undefined
+    options: TBalanceOptionType | undefined = undefined
   ) {
     if (chainId == ChainId.BSC || chainId == ChainId.BASE) {
       const chain = AppNetworkConfig[chainId];

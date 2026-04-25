@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from 'next';
 import { APP_NAME } from 'src/configs/constance';
-import { PositionType } from 'src/types/global';
+import { TPositionType } from 'src/types/global';
 
 /**
  * Converts a hexadecimal string to a Uint8Array.
@@ -62,7 +62,7 @@ export function generateAppMetadata(title: string): Metadata {
  * @param position2 - Second position [row, column]
  * @returns True if both positions have the same coordinates
  */
-export function isPositionEqual(position1: PositionType, position2: PositionType): boolean {
+export function isPositionEqual(position1: TPositionType, position2: TPositionType): boolean {
   return position1[0] === position2[0] && position1[1] === position2[1];
 }
 
@@ -73,8 +73,8 @@ export function isPositionEqual(position1: PositionType, position2: PositionType
  * @returns True if the position is found in the array
  */
 export function isPositionIncludes(
-  position: PositionType,
-  positions: Array<PositionType>
+  position: TPositionType,
+  positions: Array<TPositionType>
 ): boolean {
   return positions.some((p) => p[0] === position[0] && p[1] === position[1]);
 }

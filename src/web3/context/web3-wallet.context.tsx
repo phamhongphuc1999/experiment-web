@@ -8,7 +8,7 @@ import useReownWalletByNamespace from '../hooks/useReownWalletByNamespace';
 import { useWeb3Store } from '../states/web3.state';
 import { ChainId } from '../types';
 
-export type Web3WalletContextType = {
+export type TWeb3WalletContextType = {
   address: string | undefined;
   isConnected: boolean;
   fn: {
@@ -18,7 +18,7 @@ export type Web3WalletContextType = {
   };
 };
 
-const web3WalletContextDefault: Web3WalletContextType = {
+const web3WalletContextDefault: TWeb3WalletContextType = {
   address: undefined,
   isConnected: false,
   fn: {
@@ -28,13 +28,13 @@ const web3WalletContextDefault: Web3WalletContextType = {
   },
 };
 
-const Web3WalletContext = createContext<Web3WalletContextType>(web3WalletContextDefault);
+const Web3WalletContext = createContext<TWeb3WalletContextType>(web3WalletContextDefault);
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function Web3WalletProvider({ children }: Props) {
+export default function Web3WalletProvider({ children }: TProps) {
   const {
     chainId,
     fn: { setChainId },

@@ -2,7 +2,7 @@ import { ComponentProps, ReactNode } from 'react';
 import { cn } from 'src/lib/utils';
 import { Input } from '../shadcn/input';
 
-interface Props extends ComponentProps<'input'> {
+type TProps = ComponentProps<'input'> & {
   name: string;
   error?: string;
   rootprops?: ComponentProps<'div'>;
@@ -10,9 +10,9 @@ interface Props extends ComponentProps<'input'> {
     start?: ReactNode;
     end?: ReactNode;
   };
-}
+};
 
-export default function BaseInput({ name, error, rootprops, icon, ...props }: Props) {
+export default function BaseInput({ name, error, rootprops, icon, ...props }: TProps) {
   return (
     <div>
       <div {...rootprops} className={cn('input-group inline-block w-full', rootprops?.className)}>

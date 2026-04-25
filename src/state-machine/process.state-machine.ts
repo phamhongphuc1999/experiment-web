@@ -13,10 +13,10 @@ import {
 import { runProcessAction, runProcessEntry, runProcessGuard } from './process.utils/run.utils';
 import { saveProcessContextEntry } from './process.utils/save.utils';
 import { scheduleProcessesEntry, scheduleProcessGuard } from './process.utils/schedule.utils';
-import { ProcessContextType, ProcessEventType } from './process.utils/type.utils';
+import { TProcessContextType, TProcessEventType } from './process.utils/type.utils';
 
 const processMachine = setup({
-  types: { events: {} as ProcessEventType, context: {} as ProcessContextType },
+  types: { events: {} as TProcessEventType, context: {} as TProcessContextType },
   delays: {
     INTERVAL: ({ context }) => context.interval,
   },

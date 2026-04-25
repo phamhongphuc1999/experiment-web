@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface AuthStateType {
+interface TAuthStateType {
   accessToken: string;
   isReady: boolean;
   fn: {
@@ -11,10 +11,10 @@ interface AuthStateType {
   };
 }
 
-let setStateRef: ((fn: (state: AuthStateType) => void) => void) | null = null;
+let setStateRef: ((fn: (state: TAuthStateType) => void) => void) | null = null;
 
 export const useAuthStore = create<
-  AuthStateType,
+  TAuthStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(

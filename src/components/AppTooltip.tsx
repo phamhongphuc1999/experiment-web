@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './shadcn/tooltip';
 import { TooltipContentProps } from '@radix-ui/react-tooltip';
 
-interface Props {
+interface TProps {
   tooltipContent?: ReactNode;
   contentProps?: TooltipContentProps;
   children?: ReactNode;
 }
 
-export default function AppTooltip({ tooltipContent, contentProps, children }: Props) {
+export default function AppTooltip({ tooltipContent, contentProps, children }: TProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild className="cursor-pointer">

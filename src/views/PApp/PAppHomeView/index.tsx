@@ -6,12 +6,12 @@ import useSocket from 'src/hooks/useSocket';
 import { useConversationStore } from 'src/states/conversation.state';
 import ChatInput from './ChatInput';
 import HomeHeader from './HomeHeader';
-import MainMessage, { SocketMessage } from './MainMessage';
+import MainMessage, { TSocketMessage } from './MainMessage';
 
 export default function PAppHomeView() {
   const { socket } = useSocket();
   const { currentConversationId } = useConversationStore();
-  const [messages, setMessages] = useState<SocketMessage[]>([]);
+  const [messages, setMessages] = useState<TSocketMessage[]>([]);
   const [isJoined, setIsJoined] = useState(false);
   const pendingMessagesRef = useRef<string[]>([]);
   const joinRequestedRef = useRef(false);
@@ -19,7 +19,7 @@ export default function PAppHomeView() {
   useEffect(() => {
     if (!socket) return;
 
-    const handleReceiveMessage = (payload: SocketMessage) => {
+    const handleReceiveMessage = (payload: TSocketMessage) => {
       setMessages((prev) => [...prev, payload]);
     };
 

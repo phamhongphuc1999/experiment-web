@@ -1,10 +1,10 @@
-type Comparator<T> = (a: T, b: T) => number;
+type TComparator<T> = (a: T, b: T) => number;
 
 export class PriorityQueue<T> {
   private heap: T[] = [];
-  private compare: Comparator<T>;
+  private compare: TComparator<T>;
 
-  constructor(compare: Comparator<T>) {
+  constructor(compare: TComparator<T>) {
     this.compare = compare;
   }
 

@@ -1,12 +1,12 @@
 import { Timer } from 'lucide-react';
-import { ProcessTimeType } from 'src/types/process.type';
+import { TProcessTimeType } from 'src/types/process.type';
 
-interface BlockTaskItemProps {
+interface TBlockTaskItemProps {
   index?: number;
-  item: ProcessTimeType;
+  item: TProcessTimeType;
 }
 
-function BlockTaskItem({ index, item }: BlockTaskItemProps) {
+function BlockTaskItem({ index, item }: TBlockTaskItemProps) {
   const subProgress = (item.runtime / item.executionTime) * 100;
 
   return (
@@ -31,9 +31,9 @@ function BlockTaskItem({ index, item }: BlockTaskItemProps) {
   );
 }
 
-interface Props {
+interface TProps {
   onlyShowCurrentBlockTask?: boolean;
-  data: Array<ProcessTimeType>;
+  data: Array<TProcessTimeType>;
   currentBlockTaskIndex: number;
 }
 
@@ -41,7 +41,7 @@ export default function BlockTaskList({
   onlyShowCurrentBlockTask,
   data,
   currentBlockTaskIndex,
-}: Props) {
+}: TProps) {
   if (data[currentBlockTaskIndex] == undefined && onlyShowCurrentBlockTask == true) return null;
 
   const content =

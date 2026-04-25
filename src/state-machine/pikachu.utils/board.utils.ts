@@ -6,13 +6,13 @@ import { soundtrack } from 'src/services/soundtrack';
 import { usePikachuStore } from 'src/states/pikachu.state';
 import { SoundType } from 'src/types/global';
 import {
-  PikachuContextType,
-  PikachuEventType,
+  TPikachuContextType,
+  TPikachuEventType,
   PikachuMachineEvent,
-  PikachuMoveEventType,
+  TPikachuMoveEventType,
 } from 'src/types/pikachu.type';
 
-export function changeBoardAction(): Partial<PikachuContextType> {
+export function changeBoardAction(): Partial<TPikachuContextType> {
   const state = usePikachuStore.getState();
   const { numberOfRows, numberOfColumns, numberOfLines, imgType } = state.metadata;
   const { board, path } = PikachuService.changeBoard({
@@ -27,10 +27,10 @@ export function changeBoardAction(): Partial<PikachuContextType> {
 }
 
 export function move(
-  context: PikachuContextType,
-  { position }: PikachuMoveEventType,
-  send: (event: PikachuEventType) => void
-): Partial<PikachuContextType> {
+  context: TPikachuContextType,
+  { position }: TPikachuMoveEventType,
+  send: (event: TPikachuEventType) => void
+): Partial<TPikachuContextType> {
   const { board, metadata } = usePikachuStore.getState();
   const {
     numberOfRows,

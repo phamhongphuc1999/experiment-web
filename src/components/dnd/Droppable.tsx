@@ -4,11 +4,11 @@ import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 import { ComponentProps } from 'react';
 import { cn } from 'src/lib/utils';
 
-interface Props extends Omit<ComponentProps<'div'>, 'id'> {
+interface TProps extends Omit<ComponentProps<'div'>, 'id'> {
   id: UniqueIdentifier;
 }
 
-export default function Droppable({ id, children, ...props }: Props) {
+export default function Droppable({ id, children, ...props }: TProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (

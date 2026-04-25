@@ -20,7 +20,7 @@ export enum ProcessMonitoringStatusType {
   RUNNING_BLOCKING_TASK = 'running-blocking-task',
 }
 
-export interface ProcessMonitorType {
+export interface TProcessMonitorType {
   pid: string;
   index?: number;
   start: number;
@@ -28,16 +28,16 @@ export interface ProcessMonitorType {
   state: ProcessMonitoringStatusType;
 }
 
-export type ProcessTimeType = {
+export type TProcessTimeType = {
   arrivalTime: number; // Time when the process arrives (enters the ready queue)
   executionTime: number; // Total CPU time required to finish the process
   runtime: number; // CPU time already spent running
 };
 
-export type ProcessType = ProcessTimeType & {
+export type TProcessType = TProcessTimeType & {
   index?: number;
   pid: string;
-  blockTasks?: Array<ProcessTimeType>; // simulate the waiting state (example: I/O)
+  blockTasks?: Array<TProcessTimeType>; // simulate the waiting state (example: I/O)
   currentBlockTaskIndex: number;
   state: ProcessStatusType;
   readyPriority: number;
@@ -46,11 +46,11 @@ export type ProcessType = ProcessTimeType & {
   endAt: number;
 };
 
-export type ProcessDataObjectType = {
-  [id: string]: ProcessType;
+export type TProcessDataObjectType = {
+  [id: string]: TProcessType;
 };
 
-export type ProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
+export type TProcessStoreStatusType = 'initial' | 'ready' | 'running' | 'pause' | 'ended';
 
 export enum SchedulerModeType {
   FIFO = 'fifo',
@@ -66,7 +66,7 @@ export enum ProcessMachineEvent {
   CLEAR = 'clear',
 }
 
-export type ProcessMetricsType = {
+export type TProcessMetricsType = {
   index?: number;
   arrivalTime: number;
   burstTime: number; // the total process run
@@ -74,7 +74,7 @@ export type ProcessMetricsType = {
   completionTime?: number; // the time process fullfil
 };
 
-export type ProcessMeasureMetricsType = {
+export type TProcessMeasureMetricsType = {
   turnaroundTime?: number; // = completionTime - arrivalTime
   waitingTime?: number; // = turnaroundTime - burstTime
   responseTime?: number; // = startTime - arrivalTime

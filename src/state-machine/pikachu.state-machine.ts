@@ -2,8 +2,8 @@
 
 import { createActorContext } from '@xstate/react';
 import {
-  PikachuContextType,
-  PikachuEventType,
+  TPikachuContextType,
+  TPikachuEventType,
   PikachuMachineEvent,
   PikachuMachineStateType,
 } from 'src/types/pikachu.type';
@@ -12,7 +12,7 @@ import { changeBoardAction, move } from './pikachu.utils/board.utils';
 import { createPikachuAction } from './pikachu.utils/create.utils';
 
 const pikachuMachine = setup({
-  types: { events: {} as PikachuEventType, context: {} as PikachuContextType },
+  types: { events: {} as TPikachuEventType, context: {} as TPikachuContextType },
   actions: {
     scheduleResetSelection: ({ context, self }) => {
       if (context.selectedPath.length === 0) return;

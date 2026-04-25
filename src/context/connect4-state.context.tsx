@@ -3,19 +3,19 @@
 
 import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
 import { useConnect4Store } from 'src/states/connect4.state';
-import { TurnType } from 'src/types/caro.type';
+import { TTurnType } from 'src/types/caro.type';
 
-export type Connect4StateContextType = {
+export type TConnect4StateContextType = {
   playerText: string;
   isWin: boolean;
   fn: {
     move: (location: number) => void;
     undo: () => void;
-    reset: (turn?: TurnType | undefined) => void;
+    reset: (turn?: TTurnType | undefined) => void;
   };
 };
 
-const connect4StateContextDefault: Connect4StateContextType = {
+const connect4StateContextDefault: TConnect4StateContextType = {
   playerText: '',
   isWin: false,
   fn: {
@@ -25,13 +25,13 @@ const connect4StateContextDefault: Connect4StateContextType = {
   },
 };
 
-const Connect4Context = createContext<Connect4StateContextType>(connect4StateContextDefault);
+const Connect4Context = createContext<TConnect4StateContextType>(connect4StateContextDefault);
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function Connect4StateProvider({ children }: Props) {
+export default function Connect4StateProvider({ children }: TProps) {
   const {
     turn,
     winState,
@@ -71,7 +71,7 @@ export default function Connect4StateProvider({ children }: Props) {
   }, [undo]);
 
   const handleReset = useCallback(
-    (turn?: TurnType) => {
+    (turn?: TTurnType) => {
       reset(turn);
     },
     [reset]

@@ -1,17 +1,17 @@
-import { ThemeType } from 'src/types/global';
+import { TThemeType } from 'src/types/global';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface ConfigStateType {
-  theme: ThemeType;
+interface TConfigStateType {
+  theme: TThemeType;
   isSound: boolean;
   backgroundSound: boolean;
   fn: { setTheme: () => void; setIsSound: () => void; setBackgroundSound: () => void };
 }
 
 export const useConfigStore = create<
-  ConfigStateType,
+  TConfigStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -44,7 +44,7 @@ export const useConfigStore = create<
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {
-          return { ...(persistedState as ConfigStateType) };
+          return { ...(persistedState as TConfigStateType) };
         }
         return persistedState;
       },

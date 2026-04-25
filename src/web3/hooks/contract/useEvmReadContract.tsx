@@ -3,8 +3,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { OptionalQueryType } from 'src/types/global';
-import { ChainId, ContractActionParams } from 'src/web3/types';
+import { TOptionalQueryType } from 'src/types/global';
+import { ChainId, TContractActionParams } from 'src/web3/types';
 import { createPublicClient, fallback, http, HttpTransport } from 'viem';
 import { base, bsc } from 'viem/chains';
 
@@ -21,7 +21,7 @@ const chainMap: { [chain: string]: { chain: any; rpcs?: Array<HttpTransport> } }
 };
 
 export default function useEvmReadContract() {
-  const readContract = useCallback(async (chainId: ChainId, params: ContractActionParams) => {
+  const readContract = useCallback(async (chainId: ChainId, params: TContractActionParams) => {
     const { chain, rpcs } = chainMap[chainId as keyof typeof chainMap];
     if (!chain) throw new Error(`Chain ${chainId} not supported for public EVM read`);
 
@@ -46,13 +46,13 @@ export default function useEvmReadContract() {
   return { readContract };
 }
 
-type QueryType = {
+type TQueryType = {
   chainId: ChainId;
-  contractParams: ContractActionParams;
-  queryParams?: OptionalQueryType<unknown>;
+  contractParams: TContractActionParams;
+  queryParams?: TOptionalQueryType<unknown>;
 };
 
-export function useQueryEvmReadContract({ chainId, contractParams, queryParams }: QueryType) {
+export function useQueryEvmReadContract({ chainId, contractParams, queryParams }: TQueryType) {
   const { readContract } = useEvmReadContract();
 
   return useQuery({

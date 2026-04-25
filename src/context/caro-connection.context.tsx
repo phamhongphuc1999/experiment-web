@@ -11,24 +11,24 @@ import {
 } from 'react';
 import Peer, { Instance } from 'simple-peer';
 import { toast } from 'sonner';
-import { createCaroMessage, decodeCaroMessage, SyncReturnType } from 'src/services/caro.utils';
+import { createCaroMessage, decodeCaroMessage, TSyncReturnType } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import { useGameMessengerChat } from 'src/states/messenger.state';
-import { ConnectionType, RoleType } from 'src/types/caro.type';
+import { TConnectionType, TRoleType } from 'src/types/caro.type';
 
-export type CaroConnectionContextType = {
+export type TCaroConnectionContextType = {
   peer: Instance | null;
   yourSignal: string;
   friendSignal: string;
-  role: RoleType;
-  connectionType: ConnectionType;
+  role: TRoleType;
+  connectionType: TConnectionType;
   fn: {
-    initConnection: (role: RoleType) => void;
+    initConnection: (role: TRoleType) => void;
     setFriendSignal: (friendSignal: string) => void;
   };
 };
 
-const caroConnectionContextDefault: CaroConnectionContextType = {
+const caroConnectionContextDefault: TCaroConnectionContextType = {
   peer: null,
   yourSignal: '',
   friendSignal: '',
@@ -40,20 +40,20 @@ const caroConnectionContextDefault: CaroConnectionContextType = {
   },
 };
 
-const CaroConnectionContext = createContext<CaroConnectionContextType>(
+const CaroConnectionContext = createContext<TCaroConnectionContextType>(
   caroConnectionContextDefault
 );
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function CaroConnectionProvider({ children }: Props) {
+export default function CaroConnectionProvider({ children }: TProps) {
   const [peer, setPeer] = useState<Instance | null>(null);
-  const [role, setRole] = useState<RoleType>('host');
+  const [role, setRole] = useState<TRoleType>('host');
   const [yourSignal, setYourSignal] = useState('');
   const [friendSignal, setFriendSignal] = useState('');
-  const [connection, setConnection] = useState<ConnectionType>('init');
+  const [connection, setConnection] = useState<TConnectionType>('init');
   const {
     fn: { addChats },
   } = useGameMessengerChat('caro');
@@ -62,7 +62,7 @@ export default function CaroConnectionProvider({ children }: Props) {
     fn: { setMetadata, move, undo, reset },
   } = useCaroStore();
 
-  const initConnection = useCallback((type: RoleType) => {
+  const initConnection = useCallback((type: TRoleType) => {
     const p = new Peer({ initiator: type == 'host' ? true : false, trickle: false });
     setPeer(p);
     setRole(type);
@@ -107,7 +107,7 @@ export default function CaroConnectionProvider({ children }: Props) {
               addChats('friendChat', message);
               toast.info('New message!!');
             } else if (type == 'sync') {
-              const { size, gameType, isOverride } = message as SyncReturnType;
+              const { size, gameType, isOverride } = message as TSyncReturnType;
               setMetadata({ size, gameType, isOverride });
               toast.info(`Set board size to ${size}x${size}`);
               toast.info(
@@ -141,7 +141,7 @@ export default function CaroConnectionProvider({ children }: Props) {
     }
   }, [addChats, move, peer, setMetadata, reset, undo]);
 
-  const contextData = useMemo<CaroConnectionContextType>(() => {
+  const contextData = useMemo<TCaroConnectionContextType>(() => {
     return {
       peer,
       yourSignal,

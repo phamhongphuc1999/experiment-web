@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { ChainId } from '../types';
 
-interface Web3StateType {
+interface TWeb3StateType {
   chainId: ChainId;
   fn: {
     setChainId: (chainId: ChainId) => void;
@@ -11,7 +11,7 @@ interface Web3StateType {
 }
 
 export const useWeb3Store = create<
-  Web3StateType,
+  TWeb3StateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -32,7 +32,7 @@ export const useWeb3Store = create<
       version: 1.0,
       migrate(persistedState, version) {
         if (version < 1.0) {
-          return { ...(persistedState as Web3StateType) };
+          return { ...(persistedState as TWeb3StateType) };
         }
         return persistedState;
       },

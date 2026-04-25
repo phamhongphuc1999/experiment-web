@@ -1,20 +1,20 @@
 import { MessageCircle, Send } from 'lucide-react';
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import { beVietnamPro } from 'src/configs/app-metadata';
+import { beVietnamPro } from 'src/configs/constance';
 import { useCaroConnectionContext } from 'src/context/caro-connection.context';
 import { cn } from 'src/lib/utils';
 import { createCaroMessage } from 'src/services/caro.utils';
 import { useGameMessengerChat } from 'src/states/messenger.state';
-import { MyGameType } from 'src/types/caro.type';
+import { TMyGameType } from 'src/types/caro.type';
 import AppTooltip from '../AppTooltip';
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../shadcn/dialog';
 import { Textarea } from '../shadcn/textarea';
 
-interface Props {
-  gameType: MyGameType;
+interface TProps {
+  gameType: TMyGameType;
 }
 
-export default function CaroMessengerDialog({ gameType }: Props) {
+export default function CaroMessengerDialog({ gameType }: TProps) {
   const { peer, connectionType } = useCaroConnectionContext();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const {

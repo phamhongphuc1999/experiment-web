@@ -2,11 +2,11 @@ import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react'
 import { namespaceByChainId } from '../configs/constance';
 import { ChainId } from '../types';
 
-type Props = {
+type TProps = {
   chainId: ChainId;
 };
 
-export default function useReownWalletByNamespace({ chainId }: Props) {
+export default function useReownWalletByNamespace({ chainId }: TProps) {
   const namespace = namespaceByChainId[chainId];
   const { address, isConnected } = useAppKitAccount({ namespace });
   const { open } = useAppKit();

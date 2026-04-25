@@ -2,12 +2,12 @@
 'use client';
 
 import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { TurnType } from 'src/types/caro.type';
+import { TTurnType } from 'src/types/caro.type';
 import { createCaroMessage } from 'src/services/caro.utils';
 import { useCaroStore } from 'src/states/caro.state';
 import { useCaroConnectionContext } from './caro-connection.context';
 
-export type CaroStateContextType = {
+export type TCaroStateContextType = {
   playerText: string;
   isWin: boolean;
   isOver: boolean;
@@ -15,11 +15,11 @@ export type CaroStateContextType = {
   fn: {
     move: (location: number) => void;
     undo: () => void;
-    reset: (turn?: TurnType | undefined) => void;
+    reset: (turn?: TTurnType | undefined) => void;
   };
 };
 
-const caroStateContextDefault: CaroStateContextType = {
+const caroStateContextDefault: TCaroStateContextType = {
   playerText: '',
   isWin: false,
   isOver: false,
@@ -31,13 +31,13 @@ const caroStateContextDefault: CaroStateContextType = {
   },
 };
 
-const CaroStateContext = createContext<CaroStateContextType>(caroStateContextDefault);
+const CaroStateContext = createContext<TCaroStateContextType>(caroStateContextDefault);
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function CaroStateProvider({ children }: Props) {
+export default function CaroStateProvider({ children }: TProps) {
   const {
     turn,
     winState,
@@ -104,7 +104,7 @@ export default function CaroStateProvider({ children }: Props) {
   }, [peer, undo]);
 
   const handleReset = useCallback(
-    (turn?: TurnType) => {
+    (turn?: TTurnType) => {
       reset(turn);
       if (peer) peer.send(createCaroMessage('newGame'));
     },

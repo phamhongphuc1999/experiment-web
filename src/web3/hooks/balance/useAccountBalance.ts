@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { OptionalQueryType } from 'src/types/global';
+import { TOptionalQueryType } from 'src/types/global';
 import { useWeb3WalletContext } from 'src/web3/context/web3-wallet.context';
-import BalanceService, { BalanceOptionType } from 'src/web3/services/BalanceService';
+import BalanceService, { TBalanceOptionType } from 'src/web3/services/BalanceService';
 import { useWeb3Store } from 'src/web3/states/web3.state';
 
-type ParamsType = Partial<{
-  query: OptionalQueryType<string | number | undefined>;
-  params: BalanceOptionType;
+type TParamsType = Partial<{
+  query: TOptionalQueryType<string | number | undefined>;
+  params: TBalanceOptionType;
 }>;
 
-export default function useAccountBalance(params: ParamsType = {}) {
+export default function useAccountBalance(params: TParamsType = {}) {
   const { address } = useWeb3WalletContext();
   const { chainId } = useWeb3Store();
 

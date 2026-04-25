@@ -2,7 +2,7 @@ import {
   initializeProcessesAction,
   loadProcessContextEntry,
 } from 'src/state-machine/process.utils';
-import { ProcessContextType } from 'src/state-machine/process.utils/type.utils';
+import { TProcessContextType } from 'src/state-machine/process.utils/type.utils';
 import { ProcessMachineEvent } from 'src/types/process.type';
 import { afterAll, assert, describe, it, vi } from 'vitest';
 import { initialProcesses } from '../fake-data';
@@ -45,7 +45,7 @@ describe('/process-state-machine/utils/common.test.ts', () => {
       type: ProcessMachineEvent.INITIALIZE,
       processes: initialProcesses,
     });
-    const context: Omit<ProcessContextType, 'currentProcess'> = {
+    const context: Omit<TProcessContextType, 'currentProcess'> = {
       interval: 100,
       counter: 2,
       newQueue,

@@ -12,24 +12,24 @@ import {
 } from 'react';
 import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import { PikachuGameType, PikachuImgType, PikachuTransformType } from 'src/types/pikachu.type';
+import { TPikachuGameType, TPikachuImgType, TPikachuTransformType } from 'src/types/pikachu.type';
 
-type PikachuConfigContextType = {
+type TPikachuConfigContextType = {
   size: { numberOfRows: number; numberOfColumns: number };
   numberOfLines: number;
-  imgType: PikachuImgType;
-  rounds: Array<PikachuTransformType>;
-  gameType: PikachuGameType;
+  imgType: TPikachuImgType;
+  rounds: Array<TPikachuTransformType>;
+  gameType: TPikachuGameType;
   fn: {
     setSize: Dispatch<SetStateAction<{ numberOfRows: number; numberOfColumns: number }>>;
     setNumberOfLines: Dispatch<SetStateAction<number>>;
-    setImgType: Dispatch<SetStateAction<PikachuImgType>>;
-    setRounds: Dispatch<SetStateAction<PikachuTransformType[]>>;
-    setGameType: Dispatch<SetStateAction<PikachuGameType>>;
+    setImgType: Dispatch<SetStateAction<TPikachuImgType>>;
+    setRounds: Dispatch<SetStateAction<TPikachuTransformType[]>>;
+    setGameType: Dispatch<SetStateAction<TPikachuGameType>>;
   };
 };
 
-const pikachuConfigContextDefault: PikachuConfigContextType = {
+const pikachuConfigContextDefault: TPikachuConfigContextType = {
   size: { numberOfRows: 16, numberOfColumns: 9 },
   numberOfLines: 2,
   imgType: 'internal',
@@ -44,22 +44,22 @@ const pikachuConfigContextDefault: PikachuConfigContextType = {
   },
 };
 
-const PikachuConfigContext = createContext<PikachuConfigContextType>(pikachuConfigContextDefault);
+const PikachuConfigContext = createContext<TPikachuConfigContextType>(pikachuConfigContextDefault);
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function PikachuConfigProvider({ children }: Props) {
+export default function PikachuConfigProvider({ children }: TProps) {
   const { metadata } = usePikachuStore();
   const [size, setSize] = useState<{ numberOfRows: number; numberOfColumns: number }>({
     numberOfRows: 16,
     numberOfColumns: 9,
   });
   const [numberOfLines, setNumberOfLines] = useState(2);
-  const [imgType, setImgType] = useState<PikachuImgType>('internal');
-  const [rounds, setRounds] = useState<Array<PikachuTransformType>>(pikachuRoundTransformations);
-  const [gameType, setGameType] = useState<PikachuGameType>('normal');
+  const [imgType, setImgType] = useState<TPikachuImgType>('internal');
+  const [rounds, setRounds] = useState<Array<TPikachuTransformType>>(pikachuRoundTransformations);
+  const [gameType, setGameType] = useState<TPikachuGameType>('normal');
 
   useEffect(() => {
     setSize({ numberOfRows: metadata.numberOfRows, numberOfColumns: metadata.numberOfColumns });
@@ -81,7 +81,7 @@ export default function PikachuConfigProvider({ children }: Props) {
     setGameType(metadata.gameType);
   }, [metadata.gameType]);
 
-  const contextData = useMemo<PikachuConfigContextType>(() => {
+  const contextData = useMemo<TPikachuConfigContextType>(() => {
     return {
       size,
       numberOfLines,

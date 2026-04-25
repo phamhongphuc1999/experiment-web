@@ -5,19 +5,19 @@ import DynamicReactJson from 'src/components/DynamicReactJson';
 import { Button } from 'src/components/shadcn/button';
 import { initWasm } from 'src/services/wasm';
 
-export type DomainInfoType = {
+export type TDomainInfoType = {
   hostname: string;
   host: string;
   origin: string;
   href: string;
 };
 
-interface Props {
-  data: DomainInfoType | undefined;
-  setData: Dispatch<SetStateAction<DomainInfoType | undefined>>;
-}
+type TProps = {
+  data: TDomainInfoType | undefined;
+  setData: Dispatch<SetStateAction<TDomainInfoType | undefined>>;
+};
 
-export default function DomainInfo({ data, setData }: Props) {
+export default function DomainInfo({ data, setData }: TProps) {
   async function onGetDomain() {
     const wasm = await initWasm();
     const hostname = wasm.get_hostname();

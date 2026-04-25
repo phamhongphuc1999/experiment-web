@@ -1,22 +1,22 @@
-import { ChatType, MyGameType } from 'src/types/caro.type';
+import { TChatType, TMyGameType } from 'src/types/caro.type';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-type MessegerStateType = {
-  caroChats: Array<{ type: ChatType; message: string }>;
-  connect4Chats: Array<{ type: ChatType; message: string }>;
+type TMessegerStateType = {
+  caroChats: Array<{ type: TChatType; message: string }>;
+  connect4Chats: Array<{ type: TChatType; message: string }>;
   fn: {
-    addChats: (type: ChatType, gameType: MyGameType, message: string) => void;
+    addChats: (type: TChatType, gameType: TMyGameType, message: string) => void;
   };
 };
 
-export const useMessengerStore = create<MessegerStateType, [['zustand/immer', unknown]]>(
+export const useMessengerStore = create<TMessegerStateType, [['zustand/immer', unknown]]>(
   immer((set) => {
     return {
       caroChats: [],
       connect4Chats: [],
       fn: {
-        addChats: (type: ChatType, gameType: MyGameType, message: string) => {
+        addChats: (type: TChatType, gameType: TMyGameType, message: string) => {
           set((state) => {
             if (gameType == 'caro') state.caroChats = [...state.caroChats, { type, message }];
             else if (gameType == 'connect4')
@@ -28,14 +28,14 @@ export const useMessengerStore = create<MessegerStateType, [['zustand/immer', un
   })
 );
 
-export function useGameMessengerChat(game: MyGameType) {
+export function useGameMessengerChat(game: TMyGameType) {
   const { caroChats, connect4Chats, fn } = useMessengerStore();
 
   if (game == 'caro')
     return {
       chats: caroChats,
       fn: {
-        addChats: (type: ChatType, message: string) => {
+        addChats: (type: TChatType, message: string) => {
           fn.addChats(type, 'caro', message);
         },
       },
@@ -44,7 +44,7 @@ export function useGameMessengerChat(game: MyGameType) {
     return {
       chats: connect4Chats,
       fn: {
-        addChats: (type: ChatType, message: string) => {
+        addChats: (type: TChatType, message: string) => {
           fn.addChats(type, 'connect4', message);
         },
       },

@@ -6,19 +6,19 @@ import ProcessStatus from 'src/components/process-ui/ProcessStatus';
 import { Badge } from 'src/components/shadcn/badge';
 import { cn } from 'src/lib/utils';
 import { formatText } from 'src/services';
-import { ProcessStatusType, ProcessType } from 'src/types/process.type';
+import { ProcessStatusType, TProcessType } from 'src/types/process.type';
 import BlockTaskList from './BlockTaskList';
 import { Clock, Timer } from 'lucide-react';
 
-interface Props {
-  data: ProcessType;
+interface TProps {
+  data: TProcessType;
   metadata?: {
     onlyShowCurrentBlockTask?: boolean;
   };
   props?: ComponentProps<'div'>;
 }
 
-export default function ViewProcessItem({ data, metadata, props }: Props) {
+export default function ViewProcessItem({ data, metadata, props }: TProps) {
   const progress = (data.runtime / data.executionTime) * 100;
   const isTerminated = data.state === ProcessStatusType.TERMINATED;
   const isRunning = data.state === ProcessStatusType.RUNNING;

@@ -6,16 +6,16 @@ import { PIKACHU_URL } from 'src/configs/pikachu.constance';
 import { cn } from 'src/lib/utils';
 import { usePikachuStateMachine } from 'src/state-machine/pikachu.state-machine';
 import { usePikachuStore } from 'src/states/pikachu.state';
-import { PositionType } from 'src/types/global';
+import { TPositionType } from 'src/types/global';
 import { PikachuMachineEvent, PikachuMachineStateType } from 'src/types/pikachu.type';
 import PathDraw from './PathDraw';
 import SuggestionDraw from './SuggestionDraw';
 
-interface Props {
+type TProps = {
   size: number;
-}
+};
 
-export default function PikachuBoard({ size }: Props) {
+export default function PikachuBoard({ size }: TProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const { state, send } = usePikachuStateMachine();
   const { position, selectedPath, hintRunning } = state.context;
@@ -24,7 +24,7 @@ export default function PikachuBoard({ size }: Props) {
     metadata: { numberOfRows, numberOfColumns, imgType },
   } = usePikachuStore();
 
-  function onPieceClick(position: PositionType) {
+  function onPieceClick(position: TPositionType) {
     send({ type: PikachuMachineEvent.MOVE, position });
   }
 

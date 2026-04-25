@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import ExperimentAppLayout from 'src/components/Layouts/ExperimentAppLayout';
 
-interface Props {
+type TProps = {
   children: ReactNode;
-}
+};
 
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: TProps) {
   return <ExperimentAppLayout>{children}</ExperimentAppLayout>;
 }

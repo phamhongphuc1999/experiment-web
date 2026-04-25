@@ -2,14 +2,14 @@ import { useAppKitProvider } from '@reown/appkit/react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { useCallback } from 'react';
 import { getSolanaRpc } from 'src/web3/services/utils';
-import { SolanaSendTransactionType } from 'src/web3/types';
+import { TSolanaSendTransactionType } from 'src/web3/types';
 import { type Provider as SolProvider } from '@reown/appkit-adapter-solana/react';
 
 export default function useSolanaSendTransaction() {
   const { walletProvider: walletSolProvider } = useAppKitProvider<SolProvider>('solana');
 
   const sendTransaction = useCallback(
-    async (props: SolanaSendTransactionType) => {
+    async (props: TSolanaSendTransactionType) => {
       if (!walletSolProvider) throw new Error('Wallet provider not available');
       const { transaction, address, cluster = 'mainnet-beta' } = props;
       const rpcUrl = getSolanaRpc(cluster);

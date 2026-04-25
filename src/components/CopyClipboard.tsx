@@ -3,14 +3,14 @@
 import { Check, Copy } from 'lucide-react';
 import { MouseEvent, useState } from 'react';
 import { cn } from 'src/lib/utils';
-import { IconProps } from 'src/types/global';
+import { TIconProps } from 'src/types/global';
 
-interface Props {
+interface TProps {
   copyText: string;
-  iconprops?: IconProps;
+  iconprops?: TIconProps;
 }
 
-export default function CopyClipboard({ copyText, iconprops }: Props) {
+export default function CopyClipboard({ copyText, iconprops }: TProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy(event: MouseEvent<HTMLButtonElement>) {

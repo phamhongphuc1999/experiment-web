@@ -1,11 +1,11 @@
 import { cn } from 'src/lib/utils';
 import { useProcessStateMachine } from 'src/state-machine/process.state-machine';
 
-interface Props {
+interface TProps {
   className?: string;
 }
 
-export default function TimeSliceCounter({ className }: Props) {
+export default function TimeSliceCounter({ className }: TProps) {
   const { state } = useProcessStateMachine();
 
   return (

@@ -1,15 +1,15 @@
 import PAppClient from 'src/api/papp';
 import { QUERY_KEY } from 'src/configs/constance';
 import useAuthQuery, { useAuthMutation } from 'src/hooks/useAuthQuery';
-import { MutationOptionsDefaultError } from 'src/types/global';
-import { ConversationType, CreatePrivateChatDto } from 'src/types/papp.type';
+import { TMutationOptionsDefaultError } from 'src/types/global';
+import { TConversationType, TCreatePrivateChatDto } from 'src/types/papp.type';
 
 export function useCreatePrivateChat(
-  options?: MutationOptionsDefaultError<ConversationType, CreatePrivateChatDto>
+  options?: TMutationOptionsDefaultError<TConversationType, TCreatePrivateChatDto>
 ) {
   return useAuthMutation({
     ...options,
-    mutationFn: (data: CreatePrivateChatDto) => PAppClient.conversation.createPrivateChat(data),
+    mutationFn: (data: TCreatePrivateChatDto) => PAppClient.conversation.createPrivateChat(data),
   });
 }
 

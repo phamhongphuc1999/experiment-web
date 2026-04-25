@@ -1,38 +1,38 @@
 import { pikachuRoundTransformations } from 'src/configs/pikachu.constance';
 import { getRandom } from 'src/services';
-import { PositionType } from 'src/types/global';
-import { PikachuGameType, PikachuImgType, PikachuTransformType } from 'src/types/pikachu.type';
+import { TPositionType } from 'src/types/global';
+import { TPikachuGameType, TPikachuImgType, TPikachuTransformType } from 'src/types/pikachu.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-type PikachuMetadataType = {
+type TPikachuMetadataType = {
   numberOfRows: number;
   numberOfColumns: number;
   numberOfLines: number;
   round: number;
-  imgType: PikachuImgType;
-  roundList: Array<PikachuTransformType>;
+  imgType: TPikachuImgType;
+  roundList: Array<TPikachuTransformType>;
   randomRoundListIndex: number;
-  gameType: PikachuGameType;
+  gameType: TPikachuGameType;
 };
 
-type PikachuStateType = {
-  metadata: PikachuMetadataType;
+type TPikachuStateType = {
+  metadata: TPikachuMetadataType;
   board: Array<Array<number>>;
-  suggestion: Array<PositionType>;
+  suggestion: Array<TPositionType>;
   fn: {
-    createBoard: (mode: 'newGame' | 'nextRound', board: number[][], path: PositionType[]) => void;
-    changeBoard: (board: number[][], path: PositionType[]) => void;
+    createBoard: (mode: 'newGame' | 'nextRound', board: number[][], path: TPositionType[]) => void;
+    changeBoard: (board: number[][], path: TPositionType[]) => void;
     move: (board: Array<Array<number>>) => void;
-    movePath: (board: Array<Array<number>>, path: Array<PositionType>) => void;
+    movePath: (board: Array<Array<number>>, path: Array<TPositionType>) => void;
     moveChangeBoard: (board: Array<Array<number>>) => void;
-    setMetadata: (metadata: Partial<PikachuMetadataType>) => void;
+    setMetadata: (metadata: Partial<TPikachuMetadataType>) => void;
   };
 };
 
 export const usePikachuStore = create<
-  PikachuStateType,
+  TPikachuStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -52,7 +52,11 @@ export const usePikachuStore = create<
         board: [],
         suggestion: [],
         fn: {
-          createBoard: (mode: 'newGame' | 'nextRound', board: number[][], path: PositionType[]) => {
+          createBoard: (
+            mode: 'newGame' | 'nextRound',
+            board: number[][],
+            path: TPositionType[]
+          ) => {
             set((state) => {
               const { roundList, round } = state.metadata;
               state.board = board;
@@ -64,7 +68,7 @@ export const usePikachuStore = create<
               }
             });
           },
-          changeBoard: (board: number[][], path: PositionType[]) => {
+          changeBoard: (board: number[][], path: TPositionType[]) => {
             set((state) => {
               state.board = board;
               state.suggestion = path;
@@ -75,7 +79,7 @@ export const usePikachuStore = create<
               state.board = board;
             });
           },
-          movePath: (board: Array<Array<number>>, path: Array<PositionType>) => {
+          movePath: (board: Array<Array<number>>, path: Array<TPositionType>) => {
             set((state) => {
               state.board = board;
               state.suggestion = path;
@@ -86,7 +90,7 @@ export const usePikachuStore = create<
               state.board = board;
             });
           },
-          setMetadata: (metadata: Partial<PikachuMetadataType>) => {
+          setMetadata: (metadata: Partial<TPikachuMetadataType>) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
               if (metadata.gameType == 'randomBoard')
@@ -100,7 +104,7 @@ export const usePikachuStore = create<
       name: 'experiment.pikachu',
       version: 1.0,
       migrate(persistedState, version) {
-        if (version < 1.0) return { ...(persistedState as PikachuStateType) };
+        if (version < 1.0) return { ...(persistedState as TPikachuStateType) };
         return persistedState;
       },
       partialize: (state) => {

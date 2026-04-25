@@ -4,11 +4,11 @@ import { motion } from 'motion/react';
 import { ReactNode } from 'react';
 import AppHeader from './AppHeader';
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function ExperimentAppLayout({ children }: Props) {
+export default function ExperimentAppLayout({ children }: TProps) {
   return (
     <div className="min-h-screen">
       <AppHeader />

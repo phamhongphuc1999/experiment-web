@@ -1,5 +1,5 @@
 import { useConfigStore } from 'src/states/config.state';
-import { SoundConfigType, SoundType } from 'src/types/global';
+import { TSoundConfigType, SoundType } from 'src/types/global';
 
 const sources: Record<SoundType, string> = {
   [SoundType.CLICK]: '/sounds/click.mp3',
@@ -18,7 +18,7 @@ class Soundtrack {
     [SoundType.BACKGROUND]: null,
   };
 
-  private createAudio(config: SoundConfigType) {
+  private createAudio(config: TSoundConfigType) {
     const { type, loop = false, volume } = config;
     let audio = this.cache[type];
 
@@ -41,7 +41,7 @@ class Soundtrack {
     });
   }
 
-  private _play(ref: HTMLAudioElement | null, config: SoundConfigType): HTMLAudioElement | null {
+  private _play(ref: HTMLAudioElement | null, config: TSoundConfigType): HTMLAudioElement | null {
     try {
       if (!ref) ref = this.createAudio(config);
       ref.currentTime = 0;
@@ -55,7 +55,7 @@ class Soundtrack {
     }
   }
 
-  play(option: SoundConfigType) {
+  play(option: TSoundConfigType) {
     const { isEnabled = useConfigStore.getState().isSound, ...rest } = option;
     if (!isEnabled) return;
     this.cache[rest.type] = this._play(this.cache[rest.type], rest);

@@ -4,11 +4,11 @@ import { ReactJsonViewProps } from 'react-json-view';
 
 const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
-interface Props extends ReactJsonViewProps {
+interface TProps extends ReactJsonViewProps {
   rootProps?: ComponentProps<'div'>;
 }
 
-export default function DynamicReactJson({ rootProps, ...props }: Props) {
+export default function DynamicReactJson({ rootProps, ...props }: TProps) {
   return (
     <div {...rootProps}>
       <ReactJson {...props} />

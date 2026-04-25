@@ -6,12 +6,12 @@ import { toast } from 'sonner';
 import { GoogleIcon } from 'src/components/icons';
 import { cn } from 'src/lib/utils';
 
-interface Props extends ComponentProps<'div'> {
+type TProps = ComponentProps<'div'> & {
   isLoading?: boolean;
   onOauthClick?: (credentialResponse: CredentialResponse) => void;
-}
+};
 
-export default function GoogleButton({ isLoading, onOauthClick, ...props }: Props) {
+export default function GoogleButton({ isLoading, onOauthClick, ...props }: TProps) {
   return (
     <div {...props} className={cn('relative', props.className)}>
       <button

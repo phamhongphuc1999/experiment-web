@@ -11,35 +11,35 @@ import {
   useState,
 } from 'react';
 import { useConnect4Store } from 'src/states/connect4.state';
-import { CaroGameType, PlayModeType } from 'src/types/caro.type';
+import { TCaroGameType, TPlayModeType } from 'src/types/caro.type';
 
-type Connect4ConfigContextType = {
-  playMode: PlayModeType;
-  gameType: CaroGameType;
+type TConnect4ConfigContextType = {
+  playMode: TPlayModeType;
+  gameType: TCaroGameType;
   maxError: number;
   fn: {
-    setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
-    setGameType: Dispatch<SetStateAction<CaroGameType>>;
+    setPlayMode: Dispatch<SetStateAction<TPlayModeType>>;
+    setGameType: Dispatch<SetStateAction<TCaroGameType>>;
     setMaxError: Dispatch<SetStateAction<number>>;
   };
 };
 
-const connect4ConfigContextDefault: Connect4ConfigContextType = {
+const connect4ConfigContextDefault: TConnect4ConfigContextType = {
   playMode: 'offline',
   gameType: 'normal',
   maxError: 5,
   fn: { setPlayMode: () => {}, setGameType: () => {}, setMaxError: () => {} },
 };
 
-const Connect4ConfigContext = createContext<Connect4ConfigContextType>(
+const Connect4ConfigContext = createContext<TConnect4ConfigContextType>(
   connect4ConfigContextDefault
 );
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function Connect4ConfigProvider({ children }: Props) {
+export default function Connect4ConfigProvider({ children }: TProps) {
   const { metadata } = useConnect4Store();
 
   const [playMode, setPlayMode] = useState(metadata.playMode);
@@ -58,7 +58,7 @@ export default function Connect4ConfigProvider({ children }: Props) {
     setMaxError(metadata.maxNumberOfBlindError);
   }, [metadata.maxNumberOfBlindError]);
 
-  const contextData = useMemo<Connect4ConfigContextType>(() => {
+  const contextData = useMemo<TConnect4ConfigContextType>(() => {
     return { playMode, gameType, maxError, fn: { setPlayMode, setGameType, setMaxError } };
   }, [playMode, gameType, maxError]);
 

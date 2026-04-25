@@ -1,27 +1,27 @@
-import { Connect4WinStateType, Connect4WinType, TurnType } from 'src/types/caro.type';
-import { PositionType } from 'src/types/global';
+import { TConnect4WinStateType, TConnect4WinType, TTurnType } from 'src/types/caro.type';
+import { TPositionType } from 'src/types/global';
 
-type ParamsType = {
-  steps: { [column: number]: Array<TurnType> };
+type TParamsType = {
+  steps: { [column: number]: Array<TTurnType> };
   currentColumn: number;
-  currentPlayer: TurnType;
+  currentPlayer: TTurnType;
   numberOfRows: number;
   numberOfColumns: number;
 };
 
-type InternalParamsType = ParamsType & {
+type TInternalParamsType = TParamsType & {
   currentRow: number;
 };
 
 function connect4Check(
-  params: InternalParamsType,
-  moveCheckFn: (params: InternalParamsType, row: number, column: number) => boolean,
+  params: TInternalParamsType,
+  moveCheckFn: (params: TInternalParamsType, row: number, column: number) => boolean,
   moveFn: (row: number, column: number) => [number, number]
-): Array<PositionType> {
+): Array<TPositionType> {
   const { steps, currentColumn, currentRow, currentPlayer } = params;
   let _currentRow = currentRow;
   let _currentColumn = currentColumn;
-  const result: Array<PositionType> = [];
+  const result: Array<TPositionType> = [];
   while (moveCheckFn(params, _currentRow, _currentColumn)) {
     [_currentRow, _currentColumn] = moveFn(_currentRow, _currentColumn);
     const _turn = steps?.[_currentColumn]?.[_currentRow];
@@ -31,7 +31,7 @@ function connect4Check(
   return result;
 }
 
-function checkTopLeftDiagonal(params: InternalParamsType): Array<PositionType> {
+function checkTopLeftDiagonal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     ({ numberOfRows }, row, column) => row < numberOfRows && column >= 0,
@@ -39,7 +39,7 @@ function checkTopLeftDiagonal(params: InternalParamsType): Array<PositionType> {
   );
 }
 
-function checkTopVertical(params: InternalParamsType): Array<PositionType> {
+function checkTopVertical(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     ({ numberOfRows }, row, _) => row < numberOfRows,
@@ -47,7 +47,7 @@ function checkTopVertical(params: InternalParamsType): Array<PositionType> {
   );
 }
 
-function checkTopRightDiagonal(params: InternalParamsType): Array<PositionType> {
+function checkTopRightDiagonal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     ({ numberOfRows, numberOfColumns }, row, column) =>
@@ -56,7 +56,7 @@ function checkTopRightDiagonal(params: InternalParamsType): Array<PositionType> 
   );
 }
 
-function checkBottomLeftDiagonal(params: InternalParamsType): Array<PositionType> {
+function checkBottomLeftDiagonal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     (_, row, column) => row >= 0 && column >= 0,
@@ -64,7 +64,7 @@ function checkBottomLeftDiagonal(params: InternalParamsType): Array<PositionType
   );
 }
 
-function checkBottomVertical(params: InternalParamsType): Array<PositionType> {
+function checkBottomVertical(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     (_, row, __) => row >= 0,
@@ -72,7 +72,7 @@ function checkBottomVertical(params: InternalParamsType): Array<PositionType> {
   );
 }
 
-function checkBottomRightDiagonal(params: InternalParamsType): Array<PositionType> {
+function checkBottomRightDiagonal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     ({ numberOfColumns }, row, column) => row >= 0 && column < numberOfColumns,
@@ -80,7 +80,7 @@ function checkBottomRightDiagonal(params: InternalParamsType): Array<PositionTyp
   );
 }
 
-function checkLeftHorizontal(params: InternalParamsType): Array<PositionType> {
+function checkLeftHorizontal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     (_, __, column) => column >= 0,
@@ -88,7 +88,7 @@ function checkLeftHorizontal(params: InternalParamsType): Array<PositionType> {
   );
 }
 
-function checkRightHorizontal(params: InternalParamsType): Array<PositionType> {
+function checkRightHorizontal(params: TInternalParamsType): Array<TPositionType> {
   return connect4Check(
     params,
     ({ numberOfColumns }, __, column) => column < numberOfColumns,
@@ -97,10 +97,10 @@ function checkRightHorizontal(params: InternalParamsType): Array<PositionType> {
 }
 
 const config: Record<
-  Connect4WinType,
+  TConnect4WinType,
   {
-    side1Func: (params: InternalParamsType) => Array<PositionType>;
-    side2Func: (params: InternalParamsType) => Array<PositionType>;
+    side1Func: (params: TInternalParamsType) => Array<TPositionType>;
+    side2Func: (params: TInternalParamsType) => Array<TPositionType>;
   }
 > = {
   leftDiagonal: { side1Func: checkTopLeftDiagonal, side2Func: checkBottomRightDiagonal },
@@ -109,7 +109,7 @@ const config: Record<
   horizontal: { side1Func: checkLeftHorizontal, side2Func: checkRightHorizontal },
 };
 
-function _analyticStep(type: Connect4WinType, params: InternalParamsType) {
+function _analyticStep(type: TConnect4WinType, params: TInternalParamsType) {
   const side1 = config[type].side1Func(params);
   const side2 = config[type].side2Func(params);
   const _len = side1.length + side2.length;
@@ -117,18 +117,18 @@ function _analyticStep(type: Connect4WinType, params: InternalParamsType) {
   return { isWin, arr: side1.concat(side2) };
 }
 
-export function checkWin(params: ParamsType): Connect4WinStateType {
+export function checkWin(params: TParamsType): TConnect4WinStateType {
   const { steps, currentColumn } = params;
   const currentRow = steps[currentColumn].length - 1;
-  const internalParams: InternalParamsType = { ...params, currentRow };
+  const internalParams: TInternalParamsType = { ...params, currentRow };
 
   const leftDiagonal = _analyticStep('leftDiagonal', internalParams);
   const rightDiagonal = _analyticStep('rightDiagonal', internalParams);
   const vertical = _analyticStep('vertical', internalParams);
   const horizontal = _analyticStep('horizontal', internalParams);
-  const locations: Connect4WinStateType['locations'] = {};
+  const locations: TConnect4WinStateType['locations'] = {};
 
-  const winMode: Array<Connect4WinType> = [];
+  const winMode: Array<TConnect4WinType> = [];
   if (leftDiagonal.isWin) {
     winMode.push('leftDiagonal');
     for (const [row, column] of leftDiagonal.arr.concat([currentRow, currentColumn])) {

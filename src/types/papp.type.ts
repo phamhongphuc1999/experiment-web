@@ -1,4 +1,4 @@
-import { PaginationResponseType } from './global';
+import { TPaginationResponseType } from './global';
 
 export enum USER_ROLE {
   USER = 1,
@@ -21,43 +21,43 @@ export enum CONVERSATION_USER_ROLE {
   ADMIN = 2,
 }
 
-export type AuthSignupDto = {
+export type TAuthSignupDto = {
   name: string;
   password: string;
   email: string;
 };
 
-export type VerifyTokenDto = {
+export type TVerifyTokenDto = {
   token: string;
 };
 
-export type GoogleSigninDto = {
+export type TGoogleSigninDto = {
   idToken: string;
 };
 
-export type PasswordLoginDto = {
+export type TPasswordLoginDto = {
   email: string;
   password: string;
 };
 
-export type GoogleRecoverPasswordDto = {
+export type TGoogleRecoverPasswordDto = {
   idToken: string;
 };
 
-export type RecoverTokenDto = {
+export type TRecoverTokenDto = {
   token: string;
   newPassword: string;
 };
 
-export type OnlyOkResponseType = {
+export type TOnlyOkResponseType = {
   isOk: boolean;
 };
 
-export type AccessTokenResponseType = {
+export type TAccessTokenResponseType = {
   accessToken: string;
 };
 
-export type UserType = {
+export type TUserType = {
   id: number;
   name: string;
   email: string;
@@ -65,11 +65,11 @@ export type UserType = {
   status: USER_STATUS;
 };
 
-export type CreatePrivateChatDto = {
+export type TCreatePrivateChatDto = {
   partnerId: number;
 };
 
-export type ConversationType = {
+export type TConversationType = {
   id: number;
   name: string;
   type: number;
@@ -79,22 +79,22 @@ export type ConversationType = {
   deletedAt: string | null;
 };
 
-export type ConversationParticipantType = {
+export type TConversationParticipantType = {
   id: number;
   role: number;
-  conversation: ConversationType;
+  conversation: TConversationType;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
 };
 
-export type ParticipantItemType = {
+export type TParticipantItemType = {
   id: number;
   name: string;
   email: string;
 };
 
-export type ConversationItemType = {
+export type TConversationItemType = {
   conversationId: number;
   conversationName: string;
 
@@ -106,11 +106,11 @@ export type ConversationItemType = {
   role: CONVERSATION_USER_ROLE;
   groupType: CONVERSATION_TYPE;
 
-  yourParticipant: ParticipantItemType;
-  anotherParticipant: ParticipantItemType | null;
+  yourParticipant: TParticipantItemType;
+  anotherParticipant: TParticipantItemType | null;
 };
 
-export type ConversationResponseType = {
-  data: Array<ConversationItemType>;
-  metadata: PaginationResponseType;
+export type TConversationResponseType = {
+  data: Array<TConversationItemType>;
+  metadata: TPaginationResponseType;
 };

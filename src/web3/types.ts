@@ -9,7 +9,7 @@ export enum ChainId {
   BASE = 'base',
 }
 
-export type ContractActionParams = {
+export type TContractActionParams = {
   address: string; // Contract or Program ID
   functionName: string; // Method name
   args: any[]; // Arguments for the call
@@ -18,14 +18,14 @@ export type ContractActionParams = {
   cluster?: Cluster; // used by Solana
 };
 
-export type NetworkConfig = {
+export type TNetworkConfig = {
   chain: {
     chainIntegerId?: number;
     chainId: ChainId;
   };
 };
 
-export type SolanaSendTransactionType = {
+export type TSolanaSendTransactionType = {
   transaction: Transaction;
   address: string;
   cluster?: Cluster;

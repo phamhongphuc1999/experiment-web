@@ -1,17 +1,17 @@
 import { ComponentProps } from 'react';
 import { cn } from 'src/lib/utils';
 
-export type SocketMessage = {
+export type TSocketMessage = {
   conversationId: number;
   senderId: number;
   message: string;
 };
 
-type Props = ComponentProps<'div'> & {
-  messages?: SocketMessage[];
+type TProps = ComponentProps<'div'> & {
+  messages?: TSocketMessage[];
 };
 
-export default function MainMessage(props: Props) {
+export default function MainMessage(props: TProps) {
   const { messages = [], ...rest } = props;
 
   return (

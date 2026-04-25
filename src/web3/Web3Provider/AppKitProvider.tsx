@@ -4,10 +4,10 @@ import { ReactNode } from 'react';
 import { WagmiProvider, type Config } from 'wagmi';
 import { wagmiAdapter } from '../Adapter/AppWagmiAdapter';
 
-interface Props {
+type TProps = {
   children: ReactNode;
-}
+};
 
-export default function AppKitProvider({ children }: Props) {
+export default function AppKitProvider({ children }: TProps) {
   return <WagmiProvider config={wagmiAdapter.wagmiConfig as Config}>{children}</WagmiProvider>;
 }

@@ -3,11 +3,11 @@ import { ChangeEvent, ComponentProps, KeyboardEvent, useState } from 'react';
 import { Input } from 'src/components/shadcn/input';
 import { cn } from 'src/lib/utils';
 
-type Props = ComponentProps<'div'> & {
+type TProps = ComponentProps<'div'> & {
   onSend?: (message: string) => void;
 };
 
-export default function ChatInput(props: Props) {
+export default function ChatInput(props: TProps) {
   const [value, setValue] = useState('');
 
   function onChangeValue(event: ChangeEvent<HTMLInputElement>) {

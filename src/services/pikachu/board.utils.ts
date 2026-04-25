@@ -1,4 +1,4 @@
-import { PikachuNewBoardType } from 'src/types/pikachu.type';
+import { TPikachuNewBoardType } from 'src/types/pikachu.type';
 import { randomSubGroup } from '..';
 import { findPathWithoutTarget } from './move.utils';
 
@@ -54,7 +54,7 @@ export function createBoard(rows: number, cols: number, numTypes: number): Array
   return board;
 }
 
-function _createNewPikachuBoard(params: PikachuNewBoardType) {
+function _createNewPikachuBoard(params: TPikachuNewBoardType) {
   const { numberOfRows, numberOfColumns, numTypes } = params;
   const rawBoard = createBoard(numberOfRows, numberOfColumns, numTypes);
   const board: Array<Array<number>> = [];
@@ -66,7 +66,7 @@ function _createNewPikachuBoard(params: PikachuNewBoardType) {
   return board;
 }
 
-export function createNewPikachuBoard(params: PikachuNewBoardType & { numberOfLines: number }) {
+export function createNewPikachuBoard(params: TPikachuNewBoardType & { numberOfLines: number }) {
   const { numberOfRows, numberOfColumns, numTypes, numberOfLines } = params;
   let board = _createNewPikachuBoard({ numberOfRows, numberOfColumns, numTypes });
   let path = findPathWithoutTarget({ numberOfRows, numberOfColumns, board, numberOfLines });
@@ -77,7 +77,9 @@ export function createNewPikachuBoard(params: PikachuNewBoardType & { numberOfLi
   return { board, path };
 }
 
-function _changePikachuBoard(params: PikachuNewBoardType & { currentBoard: Array<Array<number>> }) {
+function _changePikachuBoard(
+  params: TPikachuNewBoardType & { currentBoard: Array<Array<number>> }
+) {
   const { numberOfRows, numberOfColumns, numTypes, currentBoard } = params;
   let totalCells = 0;
   const values: { [key: number]: number } = {};
@@ -115,7 +117,7 @@ function _changePikachuBoard(params: PikachuNewBoardType & { currentBoard: Array
 }
 
 export function changePikachuBoard(
-  params: PikachuNewBoardType & { currentBoard: Array<Array<number>>; numberOfLines: number }
+  params: TPikachuNewBoardType & { currentBoard: Array<Array<number>>; numberOfLines: number }
 ) {
   const { currentBoard, numberOfRows, numberOfColumns, numTypes, numberOfLines } = params;
   let board = _changePikachuBoard({ currentBoard, numberOfRows, numberOfColumns, numTypes });

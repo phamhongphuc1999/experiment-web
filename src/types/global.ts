@@ -3,9 +3,9 @@ import { AxiosRequestConfig } from 'axios';
 import { LucideProps } from 'lucide-react';
 import { ComponentProps, RefAttributes } from 'react';
 
-export type ThemeType = 'light' | 'dark';
-export type PositionType = [number, number]; // expect [row, column]
-export type VectorType = PositionType; // expect [x, y]
+export type TThemeType = 'light' | 'dark';
+export type TPositionType = [number, number]; // expect [row, column]
+export type TVectorType = TPositionType; // expect [x, y]
 
 export enum SoundType {
   CLICK = 'click',
@@ -15,41 +15,41 @@ export enum SoundType {
   BACKGROUND = 'background',
 }
 
-export type SoundConfigType = {
+export type TSoundConfigType = {
   type: SoundType;
   loop?: boolean;
   volume?: number;
   isEnabled?: boolean;
 };
 
-export type IconProps = Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>;
+export type TIconProps = Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>;
 
 export enum ENV_TYPE {
   DEVELOPMENT = 'development',
   PRODUCTION = 'production',
 }
 
-export interface AnimationComponentProps {
+export interface TAnimationComponentProps {
   size?: number | string;
   color?: string;
 }
 
-export interface AnimationComponentDivProps<
-  T = AnimationComponentProps,
+export interface TAnimationComponentDivProps<
+  T = TAnimationComponentProps,
 > extends ComponentProps<'div'> {
   iconProps?: T;
 }
 
-export type OptionalQueryType<T = unknown> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
+export type TOptionalQueryType<T = unknown> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>;
 
-export type JsonType =
+export type TJsonType =
   | string
   | number
   | Array<string>
   | Array<number>
-  | { [index: string | number]: JsonType };
+  | { [index: string | number]: TJsonType };
 
-export type PageMetadataType = Partial<{
+export type TPageMetadataType = Partial<{
   title: string;
   description: string;
   url: string;
@@ -60,27 +60,27 @@ export type PageMetadataType = Partial<{
   keywords: string;
 }>;
 
-export type MutationOptionsWithoutFn<
+export type TMutationOptionsWithoutFn<
   TData = unknown,
   TError = DefaultError,
   TVariables = void,
   TOnMutateResult = unknown,
 > = Omit<UseMutationOptions<TData, TError, TVariables, TOnMutateResult>, 'mutationFn'>;
 
-export type MutationOptionsDefaultError<
+export type TMutationOptionsDefaultError<
   TData = unknown,
   TVariables = void,
   TOnMutateResult = unknown,
-> = MutationOptionsWithoutFn<TData, Error, TVariables, TOnMutateResult>;
+> = TMutationOptionsWithoutFn<TData, Error, TVariables, TOnMutateResult>;
 
-export type BaseQueryInstance = {
+export type TBaseQueryInstance = {
   get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
   post<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig): Promise<T>;
   put<T = unknown, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig): Promise<T>;
   delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
 };
 
-export type PaginationResponseType = {
+export type TPaginationResponseType = {
   totalItems: number;
   itemCount: number;
   itemsPerPage: number;

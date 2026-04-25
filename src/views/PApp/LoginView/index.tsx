@@ -27,17 +27,17 @@ const loginSchema = z.object({
   password: z.string('Please enter password'),
 });
 
-type FormValues = z.infer<typeof loginSchema>;
+type TFormValues = z.infer<typeof loginSchema>;
 
-interface Props {
+type TProps = {
   redirect?: string;
-}
+};
 
-export default function LoginView({ redirect }: Props) {
+export default function LoginView({ redirect }: TProps) {
   const router = useRouter();
   const { fn } = useAuthStore();
 
-  const form = useForm<FormValues>({
+  const form = useForm<TFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
@@ -55,7 +55,7 @@ export default function LoginView({ redirect }: Props) {
     },
   });
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: TFormValues) {
     mutation.mutate(values);
   }
 

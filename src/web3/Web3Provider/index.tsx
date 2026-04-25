@@ -34,12 +34,12 @@ export const appKit = createAppKit({
   enableCoinbase: false,
 });
 
-interface Props {
+interface TProps {
   chainId: ChainId;
   children: ReactNode;
 }
 
-function Web3ProviderLayout({ chainId, children }: Props) {
+function Web3ProviderLayout({ chainId, children }: TProps) {
   if (chainId === ChainId.SOL || chainId === ChainId.BSC || chainId === ChainId.BASE) {
     return <AppKitProvider>{children}</AppKitProvider>;
   }

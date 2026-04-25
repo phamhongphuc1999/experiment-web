@@ -3,7 +3,7 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { cn } from 'src/lib/utils';
 import { Form } from '../shadcn/form';
 
-interface AbstractAuthorFormProps {
+interface TAbstractAuthorFormProps {
   headerTitle?: string;
   title: string;
   description?: ReactNode;
@@ -11,7 +11,7 @@ interface AbstractAuthorFormProps {
   children?: ReactNode;
 }
 
-export function AbstractAuthorForm(params: AbstractAuthorFormProps) {
+export function AbstractAuthorForm(params: TAbstractAuthorFormProps) {
   const { headerTitle = 'PApp', title, description, className, children } = params;
 
   return (
@@ -35,11 +35,11 @@ export function AbstractAuthorForm(params: AbstractAuthorFormProps) {
   );
 }
 
-interface Props<T extends FieldValues> extends AbstractAuthorFormProps {
+interface TProps<T extends FieldValues> extends TAbstractAuthorFormProps {
   form: UseFormReturn<T>;
 }
 
-export default function BaseAuthorForm<T extends FieldValues>(params: Props<T>) {
+export default function BaseAuthorForm<T extends FieldValues>(params: TProps<T>) {
   const { headerTitle = 'PApp', title, description, form, className, children } = params;
 
   return (

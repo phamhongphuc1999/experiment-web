@@ -5,26 +5,24 @@ import { Toaster } from 'sonner';
 import EffectBox from 'src/components/Layouts/EffectBox';
 import { MetadataHead } from 'src/components/MetadataHead';
 import { APP_NAME } from 'src/configs/constance';
+import { cn } from 'src/lib/utils';
 import '../styles/globals.css';
 
 const firaCode = Fira_Code({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: {
-    default: APP_NAME,
-    template: '%s',
-  },
+  title: { default: APP_NAME, template: '%s' },
 };
 
-interface Props {
+type TProps = {
   children: ReactNode;
-}
+};
 
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: TProps) {
   return (
     <html lang="en">
       <MetadataHead />
-      <body data-theme="dark" className={`${firaCode.className} antialiased`}>
+      <body data-theme="dark" className={cn(firaCode.className, 'antialiased')}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-W3M57J7H"

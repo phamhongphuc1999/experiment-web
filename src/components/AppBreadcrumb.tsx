@@ -8,11 +8,11 @@ import {
   BreadcrumbSeparator,
 } from './shadcn/breadcrumb';
 
-interface Props {
+type TProps = {
   items: Array<{ title?: string; href?: string }>;
-}
+};
 
-export default function AppBreadcrumb({ items }: Props) {
+export default function AppBreadcrumb({ items }: TProps) {
   const len = items.length;
 
   return (

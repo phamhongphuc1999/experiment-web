@@ -4,15 +4,15 @@ import { CircleX, Search } from 'lucide-react';
 import { ComponentProps } from 'react';
 import BaseInput from './BaseInput';
 
-interface Props extends ComponentProps<'input'> {
+type TProps = ComponentProps<'input'> & {
   name: string;
   rootprops?: ComponentProps<'div'>;
   events: {
     setSearchText: (value: string) => void;
   };
-}
+};
 
-export default function SearchInput({ name, rootprops, events, ...props }: Props) {
+export default function SearchInput({ name, rootprops, events, ...props }: TProps) {
   function onTextChange(text: string) {
     events.setSearchText(text);
   }

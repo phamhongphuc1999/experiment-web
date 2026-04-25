@@ -1,10 +1,10 @@
 import { usePikachuStore } from 'src/states/pikachu.state';
 
-interface Props {
+type TProps = {
   size: number;
-}
+};
 
-export default function SuggestionDraw({ size }: Props) {
+export default function SuggestionDraw({ size }: TProps) {
   const { suggestion } = usePikachuStore();
   const firstPiece = suggestion[0];
   const secondPiece = suggestion[suggestion.length - 1];

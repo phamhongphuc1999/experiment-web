@@ -12,30 +12,30 @@ import {
 } from 'react';
 import { useCaroStore } from 'src/states/caro.state';
 import {
-  CaroGameType,
-  CaroSizeBoardType,
-  CaroWinModeType,
-  PlayModeType,
+  TCaroGameType,
+  TCaroSizeBoardType,
+  TCaroWinModeType,
+  TPlayModeType,
 } from 'src/types/caro.type';
 
-type CaroConfigContextType = {
-  size: CaroSizeBoardType;
-  playMode: PlayModeType;
-  gameType: CaroGameType;
-  winMode: CaroWinModeType;
+type TCaroConfigContextType = {
+  size: TCaroSizeBoardType;
+  playMode: TPlayModeType;
+  gameType: TCaroGameType;
+  winMode: TCaroWinModeType;
   isOverride: boolean;
   maxError: number;
   fn: {
-    setSize: Dispatch<SetStateAction<CaroSizeBoardType>>;
-    setPlayMode: Dispatch<SetStateAction<PlayModeType>>;
-    setGameType: Dispatch<SetStateAction<CaroGameType>>;
+    setSize: Dispatch<SetStateAction<TCaroSizeBoardType>>;
+    setPlayMode: Dispatch<SetStateAction<TPlayModeType>>;
+    setGameType: Dispatch<SetStateAction<TCaroGameType>>;
     setIsOverride: Dispatch<SetStateAction<boolean>>;
     setMaxError: Dispatch<SetStateAction<number>>;
-    setWinMode: Dispatch<SetStateAction<CaroWinModeType>>;
+    setWinMode: Dispatch<SetStateAction<TCaroWinModeType>>;
   };
 };
 
-const caroConfigContextDefault: CaroConfigContextType = {
+const caroConfigContextDefault: TCaroConfigContextType = {
   size: 10,
   playMode: 'offline',
   gameType: 'normal',
@@ -52,13 +52,13 @@ const caroConfigContextDefault: CaroConfigContextType = {
   },
 };
 
-const CaroConfigContext = createContext<CaroConfigContextType>(caroConfigContextDefault);
+const CaroConfigContext = createContext<TCaroConfigContextType>(caroConfigContextDefault);
 
-interface Props {
+interface TProps {
   children: ReactNode;
 }
 
-export default function CaroConfigProvider({ children }: Props) {
+export default function CaroConfigProvider({ children }: TProps) {
   const { metadata } = useCaroStore();
 
   const [size, setSize] = useState(metadata.size);
@@ -92,7 +92,7 @@ export default function CaroConfigProvider({ children }: Props) {
     setMaxError(metadata.maxNumberOfBlindError);
   }, [metadata.maxNumberOfBlindError]);
 
-  const contextData = useMemo<CaroConfigContextType>(() => {
+  const contextData = useMemo<TCaroConfigContextType>(() => {
     return {
       size,
       playMode,

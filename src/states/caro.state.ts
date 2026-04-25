@@ -1,46 +1,46 @@
 import { checkWin } from 'src/services/caro.utils';
 import {
-  CaroGameType,
-  CaroSizeBoardType,
-  CaroWinModeType,
-  PlayModeType,
-  TurnType,
-  WinStateType,
+  TCaroGameType,
+  TCaroSizeBoardType,
+  TCaroWinModeType,
+  TPlayModeType,
+  TTurnType,
+  TWinStateType,
 } from 'src/types/caro.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-type CaroMetadataType = {
-  playMode: PlayModeType;
-  gameType: CaroGameType;
-  winMode: CaroWinModeType;
+type TCaroMetadataType = {
+  playMode: TPlayModeType;
+  gameType: TCaroGameType;
+  winMode: TCaroWinModeType;
   isOverride: boolean;
   status: 'playing' | 'win';
-  size: CaroSizeBoardType;
+  size: TCaroSizeBoardType;
   maxNumberOfBlindError: number;
   preWinner: number;
 };
 
-type CaroStateType = {
-  metadata: CaroMetadataType;
+type TCaroStateType = {
+  metadata: TCaroMetadataType;
   numberOfBlindError: { 0: number; 1: number };
   isBlindForceOver: boolean;
-  turn: TurnType;
-  steps: { [key: number]: TurnType };
+  turn: TTurnType;
+  steps: { [key: number]: TTurnType };
   stepsOrder: Array<number>;
-  winState?: WinStateType;
+  winState?: TWinStateType;
   fn: {
     move: (location: number) => void;
     undo: () => void;
-    reset: (turn?: TurnType) => void;
-    countNumberOfBlindError: (turn: TurnType) => void;
-    setMetadata: (metadata: Partial<Omit<CaroMetadataType, 'status'>>) => void;
+    reset: (turn?: TTurnType) => void;
+    countNumberOfBlindError: (turn: TTurnType) => void;
+    setMetadata: (metadata: Partial<Omit<TCaroMetadataType, 'status'>>) => void;
   };
 };
 
 export const useCaroStore = create<
-  CaroStateType,
+  TCaroStateType,
   [['zustand/persist', unknown], ['zustand/immer', unknown]]
 >(
   persist(
@@ -76,7 +76,7 @@ export const useCaroStore = create<
               if (_winState.winMode.length > 0) {
                 state.winState = _winState;
                 state.metadata.status = 'win';
-              } else state.turn = (1 - state.turn) as TurnType;
+              } else state.turn = (1 - state.turn) as TTurnType;
             });
           },
           undo: () => {
@@ -105,17 +105,17 @@ export const useCaroStore = create<
               state.isBlindForceOver = false;
             });
           },
-          countNumberOfBlindError: (turn: TurnType) => {
+          countNumberOfBlindError: (turn: TTurnType) => {
             set((state) => {
               const currentErrors = state.numberOfBlindError[turn];
               state.numberOfBlindError[turn] = currentErrors + 1;
               if (state.numberOfBlindError[turn] > state.metadata.maxNumberOfBlindError) {
                 state.isBlindForceOver = true;
-                state.turn = (1 - state.turn) as TurnType;
+                state.turn = (1 - state.turn) as TTurnType;
               }
             });
           },
-          setMetadata: (metadata: Partial<CaroMetadataType>) => {
+          setMetadata: (metadata: Partial<TCaroMetadataType>) => {
             set((state) => {
               state.metadata = { ...state.metadata, ...metadata };
             });
@@ -127,13 +127,13 @@ export const useCaroStore = create<
       name: 'experiment.caro',
       version: 1.0,
       migrate(persistedState, version) {
-        if (version < 1.0) return { ...(persistedState as CaroStateType) };
+        if (version < 1.0) return { ...(persistedState as TCaroStateType) };
         return persistedState;
       },
       partialize: (state) => {
         const { fn, ...rest } = state;
         if (rest.metadata.playMode == 'online') {
-          const metadata: CaroMetadataType = {
+          const metadata: TCaroMetadataType = {
             ...rest.metadata,
             playMode: 'offline',
             preWinner: 0,

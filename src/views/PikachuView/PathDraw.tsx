@@ -1,6 +1,6 @@
-import { PositionType } from 'src/types/global';
+import { TPositionType } from 'src/types/global';
 
-function getMetadata(fromPosition: PositionType, toPosition: PositionType, size: number) {
+function getMetadata(fromPosition: TPositionType, toPosition: TPositionType, size: number) {
   const xDistance = fromPosition[1] - toPosition[1];
   const yDistance = fromPosition[0] - toPosition[0];
   const mode = xDistance != 0 ? 'width' : 'height';
@@ -23,12 +23,12 @@ function getMetadata(fromPosition: PositionType, toPosition: PositionType, size:
   }
 }
 
-interface Props {
+type TProps = {
   size: number;
-  selectedPath: Array<PositionType>;
-}
+  selectedPath: Array<TPositionType>;
+};
 
-export default function PathDraw({ size, selectedPath }: Props) {
+export default function PathDraw({ size, selectedPath }: TProps) {
   return (
     <div className="pointer-events-none">
       {selectedPath.slice(1).map((toPosition, index) => {

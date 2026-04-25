@@ -1,21 +1,21 @@
 import { useProcessStore } from 'src/states/process.state';
 import {
   ProcessMonitoringStatusType,
-  ProcessMonitorType,
+  TProcessMonitorType,
   ProcessStatusType,
-  ProcessType,
+  TProcessType,
 } from 'src/types/process.type';
 import { addMonitorData } from './monitor.utils';
-import { ProcessContextType } from './type.utils';
+import { TProcessContextType } from './type.utils';
 
-export function runProcessGuard(context: ProcessContextType): boolean {
+export function runProcessGuard(context: TProcessContextType): boolean {
   return (
     !!context.currentProcess || !context.newQueue?.isEmpty() || !context.waitingQueue?.isEmpty()
   );
 }
 
 // change process state
-export function runProcessEntry(context: ProcessContextType): Partial<ProcessContextType> {
+export function runProcessEntry(context: TProcessContextType): Partial<TProcessContextType> {
   const metricsData = context.metricsData;
   const currentProcess = context.currentProcess;
   if (currentProcess) {
@@ -31,7 +31,7 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
       });
       return { waitingQueue, currentProcess: undefined };
     } else {
-      const data: Partial<Omit<ProcessType, 'pid'>> = { state: ProcessStatusType.RUNNING };
+      const data: Partial<Omit<TProcessType, 'pid'>> = { state: ProcessStatusType.RUNNING };
       const saveProcess = useProcessStore.getState().processes[currentProcess.pid];
       if (saveProcess.beginAt === -1) {
         data.beginAt = context.counter;
@@ -46,17 +46,17 @@ export function runProcessEntry(context: ProcessContextType): Partial<ProcessCon
 }
 
 // run waiting process and execute active process
-export function runProcessAction(context: ProcessContextType): Partial<ProcessContextType> {
+export function runProcessAction(context: TProcessContextType): Partial<TProcessContextType> {
   // run waiting tasks
   const waitingQueue = context.waitingQueue;
   const readyQueue = context.readyQueue;
   const metricsData = context.metricsData;
-  const monitorData: Array<ProcessMonitorType> = [];
+  const monitorData: Array<TProcessMonitorType> = [];
   if (waitingQueue && readyQueue) {
     const maxBlockTaskPerSlice = useProcessStore.getState().maxBlockTaskPerSlice;
     let counter = 0;
     const updateProcess = useProcessStore.getState().fn.updateProcess;
-    const _willRunWaitingQueue: Array<ProcessType> = [];
+    const _willRunWaitingQueue: Array<TProcessType> = [];
     while (!waitingQueue.isEmpty() && ++counter <= maxBlockTaskPerSlice) {
       _willRunWaitingQueue.push(waitingQueue.dequeue()!);
     }

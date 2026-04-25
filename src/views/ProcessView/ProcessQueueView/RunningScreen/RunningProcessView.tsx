@@ -1,13 +1,13 @@
 import { Activity } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
-import { ProcessType } from 'src/types/process.type';
+import { TProcessType } from 'src/types/process.type';
 
-interface Props {
-  runningProcess: ProcessType | undefined;
+interface TProps {
+  runningProcess: TProcessType | undefined;
 }
 
-export default function RunningProcessView({ runningProcess }: Props) {
+export default function RunningProcessView({ runningProcess }: TProps) {
   return (
     <div className="relative flex flex-1 items-center justify-center p-4">
       <AnimatePresence mode="popLayout">

@@ -1,13 +1,13 @@
 import { motion } from 'motion/react';
 import ViewProcessItem from 'src/components/process-ui/ProcessItem/ViewProcessItem';
-import { ProcessType } from 'src/types/process.type';
+import { TProcessType } from 'src/types/process.type';
 import BaseQueue from './BaseQueue';
 
-interface Props {
-  incomingProcesses: ProcessType[];
+interface TProps {
+  incomingProcesses: TProcessType[];
 }
 
-export default function IncomingQueue({ incomingProcesses }: Props) {
+export default function IncomingQueue({ incomingProcesses }: TProps) {
   return (
     <BaseQueue title="Incoming" count={incomingProcesses.length}>
       {incomingProcesses.map((process) => (

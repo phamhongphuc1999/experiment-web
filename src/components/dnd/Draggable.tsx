@@ -5,11 +5,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { ComponentProps, CSSProperties } from 'react';
 import { cn } from 'src/lib/utils';
 
-interface Props extends Omit<ComponentProps<'div'>, 'id'> {
+interface TProps extends Omit<ComponentProps<'div'>, 'id'> {
   id: UniqueIdentifier;
 }
 
-export default function Draggable({ id, children, ...props }: Props) {
+export default function Draggable({ id, children, ...props }: TProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id });
 
   const style: CSSProperties = {

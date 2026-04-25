@@ -1,30 +1,36 @@
 import { useProcessStore } from 'src/states/process.state';
 import { PriorityQueue } from 'src/structure/PriorityQueue';
 import Queue from 'src/structure/Queue';
-import { ProcessType } from 'src/types/process.type';
-import { InitializeProcessEventType, ProcessContextType } from './type.utils';
+import { TProcessType } from 'src/types/process.type';
+import { TInitializeProcessEventType, TProcessContextType } from './type.utils';
 
 export function initializeProcessesAction(
-  event: InitializeProcessEventType
-): Partial<ProcessContextType> {
+  event: TInitializeProcessEventType
+): Partial<TProcessContextType> {
   const processes = Object.values(event.processes);
-  const newQueue = new PriorityQueue<ProcessType>((a, b) => {
+  const newQueue = new PriorityQueue<TProcessType>((a, b) => {
     return a.arrivalTime - b.arrivalTime;
   });
   processes.forEach((p) => newQueue.push(p));
   const setMetadata = useProcessStore.getState().fn.setMetadata;
   setMetadata({ status: 'running' });
-  return { newQueue, waitingQueue: new Queue<ProcessType>(), readyQueue: new Queue<ProcessType>() };
+  return {
+    newQueue,
+    waitingQueue: new Queue<TProcessType>(),
+    readyQueue: new Queue<TProcessType>(),
+  };
 }
 
-export function loadProcessContextEntry(context: ProcessContextType): Partial<ProcessContextType> {
+export function loadProcessContextEntry(
+  context: TProcessContextType
+): Partial<TProcessContextType> {
   if (!context.currentProcess && !context.readyQueue?.isEmpty()) {
     return { currentProcess: context.readyQueue?.dequeue() };
   }
   return {};
 }
 
-export function resetAction(): Partial<ProcessContextType> {
+export function resetAction(): Partial<TProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.resetProcesses();
   return {
@@ -38,7 +44,7 @@ export function resetAction(): Partial<ProcessContextType> {
   };
 }
 
-export function clearAction(): Partial<ProcessContextType> {
+export function clearAction(): Partial<TProcessContextType> {
   const fn = useProcessStore.getState().fn;
   fn.clear();
   return {
